@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDEBUG 1 "perl 5.004, patch 01" "11/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDEBUG 1"
+.TH PERLDEBUG 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perldebug - Perl debugging"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,13 +188,19 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perldebug \- Perl debugging
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 First of all, have you tried using the \fB\-w\fR switch?
 .SH "The Perl Debugger"
-.IX Header "The Perl Debugger"
+\*(L"As soon as we started programming, we found to our
+surprise that it wasn't as easy to get programs right
+as we had thought.  Debugging had to be discovered.
+I can remember the exact instant when I realized that
+a large part of my life from then on was going to be
+spent in finding mistakes in my own programs.\*(R"
+.PP
+\fI  --Maurice Wilkes, 1949\fR
+.PP
 If you invoke Perl with the \fB\-d\fR switch, your script runs under the
 Perl source debugger.  This works like an interactive Perl
 environment, prompting for debugger commands that let you examine
@@ -229,10 +233,8 @@ Leading white space before a command would cause the debugger to think
 it's \fINOT\fR a debugger command but for Perl, so be careful not to do
 that.
 .Sh "Debugger Commands"
-.IX Subsection "Debugger Commands"
 The debugger understands the following commands:
 .Ip "h [command]" 12
-.IX Item "h [command]"
 Prints out a help message.
 .Sp
 If you supply another debugger command as an argument to the \f(CWh\fR command,
@@ -249,7 +251,6 @@ it's run through your pager, as in
 .Ve
 You may change the pager which is used via \f(CWO pager=...\fR command.
 .Ip "p expr" 12
-.IX Item "p expr"
 Same as \f(CWprint {$DB::OUT} expr\fR in the current package.  In particular,
 because this is just Perl's own \fBprint\fR function, this means that nested
 data structures and objects are not dumped, unlike with the \f(CWx\fR command.
@@ -257,14 +258,12 @@ data structures and objects are not dumped, unlike with the \f(CWx\fR command.
 The \f(CWDB::OUT\fR filehandle is opened to \fI/dev/tty\fR, regardless of
 where \s-1STDOUT\s0 may be redirected to.
 .Ip "x expr" 12
-.IX Item "x expr"
 Evaluates its expression in list context and dumps out the result
 in a pretty-printed fashion.  Nested data structures are printed out
 recursively, unlike the \f(CWprint\fR function.
 .Sp
 The details of printout are governed by multiple \f(CWO\fRptions.
 .Ip "V [pkg [vars]]" 12
-.IX Item "V [pkg [vars]]"
 Display all (or some) variables in package (defaulting to the \f(CWmain\fR
 package) using a data pretty-printer (hashes show their keys and values so
 you see what's what, control characters are made printable, etc.).  Make
@@ -281,76 +280,55 @@ the \f(CWprint\fR function.
 .Sp
 The details of printout are governed by multiple \f(CWO\fRptions.
 .Ip "X [vars]" 12
-.IX Item "X [vars]"
 Same as \f(CWV currentpackage [vars]\fR.
 .Ip "T" 12
-.IX Item "T"
 Produce a stack backtrace.  See below for details on its output.
 .Ip "s [expr]" 12
-.IX Item "s [expr]"
 Single step.  Executes until it reaches the beginning of another
 statement, descending into subroutine calls.  If an expression is
 supplied that includes function calls, it too will be single-stepped.
 .Ip "n [expr]" 12
-.IX Item "n [expr]"
 Next.  Executes over subroutine calls, until it reaches the beginning
 of the next statement.  If an expression is supplied that includes
 function calls, those functions will be executed with stops before
 each statement.
 .Ip "<\s-1CR\s0>" 12
-.IX Item "<\s-1CR\s0>"
 Repeat last \f(CWn\fR or \f(CWs\fR command.
 .Ip "c [line|sub]" 12
-.IX Item "c [line|sub]"
 Continue, optionally inserting a one-time-only breakpoint
 at the specified line or subroutine.
 .Ip "l" 12
-.IX Item "l"
 List next window of lines.
 .Ip "l min+incr" 12
-.IX Item "l min+incr"
 List \f(CWincr+1\fR lines starting at \f(CWmin\fR.
 .Ip "l min-max" 12
-.IX Item "l min-max"
 List lines \f(CWmin\fR through \f(CWmax\fR.  \f(CWl -\fR is synonymous to \f(CW-\fR.
 .Ip "l line" 12
-.IX Item "l line"
 List a single line.
 .Ip "l subname" 12
-.IX Item "l subname"
 List first window of lines from subroutine.
 .Ip "-" 12
-.IX Item "-"
 List previous window of lines.
 .Ip "w [line]" 12
-.IX Item "w [line]"
 List window (a few lines) around the current line.
 .Ip "." 12
-.IX Item "."
 Return debugger pointer to the last-executed line and
 print it out.
 .Ip "f filename" 12
-.IX Item "f filename"
 Switch to viewing a different file or eval statement.  If \f(CWfilename\fR
 is not a full filename as found in values of \f(CW%INC\fR, it is considered as
 a regexp.
 .Ip "/pattern/" 12
-.IX Item "/pattern/"
 Search forwards for pattern; final / is optional.
 .Ip "?pattern?" 12
-.IX Item "?pattern?"
 Search backwards for pattern; final ? is optional.
 .Ip "L" 12
-.IX Item "L"
 List all breakpoints and actions.
 .Ip "S [[!]pattern]" 12
-.IX Item "S [[!]pattern]"
 List subroutine names [not] matching pattern.
 .Ip "t" 12
-.IX Item "t"
 Toggle trace mode (see also \f(CWAutoTrace\fR \f(CWO\fRption).
 .Ip "t expr" 12
-.IX Item "t expr"
 Trace through execution of expr.  For example:
 .Sp
 .Vb 2
@@ -394,7 +372,6 @@ or, with the \f(CWO\fRption \f(CWframe=2\fR set,
 \& 42
 .Ve
 .Ip "b [line] [condition]" 12
-.IX Item "b [line] [condition]"
 Set a breakpoint.  If line is omitted, sets a breakpoint on the line
 that is about to be executed.  If a condition is specified, it's
 evaluated each time the statement is reached and a breakpoint is taken
@@ -407,28 +384,21 @@ that begin an executable statement.  Conditions don't use \fBif\fR:
 \&    b 33 /pattern/i
 .Ve
 .Ip "b subname [condition]" 12
-.IX Item "b subname [condition]"
 Set a breakpoint at the first line of the named subroutine.
 .Ip "b postpone subname [condition]" 12
-.IX Item "b postpone subname [condition]"
 Set breakpoint at first line of subroutine after it is compiled.
 .Ip "b load filename" 12
-.IX Item "b load filename"
 Set breakpoint at the first executed line of the file.  Filename should
 be a full name as found in values of \f(CW%INC\fR.
 .Ip "b compile subname" 12
-.IX Item "b compile subname"
 Sets breakpoint at the first statement executed after the subroutine
 is compiled.
 .Ip "d [line]" 12
-.IX Item "d [line]"
 Delete a breakpoint at the specified line.  If line is omitted, deletes
 the breakpoint on the line that is about to be executed.
 .Ip "D" 12
-.IX Item "D"
 Delete all installed breakpoints.
 .Ip "a [line] command" 12
-.IX Item "a [line] command"
 Set an action to be done before the line is executed.
 The sequence of steps taken by the debugger is
 .Sp
@@ -446,26 +416,20 @@ For example, this will print out \f(CW$foo\fR every time line
 \&    a 53 print "DB FOUND $foo\en"
 .Ve
 .Ip "A" 12
-.IX Item "A"
 Delete all installed actions.
 .Ip "O [opt[=val]] [op'val' [opt?]..." 12
-.IX Item "O [opt[=val]] [op'val' [opt?]..."
 Set or query values of options.  val defaults to 1.  opt can
 be abbreviated.  Several options can be listed.
 .Ip "\f(CWrecallCommand\fR, \f(CWShellBang\fR" 24
-.IX Item "\f(CWrecallCommand\fR, \f(CWShellBang\fR"
 The characters used to recall command or spawn shell.  By
 default, these are both set to \f(CW!\fR.
 .Ip "\f(CWpager\fR" 24
-.IX Item "\f(CWpager\fR"
 Program to use for output of pager-piped commands (those
 beginning with a \f(CW|\fR character.)  By default,
 \f(CW$ENV{PAGER}\fR will be used.
 .Ip "\f(CWtkRunning\fR" 24
-.IX Item "\f(CWtkRunning\fR"
 Run Tk while prompting (with ReadLine).
 .Ip "\f(CWsignalLevel\fR, \f(CWwarnLevel\fR, \f(CWdieLevel\fR" 24
-.IX Item "\f(CWsignalLevel\fR, \f(CWwarnLevel\fR, \f(CWdieLevel\fR"
 Level of verbosity.  By default the debugger is in a sane verbose mode,
 thus it will print backtraces on all the warnings and die-messages
 which are going to be printed out, and will print a message when
@@ -475,24 +439,18 @@ To disable this behaviour, set these values to 0.  If \f(CWdieLevel\fR is 2,
 then the messages which will be caught by surrounding \f(CWeval\fR are also
 printed.
 .Ip "\f(CWAutoTrace\fR" 24
-.IX Item "\f(CWAutoTrace\fR"
 Trace mode (similar to \f(CWt\fR command, but can be put into
 \f(CWPERLDB_OPTS\fR).
 .Ip "\f(CWLineInfo\fR" 24
-.IX Item "\f(CWLineInfo\fR"
 File or pipe to print line number info to.  If it is a pipe (say,
 \f(CW|visual_perl_db\fR), then a short, \*(L"emacs like\*(R" message is used.
 .Ip "\f(CWinhibit_exit\fR" 24
-.IX Item "\f(CWinhibit_exit\fR"
 If 0, allows \fIstepping off\fR the end of the script.
 .Ip "\f(CWPrintRet\fR" 24
-.IX Item "\f(CWPrintRet\fR"
 affects printing of return value after \f(CWr\fR command.
 .Ip "\f(CWornaments\fR" 24
-.IX Item "\f(CWornaments\fR"
 affects screen appearance of the command line (see the \fITerm::ReadLine\fR manpage).
 .Ip "\f(CWframe\fR" 24
-.IX Item "\f(CWframe\fR"
 affects printing messages on entry and exit from subroutines.  If
 \f(CWframe & 2\fR is false, messages are printed on entry only. (Printing
 on exit may be useful if \fIinter\fR\|(di)spersed with other messages.)
@@ -505,36 +463,28 @@ context and caller info.  If \f(CWframe & 8\fR, overloaded \f(CWstringify\fR and
 The length at which the argument list is truncated is governed by the
 next option:
 .Ip "\f(CWmaxTraceLen\fR" 24
-.IX Item "\f(CWmaxTraceLen\fR"
 length at which the argument list is truncated when \f(CWframe\fR option's
 bit 4 is set.
 .Sp
 The following options affect what happens with \f(CWV\fR, \f(CWX\fR, and \f(CWx\fR
 commands:
 .Ip "\f(CWarrayDepth\fR, \f(CWhashDepth\fR" 24
-.IX Item "\f(CWarrayDepth\fR, \f(CWhashDepth\fR"
 Print only first N elements ('\*(R' for all).
 .Ip "\f(CWcompactDump\fR, \f(CWveryCompact\fR" 24
-.IX Item "\f(CWcompactDump\fR, \f(CWveryCompact\fR"
 Change style of array and hash dump.  If \f(CWcompactDump\fR, short array
 may be printed on one line.
 .Ip "\f(CWglobPrint\fR" 24
-.IX Item "\f(CWglobPrint\fR"
 Whether to print contents of globs.
 .Ip "\f(CWDumpDBFiles\fR" 24
-.IX Item "\f(CWDumpDBFiles\fR"
 Dump arrays holding debugged files.
 .Ip "\f(CWDumpPackages\fR" 24
-.IX Item "\f(CWDumpPackages\fR"
 Dump symbol tables of packages.
 .Ip "\f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR" 24
-.IX Item "\f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR"
 Change style of string dump.  Default value of \f(CWquote\fR is \f(CWauto\fR, one
 can enable either double-quotish dump, or single-quotish by setting it
 to \f(CW"\fR or \f(CW'\fR.  By default, characters with high bit set are printed
 \fIas is\fR.
 .Ip "\f(CWUsageOnly\fR" 24
-.IX Item "\f(CWUsageOnly\fR"
 \fIvery\fR rudimentally per-package memory usage dump.  Calculates total
 size of strings in variables in the package.
 .Sp
@@ -551,10 +501,8 @@ The script will run without human intervention, putting trace information
 into the file \fIdb.out\fR.  (If you interrupt it, you would better reset
 \f(CWLineInfo\fR to something \*(L"interactive\*(R"!)
 .Ip "\f(CWTTY\fR" 24
-.IX Item "\f(CWTTY\fR"
 The \s-1TTY\s0 to use for debugging I/O.
 .Ip "\f(CWnoTTY\fR" 24
-.IX Item "\f(CWnoTTY\fR"
 If set, goes in \f(CWNonStop\fR mode, and would not connect to a \s-1TTY\s0.  If
 interrupt (or if control goes to debugger via explicit setting of
 \f(CW$DB::signal\fR or \f(CW$DB::single\fR from the Perl script), connects to a \s-1TTY\s0
@@ -567,11 +515,9 @@ for debugging input and output correspondingly.  Method \f(CWnew\fR may
 inspect an argument which is a value of \f(CW$ENV{PERLDB_NOTTY}\fR at
 startup, or is \f(CW"/tmp/perldbtty$$"\fR otherwise.
 .Ip "\f(CWReadLine\fR" 24
-.IX Item "\f(CWReadLine\fR"
 If false, readline support in debugger is disabled, so you can debug
 ReadLine applications.
 .Ip "\f(CWNonStop\fR" 24
-.IX Item "\f(CWNonStop\fR"
 If set, debugger goes into noninteractive mode until interrupted, or
 programmatically by setting \f(CW$DB::signal\fR or \f(CW$DB::single\fR.
 .Sp
@@ -609,54 +555,42 @@ corresponds to \fI/dev/ttyc\fR, say, by issuing a command like
 .Ve
 See the section on \fIDebugger Internals\fR below for more details.
 .Ip "< [ command ]" 12
-.IX Item "< [ command ]"
 Set an action (Perl command) to happen before every debugger prompt.
 A multi-line command may be entered by backslashing the newlines.  If
 \f(CWcommand\fR is missing, resets the list of actions.
 .Ip "<< command" 12
-.IX Item "<< command"
 Add an action (Perl command) to happen before every debugger prompt.
 A multi-line command may be entered by backslashing the newlines.
 .Ip "> command" 12
-.IX Item "> command"
 Set an action (Perl command) to happen after the prompt when you've
 just given a command to return to executing the script.  A multi-line
 command may be entered by backslashing the newlines.  If \f(CWcommand\fR is
 missing, resets the list of actions.
 .Ip ">> command" 12
-.IX Item ">> command"
 Adds an action (Perl command) to happen after the prompt when you've
 just given a command to return to executing the script.  A multi-line
 command may be entered by backslashing the newlines.
 .Ip "{ [ command ]" 12
-.IX Item "{ [ command ]"
 Set an action (debugger command) to happen before every debugger prompt.
 A multi-line command may be entered by backslashing the newlines.  If
 \f(CWcommand\fR is missing, resets the list of actions.
 .Ip "{{ command" 12
-.IX Item "{{ command"
 Add an action (debugger command) to happen before every debugger prompt.
 A multi-line command may be entered by backslashing the newlines.
 .Ip "! number" 12
-.IX Item "! number"
 Redo a previous command (default previous command).
 .Ip "! \-number" 12
-.IX Item "! \-number"
 Redo number'th-to-last command.
 .Ip "! pattern" 12
-.IX Item "! pattern"
 Redo last command that started with pattern.
 See \f(CWO recallCommand\fR, too.
 .Ip "!! cmd" 12
-.IX Item "!! cmd"
 Run cmd in a subprocess (reads from \s-1DB::IN\s0, writes to \s-1DB::OUT\s0)
 See \f(CWO shellBang\fR too.
 .Ip "H \-number" 12
-.IX Item "H \-number"
 Display last n commands.  Only commands longer than one character are
 listed.  If number is omitted, lists them all.
 .Ip "q or ^D" 12
-.IX Item "q or ^D"
 Quit.  ("quit\*(R" doesn't work for this.)  This is the only supported way
 to exit the debugger, though typing \f(CWexit\fR twice may do it too.
 .Sp
@@ -664,7 +598,6 @@ Set an \f(CWO\fRption \f(CWinhibit_exit\fR to 0 if you want to be able to \fIste
 off\fR the end the script.  You may also need to set \f(CW$finished\fR to 0 at
 some moment if you want to step through global destruction.
 .Ip "R" 12
-.IX Item "R"
 Restart the debugger by \fBexec\fRing a new session.  It tries to maintain
 your history across this, but internal settings and command line options
 may be lost.
@@ -673,10 +606,8 @@ Currently the following setting are preserved: history, breakpoints,
 actions, debugger \f(CWO\fRptions, and the following command line
 options: \fB\-w\fR, \fB\-I\fR, and \fB\-e\fR.
 .Ip "|dbcmd" 12
-.IX Item "|dbcmd"
 Run debugger command, piping \s-1DB::OUT\s0 to current pager.
 .Ip "||dbcmd" 12
-.IX Item "||dbcmd"
 Same as \f(CW|dbcmd\fR but \s-1DB::OUT\s0 is temporarily \fBselect\fRed as well.
 Often used with commands that would otherwise produce long
 output, such as
@@ -685,7 +616,6 @@ output, such as
 \&    |V main
 .Ve
 .Ip "= [alias value]" 12
-.IX Item "= [alias value]"
 Define a command alias, like
 .Sp
 .Vb 1
@@ -693,20 +623,15 @@ Define a command alias, like
 .Ve
 or list current aliases.
 .Ip "command" 12
-.IX Item "command"
 Execute command as a Perl statement.  A missing semicolon will be
 supplied.
 .Ip "m expr" 12
-.IX Item "m expr"
 The expression is evaluated, and the methods which may be applied to
 the result are listed.
 .Ip "m package" 12
-.IX Item "m package"
 The methods which may be applied to objects in the \f(CWpackage\fR are listed.
 .Sh "Debugger input/output"
-.IX Subsection "Debugger input/output"
 .Ip "Prompt" 8
-.IX Item "Prompt"
 The debugger prompt is something like
 .Sp
 .Vb 1
@@ -725,7 +650,6 @@ you'd already at a breakpoint and then printed out the result of a
 function call that itself also has a breakpoint, or you step into an
 expression via \f(CWs/n/t expression\fR command.
 .Ip "Multiline commands" 8
-.IX Item "Multiline commands"
 If you want to enter a multi-line command, such as a subroutine
 definition with several statements, or a format, you may escape the
 newline that would normally end the debugger command with a backslash.
@@ -743,7 +667,6 @@ Here's an example:
 Note that this business of escaping a newline is specific to interactive
 commands typed into the debugger.
 .Ip "Stack backtrace" 8
-.IX Item "Stack backtrace"
 Here's an example of what a stack backtrace via \f(CWT\fR command might
 look like:
 .Sp
@@ -767,7 +690,6 @@ Note that if you execute \f(CWT\fR command from inside an active \f(CWuse\fR
 statement, the backtrace will contain both \f(CWthe \f(CWrequire\fR entry in the \fIperlfunc\fR manpage\fR
 frame and an \f(CWthe section on \fIeval EXPR\fR in the \fIperlfunc\fR manpage\fR) frame.
 .Ip "Listing" 8
-.IX Item "Listing"
 Listing given via different flavors of \f(CWl\fR command looks like this:
 .Sp
 .Vb 11
@@ -787,7 +709,6 @@ Note that the breakable lines are marked with \f(CW:\fR, lines with
 breakpoints are marked by \f(CWb\fR, with actions by \f(CWa\fR, and the
 next executed line is marked by \f(CW==>\fR.
 .Ip "Frame listing" 8
-.IX Item "Frame listing"
 When \f(CWframe\fR option is set, debugger would print entered (and
 optionally exited) subroutines in different styles.
 .Sp
@@ -798,7 +719,6 @@ What follows is the start of the listing of
 .Ve
 for different values of \f(CWn\fR:
 .Ip "1" 12
-.IX Item "1"
 .Sp
 .Vb 13
 \&  entering main::BEGIN
@@ -816,7 +736,6 @@ for different values of \f(CWn\fR:
 \&   entering Config::FETCH
 .Ve
 .Ip "2" 12
-.IX Item "2"
 .Sp
 .Vb 19
 \&  entering main::BEGIN
@@ -840,7 +759,6 @@ for different values of \f(CWn\fR:
 \&   entering Config::FETCH
 .Ve
 .Ip "4" 12
-.IX Item "4"
 .Sp
 .Vb 15
 \&  in  $=main::BEGIN() from /dev/nul:0
@@ -860,7 +778,6 @@ for different values of \f(CWn\fR:
 \&   in  $=Config::FETCH(ref(Config), 'osvers') from lib/Config.pm:574
 .Ve
 .Ip "6" 12
-.IX Item "6"
 .Sp
 .Vb 21
 \&  in  $=main::BEGIN() from /dev/nul:0
@@ -886,7 +803,6 @@ for different values of \f(CWn\fR:
 \&   in  $=Config::FETCH(ref(Config), 'SUBVERSION') from lib/Config.pm:574
 .Ve
 .Ip "14" 12
-.IX Item "14"
 .Sp
 .Vb 18
 \&  in  $=main::BEGIN() from /dev/nul:0
@@ -909,7 +825,6 @@ for different values of \f(CWn\fR:
 \&   out $=Config::FETCH('Config=HASH(0x1aa444)', 'baserev') from lib/Config.pm:574
 .Ve
 .Ip "30" 12
-.IX Item "30"
 .Sp
 .Vb 15
 \&  in  $=CODE(0x15eca4)() from /dev/null:0
@@ -943,7 +858,6 @@ When a package is compiled, a line like this
 .Ve
 is printed with proper indentation.
 .Sh "Debugging compile-time statements"
-.IX Subsection "Debugging compile-time statements"
 If you have any compile-time executable statements (code within a \s-1BEGIN\s0
 block or a \f(CWuse\fR statement), these will \f(CWNOT\fR be stopped by debugger,
 although \f(CWrequire\fRs will (and compile-time statements can be traced
@@ -970,7 +884,6 @@ breakpoint on \fIload\fR of some module thusly
 and restart debugger by \f(CWR\fR command (if possible).  One can use \f(CWb
 compile subname\fR for the same purpose.
 .Sh "Debugger Customization"
-.IX Subsection "Debugger Customization"
 Most probably you not want to modify the debugger, it contains enough
 hooks to satisfy most needs.  You may change the behaviour of debugger
 from the debugger itself, using \f(CWO\fRptions, from the command line via
@@ -1007,7 +920,6 @@ to set your \f(CWPERL5DB\fR environment variable to say something like this:
 As the last resort, one can use \f(CWPERL5DB\fR to customize debugger by
 directly setting internal variables or calling debugger functions.
 .Sh "Readline Support"
-.IX Subsection "Readline Support"
 As shipped, the only command line history supplied is a simplistic one
 that checks for leading exclamation points.  However, if you install
 the Term::ReadKey and Term::ReadLine modules from \s-1CPAN\s0, you will
@@ -1018,7 +930,6 @@ A rudimentary command line completion is also available.
 Unfortunately, the names of lexical variables are not available for
 completion.
 .Sh "Editor Support for Debugging"
-.IX Subsection "Editor Support for Debugging"
 If you have \s-1GNU\s0 \fBemacs\fR installed on your system, it can interact with
 the Perl debugger to provide an integrated software development
 environment reminiscent of its interactions with C debuggers.
@@ -1031,7 +942,6 @@ the \fIemacs\fR directory of the Perl source distribution.
 X11 window system had also been available, but at the time of this
 writing, no debugger support for \fBvi\fR currently exists.)
 .Sh "The Perl Profiler"
-.IX Subsection "The Perl Profiler"
 If you wish to supply an alternative debugger for Perl to run, just
 invoke your script with a colon and a package argument given to the \fB\-d\fR
 flag.  One of the most popular alternative debuggers for Perl is
@@ -1051,26 +961,22 @@ to a file called \fItmon.out\fR.  A tool like \fBdprofpp\fR (also supplied with
 the Devel::DProf package) can be used to interpret the information which is
 in that profile.
 .Sh "Debugger support in perl"
-.IX Subsection "Debugger support in perl"
 When you call the \fBcaller\fR function (see the \f(CWcaller\fR entry in the \fIperlfunc\fR manpage) from the
 package \s-1DB\s0, Perl sets the array \f(CW@DB::args\fR to contain the arguments the
 corresponding stack frame was called with.
 .PP
 If perl is run with \fB\-d\fR option, the following additional features
-are enabled:
+are enabled (cf. the section on \fI$^P\fR in the \fIperlvar\fR manpage):
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Perl inserts the contents of \f(CW$ENV{PERL5DB}\fR (or \f(CWBEGIN {require
 \&'perl5db.pl'}\fR if not present) before the first line of the
 application.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 The array C<@{"_<$filename"}> is the line-by-line contents of
 \f(CW$filename\fR for all the compiled files.  Same for \f(CWeval\fRed strings which
 contain subroutines, or which are currently executed.  The \f(CW$filename\fR
 for \f(CWeval\fRed strings looks like \f(CW(eval 34)\fR.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 The hash C<%{"_<$filename"}> contains breakpoints and action (it is
 keyed by line number), and individual entries are settable (as opposed
 to the whole hash).  Only true/false is important to Perl, though the
@@ -1082,30 +988,25 @@ Same for evaluated strings which contain subroutines, or which are
 currently executed.  The \f(CW$filename\fR for \f(CWeval\fRed strings looks like
 \f(CW(eval 34)\fR.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 The scalar C<${"_<$filename"}> contains C<"_<$filename">.  Same for
 evaluated strings which contain subroutines, or which are currently
 executed.  The \f(CW$filename\fR for \f(CWeval\fRed strings looks like \f(CW(eval
 34)\fR.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 After each \f(CWrequire\fRd file is compiled, but before it is executed,
 C<\fI\s-1DB::\s0postponed\fR\|(*{"_<$filename"})> is called (if subroutine
 \f(CWDB::postponed\fR exists).  Here the \f(CW$filename\fR is the expanded name of
 the \f(CWrequire\fRd file (as found in values of \f(CW%INC\fR).
 .Ip "\(bu" 5
-.IX Item "\(bu"
 After each subroutine \f(CWsubname\fR is compiled existence of
 \f(CW$DB::postponed{subname}\fR is checked.  If this key exists,
 \f(CWDB::postponed(subname)\fR is called (if subroutine \f(CWDB::postponed\fR
 exists).
 .Ip "\(bu" 5
-.IX Item "\(bu"
 A hash \f(CW%DB::sub\fR is maintained, with keys being subroutine names,
 values having the form \f(CWfilename:startline-endline\fR.  \f(CWfilename\fR has
 the form \f(CW(eval 31)\fR for subroutines defined inside \f(CWeval\fRs.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 When execution of the application reaches a place that can have
 a breakpoint, a call to \f(CWDB::DB()\fR is performed if any one of
 variables \f(CW$DB::trace\fR, \f(CW$DB::single\fR, or \f(CW$DB::signal\fR is true. (Note that
@@ -1113,22 +1014,18 @@ these variables are not \f(CWlocal\fRizable.) This feature is disabled when
 the control is inside \f(CWDB::DB()\fR or functions called from it (unless
 \f(CW$^D & (1<<30)\fR).
 .Ip "\(bu" 5
-.IX Item "\(bu"
 When execution of the application reaches a subroutine call, a call
 to \f(CW&DB::sub\fR(\fIargs\fR) is performed instead, with \f(CW$DB::sub\fR being
 the name of the called subroutine. (Unless the subroutine is compiled
 in the package \f(CWDB\fR.)
 .PP
-Note that no subroutine call is possible until \f(CW&DB::sub\fR is defined
-(for subroutines outside of package \f(CWDB\fR).  (This restriction is
-recently lifted.)
+Note that if \f(CW&DB::sub\fR needs some external data to be setup for it
+to work, no subroutine call is possible until this is done.  For the
+standard debugger \f(CW$DB::deep\fR (how many levels of recursion deep into
+the debugger you can go before a mandatory break) gives an example of
+such a dependency.
 .PP
-(In fact, for the standard debugger the same is true if \f(CW$DB::deep\fR
-(how many levels of recursion deep into the debugger you can go before
-a mandatory break) is not defined.)
-.PP
-With the recent updates the minimal possible debugger consists of one
-line
+The minimal working debugger consists of one line
 .PP
 .Vb 1
 \&  sub DB::DB {}
@@ -1161,7 +1058,6 @@ It prints the sequential number of subroutine call and the name of the
 called subroutine.  Note that \f(CW&DB::sub\fR should be compiled into the
 package \f(CWDB\fR.
 .Sh "Debugger Internals"
-.IX Subsection "Debugger Internals"
 At the start, the debugger reads your rc file (\fI./.perldb\fR or
 \fI~/.perldb\fR under Unix), which can set important options.  This file may
 define a subroutine \f(CW&afterinit\fR to be executed after the debugger is
@@ -1189,10 +1085,8 @@ The function \f(CWDB::print_trace(FH, skip[, count[, short]])\fR prints
 formatted info about caller frames.  The last two functions may be
 convenient as arguments to \f(CW<\fR, \f(CW<<\fR commands.
 .Sh "Other resources"
-.IX Subsection "Other resources"
 You did try the \fB\-w\fR switch, didn't you?
 .SH "BUGS"
-.IX Header "BUGS"
 You cannot get the stack frame information or otherwise debug functions
 that were not compiled by Perl, such as C or \*(C+ extensions.
 .PP
@@ -1200,3 +1094,226 @@ If you alter your \f(CW@_\fR arguments in a subroutine (such as with \fBshift\fR
 or \fBpop\fR, the stack backtrace will not show the original values.
 
 .rn }` ''
+.IX Title "PERLDEBUG 1"
+.IX Name "perldebug - Perl debugging"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "The Perl Debugger"
+
+.IX Subsection "Debugger Commands"
+
+.IX Item "h [command]"
+
+.IX Item "p expr"
+
+.IX Item "x expr"
+
+.IX Item "V [pkg [vars]]"
+
+.IX Item "X [vars]"
+
+.IX Item "T"
+
+.IX Item "s [expr]"
+
+.IX Item "n [expr]"
+
+.IX Item "<\s-1CR\s0>"
+
+.IX Item "c [line|sub]"
+
+.IX Item "l"
+
+.IX Item "l min+incr"
+
+.IX Item "l min-max"
+
+.IX Item "l line"
+
+.IX Item "l subname"
+
+.IX Item "-"
+
+.IX Item "w [line]"
+
+.IX Item "."
+
+.IX Item "f filename"
+
+.IX Item "/pattern/"
+
+.IX Item "?pattern?"
+
+.IX Item "L"
+
+.IX Item "S [[!]pattern]"
+
+.IX Item "t"
+
+.IX Item "t expr"
+
+.IX Item "b [line] [condition]"
+
+.IX Item "b subname [condition]"
+
+.IX Item "b postpone subname [condition]"
+
+.IX Item "b load filename"
+
+.IX Item "b compile subname"
+
+.IX Item "d [line]"
+
+.IX Item "D"
+
+.IX Item "a [line] command"
+
+.IX Item "A"
+
+.IX Item "O [opt[=val]] [op'val' [opt?]..."
+
+.IX Item "\f(CWrecallCommand\fR, \f(CWShellBang\fR"
+
+.IX Item "\f(CWpager\fR"
+
+.IX Item "\f(CWtkRunning\fR"
+
+.IX Item "\f(CWsignalLevel\fR, \f(CWwarnLevel\fR, \f(CWdieLevel\fR"
+
+.IX Item "\f(CWAutoTrace\fR"
+
+.IX Item "\f(CWLineInfo\fR"
+
+.IX Item "\f(CWinhibit_exit\fR"
+
+.IX Item "\f(CWPrintRet\fR"
+
+.IX Item "\f(CWornaments\fR"
+
+.IX Item "\f(CWframe\fR"
+
+.IX Item "\f(CWmaxTraceLen\fR"
+
+.IX Item "\f(CWarrayDepth\fR, \f(CWhashDepth\fR"
+
+.IX Item "\f(CWcompactDump\fR, \f(CWveryCompact\fR"
+
+.IX Item "\f(CWglobPrint\fR"
+
+.IX Item "\f(CWDumpDBFiles\fR"
+
+.IX Item "\f(CWDumpPackages\fR"
+
+.IX Item "\f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR"
+
+.IX Item "\f(CWUsageOnly\fR"
+
+.IX Item "\f(CWTTY\fR"
+
+.IX Item "\f(CWnoTTY\fR"
+
+.IX Item "\f(CWReadLine\fR"
+
+.IX Item "\f(CWNonStop\fR"
+
+.IX Item "< [ command ]"
+
+.IX Item "<< command"
+
+.IX Item "> command"
+
+.IX Item ">> command"
+
+.IX Item "{ [ command ]"
+
+.IX Item "{{ command"
+
+.IX Item "! number"
+
+.IX Item "! \-number"
+
+.IX Item "! pattern"
+
+.IX Item "!! cmd"
+
+.IX Item "H \-number"
+
+.IX Item "q or ^D"
+
+.IX Item "R"
+
+.IX Item "|dbcmd"
+
+.IX Item "||dbcmd"
+
+.IX Item "= [alias value]"
+
+.IX Item "command"
+
+.IX Item "m expr"
+
+.IX Item "m package"
+
+.IX Subsection "Debugger input/output"
+
+.IX Item "Prompt"
+
+.IX Item "Multiline commands"
+
+.IX Item "Stack backtrace"
+
+.IX Item "Listing"
+
+.IX Item "Frame listing"
+
+.IX Item "1"
+
+.IX Item "2"
+
+.IX Item "4"
+
+.IX Item "6"
+
+.IX Item "14"
+
+.IX Item "30"
+
+.IX Subsection "Debugging compile-time statements"
+
+.IX Subsection "Debugger Customization"
+
+.IX Subsection "Readline Support"
+
+.IX Subsection "Editor Support for Debugging"
+
+.IX Subsection "The Perl Profiler"
+
+.IX Subsection "Debugger support in perl"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "Debugger Internals"
+
+.IX Subsection "Other resources"
+
+.IX Header "BUGS"
+

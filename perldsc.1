@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDSC 1 "perl 5.004, patch 01" "29/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDSC 1"
+.TH PERLDSC 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perldsc - Perl Data Structures Cookbook"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perldsc \- Perl Data Structures Cookbook
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 The single feature most sorely lacking in the Perl programming language
 prior to its 5.0 release was complex data structures.  Even without direct
 language support, some valiant programmers did manage to emulate them, but
@@ -241,20 +237,14 @@ purloin a drop-in example from here.
 Let's look at each of these possible constructs in detail.  There are separate
 sections on each of the following:
 .Ip "\(bu arrays of arrays" 5
-.IX Item "\(bu arrays of arrays"
 .Ip "\(bu hashes of arrays" 5
-.IX Item "\(bu hashes of arrays"
 .Ip "\(bu arrays of hashes" 5
-.IX Item "\(bu arrays of hashes"
 .Ip "\(bu hashes of hashes" 5
-.IX Item "\(bu hashes of hashes"
 .Ip "\(bu more elaborate constructs" 5
-.IX Item "\(bu more elaborate constructs"
 .PP
 But for now, let's look at some of the general issues common to all
 of these types of data structures.
 .SH "REFERENCES"
-.IX Header "REFERENCES"
 The most important thing to understand about all data structures in Perl
 -- including multidimensional arrays\*(--is that even though they might
 appear otherwise, Perl \f(CW@ARRAY\fRs and \f(CW%HASH\fRes are all internally
@@ -302,7 +292,6 @@ to do this yourself using either prefix typing indicators, like
 \f(CW${$blah}\fR, \f(CW@{$blah}\fR, \f(CW@{$blah[$i]}\fR, or else postfix pointer arrows,
 like \f(CW$a->[3]\fR, \f(CW$h->{fred}\fR, or even \f(CW$ob->\fImethod()\fR->[3]\fR.
 .SH "COMMON MISTAKES"
-.IX Header "COMMON MISTAKES"
 The two most common mistakes made in constructing something like
 an array of arrays is either accidentally counting the number of
 elements or else taking a reference to the same memory location
@@ -445,7 +434,6 @@ In summary:
 \&    @{ $LoL[$i] } = @list;      # way too tricky for most programmers
 .Ve
 .SH "CAVEAT ON PRECEDENCE"
-.IX Header "CAVEAT ON PRECEDENCE"
 Speaking of things like \f(CW@{$LoL[$i]}\fR, the following are actually the
 same thing:
 .PP
@@ -468,7 +456,6 @@ of the array pointed to by \f(CW$LoL\fR. If you wanted the C notion, you'd have 
 write \f(CW${$LoL[$i]}\fR to force the \f(CW$LoL[$i]\fR to get evaluated first
 before the leading \f(CW$\fR dereferencer.
 .SH "WHY YOU SHOULD ALWAYS \f(CWuse strict\fR"
-.IX Header "WHY YOU SHOULD ALWAYS \f(CWuse strict\fR"
 If this is starting to sound scarier than it's worth, relax.  Perl has
 some features to help you avoid its most common pitfalls.  The best
 way to avoid getting confused is to start every program like this:
@@ -499,7 +486,6 @@ variable, and it would thereby remind you to write instead:
 \&    print $listref->[2][2]
 .Ve
 .SH "DEBUGGING"
-.IX Header "DEBUGGING"
 Before version 5.002, the standard Perl debugger didn't do a very nice job of
 printing out complex data structures.  With 5.002 or above, the
 debugger includes several new features, including command line editing as
@@ -528,14 +514,11 @@ example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
 .Ve
 There's also a lowercase \fBx\fR command which is nearly the same.
 .SH "CODE EXAMPLES"
-.IX Header "CODE EXAMPLES"
 Presented with little comment (these will get their own manpages someday)
 here are short code examples illustrating access of various
 types of data structures.
 .SH "LISTS OF LISTS"
-.IX Header "LISTS OF LISTS"
 .Sh "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 5
 \& @LoL = (
@@ -545,7 +528,6 @@ types of data structures.
 \&      );
 .Ve
 .Sh "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 4
 \& # reading from file
@@ -571,7 +553,6 @@ types of data structures.
 \& push @{ $LoL[0] }, "wilma", "betty";
 .Ve
 .Sh "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 2
 \& # one element
@@ -602,9 +583,7 @@ types of data structures.
 \& }
 .Ve
 .SH "HASHES OF LISTS"
-.IX Header "HASHES OF LISTS"
 .Sh "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 5
 \& %HoL = (
@@ -614,7 +593,6 @@ types of data structures.
 \&      );
 .Ve
 .Sh "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 6
 \& # reading from file
@@ -651,7 +629,6 @@ types of data structures.
 \& push @{ $HoL{"flintstones"} }, "wilma", "betty";
 .Ve
 .Sh "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
-.IX Subsection "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
 .PP
 .Vb 2
 \& # one element
@@ -695,9 +672,7 @@ types of data structures.
 \& }
 .Ve
 .SH "LISTS OF HASHES"
-.IX Header "LISTS OF HASHES"
 .Sh "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 16
 \& @LoH = (
@@ -718,7 +693,6 @@ types of data structures.
 \&  );
 .Ve
 .Sh "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 10
 \& # reading from file
@@ -759,7 +733,6 @@ types of data structures.
 \& $LoH[2]{pet} = "santa's little helper";
 .Ve
 .Sh "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 2
 \& # one element
@@ -798,9 +771,7 @@ types of data structures.
 \& }
 .Ve
 .SH "HASHES OF HASHES"
-.IX Header "HASHES OF HASHES"
 .Sh "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 16
 \& %HoH = (
@@ -821,7 +792,6 @@ types of data structures.
 \& );
 .Ve
 .Sh "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 9
 \& # reading from file
@@ -873,7 +843,6 @@ types of data structures.
 \& }
 .Ve
 .Sh "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
-.IX Subsection "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
 .PP
 .Vb 2
 \& # one element
@@ -930,9 +899,7 @@ types of data structures.
 \& }
 .Ve
 .SH "MORE ELABORATE RECORDS"
-.IX Header "MORE ELABORATE RECORDS"
 .Sh "Declaration of \s-1MORE\s0 \s-1ELABORATE\s0 \s-1RECORDS\s0"
-.IX Subsection "Declaration of \s-1MORE\s0 \s-1ELABORATE\s0 \s-1RECORDS\s0"
 Here's a sample showing how to create and use a record whose fields are of
 many different sorts:
 .PP
@@ -971,7 +938,6 @@ many different sorts:
 \&     $rec->{HANDLE}->print(" a string\en");
 .Ve
 .Sh "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
-.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
 .PP
 .Vb 10
 \&     %TV = (
@@ -1009,7 +975,6 @@ many different sorts:
 \&      );
 .Ve
 .Sh "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
-.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
 .PP
 .Vb 5
 \&     # reading from file
@@ -1090,7 +1055,6 @@ many different sorts:
 \&     }
 .Ve
 .SH "Database Ties"
-.IX Header "Database Ties"
 You cannot easily tie a multilevel data structure (such as a hash of
 hashes) to a dbm file.  The first problem is that all but GDBM and
 Berkeley DB have size limitations, but beyond that, you also have problems
@@ -1099,13 +1063,86 @@ module that does partially attempt to address this need is the MLDBM
 module.  Check your nearest CPAN site as described in the \fIperlmodlib\fR manpage for
 source code to MLDBM.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 \fIperlref\fR\|(1), \fIperllol\fR\|(1), \fIperldata\fR\|(1), \fIperlobj\fR\|(1)
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Tom Christiansen <\fItchrist@perl.com\fR>
 .PP
 Last update:
 Wed Oct 23 04:57:50 MET DST 1996
 
 .rn }` ''
+.IX Title "PERLDSC 1"
+.IX Name "perldsc - Perl Data Structures Cookbook"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "\(bu arrays of arrays"
+
+.IX Item "\(bu hashes of arrays"
+
+.IX Item "\(bu arrays of hashes"
+
+.IX Item "\(bu hashes of hashes"
+
+.IX Item "\(bu more elaborate constructs"
+
+.IX Header "REFERENCES"
+
+.IX Header "COMMON MISTAKES"
+
+.IX Header "CAVEAT ON PRECEDENCE"
+
+.IX Header "WHY YOU SHOULD ALWAYS \f(CWuse strict\fR"
+
+.IX Header "DEBUGGING"
+
+.IX Header "CODE EXAMPLES"
+
+.IX Header "LISTS OF LISTS"
+
+.IX Subsection "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Subsection "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Subsection "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Header "HASHES OF LISTS"
+
+.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Subsection "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
+
+.IX Header "LISTS OF HASHES"
+
+.IX Subsection "Declaration of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Subsection "Generation of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Subsection "Access and Printing of a \s-1LIST\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Header "HASHES OF HASHES"
+
+.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Subsection "Access and Printing of a \s-1HASH\s0 \s-1OF\s0 \s-1HASHES\s0"
+
+.IX Header "MORE ELABORATE RECORDS"
+
+.IX Subsection "Declaration of \s-1MORE\s0 \s-1ELABORATE\s0 \s-1RECORDS\s0"
+
+.IX Subsection "Declaration of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
+
+.IX Subsection "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1COMPLEX\s0 \s-1RECORDS\s0"
+
+.IX Header "Database Ties"
+
+.IX Header "SEE ALSO"
+
+.IX Header "AUTHOR"
+

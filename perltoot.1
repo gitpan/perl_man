@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTOOT 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLTOOT 1"
+.TH PERLTOOT 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perltoot - Tom's object-oriented tutorial for perl"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perltoot \- Tom's object-oriented tutorial for perl
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Object-oriented programming is a big seller these days.  Some managers
 would rather have objects than sliced bread.  Why is that?  What's so
 special about an object?  Just what \fIis\fR an object anyway?
@@ -242,7 +238,6 @@ as the underlying intrinsic data type.  It could be a scalar, an array,
 or a hash reference.  It could even be a code reference.  But because
 of its inherent flexibility, an object is usually a hash reference.
 .SH "Creating a Class"
-.IX Header "Creating a Class"
 Before you create a class, you need to decide what to name it.  That's
 because the class (package) name governs the name of the file used to
 house it, just as with regular modules.  Then, that class (package)
@@ -275,7 +270,6 @@ a reserved word, and a class is under no obligation to supply such.
 Some programmers have also been known to use a function with
 the same name as the class as the constructor.
 .Sh "Object Representation"
-.IX Subsection "Object Representation"
 By far the most common mechanism used in Perl to represent a Pascal
 record, a C struct, or a \*(C+ class is an anonymous hash.  That's because a
 hash has an arbitrary number of data fields, each conveniently accessed by
@@ -314,7 +308,6 @@ an opaque cookie that you use \fIobject methods\fR to access.  Visually,
 methods look like you're dereffing a reference using a function name
 instead of brackets or braces.
 .Sh "Class Interface"
-.IX Subsection "Class Interface"
 Some languages provide a formal syntactic interface to a class's methods,
 but Perl does not.  It relies on you to read the documentation of each
 class.  If you try to call an undefined method on an object, Perl won't
@@ -352,7 +345,6 @@ implementation or another.  The interface to the class and its objects
 is exclusively via methods, and that's all the user of the class should
 ever play with.
 .Sh "Constructors and Instance Methods"
-.IX Subsection "Constructors and Instance Methods"
 Still, \fIsomeone\fR has to know what's in the object.  And that someone is
 the class.  It implements methods that the programmer uses to access
 the object.  Here's how to implement the Person class using the standard
@@ -414,7 +406,6 @@ and \fIpeers()\fR.  These are all substantially similar.  If called with an
 argument, they set the appropriate field; otherwise they return the
 value held by that field, meaning the value of that hash key.
 .Sh "Planning for the Future: Better Constructors"
-.IX Subsection "Planning for the Future: Better Constructors"
 Even though at this point you may not even know what it means, someday
 you're going to worry about inheritance.  (You can safely ignore this
 for now and worry about it later if you'd like.)  To ensure that this
@@ -454,7 +445,6 @@ That's about all there is for constructors.  These methods bring objects
 to life, returning neat little opaque bundles to the user to be used in
 subsequent method calls.
 .Sh "Destructors"
-.IX Subsection "Destructors"
 Every story has a beginning and an end.  The beginning of the object's
 story is its constructor, explicitly called when the object comes into
 existence.  But the ending of its story is the \fIdestructor\fR, a method
@@ -503,7 +493,6 @@ destroyed, except in the unique case of a program that never exits.
 (If you're running Perl embedded in another application, this full \s-1GC\s0
 pass happens a bit more frequently\*(--whenever a thread shuts down.)
 .Sh "Other Object Methods"
-.IX Subsection "Other Object Methods"
 The methods we've talked about so far have either been constructors or
 else simple \*(L"data methods\*(R", interfaces to data stored in the object.
 These are a bit like an object's data members in the \*(C+ world, except
@@ -563,7 +552,6 @@ it's more convenient when you want to interpolate in strings.  But using
 methods (the external interface) internally shields not just the users of
 your class but even you yourself from changes in your data representation.
 .SH "Class Data"
-.IX Header "Class Data"
 What about \*(L"class data\*(R", data items common to each object in a class?
 What would you want that for?  Well, in your Person class, you might
 like to keep track of the total people alive.  How do you implement that?
@@ -632,7 +620,6 @@ this could be done:
 Notice how there's no memory to deallocate in the destructor?  That's
 something that Perl takes care of for you all by itself.
 .Sh "Accessing Class Data"
-.IX Subsection "Accessing Class Data"
 It turns out that this is not really a good way to go about handling
 class data.  A good scalable rule is that \fIyou must never reference class
 data directly from an object method\fR.  Otherwise you aren't building a
@@ -691,7 +678,6 @@ to perl version 5.004 we'll have to quote the field name.)
 \&    }
 .Ve
 .Sh "Debugging Methods"
-.IX Subsection "Debugging Methods"
 It's common for a class to have a debugging mechanism.  For example,
 you might want to see when objects are created or destroyed.  To do that,
 add a debugging variable as a file-scoped lexical.  For this, we'll pull
@@ -760,7 +746,6 @@ What happens if a derived class (which we'll call Employee) inherits
 methods from this Person base class?  Then \f(CWEmployee->\fIdebug()\fR\fR, when called
 as a class method, manipulates \f(CW$Person::Debugging\fR not \f(CW$Employee::Debugging\fR.
 .Sh "Class Destructors"
-.IX Subsection "Class Destructors"
 The object destructor handles the death of each distinct object.  But sometimes
 you want a bit of cleanup when the entire class is shut down, which
 currently only happens when the program exits.  To make such a
@@ -779,7 +764,6 @@ or dies of an uncaught signal.  For example,
 When the program exits, all the class destructors (\s-1END\s0 functions) are
 be called in the opposite order that they were loaded in (\s-1LIFO\s0 order).
 .Sh "Documenting the Interface"
-.IX Subsection "Documenting the Interface"
 And there you have it: we've just shown you the \fIimplementation\fR of this
 Person class.  Its \fIinterface\fR would be its documentation.  Usually this
 means putting it in pod ("plain old documentation") format right there
@@ -846,7 +830,6 @@ A programmer who opens up the module and plays around with all the private
 little shiny bits that were safely locked up behind the interface contract
 has voided the warranty, and you shouldn't worry about their fate.
 .SH "Aggregation"
-.IX Header "Aggregation"
 Suppose you later want to change the class to implement better names.
 Perhaps you'd like to support both given names (called Christian names,
 irrespective of one's religion) and family names (called surnames), plus
@@ -1002,7 +985,6 @@ Finally, here's the test program:
 \&    show_census();
 .Ve
 .SH "Inheritance"
-.IX Header "Inheritance"
 Object-oriented programming systems all support some notion of
 inheritance.  Inheritance means allowing one class to piggy-back on
 top of another one so you don't have to write the same code again and
@@ -1111,7 +1093,6 @@ this up.  Meanwhile, here's the straight-forward way:
 \&    }
 .Ve
 .Sh "Overridden Methods"
-.IX Subsection "Overridden Methods"
 What happens when both a derived class and its base class have the same
 method defined?  Well, then you get the derived class's version of that
 method.  For example, let's say that we want the \fIpeers()\fR method called on
@@ -1285,7 +1266,6 @@ fix up \fIEmployee::new()\fR this way:
 Now if you dump out an Employee or Boss object, you'll find
 that new fields show up there now.
 .Sh "Multiple Inheritance"
-.IX Subsection "Multiple Inheritance"
 Ok, at the risk of confusing beginners and annoying \s-1OO\s0 gurus, it's
 time to confess that Perl's object system includes that controversial
 notion known as multiple inheritance, or \s-1MI\s0 for short.  All this means
@@ -1353,7 +1333,6 @@ like Nought?  If you kept climbing up the inheritance tree calling
 overridden methods, you'd end up calling \fINought::new()\fR twice,
 which might well be a bad idea.
 .Sh "\s-1UNIVERSAL\s0: The Root of All Objects"
-.IX Subsection "\s-1UNIVERSAL\s0: The Root of All Objects"
 Wouldn't it be convenient if all objects were rooted at some ultimate
 base class?  That way you could give every object common methods without
 having to go and add it to each and every \f(CW@ISA\fR.  Well, it turns out that
@@ -1411,7 +1390,6 @@ higher available.   This is not the same as loading in that exact version
 number.  No mechanism currently exists for concurrent installation of
 multiple versions of a module.  Lamentably.
 .SH "Alternate Object Representations"
-.IX Header "Alternate Object Representations"
 Nothing requires objects to be implemented as hash references.  An object
 can be any sort of reference so long as its referent has been suitably
 blessed.  That means scalar, array, and code references are also fair
@@ -1421,7 +1399,6 @@ A scalar would work if the object has only one datum to hold.  An array
 would work for most cases, but makes inheritance a bit dodgy because
 you have to invent new indices for the derived classes.
 .Sh "Arrays as Objects"
-.IX Subsection "Arrays as Objects"
 If the user of your class honors the contract and sticks to the advertised
 interface, then you can change its underlying interface if you feel
 like it.  Here's another implementation that conforms to the same
@@ -1492,7 +1469,6 @@ scalability, though, because later in life when you feel
 like creating subclasses, you'll find that hashes just work
 out better.
 .Sh "Closures as Objects"
-.IX Subsection "Closures as Objects"
 Using a code reference to represent an object offers some fascinating
 possibilities.  We can create a new anonymous function (closure) who
 alone in all the world can see the object's data.  This is because we
@@ -1593,7 +1569,6 @@ programmer, would come into play, here you have it. (More seriously,
 Hubris is just the pride in craftsmanship that comes from having written
 a sound bit of well-designed code.)
 .SH "AUTOLOAD: Proxy Methods"
-.IX Header "AUTOLOAD: Proxy Methods"
 Autoloading is a way to intercept calls to undefined methods.  An autoload
 routine may choose to create a new function on the fly, either loaded
 from disk or perhaps just \fIeval()\fRed right there.  This define-on-the-fly
@@ -1623,7 +1598,6 @@ through \f(CW@ISA\fR, though.  Some programmers have even been known to define
 a UNIVERSAL::AUTOLOAD method to trap unresolved method calls to any
 kind of object.
 .Sh "Autoloaded Data Methods"
-.IX Subsection "Autoloaded Data Methods"
 You probably began to get a little suspicious about the duplicated
 code way back earlier when we first showed you the Person class, and
 then later the Employee class.  Each method used to access the
@@ -1712,7 +1686,6 @@ wanted to demonstrate how to store a reference to class data on the
 object so you wouldn't have to access that class data
 directly from an object method.
 .Sh "Inherited Autoloaded Data Methods"
-.IX Subsection "Inherited Autoloaded Data Methods"
 But what about inheritance?  Can we define our Employee
 class similarly?  Yes, so long as we're careful enough.
 .PP
@@ -1749,7 +1722,6 @@ Once we've done this, we don't even need to have an
 we'll grab Person's version of that via inheritance,
 and it will all work out just fine.
 .SH "Metaclassical Tools"
-.IX Header "Metaclassical Tools"
 Even though proxy methods can provide a more convenient approach to making
 more struct-like classes than tediously coding up data methods as
 functions, it still leaves a bit to be desired.  For one thing, it means
@@ -1763,7 +1735,6 @@ that create other classes.  A couple worth looking at are
 Class::Struct and Alias.  These and other related metaclasses can be
 found in the modules directory on CPAN.
 .Sh "Class::Struct"
-.IX Subsection "Class::Struct"
 One of the older ones is Class::Struct.  In fact, its syntax and
 interface were sketched out long before perl5 even solidified into a
 real thing.  What it does is provide you a way to \*(L"declare\*(R" a class
@@ -1940,7 +1911,6 @@ that's all lowercase, by convention reserved for compiler pragmas,
 because they affect the compilation and change a builtin function.
 They also have the type names that a C programmer would most expect.
 .Sh "Data Members as Variables"
-.IX Subsection "Data Members as Variables"
 If you're used to \*(C+ objects, then you're accustomed to being able to
 get at an object's data members as simple variables from within a method.
 The Alias module provides for this, as well as a good bit more, such
@@ -2017,9 +1987,7 @@ as with any other \fIlocal()\fR.
 It would be nice to combine Alias with
 something like Class::Struct or Class::MethodMaker.
 .Sh "\s-1NOTES\s0"
-.IX Subsection "\s-1NOTES\s0"
 .Sh "Object Terminology"
-.IX Subsection "Object Terminology"
 In the various \s-1OO\s0 literature, it seems that a lot of different words
 are used to describe only a few different concepts.  If you're not
 already an object programmer, then you don't need to worry about all
@@ -2054,7 +2022,6 @@ factory\fR) philosophy and the \*(L"class as type definition\*(R" (\fIdeclaring\
 behaviour, not \fIdefining\fR mechanism) idea.  \*(C+ supports the latter
 notion, but not the former.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 The following manpages will doubtless provide more
 background for this one:
 the \fIperlmod\fR manpage,
@@ -2065,7 +2032,6 @@ the \fIperltie\fR manpage,
 and
 the \fIoverload\fR manpage.
 .SH "COPYRIGHT"
-.IX Header "COPYRIGHT"
 I \fIreally\fR hate to have to say this, but recent unpleasant
 experiences have mandated its inclusion:
 .PP
@@ -2087,7 +2053,6 @@ be written by someone else, I'll tell all the world that you're a jerk.
 Furthermore, your lawyer will meet my lawyer (or O'Reilly's) over lunch
 to arrange for you to receive your just deserts.  Count on it.
 .Sh "Acknowledgments"
-.IX Subsection "Acknowledgments"
 Thanks to
 Larry Wall,
 Roderick Schertler,
@@ -2100,3 +2065,72 @@ Brad Appleton,
 and many others for their helpful comments.
 
 .rn }` ''
+.IX Title "PERLTOOT 1"
+.IX Name "perltoot - Tom's object-oriented tutorial for perl"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "Creating a Class"
+
+.IX Subsection "Object Representation"
+
+.IX Subsection "Class Interface"
+
+.IX Subsection "Constructors and Instance Methods"
+
+.IX Subsection "Planning for the Future: Better Constructors"
+
+.IX Subsection "Destructors"
+
+.IX Subsection "Other Object Methods"
+
+.IX Header "Class Data"
+
+.IX Subsection "Accessing Class Data"
+
+.IX Subsection "Debugging Methods"
+
+.IX Subsection "Class Destructors"
+
+.IX Subsection "Documenting the Interface"
+
+.IX Header "Aggregation"
+
+.IX Header "Inheritance"
+
+.IX Subsection "Overridden Methods"
+
+.IX Subsection "Multiple Inheritance"
+
+.IX Subsection "\s-1UNIVERSAL\s0: The Root of All Objects"
+
+.IX Header "Alternate Object Representations"
+
+.IX Subsection "Arrays as Objects"
+
+.IX Subsection "Closures as Objects"
+
+.IX Header "AUTOLOAD: Proxy Methods"
+
+.IX Subsection "Autoloaded Data Methods"
+
+.IX Subsection "Inherited Autoloaded Data Methods"
+
+.IX Header "Metaclassical Tools"
+
+.IX Subsection "Class::Struct"
+
+.IX Subsection "Data Members as Variables"
+
+.IX Subsection "\s-1NOTES\s0"
+
+.IX Subsection "Object Terminology"
+
+.IX Header "SEE ALSO"
+
+.IX Header "COPYRIGHT"
+
+.IX Subsection "Acknowledgments"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXSTUT 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "PERLXSTUT 1"
+.TH PERLXSTUT 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlXStut - Tutorial for XSUBs"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlXStut \- Tutorial for XSUBs
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This tutorial will educate the reader on the steps involved in creating
 a Perl extension.  The reader is assumed to have access to the \fIperlguts\fR manpage and
 the \fIperlxs\fR manpage.
@@ -203,14 +199,12 @@ with each new example adding new features.  Certain concepts may not be
 completely explained until later in the tutorial to ease the
 reader slowly into building extensions.
 .Sh "\s-1VERSION\s0 \s-1CAVEAT\s0"
-.IX Subsection "\s-1VERSION\s0 \s-1CAVEAT\s0"
 This tutorial tries hard to keep up with the latest development versions
 of Perl.  This often means that it is sometimes in advance of the latest
 released version of Perl, and that certain features described here might
 not work on earlier versions.  This section will keep track of when various
 features were added to Perl 5.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 In versions of Perl 5.002 prior to the gamma version, the test script
 in Example 1 will not function properly.  You need to change the \*(L"use
 lib\*(R" line to read:
@@ -219,12 +213,10 @@ lib\*(R" line to read:
 \&        use lib './blib';
 .Ve
 .Ip "\(bu" 4
-.IX Item "\(bu"
 In versions of Perl 5.002 prior to version beta 3, the line in the .xs file
 about \*(L"\s-1PROTOTYPES\s0: \s-1DISABLE\s0\*(R" will cause a compiler error.  Simply remove that
 line from the file.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 In versions of Perl 5.002 prior to version 5.002b1h, the test.pl file was not
 automatically created by h2xs.  This means that you cannot say \*(L"make test\*(R"
 to run the test script.  You will need to add the following line before the
@@ -234,7 +226,6 @@ to run the test script.  You will need to add the following line before the
 \&        use lib './blib';
 .Ve
 .Ip "\(bu" 4
-.IX Item "\(bu"
 In versions 5.000 and 5.001, instead of using the above line, you will need
 to use the following line:
 .Sp
@@ -242,11 +233,9 @@ to use the following line:
 \&        BEGIN { unshift(@INC, "./blib") }
 .Ve
 .Ip "\(bu" 4
-.IX Item "\(bu"
 This document assumes that the executable named \*(L"perl\*(R" is Perl version 5.
 Some systems may have installed Perl version 5 as \*(L"perl5\*(R".
 .Sh "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
-.IX Subsection "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
 It is commonly thought that if a system does not have the capability to
 load a library dynamically, you cannot build XSUBs.  This is incorrect.
 You \fIcan\fR build them, but you must link the \s-1XSUB\s0's subroutines with the
@@ -268,7 +257,6 @@ instead of saying \*(L"make test\*(R", you should say \*(L"make test_static\*(R"
 that cannot build dynamically-loadable libraries at all, simply saying \*(L"make
 test\*(R" is sufficient.
 .Sh "\s-1EXAMPLE\s0 1"
-.IX Subsection "\s-1EXAMPLE\s0 1"
 Our first extension will be very simple.  When we call the routine in the
 extension, it will print out a well-known message and return.
 .PP
@@ -403,7 +391,6 @@ Now we run the script and we should see the following output:
 \&        %
 .Ve
 .Sh "\s-1EXAMPLE\s0 2"
-.IX Subsection "\s-1EXAMPLE\s0 2"
 Now let's add to our extension a subroutine that will take a single argument
 and return 1 if the argument is even, 0 if the argument is odd.
 .PP
@@ -459,7 +446,6 @@ should see output that looks something like this:
 \&        %
 .Ve
 .Sh "\s-1WHAT\s0 \s-1HAS\s0 \s-1GONE\s0 \s-1ON\s0?"
-.IX Subsection "\s-1WHAT\s0 \s-1HAS\s0 \s-1GONE\s0 \s-1ON\s0?"
 The program h2xs is the starting point for creating extensions.  In later
 examples we'll see how we can use h2xs to read header files and generate
 templates to connect to C routines.
@@ -520,7 +506,6 @@ The \f(CW$VERSION\fR variable is used to ensure that the .pm file and the shared
 library are \*(L"in sync\*(R" with each other.  Any time you make changes to
 the .pm or .xs files, you should increment the value of this variable.
 .Sh "\s-1WRITING\s0 \s-1GOOD\s0 \s-1TEST\s0 \s-1SCRIPTS\s0"
-.IX Subsection "\s-1WRITING\s0 \s-1GOOD\s0 \s-1TEST\s0 \s-1SCRIPTS\s0"
 The importance of writing good test scripts cannot be overemphasized.  You
 should closely follow the \*(L"ok/not ok\*(R" style that Perl itself uses, so that
 it is very easy and unambiguous to determine the outcome of each test case.
@@ -532,7 +517,6 @@ might want to copy Perl's test style.  Create a directory named \*(L"t\*(R", and
 ensure all your test files end with the suffix \*(L".t\*(R".  The Makefile will
 properly run all these test files.
 .Sh "\s-1EXAMPLE\s0 3"
-.IX Subsection "\s-1EXAMPLE\s0 3"
 Our third extension will take one argument as its input, round off that
 value, and set the \fIargument\fR to the rounded value.
 .PP
@@ -579,7 +563,6 @@ the following line to test.pl temporarily:
 Run \*(L"make test\*(R" and notice that Perl dies with a fatal error.  Perl won't let
 you change the value of constants!
 .Sh "\s-1WHAT\s0'S \s-1NEW\s0 \s-1HERE\s0?"
-.IX Subsection "\s-1WHAT\s0'S \s-1NEW\s0 \s-1HERE\s0?"
 Two things are new here.  First, we've made some changes to Makefile.\s-1PL\s0.
 In this case, we've specified an extra library to link in, the math library
 libm.  We'll talk later about how to write XSUBs that can call every routine
@@ -588,7 +571,6 @@ in a library.
 Second, the value of the function is being passed back not as the function's
 return value, but through the same variable that was passed into the function.
 .Sh "\s-1INPUT\s0 \s-1AND\s0 \s-1OUTPUT\s0 \s-1PARAMETERS\s0"
-.IX Subsection "\s-1INPUT\s0 \s-1AND\s0 \s-1OUTPUT\s0 \s-1PARAMETERS\s0"
 You specify the parameters that will be passed into the \s-1XSUB\s0 just after you
 declare the function return value and name.  Each parameter line starts with
 optional white space, and may have an optional terminating semicolon.
@@ -599,12 +581,10 @@ value of the \s-1XSUB\s0 function.  In Example 3, the value we wanted returned w
 contained in the same variable we passed in, so we listed it (and not \s-1RETVAL\s0)
 in the \s-1OUTPUT\s0: section.
 .Sh "\s-1THE\s0 \s-1XSUBPP\s0 \s-1COMPILER\s0"
-.IX Subsection "\s-1THE\s0 \s-1XSUBPP\s0 \s-1COMPILER\s0"
 The compiler xsubpp takes the \s-1XS\s0 code in the .xs file and converts it into
 C code, placing it in a file whose suffix is .c.  The C code created makes
 heavy use of the C functions within Perl.
 .Sh "\s-1THE\s0 \s-1TYPEMAP\s0 \s-1FILE\s0"
-.IX Subsection "\s-1THE\s0 \s-1TYPEMAP\s0 \s-1FILE\s0"
 The xsubpp compiler uses rules to convert from Perl's data types (scalar,
 array, etc.) to C's data types (int, char *, etc.).  These rules are stored
 in the typemap file ($\s-1PERLLIB/\s0ExtUtils/typemap).  This file is split into
@@ -648,13 +628,11 @@ be passed back to the calling subroutine.  These two functions are explained
 in the \fIperlguts\fR manpage; we'll talk more later about what that \*(L"\fI\s-1ST\s0\fR\|(0)\*(R" means in the
 section on the argument stack.
 .Sh "\s-1WARNING\s0"
-.IX Subsection "\s-1WARNING\s0"
 In general, it's not a good idea to write extensions that modify their input
 parameters, as in Example 3.  However, to accommodate better calling
 pre-existing C routines, which often do modify their input parameters,
 this behavior is tolerated.  The next example will show how to do this.
 .Sh "\s-1EXAMPLE\s0 4"
-.IX Subsection "\s-1EXAMPLE\s0 4"
 In this example, we'll now begin to write XSUBs that will interact with
 predefined C libraries.  To begin with, we will build a small library of
 our own, then let h2xs write our .pm and .xs files for us.
@@ -743,12 +721,12 @@ and a new replacement subroutine too:
 \&        sub MY::postamble {
 \&        '
 \&        $(MYEXTLIB): mylib/Makefile
-\&                cd mylib && $(MAKE)
+\&                cd mylib && $(MAKE) $(PASTHRU)
 \&        ';
 \&        }
 .Ve
 (Note: Most makes will require that there be a tab character that indents
-the line \*(L"cd mylib && $(\s-1MAKE\s0)\*(R", similarly for the Makefile in the
+the line \f(CWcd mylib && $(MAKE) $(PASTHRU)\fR, similarly for the Makefile in the
 subdirectory.)
 .PP
 Let's also fix the \s-1MANIFEST\s0 file so that it accurately reflects the contents
@@ -804,22 +782,18 @@ for equality, but rather the difference being below a certain epsilon factor,
 .PP
 Run \*(L"make test\*(R" and all should be well.
 .Sh "\s-1WHAT\s0 \s-1HAS\s0 \s-1HAPPENED\s0 \s-1HERE\s0?"
-.IX Subsection "\s-1WHAT\s0 \s-1HAS\s0 \s-1HAPPENED\s0 \s-1HERE\s0?"
 Unlike previous examples, we've now run h2xs on a real include file.  This
 has caused some extra goodies to appear in both the .pm and .xs files.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 In the .xs file, there's now a #include declaration with the full path to
 the mylib.h header file.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 There's now some new C code that's been added to the .xs file.  The purpose
 of the \f(CWconstant\fR routine is to make the values that are #define'd in the
 header file available to the Perl script (in this case, by calling
 \f(CW&main::TESTVAL\fR).  There's also some \s-1XS\s0 code to allow calls to the
 \f(CWconstant\fR routine.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 The .pm file has exported the name \s-1TESTVAL\s0 in the \f(CW@EXPORT\fR array.  This
 could lead to name clashes.  A good rule of thumb is that if the #define
 is going to be used by only the C routines themselves, and not by the user,
@@ -827,7 +801,6 @@ they should be removed from the \f(CW@EXPORT\fR array.  Alternately, if you don'
 mind using the \*(L"fully qualified name\*(R" of a variable, you could remove most
 or all of the items in the \f(CW@EXPORT\fR array.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 If our include file contained #include directives, these would not be
 processed at all by h2xs.  There is no good solution to this right now.
 .PP
@@ -841,7 +814,6 @@ specified simply that the library to be created here was a static
 archive (as opposed to a dynamically loadable library) and provided the
 commands to build it.
 .Sh "\s-1SPECIFYING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1XSUBPP\s0"
-.IX Subsection "\s-1SPECIFYING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1XSUBPP\s0"
 With the completion of Example 4, we now have an easy way to simulate some
 real-life libraries whose interfaces may not be the cleanest in the world.
 We shall now continue with a discussion of the arguments passed to the
@@ -891,7 +863,6 @@ what will be passed to the C function -- it will be whatever is in the
 You should take great pains to try to pass the function the type of variable
 it wants, when possible.  It will save you a lot of trouble in the long run.
 .Sh "\s-1THE\s0 \s-1ARGUMENT\s0 \s-1STACK\s0"
-.IX Subsection "\s-1THE\s0 \s-1ARGUMENT\s0 \s-1STACK\s0"
 If we look at any of the C code generated by any of the examples except
 example 1, you will notice a number of references to \fI\s-1ST\s0\fR\|(n), where n is
 usually 0.  The \*(L"\s-1ST\s0\*(R" is actually a macro that points to the n'th argument
@@ -903,7 +874,6 @@ which argument corresponds to which of the argument stack (i.e., the first
 one listed is the first argument, and so on).  You invite disaster if you
 do not list them in the same order as the function expects them.
 .Sh "\s-1EXTENDING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
-.IX Subsection "\s-1EXTENDING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 Sometimes you might want to provide some extra methods or subroutines
 to assist in making the interface between Perl and your extension simpler
 or easier to understand.  These routines should live in the .pm file.
@@ -911,7 +881,6 @@ Whether they are automatically loaded when the extension itself is loaded
 or loaded only when called depends on where in the .pm file the subroutine
 definition is placed.
 .Sh "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
-.IX Subsection "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 There is absolutely no excuse for not documenting your extension.
 Documentation belongs in the .pm file.  This file will be fed to pod2man,
 and the embedded documentation will be converted to the manpage format,
@@ -924,23 +893,88 @@ as the comment inside the .pm file explains.
 .PP
 See the \fIperlpod\fR manpage for more information about the pod format.
 .Sh "\s-1INSTALLING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
-.IX Subsection "\s-1INSTALLING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 Once your extension is complete and passes all its tests, installing it
 is quite simple: you simply run \*(L"make install\*(R".  You will either need
 to have write permission into the directories where Perl is installed,
 or ask your system administrator to run the make for you.
 .Sh "\s-1SEE\s0 \s-1ALSO\s0"
-.IX Subsection "\s-1SEE\s0 \s-1ALSO\s0"
 For more information, consult the \fIperlguts\fR manpage, the \fIperlxs\fR manpage, the \fIperlmod\fR manpage,
 and the \fIperlpod\fR manpage.
 .Sh "Author"
-.IX Subsection "Author"
 Jeff Okamoto <\fIokamoto@corp.hp.com\fR>
 .PP
 Reviewed and assisted by Dean Roehrich, Ilya Zakharevich, Andreas Koenig,
 and Tim Bunce.
 .Sh "Last Changed"
-.IX Subsection "Last Changed"
 1996/7/10
 
 .rn }` ''
+.IX Title "PERLXSTUT 1"
+.IX Name "perlXStut - Tutorial for XSUBs"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "\s-1VERSION\s0 \s-1CAVEAT\s0"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
+
+.IX Subsection "\s-1EXAMPLE\s0 1"
+
+.IX Subsection "\s-1EXAMPLE\s0 2"
+
+.IX Subsection "\s-1WHAT\s0 \s-1HAS\s0 \s-1GONE\s0 \s-1ON\s0?"
+
+.IX Subsection "\s-1WRITING\s0 \s-1GOOD\s0 \s-1TEST\s0 \s-1SCRIPTS\s0"
+
+.IX Subsection "\s-1EXAMPLE\s0 3"
+
+.IX Subsection "\s-1WHAT\s0'S \s-1NEW\s0 \s-1HERE\s0?"
+
+.IX Subsection "\s-1INPUT\s0 \s-1AND\s0 \s-1OUTPUT\s0 \s-1PARAMETERS\s0"
+
+.IX Subsection "\s-1THE\s0 \s-1XSUBPP\s0 \s-1COMPILER\s0"
+
+.IX Subsection "\s-1THE\s0 \s-1TYPEMAP\s0 \s-1FILE\s0"
+
+.IX Subsection "\s-1WARNING\s0"
+
+.IX Subsection "\s-1EXAMPLE\s0 4"
+
+.IX Subsection "\s-1WHAT\s0 \s-1HAS\s0 \s-1HAPPENED\s0 \s-1HERE\s0?"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "\s-1SPECIFYING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1XSUBPP\s0"
+
+.IX Subsection "\s-1THE\s0 \s-1ARGUMENT\s0 \s-1STACK\s0"
+
+.IX Subsection "\s-1EXTENDING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
+
+.IX Subsection "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
+
+.IX Subsection "\s-1INSTALLING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
+
+.IX Subsection "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "Author"
+
+.IX Subsection "Last Changed"
+

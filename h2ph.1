@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH H2PH 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "H2PH 1"
+.TH H2PH 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "h2ph - convert .h C header files to .ph Perl header files"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,13 +188,10 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 h2ph \- convert .h C header files to .ph Perl header files
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBh2ph [headerfiles]\fR
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 \fIh2ph\fR
 converts any C header files specified to the corresponding Perl header file
 format.
@@ -211,10 +206,8 @@ hierarchy with a \fB\-d\fR switch.
 .PP
 If run with no arguments, filters standard input to standard output.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 No environment variables are used.
 .SH "FILES"
-.IX Header "FILES"
 .PP
 .Vb 2
 \& /usr/include/*.h
@@ -222,16 +215,12 @@ No environment variables are used.
 .Ve
 etc.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 \fIperl\fR\|(1)
 .SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
 The usual warnings if it can't read or write the files involved.
 .SH "BUGS"
-.IX Header "BUGS"
 Doesn't construct the \f(CW%sizeof\fR array for you.
 .PP
 It doesn't handle all C constructs, but it does attempt to isolate
@@ -242,3 +231,24 @@ It's only intended as a rough tool.
 You may need to dicker with the files produced.
 
 .rn }` ''
+.IX Title "H2PH 1"
+.IX Name "h2ph - convert .h C header files to .ph Perl header files"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "FILES"
+
+.IX Header "AUTHOR"
+
+.IX Header "SEE ALSO"
+
+.IX Header "DIAGNOSTICS"
+
+.IX Header "BUGS"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOL 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLLOL 1"
+.TH PERLLOL 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlLoL - Manipulating Lists of Lists in Perl"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,9 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlLoL \- Manipulating Lists of Lists in Perl
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .SH "Declaration and Access of Lists of Lists"
-.IX Header "Declaration and Access of Lists of Lists"
 The simplest thing to build is a list of lists (sometimes called an array
 of arrays).  It's reasonably easy to understand, and almost everything
 that applies here will also be applicable later on with the fancier data
@@ -254,7 +249,6 @@ square or curly), you are free to omit the pointer dereferencing arrow.
 But you cannot do so for the very first one if it's a scalar containing
 a reference, which means that \f(CW$ref_to_LoL\fR always needs it.
 .SH "Growing Your Own"
-.IX Header "Growing Your Own"
 That's all well and good for declaration of a fixed data structure,
 but what if you wanted to add new elements on the fly, or build
 it up entirely from scratch?
@@ -394,7 +388,6 @@ Notice that I \fIcouldn't\fR say just:
 In fact, that wouldn't even compile.  How come?  Because the argument
 to \fIpush()\fR must be a real array, not just a reference to such.
 .SH "Access and Printing"
-.IX Header "Access and Printing"
 Now it's time to print your data structure out.  How
 are you going to do that?  Well, if you want only one
 of the elements, it's trivial:
@@ -458,7 +451,6 @@ Hmm... that's still a bit ugly.  How about this:
 \&    }
 .Ve
 .SH "Slices"
-.IX Header "Slices"
 If you want to get at a slice (part of a row) in a multidimensional
 array, you're going to have to do some fancy subscripting.  That's
 because while we have a nice synonym for single elements via the
@@ -525,12 +517,29 @@ If I were you, I'd put that in a function:
 \&    }
 .Ve
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 \fIperldata\fR\|(1), \fIperlref\fR\|(1), \fIperldsc\fR\|(1)
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Tom Christiansen <\fItchrist@perl.com\fR>
 .PP
 Last udpate: Sat Oct  7 19:35:26 MDT 1995
 
 .rn }` ''
+.IX Title "PERLLOL 1"
+.IX Name "perlLoL - Manipulating Lists of Lists in Perl"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "Declaration and Access of Lists of Lists"
+
+.IX Header "Growing Your Own"
+
+.IX Header "Access and Printing"
+
+.IX Header "Slices"
+
+.IX Header "SEE ALSO"
+
+.IX Header "AUTHOR"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSUB 1 "perl 5.004, patch 01" "10/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLSUB 1"
+.TH PERLSUB 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlsub - Perl subroutines"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlsub \- Perl subroutines
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 To declare subroutines:
 .PP
 .Vb 2
@@ -222,7 +218,6 @@ To call subroutines:
 \&    &NAME;         # Passes current @_ to subroutine.
 .Ve
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Like many languages, Perl provides for user-defined subroutines.  These
 may be located anywhere in the main program, loaded in from other files
 via the \f(CWdo\fR, \f(CWrequire\fR, or \f(CWuse\fR keywords, or even generated on the
@@ -398,7 +393,6 @@ disables any prototype checking on the arguments you do provide.  This
 is partly for historical reasons, and partly for having a convenient way
 to cheat if you know what you're doing.  See the section on Prototypes below.
 .Sh "Private Variables via \fImy()\fR"
-.IX Subsection "Private Variables via \fImy()\fR"
 Synopsis:
 .PP
 .Vb 4
@@ -622,7 +616,6 @@ starts to run:
 .Ve
 See the \fIperlrun\fR manpage about the \s-1BEGIN\s0 function.
 .Sh "Temporary Values via \fIlocal()\fR"
-.IX Subsection "Temporary Values via \fIlocal()\fR"
 \fB\s-1NOTE\s0\fR: In general, you should be using \*(L"my\*(R" instead of \*(L"local\*(R", because
 it's faster and safer.  Exceptions to this include the global punctuation
 variables, filehandles and formats, and direct manipulation of the Perl
@@ -737,7 +730,6 @@ like this:
 \&    [..normal %ENV behavior here..]
 .Ve
 .Sh "Passing Symbol Table Entries (typeglobs)"
-.IX Subsection "Passing Symbol Table Entries (typeglobs)"
 [Note:  The mechanism described in this section was originally the only
 way to simulate pass-by-reference in older versions of Perl.  While it
 still works fine in modern versions, the new reference mechanism is
@@ -779,7 +771,6 @@ mechanism will merge all the array values so that you can't extract out
 the individual arrays.  For more on typeglobs, see
 the section on \fITypeglobs and Filehandles\fR in the \fIperldata\fR manpage.
 .Sh "Pass by Reference"
-.IX Subsection "Pass by Reference"
 If you want to pass more than one array or hash into a function\*(--or
 return them from it\*(--and have them maintain their integrity, then
 you're going to have to use an explicit pass-by-reference.  Before you
@@ -904,7 +895,6 @@ Although that will actually produce a small memory leak.  See the bottom
 of the \f(CWopen()\fR entry in the \fIperlfunc\fR manpage for a somewhat cleaner way using the \s-1IO::\s0Handle
 package.
 .Sh "Prototypes"
-.IX Subsection "Prototypes"
 As of the 5.002 release of perl, if you declare
 .PP
 .Vb 1
@@ -1051,7 +1041,6 @@ starts scribbling on your \f(CW@_\fR parameter list.
 This is all very powerful, of course, and should be used only in moderation
 to make the world a better place.
 .Sh "Constant Functions"
-.IX Subsection "Constant Functions"
 Functions with a prototype of \f(CW()\fR are potential candidates for
 inlining.  If the result after optimization and constant folding is
 either a constant or a lexically-scoped scalar which has no other
@@ -1109,7 +1098,6 @@ inlining mechanism in some other way, such as
 \&    }
 .Ve
 .Sh "Overriding Builtin Functions"
-.IX Subsection "Overriding Builtin Functions"
 Many builtin functions may be overridden, though this should be tried
 only occasionally and for good reason.  Typically this might be
 done by a package attempting to emulate missing builtin functionality
@@ -1125,6 +1113,12 @@ via the import syntax, and these names may then override the builtin ones:
 \&    chdir $somewhere;
 \&    sub chdir { ... }
 .Ve
+To unambiguously refer to the builtin form, one may precede the
+builtin name with the special package qualifier \f(CWCORE::\fR.  For example,
+saying \f(CWCORE::open()\fR will always refer to the builtin \f(CWopen()\fR, even
+if the current package has imported some other subroutine called
+\f(CW&open()\fR from elsewhere.
+.PP
 Library modules should not in general export builtin names like \*(L"open\*(R"
 or \*(L"chdir\*(R" as part of their default \f(CW@EXPORT\fR list, because these may
 sneak into someone else's namespace and change the semantics unexpectedly.
@@ -1141,8 +1135,11 @@ and it would import the open override, but if they said
 \&    use Module;
 .Ve
 they would get the default imports without the overrides.
+.PP
+Note that such overriding is restricted to the package that requests
+the import.  Some means of \*(L"globally\*(R" overriding builtins may become
+available in future.
 .Sh "Autoloading"
-.IX Subsection "Autoloading"
 If you call a subroutine that is undefined, you would ordinarily get an
 immediate fatal error complaining that the subroutine doesn't exist.
 (Likewise for subroutines being used as methods, when the method
@@ -1191,10 +1188,36 @@ described in the \fIAutoLoader\fR manpage and in the \fIAutoSplit\fR manpage, th
 SelfLoader modules in the \fISelfLoader\fR manpage, and the document on adding C
 functions to perl code in the \fIperlxs\fR manpage.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 See the \fIperlref\fR manpage for more on references.  See the \fIperlxs\fR manpage if you'd
 like to learn about calling C subroutines from perl.  See
 the \fIperlmod\fR manpage to learn about bundling up your functions in
 separate files.
 
 .rn }` ''
+.IX Title "PERLSUB 1"
+.IX Name "perlsub - Perl subroutines"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Private Variables via \fImy()\fR"
+
+.IX Subsection "Temporary Values via \fIlocal()\fR"
+
+.IX Subsection "Passing Symbol Table Entries (typeglobs)"
+
+.IX Subsection "Pass by Reference"
+
+.IX Subsection "Prototypes"
+
+.IX Subsection "Constant Functions"
+
+.IX Subsection "Overriding Builtin Functions"
+
+.IX Subsection "Autoloading"
+
+.IX Header "SEE ALSO"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFUNC 1 "perl 5.004, patch 01" "12/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFUNC 1"
+.TH PERLFUNC 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfunc - Perl builtin functions"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfunc \- Perl builtin functions
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 The functions in this section can serve as terms in an expression.
 They fall into two major categories: list operators and named unary
 operators.  These differ in their precedence relationship with a
@@ -246,7 +242,6 @@ null list.
 .PP
 Remember the following rule:
 .Ip "\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR" 8
-.IX Item "\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR"
 .PP
 Each operator and function decides which sort of value it would be most
 appropriate to return in a scalar context.  Some operators return the
@@ -256,94 +251,72 @@ last value in the list.  Some operators return a count of successful
 operations.  In general, they do what you want, unless you want
 consistency.
 .Sh "Perl Functions by Category"
-.IX Subsection "Perl Functions by Category"
 Here are Perl's functions (including things that look like
 functions, like some of the keywords and named operators)
 arranged by category.  Some functions appear in more
 than one place.
 .Ip "Functions for SCALARs or strings" 5
-.IX Item "Functions for SCALARs or strings"
 chomp, chop, chr, crypt, hex, index, lc, lcfirst, length,
 oct, ord, pack, q/\s-1STRING\s0/, qq/\s-1STRING\s0/, reverse, rindex,
 sprintf, substr, tr///, uc, ucfirst, y///
 .Ip "Regular expressions and pattern matching" 5
-.IX Item "Regular expressions and pattern matching"
 m//, pos, quotemeta, s///, split, study
 .Ip "Numeric functions" 5
-.IX Item "Numeric functions"
 abs, atan2, cos, exp, hex, int, log, oct, rand, sin, sqrt,
 srand
 .Ip "Functions for real @ARRAYs" 5
-.IX Item "Functions for real @ARRAYs"
 pop, push, shift, splice, unshift
 .Ip "Functions for list data" 5
-.IX Item "Functions for list data"
 grep, join, map, qw/\s-1STRING\s0/, reverse, sort, unpack
 .Ip "Functions for real %HASHes" 5
-.IX Item "Functions for real %HASHes"
 delete, each, exists, keys, values
 .Ip "Input and output functions" 5
-.IX Item "Input and output functions"
 binmode, close, closedir, dbmclose, dbmopen, die, eof,
 fileno, flock, format, getc, print, printf, read, readdir,
 rewinddir, seek, seekdir, select, syscall, sysread, sysseek,
 syswrite, tell, telldir, truncate, warn, write
 .Ip "Functions for fixed length data or records" 5
-.IX Item "Functions for fixed length data or records"
 pack, read, syscall, sysread, syswrite, unpack, vec
 .Ip "Functions for filehandles, files, or directories" 5
-.IX Item "Functions for filehandles, files, or directories"
 \fI\-X\fR, chdir, chmod, chown, chroot, fcntl, glob, ioctl, link,
 lstat, mkdir, open, opendir, readlink, rename, rmdir,
 stat, symlink, umask, unlink, utime
 .Ip "Keywords related to the control flow of your perl program" 5
-.IX Item "Keywords related to the control flow of your perl program"
 caller, continue, die, do, dump, eval, exit, goto, last,
 next, redo, return, sub, wantarray
 .Ip "Keywords related to scoping" 5
-.IX Item "Keywords related to scoping"
 caller, import, local, my, package, use
 .Ip "Miscellaneous functions" 5
-.IX Item "Miscellaneous functions"
 defined, dump, eval, formline, local, my, reset, scalar,
 undef, wantarray
 .Ip "Functions for processes and process groups" 5
-.IX Item "Functions for processes and process groups"
 alarm, exec, fork, getpgrp, getppid, getpriority, kill,
 pipe, qx/\s-1STRING\s0/, setpgrp, setpriority, sleep, system,
 times, wait, waitpid
 .Ip "Keywords related to perl modules" 5
-.IX Item "Keywords related to perl modules"
 do, import, no, package, require, use
 .Ip "Keywords related to classes and object-orientedness" 5
-.IX Item "Keywords related to classes and object-orientedness"
 bless, dbmclose, dbmopen, package, ref, tie, tied, untie, use
 .Ip "Low-level socket functions" 5
-.IX Item "Low-level socket functions"
 accept, bind, connect, getpeername, getsockname,
 getsockopt, listen, recv, send, setsockopt, shutdown,
 socket, socketpair
 .Ip "System V interprocess communication functions" 5
-.IX Item "System V interprocess communication functions"
 msgctl, msgget, msgrcv, msgsnd, semctl, semget, semop,
 shmctl, shmget, shmread, shmwrite
 .Ip "Fetching user and group info" 5
-.IX Item "Fetching user and group info"
 endgrent, endhostent, endnetent, endpwent, getgrent,
 getgrgid, getgrnam, getlogin, getpwent, getpwnam,
 getpwuid, setgrent, setpwent
 .Ip "Fetching network info" 5
-.IX Item "Fetching network info"
 endprotoent, endservent, gethostbyaddr, gethostbyname,
 gethostent, getnetbyaddr, getnetbyname, getnetent,
 getprotobyname, getprotobynumber, getprotoent,
 getservbyname, getservbyport, getservent, sethostent,
 setnetent, setprotoent, setservent
 .Ip "Time-related functions" 5
-.IX Item "Time-related functions"
 gmtime, localtime, time, times
 .Ip "Functions new in perl5" 5
-.IX Item "Functions new in perl5"
 abs, bless, chomp, chr, exists, formline, glob, import, lc,
 lcfirst, map, my, no, prototype, qx, qw, readline, readpipe,
 ref, sub*, sysopen, tie, tied, uc, ucfirst, untie, use
@@ -351,16 +324,11 @@ ref, sub*, sysopen, tie, tied, uc, ucfirst, untie, use
 * \- \f(CWsub\fR was a keyword in perl4, but in perl5 it is an
 operator which can be used in expressions.
 .Ip "Functions obsoleted in perl5" 5
-.IX Item "Functions obsoleted in perl5"
 dbmclose, dbmopen
 .Sh "Alphabetical Listing of Perl Functions"
-.IX Subsection "Alphabetical Listing of Perl Functions"
 .Ip "-X \s-1FILEHANDLE\s0" 8
-.IX Item "-X \s-1FILEHANDLE\s0"
 .Ip "-X \s-1EXPR\s0" 8
-.IX Item "-X \s-1EXPR\s0"
 .Ip "-X" 8
-.IX Item "-X"
 A file test, where X is one of the letters listed below.  This unary
 operator takes one argument, either a filename or a filehandle, and
 tests the associated file to see if something is true about it.  If the
@@ -467,20 +435,15 @@ symbolic link, not the real file.)  Example:
 \&    print "Binary\en" if -B _;
 .Ve
 .Ip "abs \s-1VALUE\s0" 8
-.IX Item "abs \s-1VALUE\s0"
 .Ip "abs" 8
-.IX Item "abs"
 Returns the absolute value of its argument.
 If \s-1VALUE\s0 is omitted, uses \f(CW$_\fR.
 .Ip "accept \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0" 8
-.IX Item "accept \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0"
 Accepts an incoming socket connect, just as the \fIaccept\fR\|(2) system call
 does.  Returns the packed address if it succeeded, \s-1FALSE\s0 otherwise.
 See example in the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "alarm \s-1SECONDS\s0" 8
-.IX Item "alarm \s-1SECONDS\s0"
 .Ip "alarm" 8
-.IX Item "alarm"
 Arranges to have a \s-1SIGALRM\s0 delivered to this process after the
 specified number of seconds have elapsed.  If \s-1SECONDS\s0 is not specified,
 the value stored in \f(CW$_\fR is used. (On some machines,
@@ -517,7 +480,6 @@ restart system calls on some systems.  Using eval/die always works.
 \&    }
 .Ve
 .Ip "atan2 Y,X" 8
-.IX Item "atan2 Y,X"
 Returns the arctangent of Y/X in the range \-\*(PI to \*(PI.
 .Sp
 For the tangent operation, you may use the \fI\s-1POSIX::\s0tan()\fR
@@ -527,13 +489,11 @@ function, or use the familiar relation:
 \&    sub tan { sin($_[0]) / cos($_[0])  }
 .Ve
 .Ip "bind \s-1SOCKET\s0,\s-1NAME\s0" 8
-.IX Item "bind \s-1SOCKET\s0,\s-1NAME\s0"
 Binds a network address to a socket, just as the bind system call
 does.  Returns \s-1TRUE\s0 if it succeeded, \s-1FALSE\s0 otherwise.  \s-1NAME\s0 should be a
 packed address of the appropriate type for the socket.  See the examples in
 the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "binmode \s-1FILEHANDLE\s0" 8
-.IX Item "binmode \s-1FILEHANDLE\s0"
 Arranges for the file to be read or written in \*(L"binary\*(R" mode in operating
 systems that distinguish between binary and text files.  Files that are
 not in binary mode have \s-1CR\s0 \s-1LF\s0 sequences translated to \s-1LF\s0 on input and \s-1LF\s0
@@ -546,9 +506,7 @@ character, and that encode that character in C as \*(L'\en\*(R', do not need
 \f(CWbinmode\fR.  The rest need it.  If \s-1FILEHANDLE\s0 is an expression, the value
 is taken as the name of the filehandle.
 .Ip "bless \s-1REF\s0,\s-1CLASSNAME\s0" 8
-.IX Item "bless \s-1REF\s0,\s-1CLASSNAME\s0"
 .Ip "bless \s-1REF\s0" 8
-.IX Item "bless \s-1REF\s0"
 This function tells the thingy referenced by \s-1REF\s0 that it is now
 an object in the \s-1CLASSNAME\s0 package\*(--or the current package if no \s-1CLASSNAME\s0
 is specified, which is often the case.  It returns the reference for
@@ -557,9 +515,7 @@ Always use the two-argument version if the function doing the blessing
 might be inherited by a derived class.  See the \fIperlobj\fR manpage for more about the
 blessing (and blessings) of objects.
 .Ip "caller \s-1EXPR\s0" 8
-.IX Item "caller \s-1EXPR\s0"
 .Ip "caller" 8
-.IX Item "caller"
 Returns the context of the current subroutine call.  In a scalar context,
 returns the caller's package name if there is a caller, that is, if
 we're in a subroutine or \fIeval()\fR or \fIrequire()\fR, and the undefined value
@@ -589,12 +545,10 @@ Furthermore, when called from within the \s-1DB\s0 package, caller returns more
 detailed information: it sets the list variable \f(CW@DB::args\fR to be the
 arguments with which the subroutine was invoked.
 .Ip "chdir \s-1EXPR\s0" 8
-.IX Item "chdir \s-1EXPR\s0"
 Changes the working directory to \s-1EXPR\s0, if possible.  If \s-1EXPR\s0 is
 omitted, changes to home directory.  Returns \s-1TRUE\s0 upon success, \s-1FALSE\s0
 otherwise.  See example under \fIdie()\fR.
 .Ip "chmod \s-1LIST\s0" 8
-.IX Item "chmod \s-1LIST\s0"
 Changes the permissions of a list of files.  The first element of the
 list must be the numerical mode, which should probably be an octal
 number, and which definitely should \fInot\fR a string of octal digits:
@@ -609,11 +563,8 @@ successfully changed.  See also the \f(CWoct\fR entry elsewhere in this document
 \&    $mode = 0644;   chmod $mode, 'foo';      # this is best
 .Ve
 .Ip "chomp \s-1VARIABLE\s0" 8
-.IX Item "chomp \s-1VARIABLE\s0"
 .Ip "chomp \s-1LIST\s0" 8
-.IX Item "chomp \s-1LIST\s0"
 .Ip "chomp" 8
-.IX Item "chomp"
 This is a slightly safer version of the \f(CWchop\fR entry elsewhere in this document .  It removes any
 line ending that corresponds to the current value of \f(CW$/\fR (also known as
 \f(CW$INPUT_RECORD_SEPARATOR\fR in the \f(CWEnglish\fR module).  It returns the total
@@ -639,11 +590,8 @@ You can actually chomp anything that's an lvalue, including an assignment:
 If you chomp a list, each element is chomped, and the total number of
 characters removed is returned.
 .Ip "chop \s-1VARIABLE\s0" 8
-.IX Item "chop \s-1VARIABLE\s0"
 .Ip "chop \s-1LIST\s0" 8
-.IX Item "chop \s-1LIST\s0"
 .Ip "chop" 8
-.IX Item "chop"
 Chops off the last character of a string and returns the character
 chopped.  It's used primarily to remove the newline from the end of an
 input record, but is much more efficient than \f(CWs/\en//\fR because it neither
@@ -669,7 +617,6 @@ last chop is returned.
 Note that chop returns the last character.  To return all but the last
 character, use \f(CWsubstr($string, 0, -1)\fR.
 .Ip "chown \s-1LIST\s0" 8
-.IX Item "chown \s-1LIST\s0"
 Changes the owner (and group) of a list of files.  The first two
 elements of the list must be the \fI\s-1NUMERICAL\s0\fR uid and gid, in that order.
 Returns the number of files successfully changed.
@@ -699,17 +646,13 @@ file unless you're the superuser, although you should be able to change
 the group to any of your secondary groups.  On insecure systems, these
 restrictions may be relaxed, but this is not a portable assumption.
 .Ip "chr \s-1NUMBER\s0" 8
-.IX Item "chr \s-1NUMBER\s0"
 .Ip "chr" 8
-.IX Item "chr"
 Returns the character represented by that \s-1NUMBER\s0 in the character set.
 For example, \f(CWchr(65)\fR is \*(L"A\*(R" in \s-1ASCII\s0.  For the reverse, use the \f(CWord\fR entry elsewhere in this document .
 .Sp
 If \s-1NUMBER\s0 is omitted, uses \f(CW$_\fR.
 .Ip "chroot \s-1FILENAME\s0" 8
-.IX Item "chroot \s-1FILENAME\s0"
 .Ip "chroot" 8
-.IX Item "chroot"
 This function works as the system call by the same name: it makes the
 named directory the new root directory for all further pathnames that
 begin with a \*(L"/\*(R" by your process and all of its children.  (It doesn't
@@ -717,40 +660,43 @@ change your current working directory, which is unaffected.)  For security
 reasons, this call is restricted to the superuser.  If \s-1FILENAME\s0 is
 omitted, does chroot to \f(CW$_\fR.
 .Ip "close \s-1FILEHANDLE\s0" 8
-.IX Item "close \s-1FILEHANDLE\s0"
 Closes the file or pipe associated with the file handle, returning \s-1TRUE\s0
 only if stdio successfully flushes buffers and closes the system file
-descriptor.  If the file handle came from a piped open \f(CWclose\fR will
-additionally return \s-1FALSE\s0 if one of the other system calls involved
-fails or if the program exits with non-zero status.  (If the problem was
-that the program exited non-zero $! will be set to 0.)
-You don't have to close \s-1FILEHANDLE\s0 if you are immediately
-going to do another \fIopen()\fR on it, because \fIopen()\fR will close it for you.  (See
-\fIopen()\fR.)  However, an explicit close on an input file resets the line
-counter ($.), while the implicit close done by \fIopen()\fR does not.  Also,
-closing a pipe will wait for the process executing on the pipe to
-complete, in case you want to look at the output of the pipe
-afterwards.  Closing a pipe explicitly also puts the status value of
-the command into \f(CW$?\fR.  Example:
+descriptor.
 .Sp
-.Vb 4
-\&    open(OUTPUT, '|sort >foo'); # pipe to sort
+You don't have to close \s-1FILEHANDLE\s0 if you are immediately going to do
+another \fIopen()\fR on it, because \fIopen()\fR will close it for you.  (See
+\fIopen()\fR.)  However, an explicit close on an input file resets the line
+counter ($.), while the implicit close done by \fIopen()\fR does not.
+.Sp
+If the file handle came from a piped open \f(CWclose\fR will additionally
+return \s-1FALSE\s0 if one of the other system calls involved fails or if the
+program exits with non-zero status.  (If the only problem was that the
+program exited non-zero $! will be set to 0.) Also, closing a pipe will
+wait for the process executing on the pipe to complete, in case you
+want to look at the output of the pipe afterwards.  Closing a pipe
+explicitly also puts the exit status value of the command into \f(CW$?\fR.
+Example:
+.Sp
+.Vb 8
+\&    open(OUTPUT, '|sort >foo')  # pipe to sort
+\&        or die "Can't start sort: $!";
 \&    ...                         # print stuff to output
-\&    close OUTPUT;               # wait for sort to finish
-\&    open(INPUT, 'foo');         # get sort's results
+\&    close OUTPUT                # wait for sort to finish
+\&        or warn $! ? "Error closing sort pipe: $!"
+\&                   : "Exit status $? from sort";
+\&    open(INPUT, 'foo')          # get sort's results
+\&        or die "Can't open 'foo' for input: $!";
 .Ve
 \s-1FILEHANDLE\s0 may be an expression whose value gives the real filehandle name.
 .Ip "closedir \s-1DIRHANDLE\s0" 8
-.IX Item "closedir \s-1DIRHANDLE\s0"
 Closes a directory opened by \fIopendir()\fR.
 .Ip "connect \s-1SOCKET\s0,\s-1NAME\s0" 8
-.IX Item "connect \s-1SOCKET\s0,\s-1NAME\s0"
 Attempts to connect to a remote socket, just as the connect system call
 does.  Returns \s-1TRUE\s0 if it succeeded, \s-1FALSE\s0 otherwise.  \s-1NAME\s0 should be a
 packed address of the appropriate type for the socket.  See the examples in
 the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "continue \s-1BLOCK\s0" 8
-.IX Item "continue \s-1BLOCK\s0"
 Actually a flow control statement rather than a function.  If there is a
 \f(CWcontinue\fR \s-1BLOCK\s0 attached to a \s-1BLOCK\s0 (typically in a \f(CWwhile\fR or
 \f(CWforeach\fR), it is always executed just before the conditional is about to
@@ -759,7 +705,6 @@ it can be used to increment a loop variable, even when the loop has been
 continued via the \f(CWnext\fR statement (which is similar to the C \f(CWcontinue\fR
 statement).
 .Ip "cos \s-1EXPR\s0" 8
-.IX Item "cos \s-1EXPR\s0"
 Returns the cosine of \s-1EXPR\s0 (expressed in radians).  If \s-1EXPR\s0 is omitted
 takes cosine of \f(CW$_\fR.
 .Sp
@@ -770,7 +715,6 @@ function, or use this relation:
 \&    sub acos { atan2( sqrt(1 - $_[0] * $_[0]), $_[0] ) }
 .Ve
 .Ip "crypt \s-1PLAINTEXT\s0,\s-1SALT\s0" 8
-.IX Item "crypt \s-1PLAINTEXT\s0,\s-1SALT\s0"
 Encrypts a string exactly like the \fIcrypt\fR\|(3) function in the C library
 (assuming that you actually have a version there that has not been
 extirpated as a potential munition).  This can prove useful for checking
@@ -803,15 +747,13 @@ their own password:
 \&        print "ok\en";
 \&    }
 .Ve
-Of course, typing in your own password to whomever asks you
+Of course, typing in your own password to whoever asks you
 for it is unwise.
 .Ip "dbmclose \s-1HASH\s0" 8
-.IX Item "dbmclose \s-1HASH\s0"
 [This function has been superseded by the \fIuntie()\fR function.]
 .Sp
 Breaks the binding between a \s-1DBM\s0 file and a hash.
 .Ip "dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0" 8
-.IX Item "dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0"
 [This function has been superseded by the \fItie()\fR function.]
 .Sp
 This binds a \fIdbm\fR\|(3), \fIndbm\fR\|(3), \fIsdbm\fR\|(3), \fIgdbm()\fR, or Berkeley \s-1DB\s0 file to a
@@ -846,9 +788,7 @@ See also the \fIAnyDBM_File\fR manpage for a more general description of the pro
 cons of the various dbm approaches, as well as the \fIDB_File\fR manpage for a particularly
 rich implementation.
 .Ip "defined \s-1EXPR\s0" 8
-.IX Item "defined \s-1EXPR\s0"
 .Ip "defined" 8
-.IX Item "defined"
 Returns a Boolean value telling whether \s-1EXPR\s0 has a value other than
 the undefined value \f(CWundef\fR.  If \s-1EXPR\s0 is not present, \f(CW$_\fR will be
 checked.
@@ -918,7 +858,6 @@ changed, fixed, or broken in a future release of Perl.
 .Sp
 See also the \f(CWundef\fR, \f(CWexists\fR,  and \f(CWref\fR entries elsewhere in this document .
 .Ip "delete \s-1EXPR\s0" 8
-.IX Item "delete \s-1EXPR\s0"
 Deletes the specified \fIkey\fR\|(s) and their associated values from a hash.
 For each key, returns the deleted value associated with that key, or
 the undefined value if there was no such key.  Deleting from \f(CW$ENV{}\fR
@@ -947,7 +886,6 @@ hash element lookup or hash slice:
 \&    delete @{$ref->[$x][$y]}{$key1, $key2, @morekeys};
 .Ve
 .Ip "die \s-1LIST\s0" 8
-.IX Item "die \s-1LIST\s0"
 Outside of an \fIeval()\fR, prints the value of \s-1LIST\s0 to \f(CWSTDERR\fR and exits with
 the current value of \f(CW$!\fR (errno).  If \f(CW$!\fR is 0, exits with the value of
 \f(CW($? >> 8)\fR (backtick `command` status).  If \f(CW($? >> 8)\fR
@@ -979,22 +917,38 @@ produce, respectively
 .Ve
 See also \fIexit()\fR and \fIwarn()\fR.
 .Sp
+If \s-1LIST\s0 is empty and $@ already contains a value (typically from a
+previous eval) that value is reused after appending \*(L"\et...propagated\*(R".
+This is useful for propagating exceptions:
+.Sp
+.Vb 2
+\&    eval { ... };
+\&    die unless $@ =~ /Expected exception/;
+.Ve
+If $@ is empty then the string \*(L"Died\*(R" is used.
+.Sp
 You can arrange for a callback to be called just before the \fIdie()\fR does
 its deed, by setting the \f(CW$SIG{__DIE__}\fR hook.  The associated handler
 will be called with the error text and can change the error message, if
-it sees fit, by calling \fIdie()\fR again.  See the \fIperlvar\fR manpage for details on
-setting \f(CW%SIG\fR entries, and \fIeval()\fR for some examples.
+it sees fit, by calling \fIdie()\fR again.  See the section on \fI$\s-1SIG\s0{expr}\fR in the \fIperlvar\fR manpage for details on
+setting \f(CW%SIG\fR entries, and the section on \fIeval \s-1BLOCK\s0\fR for some examples.
+.Sp
+Note that the \f(CW$SIG{__DIE__}\fR hook is called even inside \fIeval()\fRed
+blocks/strings.  If one wants the hook to do nothing in such
+situations, put
+.Sp
+.Vb 1
+\&        die @_ if $^S;
+.Ve
+as the first line of the handler (see the section on \fI$^S\fR in the \fIperlvar\fR manpage).
 .Ip "do \s-1BLOCK\s0" 8
-.IX Item "do \s-1BLOCK\s0"
 Not really a function.  Returns the value of the last command in the
 sequence of commands indicated by \s-1BLOCK\s0.  When modified by a loop
 modifier, executes the \s-1BLOCK\s0 once before testing the loop condition.
 (On other statements the loop modifiers test the conditional first.)
 .Ip "do \s-1SUBROUTINE\s0(\s-1LIST\s0)" 8
-.IX Item "do \s-1SUBROUTINE\s0(\s-1LIST\s0)"
 A deprecated form of subroutine call.  See the \fIperlsub\fR manpage.
 .Ip "do \s-1EXPR\s0" 8
-.IX Item "do \s-1EXPR\s0"
 Uses the value of \s-1EXPR\s0 as a filename and executes the contents of the
 file as a Perl script.  Its primary use is to include subroutines
 from a Perl subroutine library.
@@ -1005,7 +959,7 @@ from a Perl subroutine library.
 is just like
 .Sp
 .Vb 1
-\&    eval `cat stat.pl`;
+\&    scalar eval `cat stat.pl`;
 .Ve
 except that it's more efficient, more concise, keeps track of the
 current filename for error messages, and searches all the \fB\-I\fR
@@ -1018,7 +972,6 @@ Note that inclusion of library modules is better done with the
 \fIuse()\fR and \fIrequire()\fR operators, which also do error checking
 and raise an exception if there's a problem.
 .Ip "dump \s-1LABEL\s0" 8
-.IX Item "dump \s-1LABEL\s0"
 This causes an immediate core dump.  Primarily this is so that you can
 use the \fBundump\fR program to turn your core dump into an executable binary
 after having initialized all your variables at the beginning of the
@@ -1054,7 +1007,6 @@ Example:
 \&    Getopt('f');
 .Ve
 .Ip "each \s-1HASH\s0" 8
-.IX Item "each \s-1HASH\s0"
 When called in a list context, returns a 2-element array consisting of the
 key and value for the next element of a hash, so that you can iterate over
 it.  When called in a scalar context, returns the key for only the next
@@ -1082,11 +1034,8 @@ only in a different order:
 .Ve
 See also \fIkeys()\fR and \fIvalues()\fR.
 .Ip "eof \s-1FILEHANDLE\s0" 8
-.IX Item "eof \s-1FILEHANDLE\s0"
 .Ip "eof ()" 8
-.IX Item "eof ()"
 .Ip "eof" 8
-.IX Item "eof"
 Returns 1 if the next read on \s-1FILEHANDLE\s0 will return end of file, or if
 \s-1FILEHANDLE\s0 is not open.  \s-1FILEHANDLE\s0 may be an expression whose value
 gives the real filehandle name.  (Note that this function actually
@@ -1123,9 +1072,7 @@ last file.  Use \f(CWeof(ARGV)\fR or eof without the parentheses to test
 Practical hint: you almost never need to use \f(CWeof\fR in Perl, because the
 input operators return undef when they run out of data.
 .Ip "eval \s-1EXPR\s0" 8
-.IX Item "eval \s-1EXPR\s0"
 .Ip "eval \s-1BLOCK\s0" 8
-.IX Item "eval \s-1BLOCK\s0"
 \s-1EXPR\s0 is parsed and executed as if it were a little Perl program.  It
 is executed in the context of the current Perl program, so that any
 variable settings or subroutine and format definitions remain afterwards.
@@ -1215,20 +1162,21 @@ normally you \fI\s-1WOULD\s0\fR like to use double quotes, except that in this
 particular situation, you can just use symbolic references instead, as
 in case 6.
 .Ip "exec \s-1LIST\s0" 8
-.IX Item "exec \s-1LIST\s0"
-The \fIexec()\fR function executes a system command \fI\s-1AND\s0 \s-1NEVER\s0 \s-1RETURNS\s0\fR,
-unless the command does not exist and is executed directly instead of
-via \f(CW/bin/sh -c\fR (see below).  Use \fIsystem()\fR instead of \fIexec()\fR if you
-want it to return.
+The \fIexec()\fR function executes a system command \fI\s-1AND\s0 \s-1NEVER\s0 \s-1RETURNS\s0\fR \-
+use \fIsystem()\fR instead of \fIexec()\fR if you want it to return. It fails and
+returns \s-1FALSE\s0 only if the command does not exist \fIand\fR it is executed
+directly instead of via your system's command shell (see below).
 .Sp
 If there is more than one argument in \s-1LIST\s0, or if \s-1LIST\s0 is an array with
 more than one value, calls \fIexecvp\fR\|(3) with the arguments in \s-1LIST\s0.  If
 there is only one scalar argument, the argument is checked for shell
-metacharacters.  If there are any, the entire argument is passed to
-\f(CW/bin/sh -c\fR for parsing.  If there are none, the argument is split
-into words and passed directly to \fIexecvp()\fR, which is more efficient.
-Note: \fIexec()\fR and \fIsystem()\fR do not flush your output buffer, so you may
-need to set \f(CW$|\fR to avoid lost output.  Examples:
+metacharacters, and if there are any, the entire argument is passed to
+the system's command shell for parsing (this is \f(CW/bin/sh -c\fR on Unix
+platforms, but varies on other platforms).  If there are no shell
+metacharacters in the argument, it is split into words and passed
+directly to \fIexecvp()\fR, which is more efficient.  Note: \fIexec()\fR and
+\fIsystem()\fR do not flush your output buffer, so you may need to set \f(CW$|\fR
+to avoid lost output.  Examples:
 .Sp
 .Vb 2
 \&    exec '/bin/echo', 'Your arguments are: ', @ARGV;
@@ -1250,8 +1198,10 @@ or, more directly,
 .Vb 1
 \&    exec {'/bin/csh'} '-sh';    # pretend it's a login shell
 .Ve
+When the arguments get executed via the system shell, results will
+be subject to its quirks and capabilities.  See the section on \fI`\s-1STRING\s0`\fR in the \fIperlop\fR manpage
+for details.
 .Ip "exists \s-1EXPR\s0" 8
-.IX Item "exists \s-1EXPR\s0"
 Returns \s-1TRUE\s0 if the specified hash key exists in its hash array, even
 if the corresponding value is undefined.
 .Sp
@@ -1270,7 +1220,6 @@ operation is a hash key lookup:
 \&    if (exists $ref->[$x][$y]{$key}) { ... }
 .Ve
 .Ip "exit \s-1EXPR\s0" 8
-.IX Item "exit \s-1EXPR\s0"
 Evaluates \s-1EXPR\s0 and exits immediately with that value.  (Actually, it
 calls any defined \f(CWEND\fR routines first, but the \f(CWEND\fR routines may not
 abort the exit.  Likewise any object destructors that need to be called
@@ -1289,13 +1238,10 @@ You shouldn't use \fIexit()\fR to abort a subroutine if there's any chance that
 someone might want to trap whatever error happened.  Use \fIdie()\fR instead,
 which can be trapped by an \fIeval()\fR.
 .Ip "exp \s-1EXPR\s0" 8
-.IX Item "exp \s-1EXPR\s0"
 .Ip "exp" 8
-.IX Item "exp"
 Returns \fIe\fR (the natural logarithm base) to the power of \s-1EXPR\s0.
 If \s-1EXPR\s0 is omitted, gives \f(CWexp($_)\fR.
 .Ip "fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0" 8
-.IX Item "fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0"
 Implements the \fIfcntl\fR\|(2) function.  You'll probably have to say
 .Sp
 .Vb 1
@@ -1311,12 +1257,10 @@ For example:
 \&    fcntl($filehandle, F_GETLK, $packed_return_buffer);
 .Ve
 .Ip "fileno \s-1FILEHANDLE\s0" 8
-.IX Item "fileno \s-1FILEHANDLE\s0"
 Returns the file descriptor for a filehandle.  This is useful for
 constructing bitmaps for \fIselect()\fR.  If \s-1FILEHANDLE\s0 is an expression, the
 value is taken as the name of the filehandle.
 .Ip "flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0" 8
-.IX Item "flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0"
 Calls \fIflock\fR\|(2), or an emulation of it, on \s-1FILEHANDLE\s0.  Returns \s-1TRUE\s0 for
 success, \s-1FALSE\s0 on failure.  Produces a fatal error if used on a machine
 that doesn't implement \fIflock\fR\|(2), \fIfcntl\fR\|(2) locking, or \fIlockf\fR\|(3).  \fIflock()\fR
@@ -1377,7 +1321,6 @@ Here's a mailbox appender for \s-1BSD\s0 systems.
 .Ve
 See also the \fIDB_File\fR manpage for other \fIflock()\fR examples.
 .Ip "fork" 8
-.IX Item "fork"
 Does a \fIfork\fR\|(2) system call.  Returns the child pid to the parent process
 and 0 to the child process, or \f(CWundef\fR if the fork is unsuccessful.
 Note: unflushed buffers remain unflushed in both processes, which means
@@ -1414,7 +1357,6 @@ Note that if your forked child inherits system file descriptors like
 if you exit, the remote server (such as, say, httpd or rsh) won't think
 you're done.  You should reopen those to /dev/null if it's any issue.
 .Ip "format" 8
-.IX Item "format"
 Declare a picture format with use by the \fIwrite()\fR function.  For
 example:
 .Sp
@@ -1432,7 +1374,6 @@ example:
 .Ve
 See the \fIperlform\fR manpage for many details and examples.
 .Ip "formline \s-1PICTURE\s0,\s-1LIST\s0" 8
-.IX Item "formline \s-1PICTURE\s0,\s-1LIST\s0"
 This is an internal function used by \f(CWformat\fRs, though you may call it
 too.  It formats (see the \fIperlform\fR manpage) a list of values according to the
 contents of \s-1PICTURE\s0, placing the output into the format output
@@ -1450,9 +1391,7 @@ Be careful if you put double quotes around the picture, because an \*(L"\f(CW@\f
 character may be taken to mean the beginning of an array name.
 \fIformline()\fR always returns \s-1TRUE\s0.  See the \fIperlform\fR manpage for other examples.
 .Ip "getc \s-1FILEHANDLE\s0" 8
-.IX Item "getc \s-1FILEHANDLE\s0"
 .Ip "getc" 8
-.IX Item "getc"
 Returns the next character from the input file attached to \s-1FILEHANDLE\s0,
 or a null string at end of file.  If \s-1FILEHANDLE\s0 is omitted, reads from \s-1STDIN\s0.
 This is not particularly efficient.  It cannot be used to get unbuffered
@@ -1486,7 +1425,6 @@ alleging \s-1POSIX\s0 compliance.
 See also the \f(CWTerm::ReadKey\fR module from your nearest \s-1CPAN\s0 site;
 details on \s-1CPAN\s0 can be found on the \f(CWCPAN\fR entry in the \fIperlmod\fR manpage.
 .Ip "getlogin" 8
-.IX Item "getlogin"
 Returns the current login from \fI/etc/utmp\fR, if any.  If null, use
 \fIgetpwuid()\fR.
 .Sp
@@ -1496,7 +1434,6 @@ Returns the current login from \fI/etc/utmp\fR, if any.  If null, use
 Do not consider \fIgetlogin()\fR for authentication: it is not as
 secure as \fIgetpwuid()\fR.
 .Ip "getpeername \s-1SOCKET\s0" 8
-.IX Item "getpeername \s-1SOCKET\s0"
 Returns the packed sockaddr address of other end of the \s-1SOCKET\s0 connection.
 .Sp
 .Vb 5
@@ -1507,7 +1444,6 @@ Returns the packed sockaddr address of other end of the \s-1SOCKET\s0 connection
 \&    $herstraddr     = inet_ntoa($iaddr);
 .Ve
 .Ip "getpgrp \s-1PID\s0" 8
-.IX Item "getpgrp \s-1PID\s0"
 Returns the current process group for the specified \s-1PID\s0.  Use
 a \s-1PID\s0 of 0 to get the current process group for the
 current process.  Will raise an exception if used on a machine that
@@ -1515,73 +1451,41 @@ doesn't implement \fIgetpgrp\fR\|(2).  If \s-1PID\s0 is omitted, returns process
 group of current process.  Note that the \s-1POSIX\s0 version of \fIgetpgrp()\fR
 does not accept a \s-1PID\s0 argument, so only \s-1PID\s0==0 is truly portable.
 .Ip "getppid" 8
-.IX Item "getppid"
 Returns the process id of the parent process.
 .Ip "getpriority \s-1WHICH\s0,\s-1WHO\s0" 8
-.IX Item "getpriority \s-1WHICH\s0,\s-1WHO\s0"
 Returns the current priority for a process, a process group, or a user.
 (See the \fIgetpriority(2)\fR manpage.)  Will raise a fatal exception if used on a
 machine that doesn't implement \fIgetpriority\fR\|(2).
 .Ip "getpwnam \s-1NAME\s0" 8
-.IX Item "getpwnam \s-1NAME\s0"
 .Ip "getgrnam \s-1NAME\s0" 8
-.IX Item "getgrnam \s-1NAME\s0"
 .Ip "gethostbyname \s-1NAME\s0" 8
-.IX Item "gethostbyname \s-1NAME\s0"
 .Ip "getnetbyname \s-1NAME\s0" 8
-.IX Item "getnetbyname \s-1NAME\s0"
 .Ip "getprotobyname \s-1NAME\s0" 8
-.IX Item "getprotobyname \s-1NAME\s0"
 .Ip "getpwuid \s-1UID\s0" 8
-.IX Item "getpwuid \s-1UID\s0"
 .Ip "getgrgid \s-1GID\s0" 8
-.IX Item "getgrgid \s-1GID\s0"
 .Ip "getservbyname \s-1NAME\s0,\s-1PROTO\s0" 8
-.IX Item "getservbyname \s-1NAME\s0,\s-1PROTO\s0"
 .Ip "gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0" 8
-.IX Item "gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0"
 .Ip "getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0" 8
-.IX Item "getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0"
 .Ip "getprotobynumber \s-1NUMBER\s0" 8
-.IX Item "getprotobynumber \s-1NUMBER\s0"
 .Ip "getservbyport \s-1PORT\s0,\s-1PROTO\s0" 8
-.IX Item "getservbyport \s-1PORT\s0,\s-1PROTO\s0"
 .Ip "getpwent" 8
-.IX Item "getpwent"
 .Ip "getgrent" 8
-.IX Item "getgrent"
 .Ip "gethostent" 8
-.IX Item "gethostent"
 .Ip "getnetent" 8
-.IX Item "getnetent"
 .Ip "getprotoent" 8
-.IX Item "getprotoent"
 .Ip "getservent" 8
-.IX Item "getservent"
 .Ip "setpwent" 8
-.IX Item "setpwent"
 .Ip "setgrent" 8
-.IX Item "setgrent"
 .Ip "sethostent \s-1STAYOPEN\s0" 8
-.IX Item "sethostent \s-1STAYOPEN\s0"
 .Ip "setnetent \s-1STAYOPEN\s0" 8
-.IX Item "setnetent \s-1STAYOPEN\s0"
 .Ip "setprotoent \s-1STAYOPEN\s0" 8
-.IX Item "setprotoent \s-1STAYOPEN\s0"
 .Ip "setservent \s-1STAYOPEN\s0" 8
-.IX Item "setservent \s-1STAYOPEN\s0"
 .Ip "endpwent" 8
-.IX Item "endpwent"
 .Ip "endgrent" 8
-.IX Item "endgrent"
 .Ip "endhostent" 8
-.IX Item "endhostent"
 .Ip "endnetent" 8
-.IX Item "endnetent"
 .Ip "endprotoent" 8
-.IX Item "endprotoent"
 .Ip "endservent" 8
-.IX Item "endservent"
 These routines perform the same functions as their counterparts in the
 system library.  Within a list context, the return values from the
 various get routines are as follows:
@@ -1624,7 +1528,6 @@ by saying something like:
 \&    ($a,$b,$c,$d) = unpack('C4',$addr[0]);
 .Ve
 .Ip "getsockname \s-1SOCKET\s0" 8
-.IX Item "getsockname \s-1SOCKET\s0"
 Returns the packed sockaddr address of this end of the \s-1SOCKET\s0 connection.
 .Sp
 .Vb 3
@@ -1633,19 +1536,15 @@ Returns the packed sockaddr address of this end of the \s-1SOCKET\s0 connection.
 \&    ($port, $myaddr) = unpack_sockaddr_in($mysockaddr);
 .Ve
 .Ip "getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0" 8
-.IX Item "getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0"
 Returns the socket option requested, or undefined if there is an error.
 .Ip "glob \s-1EXPR\s0" 8
-.IX Item "glob \s-1EXPR\s0"
 .Ip "glob" 8
-.IX Item "glob"
 Returns the value of \s-1EXPR\s0 with filename expansions such as a shell would
 do.  This is the internal function implementing the \f(CW<*.c>\fR
 operator, but you can use it directly.  If \s-1EXPR\s0 is omitted, \f(CW$_\fR is used.
 The \f(CW<*.c>\fR operator is discussed in more detail in
 the section on \fII/O Operators\fR in the \fIperlop\fR manpage.
 .Ip "gmtime \s-1EXPR\s0" 8
-.IX Item "gmtime \s-1EXPR\s0"
 Converts a time as returned by the time function to a 9-element array
 with the time localized for the standard Greenwich time zone.
 Typically used as follows:
@@ -1670,11 +1569,8 @@ In a scalar context, returns the \fIctime\fR\|(3) value:
 Also see the \fItimegm()\fR function provided by the Time::Local module,
 and the \fIstrftime\fR\|(3) function available via the \s-1POSIX\s0 module.
 .Ip "goto \s-1LABEL\s0" 8
-.IX Item "goto \s-1LABEL\s0"
 .Ip "goto \s-1EXPR\s0" 8
-.IX Item "goto \s-1EXPR\s0"
 .Ip "goto &\s-1NAME\s0" 8
-.IX Item "goto &\s-1NAME\s0"
 The goto-\s-1LABEL\s0 form finds the statement labeled with \s-1LABEL\s0 and resumes
 execution there.  It may not be used to go into any construct that
 requires initialization, such as a subroutine or a foreach loop.  It
@@ -1700,9 +1596,7 @@ pretend that the other subroutine had been called in the first place
 propagated to the other subroutine.)  After the goto, not even \fIcaller()\fR
 will be able to tell that this routine was called first.
 .Ip "grep \s-1BLOCK\s0 \s-1LIST\s0" 8
-.IX Item "grep \s-1BLOCK\s0 \s-1LIST\s0"
 .Ip "grep \s-1EXPR\s0,\s-1LIST\s0" 8
-.IX Item "grep \s-1EXPR\s0,\s-1LIST\s0"
 This is similar in spirit to, but not the same as, \fIgrep\fR\|(1)
 and its relatives.  In particular, it is not limited to using
 regular expressions.
@@ -1726,11 +1620,12 @@ supported, it can cause bizarre results if the \s-1LIST\s0 is not a named
 array.  Similarly, grep returns aliases into the original list,
 much like the way that the section on \fIForeach Loops\fR's index variable aliases the list
 elements.  That is, modifying an element of a list returned by grep
+(for example, in a \f(CWforeach\fR, \f(CWmap\fR or another \f(CWgrep\fR)
 actually modifies the element in the original list.
-.Ip "hex \s-1EXPR\s0" 8
-.IX Item "hex \s-1EXPR\s0"
+.Sp
+See also the \f(CWmap\fR entry elsewhere in this document for an array composed of the results of the \s-1BLOCK\s0 or \s-1EXPR\s0.
+=item hex \s-1EXPR\s0
 .Ip "hex" 8
-.IX Item "hex"
 Interprets \s-1EXPR\s0 as a hex string and returns the corresponding
 value.  (To convert strings that might start with either 0 or 0x
 see the \f(CWoct\fR entry elsewhere in this document .)  If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
@@ -1740,27 +1635,21 @@ see the \f(CWoct\fR entry elsewhere in this document .)  If \s-1EXPR\s0 is omitt
 \&    print hex 'aF';   # same
 .Ve
 .Ip "import" 8
-.IX Item "import"
 There is no builtin \fIimport()\fR function.  It is merely an ordinary
 method (subroutine) defined (or inherited) by modules that wish to export
 names to another module.  The \fIuse()\fR function calls the \fIimport()\fR method
 for the package used.  See also the \f(CWuse()\fR entry elsewhere in this document the \fIperlmod\fR manpage, and the \fIExporter\fR manpage.
 .Ip "index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0" 8
-.IX Item "index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0"
 .Ip "index \s-1STR\s0,\s-1SUBSTR\s0" 8
-.IX Item "index \s-1STR\s0,\s-1SUBSTR\s0"
 Returns the position of the first occurrence of \s-1SUBSTR\s0 in \s-1STR\s0 at or after
 \s-1POSITION\s0.  If \s-1POSITION\s0 is omitted, starts searching from the beginning of
 the string.  The return value is based at 0 (or whatever you've set the \f(CW$[\fR
 variable to\*(--but don't do that).  If the substring is not found, returns
 one less than the base, ordinarily \-1.
 .Ip "int \s-1EXPR\s0" 8
-.IX Item "int \s-1EXPR\s0"
 .Ip "int" 8
-.IX Item "int"
 Returns the integer portion of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0" 8
-.IX Item "ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0"
 Implements the \fIioctl\fR\|(2) function.  You'll probably have to say
 .Sp
 .Vb 1
@@ -1809,7 +1698,6 @@ system:
 \&    printf "System returned %d\en", $retval;
 .Ve
 .Ip "join \s-1EXPR\s0,\s-1LIST\s0" 8
-.IX Item "join \s-1EXPR\s0,\s-1LIST\s0"
 Joins the separate strings of \s-1LIST\s0 into a single string with
 fields separated by the value of \s-1EXPR\s0, and returns the string.
 Example:
@@ -1819,7 +1707,6 @@ Example:
 .Ve
 See the \f(CWsplit\fR entry in the \fIperlfunc\fR manpage.
 .Ip "keys \s-1HASH\s0" 8
-.IX Item "keys \s-1HASH\s0"
 Returns a normal array consisting of all the keys of the named hash.  (In
 a scalar context, returns the number of keys.)  The keys are returned in
 an apparently random order, but it is the same order as either the
@@ -1865,7 +1752,6 @@ You can't shrink the number of buckets allocated for the hash using
 \f(CWkeys\fR in this way (but you needn't worry about doing this by accident,
 as trying has no effect).
 .Ip "kill \s-1LIST\s0" 8
-.IX Item "kill \s-1LIST\s0"
 Sends a signal to a list of processes.  The first element of
 the list must be the signal to send.  Returns the number of
 processes successfully signaled.
@@ -1880,9 +1766,7 @@ number will also kill process groups, but that's not portable.)  That
 means you usually want to use positive not negative signals.  You may also
 use a signal name in quotes.  See the section on \fISignals\fR in the \fIperlipc\fR manpage for details.
 .Ip "last \s-1LABEL\s0" 8
-.IX Item "last \s-1LABEL\s0"
 .Ip "last" 8
-.IX Item "last"
 The \f(CWlast\fR command is like the \f(CWbreak\fR statement in C (as used in
 loops); it immediately exits the loop in question.  If the \s-1LABEL\s0 is
 omitted, the command refers to the innermost enclosing loop.  The
@@ -1895,39 +1779,30 @@ omitted, the command refers to the innermost enclosing loop.  The
 \&    }
 .Ve
 .Ip "lc \s-1EXPR\s0" 8
-.IX Item "lc \s-1EXPR\s0"
 .Ip "lc" 8
-.IX Item "lc"
 Returns an lowercased version of \s-1EXPR\s0.  This is the internal function
 implementing the \eL escape in double-quoted strings.
 Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
 .Sp
 If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "lcfirst \s-1EXPR\s0" 8
-.IX Item "lcfirst \s-1EXPR\s0"
 .Ip "lcfirst" 8
-.IX Item "lcfirst"
 Returns the value of \s-1EXPR\s0 with the first character lowercased.  This is
 the internal function implementing the \el escape in double-quoted strings.
 Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
 .Sp
 If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "length \s-1EXPR\s0" 8
-.IX Item "length \s-1EXPR\s0"
 .Ip "length" 8
-.IX Item "length"
 Returns the length in characters of the value of \s-1EXPR\s0.  If \s-1EXPR\s0 is
 omitted, returns length of \f(CW$_\fR.
 .Ip "link \s-1OLDFILE\s0,\s-1NEWFILE\s0" 8
-.IX Item "link \s-1OLDFILE\s0,\s-1NEWFILE\s0"
 Creates a new filename linked to the old filename.  Returns 1 for
 success, 0 otherwise.
 .Ip "listen \s-1SOCKET\s0,\s-1QUEUESIZE\s0" 8
-.IX Item "listen \s-1SOCKET\s0,\s-1QUEUESIZE\s0"
 Does the same thing that the listen system call does.  Returns \s-1TRUE\s0 if
 it succeeded, \s-1FALSE\s0 otherwise.  See example in the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "local \s-1EXPR\s0" 8
-.IX Item "local \s-1EXPR\s0"
 A local modifies the listed variables to be local to the enclosing block,
 subroutine, \f(CWeval{}\fR, or \f(CWdo\fR.  If more than one value is listed, the
 list must be placed in parentheses.  See the section on \fITemporary Values via
@@ -1937,7 +1812,6 @@ But you really probably want to be using \fImy()\fR instead, because \fIlocal()\
 what most people think of as \*(L"local").  See the section on \fIPrivate Variables
 via my()\fR in the \fIperlsub\fR manpage for details.
 .Ip "localtime \s-1EXPR\s0" 8
-.IX Item "localtime \s-1EXPR\s0"
 Converts a time as returned by the time function to a 9-element array
 with the time analyzed for the local time zone.  Typically used as
 follows:
@@ -1959,32 +1833,26 @@ In a scalar context, returns the \fIctime\fR\|(3) value:
 .Vb 1
 \&    $now_string = localtime;  # e.g., "Thu Oct 13 04:54:34 1994"
 .Ve
+This scalar value is \fBnot\fR locale dependent, see the \fIperllocale\fR manpage,
+but instead a Perl builtin.
 Also see the Time::Local module, and the \fIstrftime\fR\|(3) and \fImktime\fR\|(3)
 function available via the \s-1POSIX\s0 module.
 .Ip "log \s-1EXPR\s0" 8
-.IX Item "log \s-1EXPR\s0"
 .Ip "log" 8
-.IX Item "log"
 Returns logarithm (base \fIe\fR) of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, returns log
 of \f(CW$_\fR.
 .Ip "lstat \s-1FILEHANDLE\s0" 8
-.IX Item "lstat \s-1FILEHANDLE\s0"
 .Ip "lstat \s-1EXPR\s0" 8
-.IX Item "lstat \s-1EXPR\s0"
 .Ip "lstat" 8
-.IX Item "lstat"
 Does the same thing as the \fIstat()\fR function, but stats a symbolic link
 instead of the file the symbolic link points to.  If symbolic links are
 unimplemented on your system, a normal \fIstat()\fR is done.
 .Sp
 If \s-1EXPR\s0 is omitted, stats \f(CW$_\fR.
 .Ip "m//" 8
-.IX Item "m//"
 The match operator.  See the \fIperlop\fR manpage.
 .Ip "map \s-1BLOCK\s0 \s-1LIST\s0" 8
-.IX Item "map \s-1BLOCK\s0 \s-1LIST\s0"
 .Ip "map \s-1EXPR\s0,\s-1LIST\s0" 8
-.IX Item "map \s-1EXPR\s0,\s-1LIST\s0"
 Evaluates the \s-1BLOCK\s0 or \s-1EXPR\s0 for each element of \s-1LIST\s0 (locally setting \f(CW$_\fR to each
 element) and returns the list value composed of the results of each such
 evaluation.  Evaluates \s-1BLOCK\s0 or \s-1EXPR\s0 in a list context, so each element of \s-1LIST\s0
@@ -2006,29 +1874,29 @@ is just a funny way to write
 \&        $hash{getkey($_)} = $_;
 \&    }
 .Ve
+Note that, because \f(CW$_\fR is a reference into the list value, it can be used
+to modify the elements of the array.  While this is useful and
+supported, it can cause bizarre results if the \s-1LIST\s0 is not a named
+array.  See also the \f(CWgrep\fR entry elsewhere in this document for an array composed of those items of the 
+original list for which the \s-1BLOCK\s0 or \s-1EXPR\s0 evaluates to true.
 .Ip "mkdir \s-1FILENAME\s0,\s-1MODE\s0" 8
-.IX Item "mkdir \s-1FILENAME\s0,\s-1MODE\s0"
 Creates the directory specified by \s-1FILENAME\s0, with permissions specified
 by \s-1MODE\s0 (as modified by umask).  If it succeeds it returns 1, otherwise
 it returns 0 and sets \f(CW$!\fR (errno).
 .Ip "msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0" 8
-.IX Item "msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
 Calls the System V \s-1IPC\s0 function \fImsgctl\fR\|(2).  If \s-1CMD\s0 is &\s-1IPC_STAT\s0, then \s-1ARG\s0
 must be a variable which will hold the returned msqid_ds structure.
 Returns like ioctl: the undefined value for error, \*(L"0 but true\*(R" for
 zero, or the actual return value otherwise.
 .Ip "msgget \s-1KEY\s0,\s-1FLAGS\s0" 8
-.IX Item "msgget \s-1KEY\s0,\s-1FLAGS\s0"
 Calls the System V \s-1IPC\s0 function \fImsgget\fR\|(2).  Returns the message queue id,
 or the undefined value if there is an error.
 .Ip "msgsnd \s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0" 8
-.IX Item "msgsnd \s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0"
 Calls the System V \s-1IPC\s0 function msgsnd to send the message \s-1MSG\s0 to the
 message queue \s-1ID\s0.  \s-1MSG\s0 must begin with the long integer message type,
 which may be created with \f(CWpack("l", $type)\fR.  Returns \s-1TRUE\s0 if
 successful, or \s-1FALSE\s0 if there is an error.
 .Ip "msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0" 8
-.IX Item "msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0"
 Calls the System V \s-1IPC\s0 function msgrcv to receive a message from
 message queue \s-1ID\s0 into variable \s-1VAR\s0 with a maximum message size of
 \s-1SIZE\s0.  Note that if a message is received, the message type will be the
@@ -2036,15 +1904,12 @@ first thing in \s-1VAR\s0, and the maximum length of \s-1VAR\s0 is \s-1SIZE\s0 p
 of the message type.  Returns \s-1TRUE\s0 if successful, or \s-1FALSE\s0 if there is
 an error.
 .Ip "my \s-1EXPR\s0" 8
-.IX Item "my \s-1EXPR\s0"
 A \*(L"my\*(R" declares the listed variables to be local (lexically) to the
 enclosing block, subroutine, \f(CWeval\fR, or \f(CWdo/require/use\fR'd file.  If
 more than one value is listed, the list must be placed in parentheses.  See
 the section on \fIPrivate Variables via my()\fR in the \fIperlsub\fR manpage for details.
 .Ip "next \s-1LABEL\s0" 8
-.IX Item "next \s-1LABEL\s0"
 .Ip "next" 8
-.IX Item "next"
 The \f(CWnext\fR command is like the \f(CWcontinue\fR statement in C; it starts
 the next iteration of the loop:
 .Sp
@@ -2058,12 +1923,9 @@ Note that if there were a \f(CWcontinue\fR block on the above, it would get
 executed even on discarded lines.  If the \s-1LABEL\s0 is omitted, the command
 refers to the innermost enclosing loop.
 .Ip "no Module \s-1LIST\s0" 8
-.IX Item "no Module \s-1LIST\s0"
 See the \*(L"use\*(R" function, which \*(L"no\*(R" is the opposite of.
 .Ip "oct \s-1EXPR\s0" 8
-.IX Item "oct \s-1EXPR\s0"
 .Ip "oct" 8
-.IX Item "oct"
 Interprets \s-1EXPR\s0 as an octal string and returns the corresponding
 value.  (If \s-1EXPR\s0 happens to start off with 0x, interprets it as
 a hex string instead.)  The following will handle decimal, octal, and
@@ -2077,9 +1939,7 @@ a string such as \*(L"644\*(R" needs to be converted into a file mode, for
 example. (Although perl will automatically convert strings into
 numbers as needed, this automatic conversion assumes base 10.)
 .Ip "open \s-1FILEHANDLE\s0,\s-1EXPR\s0" 8
-.IX Item "open \s-1FILEHANDLE\s0,\s-1EXPR\s0"
 .Ip "open \s-1FILEHANDLE\s0" 8
-.IX Item "open \s-1FILEHANDLE\s0"
 Opens the file whose filename is given by \s-1EXPR\s0, and associates it with
 \s-1FILEHANDLE\s0.  If \s-1FILEHANDLE\s0 is an expression, its value is used as the
 name of the real filehandle wanted.  If \s-1EXPR\s0 is omitted, the scalar
@@ -2119,6 +1979,14 @@ and those that don't is their text file formats.  Systems like Unix and
 Plan9 that delimit lines with a single character, and that encode that
 character in C as \*(L'\en\*(R', do not need \f(CWbinmode\fR.  The rest need it.
 .Sp
+When opening a file, it's usually a bad idea to continue normal execution
+if the request failed, so \f(CWopen\fR is frequently used in connection with
+\f(CWdie\fR. Even if \f(CWdie\fR won't do what you want (say, in a \s-1CGI\s0 script,
+where you want to make a nicely formatted error message (but there are
+modules which can help with that problem)) you should always check
+the return value from opening a file. The infrequent exception is when
+working with an unopened filehandle is actually what you want to do.
+.Sp
 Examples:
 .Sp
 .Vb 3
@@ -2126,17 +1994,21 @@ Examples:
 \&    open ARTICLE or die "Can't find article $ARTICLE: $!\en";
 \&    while (<ARTICLE>) {...
 .Ve
-.Vb 1
+.Vb 2
 \&    open(LOG, '>>/usr/spool/news/twitlog'); # (log is reserved)
+\&    # if the open fails, output is discarded
 .Ve
-.Vb 1
-\&    open(DBASE, '+<dbase.mine');            # open for update
+.Vb 2
+\&    open(DBASE, '+<dbase.mine')             # open for update
+\&        or die "Can't open 'dbase.mine' for update: $!";
 .Ve
-.Vb 1
-\&    open(ARTICLE, "caesar <$article |");    # decrypt article
+.Vb 2
+\&    open(ARTICLE, "caesar <$article |")     # decrypt article
+\&        or die "Can't start caesar: $!";
 .Ve
-.Vb 1
-\&    open(EXTRACT, "|sort >/tmp/Tmp$$");     # $$ is our process id
+.Vb 2
+\&    open(EXTRACT, "|sort >/tmp/Tmp$$")      # $$ is our process id
+\&        or die "Can't start sort: $!";
 .Ve
 .Vb 1
 \&    # process argument list of files along with any includes
@@ -2286,18 +2158,14 @@ protect your filenames from interpretation.  For example:
 .Ve
 See the \f(CWseek()\fR entry elsewhere in this document for some details about mixing reading and writing.
 .Ip "opendir \s-1DIRHANDLE\s0,\s-1EXPR\s0" 8
-.IX Item "opendir \s-1DIRHANDLE\s0,\s-1EXPR\s0"
 Opens a directory named \s-1EXPR\s0 for processing by \fIreaddir()\fR, \fItelldir()\fR,
 \fIseekdir()\fR, \fIrewinddir()\fR, and \fIclosedir()\fR.  Returns \s-1TRUE\s0 if successful.
 DIRHANDLEs have their own namespace separate from FILEHANDLEs.
 .Ip "ord \s-1EXPR\s0" 8
-.IX Item "ord \s-1EXPR\s0"
 .Ip "ord" 8
-.IX Item "ord"
 Returns the numeric ascii value of the first character of \s-1EXPR\s0.  If
 \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.  For the reverse, see the \f(CWchr\fR entry elsewhere in this document .
 .Ip "pack \s-1TEMPLATE\s0,\s-1LIST\s0" 8
-.IX Item "pack \s-1TEMPLATE\s0,\s-1LIST\s0"
 Takes an array or list of values and packs it into a binary structure,
 returning the string containing the structure.  The \s-1TEMPLATE\s0 is a
 sequence of characters that give the order and type of values, as
@@ -2372,8 +2240,13 @@ types gobble just one value, but pack it as a string of length count,
 padding with nulls or spaces as necessary.  (When unpacking, \*(L"A\*(R" strips
 trailing spaces and nulls, but \*(L"a\*(R" does not.)  Likewise, the \*(L"b\*(R" and \*(L"B\*(R"
 fields pack a string that many bits long.  The \*(L"h\*(R" and \*(L"H\*(R" fields pack a
-string that many nybbles long.  The \*(L"P\*(R" packs a pointer to a structure of
-the size indicated by the length.  Real numbers (floats and doubles) are
+string that many nybbles long.  The \*(L"p\*(R" type packs a pointer to a null-
+terminated string.  You are responsible for ensuring the string is not a
+temporary value (which can potentially get deallocated before you get
+around to using the packed result).  The \*(L"P\*(R" packs a pointer to a structure
+of the size indicated by the length. A \s-1NULL\s0 pointer is created if the 
+corresponding value for \*(L"p\*(R" or \*(L"P\*(R" is \f(CWundef\fR.
+Real numbers (floats and doubles) are
 in the native machine format only; due to the multiplicity of floating
 formats around, and the lack of a standard \*(L"network\*(R" representation, no
 facility for interchange has been made.  This means that packed floating
@@ -2424,7 +2297,6 @@ Examples:
 .Ve
 The same template may generally also be used in the unpack function.
 .Ip "package \s-1NAMESPACE\s0" 8
-.IX Item "package \s-1NAMESPACE\s0"
 Declares the compilation unit as being in the given namespace.  The scope
 of the package declaration is from the declaration itself through the end of
 the enclosing block (the same scope as the \fIlocal()\fR operator).  All further
@@ -2442,7 +2314,6 @@ package as assumed.  That is, \f(CW$::sail\fR is equivalent to \f(CW$main::sail\
 See the section on \fIPackages\fR in the \fIperlmod\fR manpage for more information about packages, modules,
 and classes.  See the \fIperlsub\fR manpage for other scoping issues.
 .Ip "pipe \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0" 8
-.IX Item "pipe \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0"
 Opens a pair of connected pipes like the corresponding system call.
 Note that if you set up a loop of piped processes, deadlock can occur
 unless you are very careful.  In addition, note that Perl's pipes use
@@ -2452,9 +2323,7 @@ after each command, depending on the application.
 See the \fI\s-1IPC::\s0Open2\fR manpage, the \fI\s-1IPC::\s0Open3\fR manpage, and the section on \fIBidirectional Communication\fR in the \fIperlipc\fR manpage
 for examples of such things.
 .Ip "pop \s-1ARRAY\s0" 8
-.IX Item "pop \s-1ARRAY\s0"
 .Ip "pop" 8
-.IX Item "pop"
 Pops and returns the last value of the array, shortening the array by
 1.  Has a similar effect to
 .Sp
@@ -2466,20 +2335,15 @@ If \s-1ARRAY\s0 is omitted, pops the
 \f(CW@ARGV\fR array in the main program, and the \f(CW@_\fR array in subroutines, just
 like \fIshift()\fR.
 .Ip "pos \s-1SCALAR\s0" 8
-.IX Item "pos \s-1SCALAR\s0"
 .Ip "pos" 8
-.IX Item "pos"
 Returns the offset of where the last \f(CWm//g\fR search left off for the variable
 is in question ($_ is used when the variable is not specified).  May be
 modified to change that offset.  Such modification will also influence
 the \f(CW\eG\fR zero-width assertion in regular expressions.  See the \fIperlre\fR manpage and
 the \fIperlop\fR manpage.
 .Ip "print \s-1FILEHANDLE\s0 \s-1LIST\s0" 8
-.IX Item "print \s-1FILEHANDLE\s0 \s-1LIST\s0"
 .Ip "print \s-1LIST\s0" 8
-.IX Item "print \s-1LIST\s0"
 .Ip "print" 8
-.IX Item "print"
 Prints a string or a comma-separated list of strings.  Returns \s-1TRUE\s0
 if successful.  \s-1FILEHANDLE\s0 may be a scalar variable name, in which case
 the variable contains the name of or a reference to the filehandle, thus introducing one
@@ -2505,9 +2369,7 @@ you will have to use a block returning its value instead:
 \&    print { $OK ? STDOUT : STDERR } "stuff\en";
 .Ve
 .Ip "printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0" 8
-.IX Item "printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0"
 .Ip "printf \s-1FORMAT\s0, \s-1LIST\s0" 8
-.IX Item "printf \s-1FORMAT\s0, \s-1LIST\s0"
 Equivalent to \f(CWprint FILEHANDLE sprintf(FORMAT, LIST)\fR.  The first argument
 of the list will be interpreted as the printf format.  If \f(CWuse locale\fR is
 in effect, the character used for the decimal point in formatted real numbers
@@ -2517,12 +2379,17 @@ Don't fall into the trap of using a \fIprintf()\fR when a simple
 \fIprint()\fR would do.  The \fIprint()\fR is more efficient, and less
 error prone.
 .Ip "prototype \s-1FUNCTION\s0" 8
-.IX Item "prototype \s-1FUNCTION\s0"
 Returns the prototype of a function as a string (or \f(CWundef\fR if the
 function has no prototype).  \s-1FUNCTION\s0 is a reference to, or the name of,
 the function whose prototype you want to retrieve.
+.Sp
+If \s-1FUNCTION\s0 is a string starting with \f(CWCORE::\fR, the rest is taken as
+a name for Perl builtin.  If builtin is not \fIoverridable\fR (such as
+\f(CWqw\fR) or its arguments cannot be expressed by a prototype (such as
+\f(CWsystem\fR) \- in other words, the builtin does not behave like a Perl
+function \- returns \f(CWundef\fR.  Otherwise, the string describing the
+equivalent prototype is returned.
 .Ip "push \s-1ARRAY\s0,\s-1LIST\s0" 8
-.IX Item "push \s-1ARRAY\s0,\s-1LIST\s0"
 Treats \s-1ARRAY\s0 as a stack, and pushes the values of \s-1LIST\s0
 onto the end of \s-1ARRAY\s0.  The length of \s-1ARRAY\s0 increases by the length of
 \s-1LIST\s0.  Has the same effect as
@@ -2534,18 +2401,12 @@ onto the end of \s-1ARRAY\s0.  The length of \s-1ARRAY\s0 increases by the lengt
 .Ve
 but is more efficient.  Returns the new number of elements in the array.
 .Ip "q/\s-1STRING\s0/" 8
-.IX Item "q/\s-1STRING\s0/"
 .Ip "qq/\s-1STRING\s0/" 8
-.IX Item "qq/\s-1STRING\s0/"
 .Ip "qx/\s-1STRING\s0/" 8
-.IX Item "qx/\s-1STRING\s0/"
 .Ip "qw/\s-1STRING\s0/" 8
-.IX Item "qw/\s-1STRING\s0/"
 Generalized quotes.  See the \fIperlop\fR manpage.
 .Ip "quotemeta \s-1EXPR\s0" 8
-.IX Item "quotemeta \s-1EXPR\s0"
 .Ip "quotemeta" 8
-.IX Item "quotemeta"
 Returns the value of \s-1EXPR\s0 with all non-alphanumeric
 characters backslashed.  (That is, all characters not matching
 \f(CW/[A-Za-z_0-9]/\fR will be preceded by a backslash in the
@@ -2555,9 +2416,7 @@ the \eQ escape in double-quoted strings.
 .Sp
 If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "rand \s-1EXPR\s0" 8
-.IX Item "rand \s-1EXPR\s0"
 .Ip "rand" 8
-.IX Item "rand"
 Returns a random fractional number greater than or equal to 0 and less
 than the value of \s-1EXPR\s0.  (\s-1EXPR\s0 should be positive.)  If \s-1EXPR\s0 is
 omitted, the value 1 is used.  Automatically calls \fIsrand()\fR unless
@@ -2567,9 +2426,7 @@ omitted, the value 1 is used.  Automatically calls \fIsrand()\fR unless
 large or too small, then your version of Perl was probably compiled
 with the wrong number of \s-1RANDBITS\s0.)
 .Ip "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
-.IX Item "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
-.IX Item "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
 Attempts to read \s-1LENGTH\s0 bytes of data into variable \s-1SCALAR\s0 from the
 specified \s-1FILEHANDLE\s0.  Returns the number of bytes actually read, or
 undef if there was an error.  \s-1SCALAR\s0 will be grown or shrunk to the
@@ -2578,7 +2435,6 @@ data at some other place than the beginning of the string.  This call
 is actually implemented in terms of stdio's fread call.  To get a true
 read system call, see \fIsysread()\fR.
 .Ip "readdir \s-1DIRHANDLE\s0" 8
-.IX Item "readdir \s-1DIRHANDLE\s0"
 Returns the next directory entry for a directory opened by \fIopendir()\fR.
 If used in a list context, returns all the rest of the entries in the
 directory.  If there are no more entries, returns an undefined value in
@@ -2593,16 +2449,30 @@ better prepend the directory in question.  Otherwise, because we didn't
 \&    @dots = grep { /^\e./ && -f "$some_dir/$_" } readdir(DIR);
 \&    closedir DIR;
 .Ve
+.Ip "readline \s-1EXPR\s0" 8
+Reads from the file handle \s-1EXPR\s0.  In scalar context, a single line
+is read and returned.  In list context, reads until end-of-file is
+reached and returns a list of lines (however you've defined lines
+with $/ or \f(CW$INPUT_RECORD_SEPARATOR\fR).
+This is the internal function implementing the \f(CW<EXPR>\fR
+operator, but you can use it directly.  The \f(CW<EXPR>\fR
+operator is discussed in more detail in the section on \fII/O Operators\fR in the \fIperlop\fR manpage.
 .Ip "readlink \s-1EXPR\s0" 8
-.IX Item "readlink \s-1EXPR\s0"
 .Ip "readlink" 8
-.IX Item "readlink"
 Returns the value of a symbolic link, if symbolic links are
 implemented.  If not, gives a fatal error.  If there is some system
 error, returns the undefined value and sets \f(CW$!\fR (errno).  If \s-1EXPR\s0 is
 omitted, uses \f(CW$_\fR.
+.Ip "readpipe \s-1EXPR\s0" 8
+\s-1EXPR\s0 is interpolated and then executed as a system command.
+The collected standard output of the command is returned.
+In scalar context, it comes back as a single (potentially
+multi-line) string.  In list context, returns a list of lines
+(however you've defined lines with $/ or \f(CW$INPUT_RECORD_SEPARATOR\fR).
+This is the internal function implementing the \f(CWqx/EXPR/\fR
+operator, but you can use it directly.  The \f(CWqx/EXPR/\fR
+operator is discussed in more detail in the section on \fII/O Operators\fR in the \fIperlop\fR manpage.
 .Ip "recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0" 8
-.IX Item "recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0"
 Receives a message on a socket.  Attempts to receive \s-1LENGTH\s0 bytes of
 data into variable \s-1SCALAR\s0 from the specified \s-1SOCKET\s0 filehandle.
 Actually does a C \fIrecvfrom()\fR, so that it can returns the address of the
@@ -2611,9 +2481,7 @@ be grown or shrunk to the length actually read.  Takes the same flags
 as the system call of the same name.
 See the section on \fI\s-1UDP\s0: Message Passing\fR in the \fIperlipc\fR manpage for examples.
 .Ip "redo \s-1LABEL\s0" 8
-.IX Item "redo \s-1LABEL\s0"
 .Ip "redo" 8
-.IX Item "redo"
 The \f(CWredo\fR command restarts the loop block without evaluating the
 conditional again.  The \f(CWcontinue\fR block, if any, is not executed.  If
 the \s-1LABEL\s0 is omitted, the command refers to the innermost enclosing
@@ -2639,9 +2507,7 @@ themselves about what was just input:
 \&    }
 .Ve
 .Ip "ref \s-1EXPR\s0" 8
-.IX Item "ref \s-1EXPR\s0"
 .Ip "ref" 8
-.IX Item "ref"
 Returns a \s-1TRUE\s0 value if \s-1EXPR\s0 is a reference, \s-1FALSE\s0 otherwise.  If \s-1EXPR\s0
 is not specified, \f(CW$_\fR will be used.  The value returned depends on the
 type of thing the reference is a reference to.
@@ -2668,13 +2534,10 @@ name is returned instead.  You can think of \fIref()\fR as a \fItypeof()\fR oper
 .Ve
 See also the \fIperlref\fR manpage.
 .Ip "rename \s-1OLDNAME\s0,\s-1NEWNAME\s0" 8
-.IX Item "rename \s-1OLDNAME\s0,\s-1NEWNAME\s0"
 Changes the name of a file.  Returns 1 for success, 0 otherwise.  Will
 not work across file system boundaries.
 .Ip "require \s-1EXPR\s0" 8
-.IX Item "require \s-1EXPR\s0"
 .Ip "require" 8
-.IX Item "require"
 Demands some semantics specified by \s-1EXPR\s0, or by \f(CW$_\fR if \s-1EXPR\s0 is not
 supplied.  If \s-1EXPR\s0 is numeric, demands that the current version of Perl
 (\f(CW$]\fR or \f(CW$PERL_VERSION\fR) be equal or greater than \s-1EXPR\s0.
@@ -2717,11 +2580,9 @@ replaces \*(L"\fI::\fR\*(R" with \*(L"\fI/\fR\*(R" in the filename for you,
 to make it easy to load standard modules.  This form of loading of
 modules does not risk altering your namespace.
 .Sp
-For a yet-more-powerful import facility, see the \f(CWuse\fR entry elsewhere in this document the \fIperlmod\fR manpage.
+For a yet-more-powerful import facility, see the \f(CWuse\fR entry elsewhere in this document and the \fIperlmod\fR manpage.
 .Ip "reset \s-1EXPR\s0" 8
-.IX Item "reset \s-1EXPR\s0"
 .Ip "reset" 8
-.IX Item "reset"
 Generally used in a \f(CWcontinue\fR block at the end of a loop to clear
 variables and reset ?? searches so that they work again.  The
 expression is interpreted as a list of single characters (hyphens
@@ -2741,9 +2602,7 @@ Resetting \*(L"A\-Z\*(R" is not recommended because you'll wipe out your
 are unaffected, but they clean themselves up on scope exit anyway,
 so you'll probably want to use them instead.  See the \f(CWmy\fR entry elsewhere in this document .
 .Ip "return \s-1EXPR\s0" 8
-.IX Item "return \s-1EXPR\s0"
 .Ip "return" 8
-.IX Item "return"
 Returns from a subroutine, \fIeval()\fR, or do \s-1FILE\s0 with the value of the
 given \s-1EXPR\s0.  Evaluation of \s-1EXPR\s0 may be in a list, scalar, or void
 context, depending on how the return value will be used, and the context
@@ -2754,7 +2613,6 @@ a scalar context, or nothing in a void context.
 (Note that in the absence of a return, a subroutine, eval, or do \s-1FILE\s0
 will automatically return the value of the last expression evaluated.)
 .Ip "reverse \s-1LIST\s0" 8
-.IX Item "reverse \s-1LIST\s0"
 In a list context, returns a list value consisting of the elements
 of \s-1LIST\s0 in the opposite order.  In a scalar context, concatenates the
 elements of \s-1LIST\s0, and returns a string value consisting of those bytes,
@@ -2777,28 +2635,21 @@ on a large hash.
 \&    %by_name = reverse %by_address;     # Invert the hash
 .Ve
 .Ip "rewinddir \s-1DIRHANDLE\s0" 8
-.IX Item "rewinddir \s-1DIRHANDLE\s0"
 Sets the current position to the beginning of the directory for the
 \fIreaddir()\fR routine on \s-1DIRHANDLE\s0.
 .Ip "rindex \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0" 8
-.IX Item "rindex \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0"
 .Ip "rindex \s-1STR\s0,\s-1SUBSTR\s0" 8
-.IX Item "rindex \s-1STR\s0,\s-1SUBSTR\s0"
 Works just like index except that it returns the position of the \s-1LAST\s0
 occurrence of \s-1SUBSTR\s0 in \s-1STR\s0.  If \s-1POSITION\s0 is specified, returns the
 last occurrence at or before that position.
 .Ip "rmdir \s-1FILENAME\s0" 8
-.IX Item "rmdir \s-1FILENAME\s0"
 .Ip "rmdir" 8
-.IX Item "rmdir"
 Deletes the directory specified by \s-1FILENAME\s0 if it is empty.  If it
 succeeds it returns 1, otherwise it returns 0 and sets \f(CW$!\fR (errno).  If
 \s-1FILENAME\s0 is omitted, uses \f(CW$_\fR.
 .Ip "s///" 8
-.IX Item "s///"
 The substitution operator.  See the \fIperlop\fR manpage.
 .Ip "scalar \s-1EXPR\s0" 8
-.IX Item "scalar \s-1EXPR\s0"
 Forces \s-1EXPR\s0 to be interpreted in a scalar context and returns the value
 of \s-1EXPR\s0.
 .Sp
@@ -2811,7 +2662,6 @@ needed.  If you really wanted to do so, however, you could use
 the construction \f(CW@{[ (some expression) ]}\fR, but usually a simple
 \f(CW(some expression)\fR suffices.
 .Ip "seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0" 8
-.IX Item "seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0"
 Sets \s-1FILEHANDLE\s0's position, just like the \fIfseek()\fR call of stdio.
 \s-1FILEHANDLE\s0 may be an expression whose value gives the name of the
 filehandle.  The values for \s-1WHENCE\s0 are 0 to set the new position to
@@ -2851,15 +2701,12 @@ you may need something more like this:
 \&    }
 .Ve
 .Ip "seekdir \s-1DIRHANDLE\s0,\s-1POS\s0" 8
-.IX Item "seekdir \s-1DIRHANDLE\s0,\s-1POS\s0"
 Sets the current position for the \fIreaddir()\fR routine on \s-1DIRHANDLE\s0.  \s-1POS\s0
 must be a value returned by \fItelldir()\fR.  Has the same caveats about
 possible directory compaction as the corresponding system library
 routine.
 .Ip "select \s-1FILEHANDLE\s0" 8
-.IX Item "select \s-1FILEHANDLE\s0"
 .Ip "select" 8
-.IX Item "select"
 Returns the currently selected filehandle.  Sets the current default
 filehandle for output, if \s-1FILEHANDLE\s0 is supplied.  This has two
 effects: first, a \f(CWwrite\fR or a \f(CWprint\fR without a filehandle will
@@ -2888,7 +2735,6 @@ methods, preferring to write the last example as:
 \&    STDERR->autoflush(1);
 .Ve
 .Ip "select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0" 8
-.IX Item "select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0"
 This calls the \fIselect\fR\|(2) system call with the bit masks specified, which
 can be constructed using \fIfileno()\fR and \fIvec()\fR, along these lines:
 .Sp
@@ -2939,18 +2785,15 @@ You can effect a sleep of 250 milliseconds this way:
 \fB\s-1WARNING\s0\fR: Do not attempt to mix buffered I/O (like \fIread()\fR or <\s-1FH\s0>)
 with \fIselect()\fR.  You have to use \fIsysread()\fR instead.
 .Ip "semctl \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0" 8
-.IX Item "semctl \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0"
 Calls the System V \s-1IPC\s0 function semctl.  If \s-1CMD\s0 is &\s-1IPC_STAT\s0 or
 &\s-1GETALL\s0, then \s-1ARG\s0 must be a variable which will hold the returned
 semid_ds structure or semaphore value array.  Returns like ioctl: the
 undefined value for error, \*(L"0 but true\*(R" for zero, or the actual return
 value otherwise.
 .Ip "semget \s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0" 8
-.IX Item "semget \s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0"
 Calls the System V \s-1IPC\s0 function semget.  Returns the semaphore id, or
 the undefined value if there is an error.
 .Ip "semop \s-1KEY\s0,\s-1OPSTRING\s0" 8
-.IX Item "semop \s-1KEY\s0,\s-1OPSTRING\s0"
 Calls the System V \s-1IPC\s0 function semop to perform semaphore operations
 such as signaling and waiting.  \s-1OPSTRING\s0 must be a packed array of
 semop structures.  Each semop structure can be generated with
@@ -2965,9 +2808,7 @@ following code waits on semaphore \f(CW$semnum\fR of semaphore id \f(CW$semid:\f
 .Ve
 To signal the semaphore, replace \*(L"\-1\*(R" with \*(L"1\*(R".
 .Ip "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0,\s-1TO\s0" 8
-.IX Item "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0,\s-1TO\s0"
 .Ip "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0" 8
-.IX Item "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0"
 Sends a message on a socket.  Takes the same flags as the system call
 of the same name.  On unconnected sockets you must specify a
 destination to send \s-1TO\s0, in which case it does a C \fIsendto()\fR.  Returns
@@ -2975,26 +2816,21 @@ the number of characters sent, or the undefined value if there is an
 error.
 See the section on \fI\s-1UDP\s0: Message Passing\fR in the \fIperlipc\fR manpage for examples.
 .Ip "setpgrp \s-1PID\s0,\s-1PGRP\s0" 8
-.IX Item "setpgrp \s-1PID\s0,\s-1PGRP\s0"
 Sets the current process group for the specified \s-1PID\s0, 0 for the current
 process.  Will produce a fatal error if used on a machine that doesn't
 implement \fIsetpgrp\fR\|(2).  If the arguments are omitted, it defaults to
 0,0.  Note that the \s-1POSIX\s0 version of \fIsetpgrp()\fR does not accept any
 arguments, so only setpgrp 0,0 is portable.
 .Ip "setpriority \s-1WHICH\s0,\s-1WHO\s0,\s-1PRIORITY\s0" 8
-.IX Item "setpriority \s-1WHICH\s0,\s-1WHO\s0,\s-1PRIORITY\s0"
 Sets the current priority for a process, a process group, or a user.
 (See \fIsetpriority\fR\|(2).)  Will produce a fatal error if used on a machine
 that doesn't implement \fIsetpriority\fR\|(2).
 .Ip "setsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0,\s-1OPTVAL\s0" 8
-.IX Item "setsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0,\s-1OPTVAL\s0"
 Sets the socket option requested.  Returns undefined if there is an
 error.  \s-1OPTVAL\s0 may be specified as undef if you don't want to pass an
 argument.
 .Ip "shift \s-1ARRAY\s0" 8
-.IX Item "shift \s-1ARRAY\s0"
 .Ip "shift" 8
-.IX Item "shift"
 Shifts the first value of the array off and returns it, shortening the
 array by 1 and moving everything down.  If there are no elements in the
 array, returns the undefined value.  If \s-1ARRAY\s0 is omitted, shifts the
@@ -3003,19 +2839,15 @@ array, returns the undefined value.  If \s-1ARRAY\s0 is omitted, shifts the
 \fIShift()\fR and \fIunshift()\fR do the same thing to the left end of an array
 that \fIpop()\fR and \fIpush()\fR do to the right end.
 .Ip "shmctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0" 8
-.IX Item "shmctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
 Calls the System V \s-1IPC\s0 function shmctl.  If \s-1CMD\s0 is &\s-1IPC_STAT\s0, then \s-1ARG\s0
 must be a variable which will hold the returned shmid_ds structure.
 Returns like ioctl: the undefined value for error, \*(L"0 but true\*(R" for
 zero, or the actual return value otherwise.
 .Ip "shmget \s-1KEY\s0,\s-1SIZE\s0,\s-1FLAGS\s0" 8
-.IX Item "shmget \s-1KEY\s0,\s-1SIZE\s0,\s-1FLAGS\s0"
 Calls the System V \s-1IPC\s0 function shmget.  Returns the shared memory
 segment id, or the undefined value if there is an error.
 .Ip "shmread \s-1ID\s0,\s-1VAR\s0,\s-1POS\s0,\s-1SIZE\s0" 8
-.IX Item "shmread \s-1ID\s0,\s-1VAR\s0,\s-1POS\s0,\s-1SIZE\s0"
 .Ip "shmwrite \s-1ID\s0,\s-1STRING\s0,\s-1POS\s0,\s-1SIZE\s0" 8
-.IX Item "shmwrite \s-1ID\s0,\s-1STRING\s0,\s-1POS\s0,\s-1SIZE\s0"
 Reads or writes the System V shared memory segment \s-1ID\s0 starting at
 position \s-1POS\s0 for size \s-1SIZE\s0 by attaching to it, copying in/out, and
 detaching from it.  When reading, \s-1VAR\s0 must be a variable which will
@@ -3023,13 +2855,10 @@ hold the data read.  When writing, if \s-1STRING\s0 is too long, only \s-1SIZE\s
 bytes are used; if \s-1STRING\s0 is too short, nulls are written to fill out
 \s-1SIZE\s0 bytes.  Return \s-1TRUE\s0 if successful, or \s-1FALSE\s0 if there is an error.
 .Ip "shutdown \s-1SOCKET\s0,\s-1HOW\s0" 8
-.IX Item "shutdown \s-1SOCKET\s0,\s-1HOW\s0"
 Shuts down a socket connection in the manner indicated by \s-1HOW\s0, which
 has the same interpretation as in the system call of the same name.
 .Ip "sin \s-1EXPR\s0" 8
-.IX Item "sin \s-1EXPR\s0"
 .Ip "sin" 8
-.IX Item "sin"
 Returns the sine of \s-1EXPR\s0 (expressed in radians).  If \s-1EXPR\s0 is omitted,
 returns sine of \f(CW$_\fR.
 .Sp
@@ -3040,9 +2869,7 @@ function, or use this relation:
 \&    sub asin { atan2($_[0], sqrt(1 - $_[0] * $_[0])) }
 .Ve
 .Ip "sleep \s-1EXPR\s0" 8
-.IX Item "sleep \s-1EXPR\s0"
 .Ip "sleep" 8
-.IX Item "sleep"
 Causes the script to sleep for \s-1EXPR\s0 seconds, or forever if no \s-1EXPR\s0.
 May be interrupted by sending the process a \s-1SIGALRM\s0.  Returns the
 number of seconds actually slept.  You probably cannot mix \fIalarm()\fR and
@@ -3058,23 +2885,18 @@ or else see the \f(CWselect()\fR entry elsewhere in this document below.
 .Sp
 See also the \s-1POSIX\s0 module's \fIsigpause()\fR function.
 .Ip "socket \s-1SOCKET\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0" 8
-.IX Item "socket \s-1SOCKET\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
 Opens a socket of the specified kind and attaches it to filehandle
 \s-1SOCKET\s0.  \s-1DOMAIN\s0, \s-1TYPE\s0, and \s-1PROTOCOL\s0 are specified the same as for the
 system call of the same name.  You should \*(L"use Socket;\*(R" first to get
 the proper definitions imported.  See the example in the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0" 8
-.IX Item "socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
 Creates an unnamed pair of sockets in the specified domain, of the
 specified type.  \s-1DOMAIN\s0, \s-1TYPE\s0, and \s-1PROTOCOL\s0 are specified the same as
 for the system call of the same name.  If unimplemented, yields a fatal
 error.  Returns \s-1TRUE\s0 if successful.
 .Ip "sort \s-1SUBNAME\s0 \s-1LIST\s0" 8
-.IX Item "sort \s-1SUBNAME\s0 \s-1LIST\s0"
 .Ip "sort \s-1BLOCK\s0 \s-1LIST\s0" 8
-.IX Item "sort \s-1BLOCK\s0 \s-1LIST\s0"
 .Ip "sort \s-1LIST\s0" 8
-.IX Item "sort \s-1LIST\s0"
 Sorts the \s-1LIST\s0 and returns the sorted list value.  If \s-1SUBNAME\s0 or \s-1BLOCK\s0
 is omitted, sorts in standard string comparison order.  If \s-1SUBNAME\s0 is
 specified, it gives the name of a subroutine that returns an integer
@@ -3209,11 +3031,8 @@ probably crash and dump core.  This is entirely due to and dependent
 upon your system's \fIqsort\fR\|(3) library routine; this routine often avoids
 sanity checks in the interest of speed.
 .Ip "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0" 8
-.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0"
 .Ip "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0" 8
-.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0"
 .Ip "splice \s-1ARRAY\s0,\s-1OFFSET\s0" 8
-.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0"
 Removes the elements designated by \s-1OFFSET\s0 and \s-1LENGTH\s0 from an array, and
 replaces them with the elements of \s-1LIST\s0, if any.  Returns the elements
 removed from the array.  The array grows or shrinks as necessary.  If
@@ -3242,13 +3061,9 @@ Example, assuming array lengths are passed before arrays:
 \&    if (&aeq($len,@foo[1..$len],0+@bar,@bar)) { ... }
 .Ve
 .Ip "split /\s-1PATTERN\s0/,\s-1EXPR\s0,\s-1LIMIT\s0" 8
-.IX Item "split /\s-1PATTERN\s0/,\s-1EXPR\s0,\s-1LIMIT\s0"
 .Ip "split /\s-1PATTERN\s0/,\s-1EXPR\s0" 8
-.IX Item "split /\s-1PATTERN\s0/,\s-1EXPR\s0"
 .Ip "split /\s-1PATTERN\s0/" 8
-.IX Item "split /\s-1PATTERN\s0/"
 .Ip "split" 8
-.IX Item "split"
 Splits a string into an array of strings, and returns it.
 .Sp
 If not in a list context, returns the number of fields found and splits into
@@ -3259,12 +3074,13 @@ value.)  The use of implicit split to \f(CW@_\fR is deprecated, however.
 If \s-1EXPR\s0 is omitted, splits the \f(CW$_\fR string.  If \s-1PATTERN\s0 is also omitted,
 splits on whitespace (after skipping any leading whitespace).  Anything
 matching \s-1PATTERN\s0 is taken to be a delimiter separating the fields.  (Note
-that the delimiter may be longer than one character.)  If \s-1LIMIT\s0 is
-specified and is not negative, splits into no more than that many fields
-(though it may split into fewer).  If \s-1LIMIT\s0 is unspecified, trailing null
-fields are stripped (which potential users of \fIpop()\fR would do well to
-remember).  If \s-1LIMIT\s0 is negative, it is treated as if an arbitrarily large
-\s-1LIMIT\s0 had been specified.
+that the delimiter may be longer than one character.)
+.Sp
+If \s-1LIMIT\s0 is specified and is not negative, splits into no more than
+that many fields (though it may split into fewer).  If \s-1LIMIT\s0 is
+unspecified, trailing null fields are stripped (which potential users
+of \fIpop()\fR would do well to remember).  If \s-1LIMIT\s0 is negative, it is
+treated as if an arbitrarily large \s-1LIMIT\s0 had been specified.
 .Sp
 A pattern matching the null string (not to be confused with
 a null pattern \f(CW//\fR, which is just one member of the set of patterns
@@ -3303,7 +3119,7 @@ you could split it up into fields and their values this way:
 .Sp
 .Vb 2
 \&    $header =~ s/\en\es+/ /g;  # fix continuation lines
-\&    %hdrs   =  (UNIX_FROM => split /^(.*?):\es*/m, $header);
+\&    %hdrs   =  (UNIX_FROM => split /^(\eS*?):\es*/m, $header);
 .Ve
 The pattern \f(CW/PATTERN/\fR may be replaced with an expression to specify
 patterns that vary at runtime.  (To do runtime compilation only once,
@@ -3329,7 +3145,6 @@ Example:
 .Ve
 (Note that \f(CW$shell\fR above will still have a newline on it.  See the \f(CWchop\fR, \f(CWchomp\fR,  and \f(CWjoin\fR entries elsewhere in this document .)
 .Ip "sprintf \s-1FORMAT\s0, \s-1LIST\s0" 8
-.IX Item "sprintf \s-1FORMAT\s0, \s-1LIST\s0"
 Returns a string formatted by the usual printf conventions of the
 C library function \fIsprintf()\fR.  See the \fIsprintf(3)\fR manpage or the \fIprintf(3)\fR manpage
 on your system for an explanation of the general principles.
@@ -3404,15 +3219,11 @@ If \f(CWuse locale\fR is in effect, the character used for the decimal
 point in formatted real numbers is affected by the \s-1LC_NUMERIC\s0 locale.
 See the \fIperllocale\fR manpage.
 .Ip "sqrt \s-1EXPR\s0" 8
-.IX Item "sqrt \s-1EXPR\s0"
 .Ip "sqrt" 8
-.IX Item "sqrt"
 Return the square root of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, returns square
 root of \f(CW$_\fR.
 .Ip "srand \s-1EXPR\s0" 8
-.IX Item "srand \s-1EXPR\s0"
 .Ip "srand" 8
-.IX Item "srand"
 Sets the random number seed for the \f(CWrand\fR operator.  If \s-1EXPR\s0 is
 omitted, uses a semi-random value based on the current time and process
 \s-1ID\s0, among other things.  In versions of Perl prior to 5.004 the default
@@ -3455,11 +3266,8 @@ for a seed can fall prey to the mathematical property that
 .Ve
 one-third of the time.  So don't do that.
 .Ip "stat \s-1FILEHANDLE\s0" 8
-.IX Item "stat \s-1FILEHANDLE\s0"
 .Ip "stat \s-1EXPR\s0" 8
-.IX Item "stat \s-1EXPR\s0"
 .Ip "stat" 8
-.IX Item "stat"
 Returns a 13-element array giving the status info for a file, either the
 file opened via \s-1FILEHANDLE\s0, or named by \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, it
 stats \f(CW$_\fR.  Returns a null list if the stat fails.  Typically used as
@@ -3501,9 +3309,7 @@ last stat or filetest are returned.  Example:
 .Ve
 (This works on machines only for which the device number is negative under \s-1NFS\s0.)
 .Ip "study \s-1SCALAR\s0" 8
-.IX Item "study \s-1SCALAR\s0"
 .Ip "study" 8
-.IX Item "study"
 Takes extra time to study \s-1SCALAR\s0 (\f(CW$_\fR if unspecified) in anticipation of
 doing many pattern matches on the string before it is next modified.
 This may or may not save time, depending on the nature and number of
@@ -3562,26 +3368,25 @@ out the names of those files that contain a match:
 \&    }
 .Ve
 .Ip "sub \s-1BLOCK\s0" 8
-.IX Item "sub \s-1BLOCK\s0"
 .Ip "sub \s-1NAME\s0" 8
-.IX Item "sub \s-1NAME\s0"
 .Ip "sub \s-1NAME\s0 \s-1BLOCK\s0" 8
-.IX Item "sub \s-1NAME\s0 \s-1BLOCK\s0"
 This is subroutine definition, not a real function \fIper se\fR.  With just a
 \s-1NAME\s0 (and possibly prototypes), it's just a forward declaration.  Without
 a \s-1NAME\s0, it's an anonymous function declaration, and does actually return a
 value: the \s-1CODE\s0 ref of the closure you just created.  See the \fIperlsub\fR manpage and
 the \fIperlref\fR manpage for details.
 .Ip "substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0" 8
-.IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0"
 .Ip "substr \s-1EXPR\s0,\s-1OFFSET\s0" 8
-.IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0"
 Extracts a substring out of \s-1EXPR\s0 and returns it.  First character is at
 offset 0, or whatever you've set \f(CW$[\fR to (but don't do that).
-If \s-1OFFSET\s0 is negative, starts
+If \s-1OFFSET\s0 is negative (or more precisely, less than \f(CW$[\fR), starts
 that far from the end of the string.  If \s-1LEN\s0 is omitted, returns
 everything to the end of the string.  If \s-1LEN\s0 is negative, leaves that
 many characters off the end of the string.
+.Sp
+If you specify a substring which is partly outside the string, the part
+within the string is returned.    If the substring is totally outside
+the string a warning is produced.
 .Sp
 You can use the \fIsubstr()\fR function
 as an lvalue, in which case \s-1EXPR\s0 must be an lvalue.  If you assign
@@ -3590,7 +3395,6 @@ something longer than \s-1LEN\s0, the string will grow to accommodate it.  To
 keep the string the same length you may need to pad or chop your value
 using \fIsprintf()\fR.
 .Ip "symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0" 8
-.IX Item "symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0"
 Creates a new filename symbolically linked to the old filename.
 Returns 1 for success, 0 otherwise.  On systems that don't support
 symbolic links, produces a fatal error at run time.  To check for that,
@@ -3600,7 +3404,6 @@ use eval:
 \&    $symlink_exists = (eval {symlink("","")};, $@ eq '');
 .Ve
 .Ip "syscall \s-1LIST\s0" 8
-.IX Item "syscall \s-1LIST\s0"
 Calls the system call specified as the first element of the list,
 passing the remaining elements as arguments to the system call.  If
 unimplemented, produces a fatal error.  The arguments are interpreted
@@ -3618,10 +3421,19 @@ like numbers.
 .Ve
 Note that Perl supports passing of up to only 14 arguments to your system call,
 which in practice should usually suffice.
+.Sp
+Syscall returns whatever value returned by the system call it calls.
+If the system call fails, syscall returns \-1 and sets \f(CW$!\fR (errno).
+Note that some system calls can legitimately return \-1.  The proper
+way to handle such calls is to assign \f(CW$!=0;\fR before the call and
+check the value of <$!> if syscall returns \-1.
+.Sp
+There's a problem with \f(CWsyscall(&SYS_pipe)\fR: it returns the file
+number of the read end of the pipe it creates.  There is no way
+to retrieve the file number of the other end.  You can avoid this 
+problem by using \f(CWpipe\fR instead.
 .Ip "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0" 8
-.IX Item "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0"
 .Ip "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0" 8
-.IX Item "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0"
 Opens the file whose filename is given by \s-1FILENAME\s0, and associates it
 with \s-1FILEHANDLE\s0.  If \s-1FILEHANDLE\s0 is an expression, its value is used as
 the name of the real filehandle wanted.  This function calls the
@@ -3642,16 +3454,14 @@ read and write for all.  This default is reasonable: see \f(CWumask\fR.
 The \s-1IO::\s0File module provides a more object-oriented approach, if you're
 into that kind of thing.
 .Ip "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
-.IX Item "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
-.IX Item "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
 Attempts to read \s-1LENGTH\s0 bytes of data into variable \s-1SCALAR\s0 from the
-specified \s-1FILEHANDLE\s0, using the system call \fIread\fR\|(2).  It bypasses stdio,
-so mixing this with other kinds of reads, \fIprint()\fR, \fIwrite()\fR, \fIseek()\fR, or
-\fItell()\fR can cause confusion.  Returns the number of bytes actually read,
-or undef if there was an error.  \s-1SCALAR\s0 will be grown or shrunk so that
-the last byte actually read is the last byte of the scalar after the
-read.
+specified \s-1FILEHANDLE\s0, using the system call \fIread\fR\|(2).  It bypasses
+stdio, so mixing this with other kinds of reads, \fIprint()\fR, \fIwrite()\fR,
+\fIseek()\fR, or \fItell()\fR can cause confusion because stdio usually buffers
+data.  Returns the number of bytes actually read, or undef if there
+was an error.  \s-1SCALAR\s0 will be grown or shrunk so that the last byte
+actually read is the last byte of the scalar after the read.
 .Sp
 An \s-1OFFSET\s0 may be specified to place the read data at some place in the
 string other than the beginning.  A negative \s-1OFFSET\s0 specifies
@@ -3660,7 +3470,6 @@ string.  A positive \s-1OFFSET\s0 greater than the length of \s-1SCALAR\s0 resul
 in the string being padded to the required size with \*(L"\e0\*(R" bytes before
 the result of the read is appended.
 .Ip "sysseek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0" 8
-.IX Item "sysseek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0"
 Sets \s-1FILEHANDLE\s0's system position using the system call \fIlseek\fR\|(2).  It
 bypasses stdio, so mixing this with reads (other than \fIsysread()\fR),
 \fIprint()\fR, \fIwrite()\fR, \fIseek()\fR, or \fItell()\fR may cause confusion.  \s-1FILEHANDLE\s0 may
@@ -3676,7 +3485,6 @@ of zero is returned as the string \*(L"0 but true\*(R"; thus \fIsysseek()\fR ret
 \s-1TRUE\s0 on success and \s-1FALSE\s0 on failure, yet you can still easily determine
 the new position.
 .Ip "system \s-1LIST\s0" 8
-.IX Item "system \s-1LIST\s0"
 Does exactly the same thing as \*(L"exec \s-1LIST\s0\*(R" except that a fork is done
 first, and the parent process waits for the child process to complete.
 Note that argument processing varies depending on the number of
@@ -3721,36 +3529,35 @@ signals and core dumps.
 \&    }
 \&    $ok = ($rc != 0);
 .Ve
+When the arguments get executed via the system shell, results will
+be subject to its quirks and capabilities.  See the section on \fI`\s-1STRING\s0`\fR in the \fIperlop\fR manpage
+for details.
 .Ip "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
-.IX Item "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
-.IX Item "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
 Attempts to write \s-1LENGTH\s0 bytes of data from variable \s-1SCALAR\s0 to the
 specified \s-1FILEHANDLE\s0, using the system call \fIwrite\fR\|(2).  It bypasses
 stdio, so mixing this with reads (other than \fIsysread()\fR), \fIprint()\fR,
-\fIwrite()\fR, \fIseek()\fR, or \fItell()\fR may cause confusion.  Returns the number of
-bytes actually written, or undef if there was an error.  If the length
-is greater than the available data, only as much data as is available
+\fIwrite()\fR, \fIseek()\fR, or \fItell()\fR may cause confusion because stdio usually
+buffers data.  Returns the number of bytes actually written, or undef
+if there was an error.  If the \s-1LENGTH\s0 is greater than the available
+data in the \s-1SCALAR\s0 after the \s-1OFFSET\s0, only as much data as is available
 will be written.
 .Sp
 An \s-1OFFSET\s0 may be specified to write the data from some part of the
 string other than the beginning.  A negative \s-1OFFSET\s0 specifies writing
-that many bytes counting backwards from the end of the string.
+that many bytes counting backwards from the end of the string.  In the
+case the \s-1SCALAR\s0 is empty you can use \s-1OFFSET\s0 but only zero offset.
 .Ip "tell \s-1FILEHANDLE\s0" 8
-.IX Item "tell \s-1FILEHANDLE\s0"
 .Ip "tell" 8
-.IX Item "tell"
 Returns the current position for \s-1FILEHANDLE\s0.  \s-1FILEHANDLE\s0 may be an
 expression whose value gives the name of the actual filehandle.  If
 \s-1FILEHANDLE\s0 is omitted, assumes the file last read.
 .Ip "telldir \s-1DIRHANDLE\s0" 8
-.IX Item "telldir \s-1DIRHANDLE\s0"
 Returns the current position of the \fIreaddir()\fR routines on \s-1DIRHANDLE\s0.
 Value may be given to \fIseekdir()\fR to access a particular location in a
 directory.  Has the same caveats about possible directory compaction as
 the corresponding system library routine.
 .Ip "tie \s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0" 8
-.IX Item "tie \s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0"
 This function binds a variable to a package class that will provide the
 implementation for the variable.  \s-1VARIABLE\s0 is the name of the variable
 to be enchanted.  \s-1CLASSNAME\s0 is the name of a class implementing objects
@@ -3807,19 +3614,16 @@ Unlike \fIdbmopen()\fR, the \fItie()\fR function will not use or require a modul
 for you\*(--you need to do that explicitly yourself.  See the \fIDB_File\fR manpage
 or the \fIConfig\fR module for interesting \fItie()\fR implementations.
 .Ip "tied \s-1VARIABLE\s0" 8
-.IX Item "tied \s-1VARIABLE\s0"
 Returns a reference to the object underlying \s-1VARIABLE\s0 (the same value
 that was originally returned by the \fItie()\fR call which bound the variable
 to a package.)  Returns the undefined value if \s-1VARIABLE\s0 isn't tied to a
 package.
 .Ip "time" 8
-.IX Item "time"
 Returns the number of non-leap seconds since whatever time the system
 considers to be the epoch (that's 00:00:00, January 1, 1904 for MacOS,
 and 00:00:00 \s-1UTC\s0, January 1, 1970 for most other systems).
 Suitable for feeding to \fIgmtime()\fR and \fIlocaltime()\fR.
 .Ip "times" 8
-.IX Item "times"
 Returns a four-element array giving the user and system times, in
 seconds, for this process and the children of this process.
 .Sp
@@ -3827,45 +3631,34 @@ seconds, for this process and the children of this process.
 \&    ($user,$system,$cuser,$csystem) = times;
 .Ve
 .Ip "tr///" 8
-.IX Item "tr///"
 The translation operator.  Same as y///. See the \fIperlop\fR manpage.
 .Ip "truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0" 8
-.IX Item "truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0"
 .Ip "truncate \s-1EXPR\s0,\s-1LENGTH\s0" 8
-.IX Item "truncate \s-1EXPR\s0,\s-1LENGTH\s0"
 Truncates the file opened on \s-1FILEHANDLE\s0, or named by \s-1EXPR\s0, to the
 specified length.  Produces a fatal error if truncate isn't implemented
 on your system.
 .Ip "uc \s-1EXPR\s0" 8
-.IX Item "uc \s-1EXPR\s0"
 .Ip "uc" 8
-.IX Item "uc"
 Returns an uppercased version of \s-1EXPR\s0.  This is the internal function
 implementing the \eU escape in double-quoted strings.
 Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
 .Sp
 If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "ucfirst \s-1EXPR\s0" 8
-.IX Item "ucfirst \s-1EXPR\s0"
 .Ip "ucfirst" 8
-.IX Item "ucfirst"
 Returns the value of \s-1EXPR\s0 with the first character uppercased.  This is
 the internal function implementing the \eu escape in double-quoted strings.
 Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
 .Sp
 If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "umask \s-1EXPR\s0" 8
-.IX Item "umask \s-1EXPR\s0"
 .Ip "umask" 8
-.IX Item "umask"
 Sets the umask for the process to \s-1EXPR\s0 and returns the previous value.
 If \s-1EXPR\s0 is omitted, merely returns the current umask.  Remember that a
 umask is a number, usually given in octal; it is \fInot\fR a string of octal
 digits.  See also the \f(CWoct\fR entry elsewhere in this document if all you have is a string.
 .Ip "undef \s-1EXPR\s0" 8
-.IX Item "undef \s-1EXPR\s0"
 .Ip "undef" 8
-.IX Item "undef"
 Undefines the value of \s-1EXPR\s0, which must be an lvalue.  Use only on a
 scalar value, an entire array, an entire hash, or a subroutine name (using
 \*(L"&").  (Using \fIundef()\fR will probably not do what you expect on most
@@ -3886,9 +3679,7 @@ pass as a parameter.  Examples:
 \&    ($a, $b, undef, $c) = &foo;       # Ignore third value returned
 .Ve
 .Ip "unlink \s-1LIST\s0" 8
-.IX Item "unlink \s-1LIST\s0"
 .Ip "unlink" 8
-.IX Item "unlink"
 Deletes a list of files.  Returns the number of files successfully
 deleted.
 .Sp
@@ -3904,7 +3695,6 @@ filesystem.  Use rmdir instead.
 .Sp
 If \s-1LIST\s0 is omitted, uses \f(CW$_\fR.
 .Ip "unpack \s-1TEMPLATE\s0,\s-1EXPR\s0" 8
-.IX Item "unpack \s-1TEMPLATE\s0,\s-1EXPR\s0"
 Unpack does the reverse of pack: it takes a string representing a
 structure and expands it out into a list value, returning the array
 value.  (In a scalar context, it returns merely the first value
@@ -3939,10 +3729,8 @@ The following efficiently counts the number of set bits in a bit vector:
 \&    $setbits = unpack("%32b*", $selectmask);
 .Ve
 .Ip "untie \s-1VARIABLE\s0" 8
-.IX Item "untie \s-1VARIABLE\s0"
 Breaks the binding between a variable and a package.  (See \fItie()\fR.)
 .Ip "unshift \s-1ARRAY\s0,\s-1LIST\s0" 8
-.IX Item "unshift \s-1ARRAY\s0,\s-1LIST\s0"
 Does the opposite of a \f(CWshift\fR.  Or the opposite of a \f(CWpush\fR,
 depending on how you look at it.  Prepends list to the front of the
 array, and returns the new number of elements in the array.
@@ -3954,13 +3742,9 @@ Note the \s-1LIST\s0 is prepended whole, not one element at a time, so the
 prepended elements stay in the same order.  Use reverse to do the
 reverse.
 .Ip "use Module \s-1LIST\s0" 8
-.IX Item "use Module \s-1LIST\s0"
 .Ip "use Module" 8
-.IX Item "use Module"
 .Ip "use Module \s-1VERSION\s0 \s-1LIST\s0" 8
-.IX Item "use Module \s-1VERSION\s0 \s-1LIST\s0"
 .Ip "use \s-1VERSION\s0" 8
-.IX Item "use \s-1VERSION\s0"
 Imports some semantics into the current package from the named module,
 generally by aliasing certain subroutine or variable names into your
 package.  It is exactly equivalent to
@@ -4031,7 +3815,6 @@ If no unimport method can be found the call fails with a fatal error.
 .Sp
 See the \fIperlmod\fR manpage for a list of standard modules and pragmas.
 .Ip "utime \s-1LIST\s0" 8
-.IX Item "utime \s-1LIST\s0"
 Changes the access and modification times on each file of a list of
 files.  The first two elements of the list must be the \s-1NUMERICAL\s0 access
 and modification times, in that order.  Returns the number of files
@@ -4044,14 +3827,12 @@ to the current time.  Example of a \*(L"touch\*(R" command:
 \&    utime $now, $now, @ARGV;
 .Ve
 .Ip "values \s-1HASH\s0" 8
-.IX Item "values \s-1HASH\s0"
 Returns a normal array consisting of all the values of the named hash.
 (In a scalar context, returns the number of values.)  The values are
 returned in an apparently random order, but it is the same order as either
 the \fIkeys()\fR or \fIeach()\fR function would produce on the same hash.  As a side
 effect, it resets \s-1HASH\s0's iterator.  See also \fIkeys()\fR, \fIeach()\fR, and \fIsort()\fR.
 .Ip "vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0" 8
-.IX Item "vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0"
 Treats the string in \s-1EXPR\s0 as a vector of unsigned integers, and
 returns the value of the bit field specified by \s-1OFFSET\s0.  \s-1BITS\s0 specifies
 the number of bits that are reserved for each entry in the bit
@@ -4074,12 +3855,10 @@ To transform a bit vector into a string or array of 0's and 1's, use these:
 .Ve
 If you know the exact length in bits, it can be used in place of the *.
 .Ip "wait" 8
-.IX Item "wait"
 Waits for a child process to terminate and returns the pid of the
 deceased process, or \-1 if there are no child processes.  The status is
 returned in \f(CW$?\fR.
 .Ip "waitpid \s-1PID\s0,\s-1FLAGS\s0" 8
-.IX Item "waitpid \s-1PID\s0,\s-1FLAGS\s0"
 Waits for a particular child process to terminate and returns the pid
 of the deceased process, or \-1 if there is no such child process.  The
 status is returned in \f(CW$?\fR.  If you say
@@ -4096,7 +3875,6 @@ is available on machines supporting either the \fIwaitpid\fR\|(2) or
 by remembering the status values of processes that have exited but have
 not been harvested by the Perl script yet.)
 .Ip "wantarray" 8
-.IX Item "wantarray"
 Returns \s-1TRUE\s0 if the context of the currently executing subroutine is
 looking for a list value.  Returns \s-1FALSE\s0 if the context is looking
 for a scalar.  Returns the undefined value if the context is looking
@@ -4108,7 +3886,6 @@ for no value (void context).
 \&    return wantarray ? @a : "@a";
 .Ve
 .Ip "warn \s-1LIST\s0" 8
-.IX Item "warn \s-1LIST\s0"
 Produces a message on \s-1STDERR\s0 just like \fIdie()\fR, but doesn't exit or throw
 an exception.
 .Sp
@@ -4144,11 +3921,8 @@ warnings (even the so-called mandatory ones).  An example:
 See the \fIperlvar\fR manpage for details on setting \f(CW%SIG\fR entries, and for more
 examples.
 .Ip "write \s-1FILEHANDLE\s0" 8
-.IX Item "write \s-1FILEHANDLE\s0"
 .Ip "write \s-1EXPR\s0" 8
-.IX Item "write \s-1EXPR\s0"
 .Ip "write" 8
-.IX Item "write"
 Writes a formatted record (possibly multi-line) to the specified file,
 using the format associated with that file.  By default the format for
 a file is the one having the same name as the filehandle, but the
@@ -4173,7 +3947,667 @@ the \s-1FILEHANDLE\s0 at run time.  For more on formats, see the \fIperlform\fR 
 .Sp
 Note that write is \fI\s-1NOT\s0\fR the opposite of read.  Unfortunately.
 .Ip "y///" 8
-.IX Item "y///"
 The translation operator.  Same as tr///.  See the \fIperlop\fR manpage.
 
 .rn }` ''
+.IX Title "PERLFUNC 1"
+.IX Name "perlfunc - Perl builtin functions"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR"
+
+.IX Subsection "Perl Functions by Category"
+
+.IX Item "Functions for SCALARs or strings"
+
+.IX Item "Regular expressions and pattern matching"
+
+.IX Item "Numeric functions"
+
+.IX Item "Functions for real @ARRAYs"
+
+.IX Item "Functions for list data"
+
+.IX Item "Functions for real %HASHes"
+
+.IX Item "Input and output functions"
+
+.IX Item "Functions for fixed length data or records"
+
+.IX Item "Functions for filehandles, files, or directories"
+
+.IX Item "Keywords related to the control flow of your perl program"
+
+.IX Item "Keywords related to scoping"
+
+.IX Item "Miscellaneous functions"
+
+.IX Item "Functions for processes and process groups"
+
+.IX Item "Keywords related to perl modules"
+
+.IX Item "Keywords related to classes and object-orientedness"
+
+.IX Item "Low-level socket functions"
+
+.IX Item "System V interprocess communication functions"
+
+.IX Item "Fetching user and group info"
+
+.IX Item "Fetching network info"
+
+.IX Item "Time-related functions"
+
+.IX Item "Functions new in perl5"
+
+.IX Item "Functions obsoleted in perl5"
+
+.IX Subsection "Alphabetical Listing of Perl Functions"
+
+.IX Item "-X \s-1FILEHANDLE\s0"
+
+.IX Item "-X \s-1EXPR\s0"
+
+.IX Item "-X"
+
+.IX Item "abs \s-1VALUE\s0"
+
+.IX Item "abs"
+
+.IX Item "accept \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0"
+
+.IX Item "alarm \s-1SECONDS\s0"
+
+.IX Item "alarm"
+
+.IX Item "atan2 Y,X"
+
+.IX Item "bind \s-1SOCKET\s0,\s-1NAME\s0"
+
+.IX Item "binmode \s-1FILEHANDLE\s0"
+
+.IX Item "bless \s-1REF\s0,\s-1CLASSNAME\s0"
+
+.IX Item "bless \s-1REF\s0"
+
+.IX Item "caller \s-1EXPR\s0"
+
+.IX Item "caller"
+
+.IX Item "chdir \s-1EXPR\s0"
+
+.IX Item "chmod \s-1LIST\s0"
+
+.IX Item "chomp \s-1VARIABLE\s0"
+
+.IX Item "chomp \s-1LIST\s0"
+
+.IX Item "chomp"
+
+.IX Item "chop \s-1VARIABLE\s0"
+
+.IX Item "chop \s-1LIST\s0"
+
+.IX Item "chop"
+
+.IX Item "chown \s-1LIST\s0"
+
+.IX Item "chr \s-1NUMBER\s0"
+
+.IX Item "chr"
+
+.IX Item "chroot \s-1FILENAME\s0"
+
+.IX Item "chroot"
+
+.IX Item "close \s-1FILEHANDLE\s0"
+
+.IX Item "closedir \s-1DIRHANDLE\s0"
+
+.IX Item "connect \s-1SOCKET\s0,\s-1NAME\s0"
+
+.IX Item "continue \s-1BLOCK\s0"
+
+.IX Item "cos \s-1EXPR\s0"
+
+.IX Item "crypt \s-1PLAINTEXT\s0,\s-1SALT\s0"
+
+.IX Item "dbmclose \s-1HASH\s0"
+
+.IX Item "dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0"
+
+.IX Item "defined \s-1EXPR\s0"
+
+.IX Item "defined"
+
+.IX Item "delete \s-1EXPR\s0"
+
+.IX Item "die \s-1LIST\s0"
+
+.IX Item "do \s-1BLOCK\s0"
+
+.IX Item "do \s-1SUBROUTINE\s0(\s-1LIST\s0)"
+
+.IX Item "do \s-1EXPR\s0"
+
+.IX Item "dump \s-1LABEL\s0"
+
+.IX Item "each \s-1HASH\s0"
+
+.IX Item "eof \s-1FILEHANDLE\s0"
+
+.IX Item "eof ()"
+
+.IX Item "eof"
+
+.IX Item "eval \s-1EXPR\s0"
+
+.IX Item "eval \s-1BLOCK\s0"
+
+.IX Item "exec \s-1LIST\s0"
+
+.IX Item "exists \s-1EXPR\s0"
+
+.IX Item "exit \s-1EXPR\s0"
+
+.IX Item "exp \s-1EXPR\s0"
+
+.IX Item "exp"
+
+.IX Item "fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0"
+
+.IX Item "fileno \s-1FILEHANDLE\s0"
+
+.IX Item "flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0"
+
+.IX Item "fork"
+
+.IX Item "format"
+
+.IX Item "formline \s-1PICTURE\s0,\s-1LIST\s0"
+
+.IX Item "getc \s-1FILEHANDLE\s0"
+
+.IX Item "getc"
+
+.IX Item "getlogin"
+
+.IX Item "getpeername \s-1SOCKET\s0"
+
+.IX Item "getpgrp \s-1PID\s0"
+
+.IX Item "getppid"
+
+.IX Item "getpriority \s-1WHICH\s0,\s-1WHO\s0"
+
+.IX Item "getpwnam \s-1NAME\s0"
+
+.IX Item "getgrnam \s-1NAME\s0"
+
+.IX Item "gethostbyname \s-1NAME\s0"
+
+.IX Item "getnetbyname \s-1NAME\s0"
+
+.IX Item "getprotobyname \s-1NAME\s0"
+
+.IX Item "getpwuid \s-1UID\s0"
+
+.IX Item "getgrgid \s-1GID\s0"
+
+.IX Item "getservbyname \s-1NAME\s0,\s-1PROTO\s0"
+
+.IX Item "gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0"
+
+.IX Item "getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0"
+
+.IX Item "getprotobynumber \s-1NUMBER\s0"
+
+.IX Item "getservbyport \s-1PORT\s0,\s-1PROTO\s0"
+
+.IX Item "getpwent"
+
+.IX Item "getgrent"
+
+.IX Item "gethostent"
+
+.IX Item "getnetent"
+
+.IX Item "getprotoent"
+
+.IX Item "getservent"
+
+.IX Item "setpwent"
+
+.IX Item "setgrent"
+
+.IX Item "sethostent \s-1STAYOPEN\s0"
+
+.IX Item "setnetent \s-1STAYOPEN\s0"
+
+.IX Item "setprotoent \s-1STAYOPEN\s0"
+
+.IX Item "setservent \s-1STAYOPEN\s0"
+
+.IX Item "endpwent"
+
+.IX Item "endgrent"
+
+.IX Item "endhostent"
+
+.IX Item "endnetent"
+
+.IX Item "endprotoent"
+
+.IX Item "endservent"
+
+.IX Item "getsockname \s-1SOCKET\s0"
+
+.IX Item "getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0"
+
+.IX Item "glob \s-1EXPR\s0"
+
+.IX Item "glob"
+
+.IX Item "gmtime \s-1EXPR\s0"
+
+.IX Item "goto \s-1LABEL\s0"
+
+.IX Item "goto \s-1EXPR\s0"
+
+.IX Item "goto &\s-1NAME\s0"
+
+.IX Item "grep \s-1BLOCK\s0 \s-1LIST\s0"
+
+.IX Item "grep \s-1EXPR\s0,\s-1LIST\s0"
+
+.IX Item "hex"
+
+.IX Item "import"
+
+.IX Item "index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0"
+
+.IX Item "index \s-1STR\s0,\s-1SUBSTR\s0"
+
+.IX Item "int \s-1EXPR\s0"
+
+.IX Item "int"
+
+.IX Item "ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0"
+
+.IX Item "join \s-1EXPR\s0,\s-1LIST\s0"
+
+.IX Item "keys \s-1HASH\s0"
+
+.IX Item "kill \s-1LIST\s0"
+
+.IX Item "last \s-1LABEL\s0"
+
+.IX Item "last"
+
+.IX Item "lc \s-1EXPR\s0"
+
+.IX Item "lc"
+
+.IX Item "lcfirst \s-1EXPR\s0"
+
+.IX Item "lcfirst"
+
+.IX Item "length \s-1EXPR\s0"
+
+.IX Item "length"
+
+.IX Item "link \s-1OLDFILE\s0,\s-1NEWFILE\s0"
+
+.IX Item "listen \s-1SOCKET\s0,\s-1QUEUESIZE\s0"
+
+.IX Item "local \s-1EXPR\s0"
+
+.IX Item "localtime \s-1EXPR\s0"
+
+.IX Item "log \s-1EXPR\s0"
+
+.IX Item "log"
+
+.IX Item "lstat \s-1FILEHANDLE\s0"
+
+.IX Item "lstat \s-1EXPR\s0"
+
+.IX Item "lstat"
+
+.IX Item "m//"
+
+.IX Item "map \s-1BLOCK\s0 \s-1LIST\s0"
+
+.IX Item "map \s-1EXPR\s0,\s-1LIST\s0"
+
+.IX Item "mkdir \s-1FILENAME\s0,\s-1MODE\s0"
+
+.IX Item "msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
+
+.IX Item "msgget \s-1KEY\s0,\s-1FLAGS\s0"
+
+.IX Item "msgsnd \s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0"
+
+.IX Item "msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0"
+
+.IX Item "my \s-1EXPR\s0"
+
+.IX Item "next \s-1LABEL\s0"
+
+.IX Item "next"
+
+.IX Item "no Module \s-1LIST\s0"
+
+.IX Item "oct \s-1EXPR\s0"
+
+.IX Item "oct"
+
+.IX Item "open \s-1FILEHANDLE\s0,\s-1EXPR\s0"
+
+.IX Item "open \s-1FILEHANDLE\s0"
+
+.IX Item "opendir \s-1DIRHANDLE\s0,\s-1EXPR\s0"
+
+.IX Item "ord \s-1EXPR\s0"
+
+.IX Item "ord"
+
+.IX Item "pack \s-1TEMPLATE\s0,\s-1LIST\s0"
+
+.IX Item "package \s-1NAMESPACE\s0"
+
+.IX Item "pipe \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0"
+
+.IX Item "pop \s-1ARRAY\s0"
+
+.IX Item "pop"
+
+.IX Item "pos \s-1SCALAR\s0"
+
+.IX Item "pos"
+
+.IX Item "print \s-1FILEHANDLE\s0 \s-1LIST\s0"
+
+.IX Item "print \s-1LIST\s0"
+
+.IX Item "print"
+
+.IX Item "printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0"
+
+.IX Item "printf \s-1FORMAT\s0, \s-1LIST\s0"
+
+.IX Item "prototype \s-1FUNCTION\s0"
+
+.IX Item "push \s-1ARRAY\s0,\s-1LIST\s0"
+
+.IX Item "q/\s-1STRING\s0/"
+
+.IX Item "qq/\s-1STRING\s0/"
+
+.IX Item "qx/\s-1STRING\s0/"
+
+.IX Item "qw/\s-1STRING\s0/"
+
+.IX Item "quotemeta \s-1EXPR\s0"
+
+.IX Item "quotemeta"
+
+.IX Item "rand \s-1EXPR\s0"
+
+.IX Item "rand"
+
+.IX Item "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
+
+.IX Item "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
+
+.IX Item "readdir \s-1DIRHANDLE\s0"
+
+.IX Item "readline \s-1EXPR\s0"
+
+.IX Item "readlink \s-1EXPR\s0"
+
+.IX Item "readlink"
+
+.IX Item "readpipe \s-1EXPR\s0"
+
+.IX Item "recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0"
+
+.IX Item "redo \s-1LABEL\s0"
+
+.IX Item "redo"
+
+.IX Item "ref \s-1EXPR\s0"
+
+.IX Item "ref"
+
+.IX Item "rename \s-1OLDNAME\s0,\s-1NEWNAME\s0"
+
+.IX Item "require \s-1EXPR\s0"
+
+.IX Item "require"
+
+.IX Item "reset \s-1EXPR\s0"
+
+.IX Item "reset"
+
+.IX Item "return \s-1EXPR\s0"
+
+.IX Item "return"
+
+.IX Item "reverse \s-1LIST\s0"
+
+.IX Item "rewinddir \s-1DIRHANDLE\s0"
+
+.IX Item "rindex \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0"
+
+.IX Item "rindex \s-1STR\s0,\s-1SUBSTR\s0"
+
+.IX Item "rmdir \s-1FILENAME\s0"
+
+.IX Item "rmdir"
+
+.IX Item "s///"
+
+.IX Item "scalar \s-1EXPR\s0"
+
+.IX Item "seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0"
+
+.IX Item "seekdir \s-1DIRHANDLE\s0,\s-1POS\s0"
+
+.IX Item "select \s-1FILEHANDLE\s0"
+
+.IX Item "select"
+
+.IX Item "select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0"
+
+.IX Item "semctl \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0"
+
+.IX Item "semget \s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0"
+
+.IX Item "semop \s-1KEY\s0,\s-1OPSTRING\s0"
+
+.IX Item "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0,\s-1TO\s0"
+
+.IX Item "send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0"
+
+.IX Item "setpgrp \s-1PID\s0,\s-1PGRP\s0"
+
+.IX Item "setpriority \s-1WHICH\s0,\s-1WHO\s0,\s-1PRIORITY\s0"
+
+.IX Item "setsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0,\s-1OPTVAL\s0"
+
+.IX Item "shift \s-1ARRAY\s0"
+
+.IX Item "shift"
+
+.IX Item "shmctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
+
+.IX Item "shmget \s-1KEY\s0,\s-1SIZE\s0,\s-1FLAGS\s0"
+
+.IX Item "shmread \s-1ID\s0,\s-1VAR\s0,\s-1POS\s0,\s-1SIZE\s0"
+
+.IX Item "shmwrite \s-1ID\s0,\s-1STRING\s0,\s-1POS\s0,\s-1SIZE\s0"
+
+.IX Item "shutdown \s-1SOCKET\s0,\s-1HOW\s0"
+
+.IX Item "sin \s-1EXPR\s0"
+
+.IX Item "sin"
+
+.IX Item "sleep \s-1EXPR\s0"
+
+.IX Item "sleep"
+
+.IX Item "socket \s-1SOCKET\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
+
+.IX Item "socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
+
+.IX Item "sort \s-1SUBNAME\s0 \s-1LIST\s0"
+
+.IX Item "sort \s-1BLOCK\s0 \s-1LIST\s0"
+
+.IX Item "sort \s-1LIST\s0"
+
+.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0"
+
+.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0"
+
+.IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0"
+
+.IX Item "split /\s-1PATTERN\s0/,\s-1EXPR\s0,\s-1LIMIT\s0"
+
+.IX Item "split /\s-1PATTERN\s0/,\s-1EXPR\s0"
+
+.IX Item "split /\s-1PATTERN\s0/"
+
+.IX Item "split"
+
+.IX Item "sprintf \s-1FORMAT\s0, \s-1LIST\s0"
+
+.IX Item "sqrt \s-1EXPR\s0"
+
+.IX Item "sqrt"
+
+.IX Item "srand \s-1EXPR\s0"
+
+.IX Item "srand"
+
+.IX Item "stat \s-1FILEHANDLE\s0"
+
+.IX Item "stat \s-1EXPR\s0"
+
+.IX Item "stat"
+
+.IX Item "study \s-1SCALAR\s0"
+
+.IX Item "study"
+
+.IX Item "sub \s-1BLOCK\s0"
+
+.IX Item "sub \s-1NAME\s0"
+
+.IX Item "sub \s-1NAME\s0 \s-1BLOCK\s0"
+
+.IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0"
+
+.IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0"
+
+.IX Item "symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0"
+
+.IX Item "syscall \s-1LIST\s0"
+
+.IX Item "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0"
+
+.IX Item "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0"
+
+.IX Item "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
+
+.IX Item "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
+
+.IX Item "sysseek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0"
+
+.IX Item "system \s-1LIST\s0"
+
+.IX Item "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
+
+.IX Item "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0"
+
+.IX Item "tell \s-1FILEHANDLE\s0"
+
+.IX Item "tell"
+
+.IX Item "telldir \s-1DIRHANDLE\s0"
+
+.IX Item "tie \s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0"
+
+.IX Item "tied \s-1VARIABLE\s0"
+
+.IX Item "time"
+
+.IX Item "times"
+
+.IX Item "tr///"
+
+.IX Item "truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0"
+
+.IX Item "truncate \s-1EXPR\s0,\s-1LENGTH\s0"
+
+.IX Item "uc \s-1EXPR\s0"
+
+.IX Item "uc"
+
+.IX Item "ucfirst \s-1EXPR\s0"
+
+.IX Item "ucfirst"
+
+.IX Item "umask \s-1EXPR\s0"
+
+.IX Item "umask"
+
+.IX Item "undef \s-1EXPR\s0"
+
+.IX Item "undef"
+
+.IX Item "unlink \s-1LIST\s0"
+
+.IX Item "unlink"
+
+.IX Item "unpack \s-1TEMPLATE\s0,\s-1EXPR\s0"
+
+.IX Item "untie \s-1VARIABLE\s0"
+
+.IX Item "unshift \s-1ARRAY\s0,\s-1LIST\s0"
+
+.IX Item "use Module \s-1LIST\s0"
+
+.IX Item "use Module"
+
+.IX Item "use Module \s-1VERSION\s0 \s-1LIST\s0"
+
+.IX Item "use \s-1VERSION\s0"
+
+.IX Item "utime \s-1LIST\s0"
+
+.IX Item "values \s-1HASH\s0"
+
+.IX Item "vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0"
+
+.IX Item "wait"
+
+.IX Item "waitpid \s-1PID\s0,\s-1FLAGS\s0"
+
+.IX Item "wantarray"
+
+.IX Item "warn \s-1LIST\s0"
+
+.IX Item "write \s-1FILEHANDLE\s0"
+
+.IX Item "write \s-1EXPR\s0"
+
+.IX Item "write"
+
+.IX Item "y///"
+

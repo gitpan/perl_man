@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSYN 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "PERLSYN 1"
+.TH PERLSYN 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlsyn - Perl syntax"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlsyn \- Perl syntax
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 A Perl script consists of a sequence of declarations and statements.
 The only things that need to be declared in Perl are report formats
 and subroutines.  See the sections below for more information on those
@@ -209,7 +205,6 @@ which lines you look at.  (Actually, I'm lying\*(--it is possible to do an
 implicit loop with either the \fB\-n\fR or \fB\-p\fR switch.  It's just not the
 mandatory default like it is in \fBsed\fR and \fBawk\fR.)
 .Sh "Declarations"
-.IX Subsection "Declarations"
 Perl is, for the most part, a free-form language.  (The only
 exception to this is format declarations, for obvious reasons.) Comments
 are indicated by the \*(L"#\*(R" character, and extend to the end of the line.  If
@@ -250,7 +245,6 @@ like an ordinary statement, and is elaborated within the sequence of
 statements as if it were an ordinary statement.  That means it actually
 has both compile-time and run-time effects.
 .Sh "Simple statements"
-.IX Subsection "Simple statements"
 The only kind of simple statement is an expression evaluated for its
 side effects.  Every simple statement must be terminated with a
 semicolon, unless it is the final statement in a block, in which case
@@ -289,7 +283,6 @@ statements described later will \fI\s-1NOT\s0\fR work in this construct, because
 modifiers don't take loop labels.  Sorry.  You can always wrap
 another block around it to do that sort of thing.
 .Sh "Compound statements"
-.IX Subsection "Compound statements"
 In Perl, a sequence of statements that defines a scope is called a block.
 Sometimes a block is delimited by the file containing it (in the case
 of a required file, or the program as a whole), and sometimes a block
@@ -343,7 +336,6 @@ conditional is about to be evaluated again, just like the third part of a
 when the loop has been continued via the \f(CWnext\fR statement (which is
 similar to the C \f(CWcontinue\fR statement).
 .Sh "Loop Control"
-.IX Subsection "Loop Control"
 The \f(CWnext\fR command is like the \f(CWcontinue\fR statement in C; it starts
 the next iteration of the loop:
 .PP
@@ -423,7 +415,6 @@ iteration.
 The form \f(CWwhile/if BLOCK BLOCK\fR, available in Perl 4, is no longer
 available.   Replace any occurrence of \f(CWif BLOCK\fR by \f(CWif (do BLOCK)\fR.
 .Sh "For Loops"
-.IX Subsection "For Loops"
 Perl's C\-style \f(CWfor\fR loop works exactly like the corresponding \f(CWwhile\fR loop;
 that means that this:
 .PP
@@ -459,7 +450,6 @@ hang.
 \&    }
 .Ve
 .Sh "Foreach Loops"
-.IX Subsection "Foreach Loops"
 The \f(CWforeach\fR loop iterates over a normal list value and sets the
 variable \s-1VAR\s0 to be each element of the list in turn.  If the variable
 is preceded with the keyword \f(CWmy\fR, then it is lexically scoped, and
@@ -533,7 +523,6 @@ rather than merely terminating the inner one.  And it's faster because
 Perl executes a \f(CWforeach\fR statement more rapidly than it would the
 equivalent \f(CWfor\fR loop.
 .Sh "Basic BLOCKs and Switch Statements"
-.IX Subsection "Basic BLOCKs and Switch Statements"
 A \s-1BLOCK\s0 by itself (labeled or not) is semantically equivalent to a
 loop that executes once.  Thus you can use any of the loop control
 statements in it to leave or restart the block.  (Note that this is
@@ -648,7 +637,6 @@ for a \f(CWdo\fR block to return the proper value:
 \&    };
 .Ve
 .Sh "Goto"
-.IX Subsection "Goto"
 Although not for the faint of heart, Perl does support a \f(CWgoto\fR statement.
 A loop's \s-1LABEL\s0 is not actually a valid target for a \f(CWgoto\fR;
 it's just the name of the loop.  There are three forms: goto-\s-1LABEL\s0,
@@ -683,7 +671,6 @@ structured control flow mechanisms of \f(CWnext\fR, \f(CWlast\fR, or \f(CWredo\f
 resorting to a \f(CWgoto\fR.  For certain applications, the catch and throw pair of
 \f(CWeval{}\fR and \fIdie()\fR for exception processing can also be a prudent approach.
 .Sh "PODs: Embedded Documentation"
-.IX Subsection "PODs: Embedded Documentation"
 Perl has a mechanism for intermixing documentation with source code.
 While it's expecting the beginning of a new statement, if the compiler
 encounters a line that begins with an equal sign and a word, like this
@@ -735,7 +722,6 @@ the compiler will become pickier.
 One may also use pod directives to quickly comment out a section
 of code.
 .Sh "Plain Old Comments (Not!)"
-.IX Subsection "Plain Old Comments (Not!)"
 Much like the C preprocessor, perl can process line directives.  Using
 this, one can control perl's idea of filenames and line numbers in
 error or warning messages (especially for strings that are processed
@@ -779,3 +765,30 @@ shell:
 .Ve
 
 .rn }` ''
+.IX Title "PERLSYN 1"
+.IX Name "perlsyn - Perl syntax"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Declarations"
+
+.IX Subsection "Simple statements"
+
+.IX Subsection "Compound statements"
+
+.IX Subsection "Loop Control"
+
+.IX Subsection "For Loops"
+
+.IX Subsection "Foreach Loops"
+
+.IX Subsection "Basic BLOCKs and Switch Statements"
+
+.IX Subsection "Goto"
+
+.IX Subsection "PODs: Embedded Documentation"
+
+.IX Subsection "Plain Old Comments (Not!)"
+

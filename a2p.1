@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH A2P 1 "perl 5.004, patch 01" "10/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "A2P 1"
+.TH A2P 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "a2p - Awk to Perl translator"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,28 +188,21 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 a2p \- Awk to Perl translator
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBa2p [options] filename\fR
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 \fIA2p\fR takes an awk script specified on the command line (or from
 standard input) and produces a comparable \fIperl\fR script on the
 standard output.
 .Sh "Options"
-.IX Subsection "Options"
 Options include:
 .Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
 sets debugging flags.
 .Ip "\fB\-F<character>\fR" 5
-.IX Item "\fB\-F<character>\fR"
 tells a2p that this awk script is always invoked with this \fB\-F\fR
 switch.
 .Ip "\fB\-n<fieldlist>\fR" 5
-.IX Item "\fB\-n<fieldlist>\fR"
 specifies the names of the input fields if input does not have to be
 split into an array.  If you were translating an awk script that
 processes the password file, you might say:
@@ -221,15 +212,12 @@ processes the password file, you might say:
 .Ve
 Any delimiter can be used to separate the field names.
 .Ip "\fB\-<number>\fR" 5
-.IX Item "\fB\-<number>\fR"
 causes a2p to assume that input will always have that many fields.
 .Ip "\fB\-o\fR" 5
-.IX Item "\fB\-o\fR"
 tells a2p to use old awk behavior.  For now, the only difference is
 that old awk always has a line loop, even if there are no line
 actions, whereas new awk does not.
 .Sh "\*(M"Considerations\*(S""
-.IX Subsection "\*(M"Considerations\*(S""
 A2p cannot do as good a job translating as a human would, but it
 usually does pretty well.  There are some areas where you may want to
 examine the perl script produced and tweak it some.  Here are some of
@@ -313,15 +301,11 @@ subtler cases.
 \s-1ARGV\s0[0] translates to \f(CW$ARGV0\fR, but \s-1ARGV\s0[n] translates to \f(CW$ARGV\fR[$n].  A
 loop that tries to iterate over \s-1ARGV\s0[0] won't find it.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 A2p uses no environment variables.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall <\fIlarry@wall.org\fR>
 .SH "FILES"
-.IX Header "FILES"
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 .PP
 .Vb 3
 \& perl   The perl compiler/interpreter
@@ -329,9 +313,7 @@ Larry Wall <\fIlarry@wall.org\fR>
 \& s2p    sed to perl translator
 .Ve
 .SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
 .SH "BUGS"
-.IX Header "BUGS"
 It would be possible to emulate awk's behavior in selecting string
 versus numeric operations at run time by inspection of the operands,
 but it would be gross and inefficient.  Besides, a2p almost always
@@ -340,3 +322,38 @@ guesses right.
 Storage for the awk syntax tree is currently static, and can run out.
 
 .rn }` ''
+.IX Title "A2P 1"
+.IX Name "a2p - Awk to Perl translator"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Options"
+
+.IX Item "\fB\-D<number>\fR"
+
+.IX Item "\fB\-F<character>\fR"
+
+.IX Item "\fB\-n<fieldlist>\fR"
+
+.IX Item "\fB\-<number>\fR"
+
+.IX Item "\fB\-o\fR"
+
+.IX Subsection "\*(M"Considerations\*(S""
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "AUTHOR"
+
+.IX Header "FILES"
+
+.IX Header "SEE ALSO"
+
+.IX Header "DIAGNOSTICS"
+
+.IX Header "BUGS"
+

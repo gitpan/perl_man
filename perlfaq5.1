@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ5 1 "perl 5.004, patch 01" "24/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ5 1"
+.TH PERLFAQ5 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq5 - Files and Formats ($Revision: 1.22 $, $Date: 1997/04/24 22:44:02 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,14 +188,11 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq5 \- Files and Formats ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:44:02 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section deals with I/O and the \*(L"f\*(R" issues: filehandles, flushing,
 formats, and footers.
 .Sh "How do I flush/unbuffer a filehandle?  Why must I do this?"
-.IX Subsection "How do I flush/unbuffer a filehandle?  Why must I do this?"
 The C standard I/O library (stdio) normally buffers characters sent to
 devices.  This is done for efficiency reasons, so that there isn't a
 system call for each byte.  Any time you use \fIprint()\fR or \fIwrite()\fR in
@@ -265,7 +260,6 @@ You'll also see code that does this without a temporary variable, as in
 \&    select((select(DEV), $| = 1)[0]);
 .Ve
 .Sh "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?"
-.IX Subsection "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?"
 Although humans have an easy time thinking of a text file as being a
 sequence of lines that operates much like a stack of playing cards --
 or punch cards -- computers usually see the text file as a sequence of
@@ -346,7 +340,6 @@ whole file into memory:
 .Ve
 Error checking is left as an exercise for the reader.
 .Sh "How do I count the number of lines in a file?"
-.IX Subsection "How do I count the number of lines in a file?"
 One fairly efficient way is to count newlines in the file. The
 following program uses a feature of tr///, as documented in the \fIperlop\fR manpage.
 If your text file doesn't end with a newline, then it's not really a
@@ -361,7 +354,6 @@ proper text file, so this may report one fewer line than you expect.
 \&    close FILE;
 .Ve
 .Sh "How do I make a temporary file name?"
-.IX Subsection "How do I make a temporary file name?"
 Use the process \s-1ID\s0 and/or the current time-value.  If you need to have
 many temporary files in one process, use a counter:
 .PP
@@ -388,7 +380,6 @@ many temporary files in one process, use a counter:
 .Ve
 Or you could simply use \s-1IO::\s0Handle::new_tmpfile.
 .Sh "How can I manipulate fixed-record-length files?"
-.IX Subsection "How can I manipulate fixed-record-length files?"
 The most efficient way is using \fIpack()\fR and \fIunpack()\fR.  This is faster
 than using \fIsubstr()\fR.  Here is a sample chunk of code to break up and
 put back together again some fixed-format input lines, in this case
@@ -410,7 +401,6 @@ from the output of a normal, Berkeley-style ps:
 \&    }
 .Ve
 .Sh "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?"
-.IX Subsection "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?"
 You may have some success with typeglobs, as we always had to use
 in days of old:
 .PP
@@ -474,14 +464,11 @@ scalar values:
 \&    debug($fh, "Testing\en");
 .Ve
 .Sh "How can I set up a footer format to be used with \fIwrite()\fR?"
-.IX Subsection "How can I set up a footer format to be used with \fIwrite()\fR?"
 There's no builtin way to do this, but the \fIperlform\fR manpage has a couple of
 techniques to make it possible for the intrepid hacker.
 .Sh "How can I \fIwrite()\fR into a string?"
-.IX Subsection "How can I \fIwrite()\fR into a string?"
 See the \fIperlform\fR manpage for an \fIswrite()\fR function.
 .Sh "How can I output my numbers with commas added?"
-.IX Subsection "How can I output my numbers with commas added?"
 This one will do it for you:
 .PP
 .Vb 5
@@ -520,7 +507,6 @@ whatever:
 \&    }
 .Ve
 .Sh "How can I translate tildes (~) in a filename?"
-.IX Subsection "How can I translate tildes (~) in a filename?"
 Use the <> (\fIglob()\fR) operator, documented in the \fIperlfunc\fR manpage.  This
 requires that you have a shell installed that groks tildes, meaning
 csh or tcsh or (some versions of) ksh, and thus may have portability
@@ -543,7 +529,6 @@ Within Perl, you may use this directly:
 \&        }ex;
 .Ve
 .Sh "How come when I open the file read-write it wipes it out?"
-.IX Subsection "How come when I open the file read-write it wipes it out?"
 Because you're using something like this, which truncates the file and
 \fIthen\fR gives you read-write access:
 .PP
@@ -563,7 +548,6 @@ If this is an issue, try:
 .Ve
 Error checking is left as an exercise for the reader.
 .Sh "Why do I sometimes get an \*(M"Argument list too long\*(S" when I use <*>?"
-.IX Subsection "Why do I sometimes get an \*(M"Argument list too long\*(S" when I use <*>?"
 The \f(CW<>\fR operator performs a globbing operation (see above).
 By default \fIglob()\fR forks \fIcsh\fR\|(1) to do the actual glob expansion, but
 csh can't handle more than 127 items and so gives the error message
@@ -574,13 +558,11 @@ To get around this, either do the glob yourself with \f(CWDirhandle\fRs and
 patterns, or use a module like Glob::KGlob, one that doesn't use the
 shell to do globbing.
 .Sh "Is there a leak/bug in \fIglob()\fR?"
-.IX Subsection "Is there a leak/bug in \fIglob()\fR?"
 Due to the current implementation on some operating systems, when you
 use the \fIglob()\fR function or its angle-bracket alias in a scalar
 context, you may cause a leak and/or unpredictable behavior.  It's
 best therefore to use \fIglob()\fR only in list context.
 .Sh "How can I open a file with a leading \*(M">\*(S" or trailing blanks?"
-.IX Subsection "How can I open a file with a leading \*(M">\*(S" or trailing blanks?"
 Normally perl ignores trailing blanks in filenames, and interprets
 certain leading characters (or a trailing \*(L"|") to mean something
 special.  To avoid this, you might want to use a routine like this.
@@ -601,7 +583,6 @@ trailing null byte on the name to make perl leave it alone:
 .Ve
 You could also use the \fIsysopen()\fR function (see the \f(CWsysopen\fR entry in the \fIperlfunc\fR manpage).
 .Sh "How can I reliably rename a file?"
-.IX Subsection "How can I reliably rename a file?"
 Well, usually you just use Perl's \fIrename()\fR function.  But that may
 not work everywhere, in particular, renaming files across file systems.
 If your operating system supports a \fImv\fR\|(1) program or its moral equivalent,
@@ -616,22 +597,18 @@ then delete the old one.  This isn't really the same semantics as a
 real \fIrename()\fR, though, which preserves metainformation like
 permissions, timestamps, inode info, etc.
 .Sh "How can I lock a file?"
-.IX Subsection "How can I lock a file?"
 Perl's builtin \fIflock()\fR function (see the \fIperlfunc\fR manpage for details) will call
 \fIflock\fR\|(2) if that exists, \fIfcntl\fR\|(2) if it doesn't (on perl version 5.004 and
 later), and \fIlockf\fR\|(3) if neither of the two previous system calls exists.
 On some systems, it may even use a different form of native locking.
 Here are some gotchas with Perl's \fIflock()\fR:
 .Ip "1" 4
-.IX Item "1"
 Produces a fatal error if none of the three system calls (or their
 close equivalent) exists.
 .Ip "2" 4
-.IX Item "2"
 \fIlockf\fR\|(3) does not provide shared locking, and requires that the
 filehandle be open for writing (or appending, or read/writing).
 .Ip "3" 4
-.IX Item "3"
 Some versions of \fIflock()\fR can't lock files over a network (e.g. on \s-1NFS\s0
 file systems), so you'd need to force the use of \fIfcntl\fR\|(2) when you
 build Perl.  See the flock entry of the \fIperlfunc\fR manpage, and the \fI\s-1INSTALL\s0\fR
@@ -642,7 +619,6 @@ The \s-1CPAN\s0 module File::Lock offers similar functionality and (if you
 have dynamic loading) won't require you to rebuild perl if your
 \fIflock()\fR can't lock network files.
 .Sh "What can't I just \fIopen\fR\|(\s-1FH\s0, \*(M">file.lock"")?"
-.IX Subsection "What can't I just \fIopen\fR\|(\s-1FH\s0, \*(M">file.lock"")?"
 A common bit of code \fB\s-1NOT\s0 \s-1TO\s0 \s-1USE\s0\fR is this:
 .PP
 .Vb 2
@@ -662,7 +638,6 @@ over \s-1NFS\s0, so this won't work (at least, not every time) over the net.
 Various schemes involving involving \fIlink()\fR have been suggested, but
 these tend to involve busy-wait, which is also subdesirable.
 .Sh "I still don't get locking.  I just want to increment the number in the file.  How can I do this?"
-.IX Subsection "I still don't get locking.  I just want to increment the number in the file.  How can I do this?"
 Didn't anyone ever tell you web-page hit counters were useless?
 .PP
 Anyway, this is what to do:
@@ -685,7 +660,6 @@ Here's a much better web-page hit counter:
 .Ve
 If the count doesn't impress your friends, then the code might.  :\-)
 .Sh "How do I randomly update a binary file?"
-.IX Subsection "How do I randomly update a binary file?"
 If you're just trying to patch a binary, in many cases something as
 simple as this works:
 .PP
@@ -713,7 +687,6 @@ Don't forget to set \fIbinmode()\fR under \s-1DOS\s0\-like platforms when operat
 on files that have anything other than straight text in them.  See the
 docs on \fIopen()\fR and on \fIbinmode()\fR for more details.
 .Sh "How do I get a file's timestamp in perl?"
-.IX Subsection "How do I get a file's timestamp in perl?"
 If you want to retrieve the time at which the file was last read,
 written, or had its meta-data (owner, etc) changed, you use the \fB\-M\fR,
 \fB\-A\fR, or \fB\-C\fR filetest operations as documented in the \fIperlfunc\fR manpage.  These
@@ -740,7 +713,6 @@ If you prefer something more legible, use the File::stat module
 .Ve
 Error checking is left as an exercise for the reader.
 .Sh "How do I set a file's timestamp in perl?"
-.IX Subsection "How do I set a file's timestamp in perl?"
 You use the \fIutime()\fR function documented in the \f(CWutime\fR entry in the \fIperlfunc\fR manpage.
 By way of example, here's a little program that copies the
 read and write times from its first argument to all the rest
@@ -760,7 +732,6 @@ Note that \fIutime()\fR currently doesn't work correctly with Win95/\s-1NT\s0
 ports.  A bug has been reported.  Check it carefully before using
 it on those platforms.
 .Sh "How do I print to more than one file at once?"
-.IX Subsection "How do I print to more than one file at once?"
 If you only have to do this once, you can do this:
 .PP
 .Vb 1
@@ -781,13 +752,11 @@ written in Perl.
 In theory a \s-1IO::\s0Tee class could be written, but to date we haven't
 seen such.
 .Sh "How can I read in a file by paragraphs?"
-.IX Subsection "How can I read in a file by paragraphs?"
 Use the \f(CW$\e\fR variable (see the \fIperlvar\fR manpage for details).  You can either
 set it to \f(CW""\fR to eliminate empty paragraphs (\f(CW"abc\en\en\en\endef"\fR,
 for instance, gets treated as two paragraphs and not three), or
 \f(CW"\en\en"\fR to accept empty paragraphs.
 .Sh "How can I read a single character from a file?  From the keyboard?"
-.IX Subsection "How can I read a single character from a file?  From the keyboard?"
 You can use the builtin \f(CWgetc()\fR function for most filehandles, but
 it won't (easily) work on a terminal device.  For \s-1STDIN\s0, either use
 the Term::ReadKey module from \s-1CPAN\s0, or use the sample code in
@@ -919,7 +888,6 @@ table:
 This is all trial and error I did a long time ago, I hope I'm reading the
 file that worked.
 .Sh "How can I tell if there's a character waiting on a filehandle?"
-.IX Subsection "How can I tell if there's a character waiting on a filehandle?"
 You should check out the Frequently Asked Questions list in
 comp.unix.* for things like this: the answer is essentially the same.
 It's very system dependent.  Here's one solution that works on \s-1BSD\s0
@@ -934,7 +902,6 @@ systems:
 .Ve
 You should look into getting the Term::ReadKey extension from \s-1CPAN\s0.
 .Sh "How do I open a file without blocking?"
-.IX Subsection "How do I open a file without blocking?"
 You need to use the O_NDELAY or O_NONBLOCK flag from the Fcntl module
 in conjunction with \fIsysopen()\fR:
 .PP
@@ -944,7 +911,6 @@ in conjunction with \fIsysopen()\fR:
 \&    or die "can't open /tmp/somefile: $!":
 .Ve
 .Sh "How do I create a file only if it doesn't exist?"
-.IX Subsection "How do I create a file only if it doesn't exist?"
 You need to use the O_CREAT and O_EXCL flags from the Fcntl module in
 conjunction with \fIsysopen()\fR:
 .PP
@@ -957,7 +923,6 @@ Be warned that neither creation nor deletion of files is guaranteed to
 be an atomic operation over \s-1NFS\s0.  That is, two processes might both
 successful create or unlink the same file!
 .Sh "How do I do a \f(CWtail -f\fR in perl?"
-.IX Subsection "How do I do a \f(CWtail -f\fR in perl?"
 First try
 .PP
 .Vb 1
@@ -984,7 +949,6 @@ the \fIclearerr()\fR method, which can remove the end of file condition on a
 filehandle.  The method: read until end of file, \fIclearerr()\fR, read some
 more.  Lather, rinse, repeat.
 .Sh "How do I \fIdup()\fR a filehandle in Perl?"
-.IX Subsection "How do I \fIdup()\fR a filehandle in Perl?"
 If you check the \f(CWopen\fR entry in the \fIperlfunc\fR manpage, you'll see that several of the ways
 to call \fIopen()\fR should do the trick.  For example:
 .PP
@@ -1000,7 +964,6 @@ Or even with a literal numeric descriptor:
 .Ve
 Error checking has been left as an exercise for the reader.
 .Sh "How do I close a file descriptor by number?"
-.IX Subsection "How do I close a file descriptor by number?"
 This should rarely be necessary, as the Perl \fIclose()\fR function is to be
 used for things that Perl opened itself, even if it was a dup of a
 numeric descriptor, as with \s-1MHCONTEXT\s0 above.  But if you really have
@@ -1012,7 +975,6 @@ to, you may be able to do this:
 \&    die "can't sysclose $fd: $!" unless $rc == -1;
 .Ve
 .Sh "Why can't I use \*(M"C:\etemp\efoo\*(S" in \s-1DOS\s0 paths?  What doesn't `C:\etemp\efoo.exe` work?"
-.IX Subsection "Why can't I use \*(M"C:\etemp\efoo\*(S" in \s-1DOS\s0 paths?  What doesn't `C:\etemp\efoo.exe` work?"
 Whoops!  You just put a tab and a formfeed into that filename!
 Remember that within double quoted strings ("like\ethis"), the
 backslash is an escape character.  The full list of these is in
@@ -1026,12 +988,10 @@ have treated \f(CW/\fR and \f(CW\e\fR the same in a path, you might as well use 
 one that doesn't clash with Perl -- or the \s-1POSIX\s0 shell, \s-1ANSI\s0 C and \*(C+,
 awk, Tcl, Java, or Python, just to mention a few.
 .Sh "Why doesn't \fIglob\fR\|(""*.*"") get all the files?"
-.IX Subsection "Why doesn't \fIglob\fR\|(""*.*"") get all the files?"
 Because even on non-Unix ports, Perl's glob function follows standard
 Unix globbing semantics.  You'll need \f(CWglob("*")\fR to get all (non-hidden)
 files.
 .Sh "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?"
-.IX Subsection "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?"
 This is elaborately and painstakingly described in the \*(L"Far More Than
 You Every Wanted To Know\*(R" in
 http://www.perl.com/\s-1CPAN/\s0doc/\s-1FMTEYEWTK/\s0file-dir-perms .
@@ -1044,7 +1004,6 @@ name from the directory (so the operation depends on the permissions
 of the directory, not of the file).  If you try to write to the file,
 the permissions of the file govern whether you're allowed to.
 .Sh "How do I select a random line from a file?"
-.IX Subsection "How do I select a random line from a file?"
 Here's an algorithm from the Camel Book:
 .PP
 .Vb 2
@@ -1054,8 +1013,90 @@ Here's an algorithm from the Camel Book:
 This has a significant advantage in space over reading the whole
 file in.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ5 1"
+.IX Name "perlfaq5 - Files and Formats ($Revision: 1.22 $, $Date: 1997/04/24 22:44:02 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "How do I flush/unbuffer a filehandle?  Why must I do this?"
+
+.IX Subsection "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?"
+
+.IX Subsection "How do I count the number of lines in a file?"
+
+.IX Subsection "How do I make a temporary file name?"
+
+.IX Subsection "How can I manipulate fixed-record-length files?"
+
+.IX Subsection "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?"
+
+.IX Subsection "How can I set up a footer format to be used with \fIwrite()\fR?"
+
+.IX Subsection "How can I \fIwrite()\fR into a string?"
+
+.IX Subsection "How can I output my numbers with commas added?"
+
+.IX Subsection "How can I translate tildes (~) in a filename?"
+
+.IX Subsection "How come when I open the file read-write it wipes it out?"
+
+.IX Subsection "Why do I sometimes get an \*(M"Argument list too long\*(S" when I use <*>?"
+
+.IX Subsection "Is there a leak/bug in \fIglob()\fR?"
+
+.IX Subsection "How can I open a file with a leading \*(M">\*(S" or trailing blanks?"
+
+.IX Subsection "How can I reliably rename a file?"
+
+.IX Subsection "How can I lock a file?"
+
+.IX Item "1"
+
+.IX Item "2"
+
+.IX Item "3"
+
+.IX Subsection "What can't I just \fIopen\fR\|(\s-1FH\s0, \*(M">file.lock"")?"
+
+.IX Subsection "I still don't get locking.  I just want to increment the number in the file.  How can I do this?"
+
+.IX Subsection "How do I randomly update a binary file?"
+
+.IX Subsection "How do I get a file's timestamp in perl?"
+
+.IX Subsection "How do I set a file's timestamp in perl?"
+
+.IX Subsection "How do I print to more than one file at once?"
+
+.IX Subsection "How can I read in a file by paragraphs?"
+
+.IX Subsection "How can I read a single character from a file?  From the keyboard?"
+
+.IX Subsection "How can I tell if there's a character waiting on a filehandle?"
+
+.IX Subsection "How do I open a file without blocking?"
+
+.IX Subsection "How do I create a file only if it doesn't exist?"
+
+.IX Subsection "How do I do a \f(CWtail -f\fR in perl?"
+
+.IX Subsection "How do I \fIdup()\fR a filehandle in Perl?"
+
+.IX Subsection "How do I close a file descriptor by number?"
+
+.IX Subsection "Why can't I use \*(M"C:\etemp\efoo\*(S" in \s-1DOS\s0 paths?  What doesn't `C:\etemp\efoo.exe` work?"
+
+.IX Subsection "Why doesn't \fIglob\fR\|(""*.*"") get all the files?"
+
+.IX Subsection "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?"
+
+.IX Subsection "How do I select a random line from a file?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

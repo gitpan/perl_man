@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH LWP-RGET 1 "perl 5.004, patch 01" "20/Jun/97" "User Contributed Perl Documentation"
-.IX Title "LWP-RGET 1"
+.TH LWP-RGET 1 "perl 5.004, patch 55" "28/Nov/97" "User Contributed Perl Documentation"
 .UC
-.IX Name "lwp-rget - Retrieve WWW documents recursively"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,17 +188,14 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 lwp-rget \- Retrieve WWW documents recursively
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 .PP
 .Vb 2
 \& lwp-rget [--verbose] [--depth=N] [--limit=N] [--prefix=URL] <URL>
 \& lwp-rget --version
 .Ve
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This program will retrieve a document and store it in a local file.  It
 will follow any links found in the document and store these documents
 as well, patching links so that they refer to these local copies.
@@ -216,7 +211,6 @@ file names chosen are derived from the last component of URL paths.
 .PP
 The options are:
 .Ip "--depth=\fIn\fR" 3
-.IX Item "--depth=\fIn\fR"
 Limit the recursive level. Embedded images are always loaded, even if
 they fall outside the \fI--depth\fR. This means that one can use
 \fI--depth=0\fR in order to fetch a single document together with all
@@ -224,10 +218,8 @@ inline graphics.
 .Sp
 The default depth is 5.
 .Ip "--limit=\fIn\fR" 3
-.IX Item "--limit=\fIn\fR"
 Limit the number of documents to get.  The default limit is 50.
 .Ip "--prefix=\fIurl_prefix\fR" 3
-.IX Item "--prefix=\fIurl_prefix\fR"
 Limit the links to follow. Only URLs that start the prefix string are
 followed.
 .Sp
@@ -239,20 +231,15 @@ follow.  For instance if we start lwp-rget with the \s-1URL\s0
 Use \f(CW--prefix=''\fR if you don't want the fetching to be limited by any
 prefix.
 .Ip "--sleep=\fIn\fR" 3
-.IX Item "--sleep=\fIn\fR"
 Sleep \fIn\fR seconds before retrieving each document. This options allows
 you to go slowly, not loading the server you visiting too much.
 .Ip "--verbose" 3
-.IX Item "--verbose"
 Make more noise while running.
 .Ip "--quiet" 3
-.IX Item "--quiet"
 Don't make any noise.
 .Ip "--version" 3
-.IX Item "--version"
 Print program version number and quit.
 .Ip "--help" 3
-.IX Item "--help"
 Print the usage message and quit.
 .PP
 Before the program exits the name of the file, where the initial \s-1URL\s0
@@ -260,10 +247,37 @@ is stored, is printed on stdout.  All used filenames are also printed
 on stderr as they are loaded.  This printing can be suppressed with
 the \fI--quiet\fR option.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 the \fIlwp-request\fR manpage, the \fILWP\fR manpage
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Gisle Aas <aas@sn.no>
 
 .rn }` ''
+.IX Title "LWP-RGET 1"
+.IX Name "lwp-rget - Retrieve WWW documents recursively"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "--depth=\fIn\fR"
+
+.IX Item "--limit=\fIn\fR"
+
+.IX Item "--prefix=\fIurl_prefix\fR"
+
+.IX Item "--sleep=\fIn\fR"
+
+.IX Item "--verbose"
+
+.IX Item "--quiet"
+
+.IX Item "--version"
+
+.IX Item "--help"
+
+.IX Header "SEE ALSO"
+
+.IX Header "AUTHOR"
+

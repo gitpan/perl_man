@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERL 1 "perl 5.004, patch 01" "8/May/97" "Perl Programmers Reference Guide"
-.IX Title "PERL 1"
+.TH PERL 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perl - Practical Extraction and Report Language"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perl \- Practical Extraction and Report Language
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBperl\fR	[\ \fB\-sTuU\fR\ ]
 	[\ \fB\-hv\fR\ ]\ [\ \fB\-V\fR[:\fIconfigvar\fR]\ ]
 	[\ \fB\-cw\fR\ ]\ [\ \fB\-d\fR[:\fIdebugger\fR]\ ]\ [\ \fB\-D\fR[\fInumber/list\fR]\ ]
@@ -291,7 +287,6 @@ If something strange has gone wrong with your program and you're not
 sure where you should look for help, try the \fB\-w\fR switch first.  It
 will often point out exactly where the trouble is.
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Perl is a language optimized for scanning arbitrary
 text files, extracting information from those text files, and printing
 reports based on that information.  It's also a good language for many
@@ -327,7 +322,6 @@ But wait, there's more...
 Perl version 5 is nearly a complete rewrite, and provides
 the following additional benefits:
 .Ip "\(bu Many usability enhancements" 5
-.IX Item "\(bu Many usability enhancements"
 It is now possible to write much more readable Perl code (even within
 regular expressions).  Formerly cryptic variable names can be replaced
 by mnemonic identifiers.  Error messages are more informative, and the
@@ -336,96 +330,84 @@ This cannot be stressed enough.  Whenever you get mysterious behavior,
 try the \fB\-w\fR switch!!!  Whenever you don't get mysterious behavior,
 try using \fB\-w\fR anyway.
 .Ip "\(bu Simplified grammar" 5
-.IX Item "\(bu Simplified grammar"
 The new yacc grammar is one half the size of the old one.  Many of the
 arbitrary grammar rules have been regularized.  The number of reserved
 words has been cut by 2/3.  Despite this, nearly all old Perl scripts
 will continue to work unchanged.
 .Ip "\(bu Lexical scoping" 5
-.IX Item "\(bu Lexical scoping"
 Perl variables may now be declared within a lexical scope, like \*(L"auto\*(R"
 variables in C.  Not only is this more efficient, but it contributes
 to better privacy for \*(L"programming in the large\*(R".  Anonymous
 subroutines exhibit deep binding of lexical variables (closures).
 .Ip "\(bu Arbitrarily nested data structures" 5
-.IX Item "\(bu Arbitrarily nested data structures"
 Any scalar value, including any array element, may now contain a
 reference to any other variable or subroutine.  You can easily create
 anonymous variables and subroutines.  Perl manages your reference
 counts for you.
 .Ip "\(bu Modularity and reusability" 5
-.IX Item "\(bu Modularity and reusability"
 The Perl library is now defined in terms of modules which can be easily
 shared among various packages.  A package may choose to import all or a
 portion of a module's published interface.  Pragmas (that is, compiler
 directives) are defined and used by the same mechanism.
 .Ip "\(bu Object-oriented programming" 5
-.IX Item "\(bu Object-oriented programming"
 A package can function as a class.  Dynamic multiple inheritance and
 virtual methods are supported in a straightforward manner and with very
 little new syntax.  Filehandles may now be treated as objects.
 .Ip "\(bu Embeddable and Extensible" 5
-.IX Item "\(bu Embeddable and Extensible"
 Perl may now be embedded easily in your C or \*(C+ application, and can
 either call or be called by your routines through a documented
 interface.  The \s-1XS\s0 preprocessor is provided to make it easy to glue
 your C or \*(C+ routines into Perl.  Dynamic loading of modules is
 supported, and Perl itself can be made into a dynamic library.
 .Ip "\(bu \s-1POSIX\s0 compliant" 5
-.IX Item "\(bu \s-1POSIX\s0 compliant"
 A major new module is the \s-1POSIX\s0 module, which provides access to all
 available \s-1POSIX\s0 routines and definitions, via object classes where
 appropriate.
 .Ip "\(bu Package constructors and destructors" 5
-.IX Item "\(bu Package constructors and destructors"
 The new \s-1BEGIN\s0 and \s-1END\s0 blocks provide means to capture control as
 a package is being compiled, and after the program exits.  As a
 degenerate case they work just like awk's \s-1BEGIN\s0 and \s-1END\s0 when you
 use the \fB\-p\fR or \fB\-n\fR switches.
 .Ip "\(bu Multiple simultaneous \s-1DBM\s0 implementations" 5
-.IX Item "\(bu Multiple simultaneous \s-1DBM\s0 implementations"
 A Perl program may now access \s-1DBM\s0, \s-1NDBM\s0, \s-1SDBM\s0, \s-1GDBM\s0, and Berkeley \s-1DB\s0
 files from the same script simultaneously.  In fact, the old dbmopen
 interface has been generalized to allow any variable to be tied
 to an object class which defines its access methods.
 .Ip "\(bu Subroutine definitions may now be autoloaded" 5
-.IX Item "\(bu Subroutine definitions may now be autoloaded"
 In fact, the \s-1AUTOLOAD\s0 mechanism also allows you to define any arbitrary
 semantics for undefined subroutine calls.  It's not for just autoloading.
 .Ip "\(bu Regular expression enhancements" 5
-.IX Item "\(bu Regular expression enhancements"
 You can now specify nongreedy quantifiers.  You can now do grouping
 without creating a backreference.  You can now write regular expressions
 with embedded whitespace and comments for readability.  A consistent
 extensibility mechanism has been added that is upwardly compatible with
 all old regular expressions.
 .Ip "\(bu Innumerable Unbundled Modules" 5
-.IX Item "\(bu Innumerable Unbundled Modules"
 The Comprehensive Perl Archive Network described in the \fIperlmodlib\fR manpage
 contains hundreds of plug-and-play modules full of reusable code.
 See \fIhttp://www.perl.com/\s-1CPAN\s0\fR for a site near you.
 .Ip "\(bu Compilability" 5
-.IX Item "\(bu Compilability"
 While not yet in full production mode, a working perl-to-C compiler
 does exist.  It can generate portable byte code, simple C, or
 optimized C code.
 .PP
 Okay, that's \fIdefinitely\fR enough hype.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 See the \fIperlrun\fR manpage.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall <\fIlarry@wall.org\fR>, with the help of oodles of other folks.
+.PP
+If your Perl success stories and testimonials may be of help to others 
+who wish to advocate the use of Perl in their applications, 
+or if you wish to simply express your gratitude to Larry and the 
+Perl developers, please write to <\fIperl-thanks@perl.org\fR>.
 .SH "FILES"
-.IX Header "FILES"
 .PP
 .Vb 2
 \& "/tmp/perl-e$$"        temporary file for -e commands
 \& "@INC"                 locations of perl libraries
 .Ve
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 .PP
 .Vb 1
 \& a2p    awk to perl translator
@@ -434,7 +416,6 @@ Larry Wall <\fIlarry@wall.org\fR>, with the help of oodles of other folks.
 \& s2p    sed to perl translator
 .Ve
 .SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
 The \fB\-w\fR switch produces some lovely diagnostics.
 .PP
 See the \fIperldiag\fR manpage for explanations of all Perl's diagnostics.
@@ -450,7 +431,6 @@ messages such as \*(L"Insecure dependency\*(R".  See the \fIperlsec\fR manpage.
 Did we mention that you should definitely consider using the \fB\-w\fR
 switch?
 .SH "BUGS"
-.IX Header "BUGS"
 The \fB\-w\fR switch is not mandatory.
 .PP
 Perl is at the mercy of your machine's definitions of various
@@ -476,7 +456,6 @@ subdirectory can be used to help mail in a bug report.
 Perl actually stands for Pathologically Eclectic Rubbish Lister, but
 don't tell anyone I said that.
 .SH "NOTES"
-.IX Header "NOTES"
 The Perl motto is \*(L"There's more than one way to do it.\*(R"  Divining
 how many more is left as an exercise to the reader.
 .PP
@@ -484,3 +463,54 @@ The three principal virtues of a programmer are Laziness,
 Impatience, and Hubris.  See the Camel Book for why.
 
 .rn }` ''
+.IX Title "PERL 1"
+.IX Name "perl - Practical Extraction and Report Language"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "\(bu Many usability enhancements"
+
+.IX Item "\(bu Simplified grammar"
+
+.IX Item "\(bu Lexical scoping"
+
+.IX Item "\(bu Arbitrarily nested data structures"
+
+.IX Item "\(bu Modularity and reusability"
+
+.IX Item "\(bu Object-oriented programming"
+
+.IX Item "\(bu Embeddable and Extensible"
+
+.IX Item "\(bu \s-1POSIX\s0 compliant"
+
+.IX Item "\(bu Package constructors and destructors"
+
+.IX Item "\(bu Multiple simultaneous \s-1DBM\s0 implementations"
+
+.IX Item "\(bu Subroutine definitions may now be autoloaded"
+
+.IX Item "\(bu Regular expression enhancements"
+
+.IX Item "\(bu Innumerable Unbundled Modules"
+
+.IX Item "\(bu Compilability"
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "AUTHOR"
+
+.IX Header "FILES"
+
+.IX Header "SEE ALSO"
+
+.IX Header "DIAGNOSTICS"
+
+.IX Header "BUGS"
+
+.IX Header "NOTES"
+

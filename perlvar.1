@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLVAR 1 "perl 5.004, patch 01" "9/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLVAR 1"
+.TH PERLVAR 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlvar - Perl predefined variables"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,9 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlvar \- Perl predefined variables
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "Predefined Names"
-.IX Subsection "Predefined Names"
 The following names have special meaning to Perl.  Most of the
 punctuation names have reasonable mnemonics, or analogues in one of
 the shells.  Nevertheless, if you wish to use the long variable names,
@@ -209,9 +204,9 @@ long names in the current package.  Some of them even have medium names,
 generally borrowed from \fBawk\fR.
 .PP
 To go a step further, those variables that depend on the currently
-selected filehandle may instead be set by calling an object method on
-the FileHandle object.  (Summary lines below for this contain the word
-\s-1HANDLE\s0.)  First you must say
+selected filehandle may instead (and preferably) be set by calling an
+object method on the FileHandle object.  (Summary lines below for this
+contain the word \s-1HANDLE\s0.)  First you must say
 .PP
 .Vb 1
 \&    use FileHandle;
@@ -235,10 +230,13 @@ most of the methods do nothing to the current value, except for
 A few of these variables are considered \*(L"read-only\*(R".  This means that if
 you try to assign to this variable, either directly or indirectly through
 a reference, you'll raise a run-time exception.
+.PP
+The following list is ordered by scalar variables first, then the
+arrays, then the hashes (except $^M was added in the wrong place).
+This is somewhat obscured by the fact that \f(CW%ENV\fR and \f(CW%SIG\fR are listed as
+\f(CW$ENV\fR{expr} and \f(CW$SIG\fR{expr}.
 .Ip "$\s-1ARG\s0" 8
-.IX Item "$\s-1ARG\s0"
 .Ip "$_" 8
-.IX Item "$_"
 The default input and pattern-searching space.  The following pairs are
 equivalent:
 .Sp
@@ -261,56 +259,43 @@ equivalent:
 Here are the places where Perl will assume \f(CW$_\fR even if you
 don't use it:
 .Ip "\(bu" 11
-.IX Item "\(bu"
 Various unary functions, including functions like \fIord()\fR and \fIint()\fR, as well
 as the all file tests (\f(CW-f\fR, \f(CW-d\fR) except for \f(CW-t\fR, which defaults to
 \s-1STDIN\s0.
 .Ip "\(bu" 11
-.IX Item "\(bu"
 Various list functions like \fIprint()\fR and \fIunlink()\fR.
 .Ip "\(bu" 11
-.IX Item "\(bu"
 The pattern matching operations \f(CWm//\fR, \f(CWs///\fR, and \f(CWtr///\fR when used
 without an \f(CW=~\fR operator.
 .Ip "\(bu" 11
-.IX Item "\(bu"
 The default iterator variable in a \f(CWforeach\fR loop if no other
 variable is supplied.
 .Ip "\(bu" 11
-.IX Item "\(bu"
 The implicit iterator variable in the \fIgrep()\fR and \fImap()\fR functions.
 .Ip "\(bu" 11
-.IX Item "\(bu"
 The default place to put an input record when a \f(CW<FH>\fR
 operation's result is tested by itself as the sole criterion of a \f(CWwhile\fR
 test.  Note that outside of a \f(CWwhile\fR test, this will not happen.
 .Sp
 (Mnemonic: underline is understood in certain operations.)
 .Ip "$<\fIdigit\fR>" 8
-.IX Item "$<\fIdigit\fR>"
 Contains the subpattern from the corresponding set of parentheses in
 the last pattern matched, not counting patterns matched in nested
 blocks that have been exited already.  (Mnemonic: like \edigit.)
 These variables are all read-only.
 .Ip "$\s-1MATCH\s0" 8
-.IX Item "$\s-1MATCH\s0"
 .Ip "$&" 8
-.IX Item "$&"
 The string matched by the last successful pattern match (not counting
 any matches hidden within a \s-1BLOCK\s0 or \fIeval()\fR enclosed by the current
 \s-1BLOCK\s0).  (Mnemonic: like & in some editors.)  This variable is read-only.
 .Ip "$\s-1PREMATCH\s0" 8
-.IX Item "$\s-1PREMATCH\s0"
 .Ip "$`" 8
-.IX Item "$`"
 The string preceding whatever was matched by the last successful
 pattern match (not counting any matches hidden within a \s-1BLOCK\s0 or eval
 enclosed by the current \s-1BLOCK\s0).  (Mnemonic: \f(CW`\fR often precedes a quoted
 string.)  This variable is read-only.
 .Ip "$\s-1POSTMATCH\s0" 8
-.IX Item "$\s-1POSTMATCH\s0"
 .Ip "$\*(T'" 8
-.IX Item "$\*(T'"
 The string following whatever was matched by the last successful
 pattern match (not counting any matches hidden within a \s-1BLOCK\s0 or \fIeval()\fR
 enclosed by the current \s-1BLOCK\s0).  (Mnemonic: \f(CW'\fR often follows a quoted
@@ -323,9 +308,7 @@ string.)  Example:
 .Ve
 This variable is read-only.
 .Ip "$\s-1LAST_PAREN_MATCH\s0" 8
-.IX Item "$\s-1LAST_PAREN_MATCH\s0"
 .Ip "$+" 8
-.IX Item "$+"
 The last bracket matched by the last search pattern.  This is useful if
 you don't know which of a set of alternative patterns matched.  For
 example:
@@ -336,9 +319,7 @@ example:
 (Mnemonic: be positive and forward looking.)
 This variable is read-only.
 .Ip "$\s-1MULTILINE_MATCHING\s0" 8
-.IX Item "$\s-1MULTILINE_MATCHING\s0"
 .Ip "$*" 8
-.IX Item "$*"
 Set to 1 to do multi-line matching within a string, 0 to tell Perl
 that it can assume that strings contain a single line, for the purpose
 of optimizing pattern matches.  Pattern matches on strings containing
@@ -349,13 +330,9 @@ be searched for even when \f(CW$* == 0\fR.
 .Sp
 Use of \*(L"\f(CW$*\fR\*(R" is deprecated in modern perls.
 .Ip "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1INPUT_LINE_NUMBER\s0" 8
-.IX Item "$\s-1INPUT_LINE_NUMBER\s0"
 .Ip "$\s-1NR\s0" 8
-.IX Item "$\s-1NR\s0"
 .Ip "$." 8
-.IX Item "$."
 The current input line number for the last file handle from
 which you read (or performed a \f(CWseek\fR or \f(CWtell\fR on).  An
 explicit close on a filehandle resets the line number.  Because
@@ -365,13 +342,9 @@ the effect of also localizing Perl's notion of \*(L"the last read
 filehandle\*(R".  (Mnemonic: many programs use \*(L".\*(R" to mean the current line
 number.)
 .Ip "input_record_separator \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "input_record_separator \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1INPUT_RECORD_SEPARATOR\s0" 8
-.IX Item "$\s-1INPUT_RECORD_SEPARATOR\s0"
 .Ip "$\s-1RS\s0" 8
-.IX Item "$\s-1RS\s0"
 .Ip "$/" 8
-.IX Item "$/"
 The input record separator, newline by default.  Works like \fBawk\fR's \s-1RS\s0
 variable, including treating empty lines as delimiters if set to the
 null string.  (Note: An empty line cannot contain any spaces or tabs.)
@@ -392,11 +365,8 @@ character belongs to the next paragraph, even if it's a newline.
 Remember: the value of $/ is a string, not a regexp.  \s-1AWK\s0 has to be
 better for something :\-)
 .Ip "autoflush \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "autoflush \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1OUTPUT_AUTOFLUSH\s0" 8
-.IX Item "$\s-1OUTPUT_AUTOFLUSH\s0"
 .Ip "$|" 8
-.IX Item "$|"
 If set to nonzero, forces a flush right away and after every write or print on the
 currently selected output channel.  Default is 0 (regardless of whether
 the channel is actually buffered by the system or not; \f(CW$|\fR tells you
@@ -408,13 +378,9 @@ a Perl script under rsh and want to see the output as it's happening.  This
 has no effect on input buffering.
 (Mnemonic: when you want your pipes to be piping hot.)
 .Ip "output_field_separator \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "output_field_separator \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1OUTPUT_FIELD_SEPARATOR\s0" 8
-.IX Item "$\s-1OUTPUT_FIELD_SEPARATOR\s0"
 .Ip "$\s-1OFS\s0" 8
-.IX Item "$\s-1OFS\s0"
 .Ip "$," 8
-.IX Item "$,"
 The output field separator for the print operator.  Ordinarily the
 print operator simply prints out the comma-separated fields you
 specify.  To get behavior more like \fBawk\fR, set this variable
@@ -422,13 +388,9 @@ as you would set \fBawk\fR's \s-1OFS\s0 variable to specify what is printed
 between fields.  (Mnemonic: what is printed when there is a , in your
 print statement.)
 .Ip "output_record_separator \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "output_record_separator \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1OUTPUT_RECORD_SEPARATOR\s0" 8
-.IX Item "$\s-1OUTPUT_RECORD_SEPARATOR\s0"
 .Ip "$\s-1ORS\s0" 8
-.IX Item "$\s-1ORS\s0"
 .Ip "$\e" 8
-.IX Item "$\e"
 The output record separator for the print operator.  Ordinarily the
 print operator simply prints out the comma-separated fields you
 specify, with no trailing newline or record separator assumed.
@@ -438,18 +400,13 @@ print.  (Mnemonic: you set \*(L"\f(CW$\e\fR\*(R" instead of adding \en at the en
 print.  Also, it's just like \f(CW$/\fR, but it's what you get \*(L"back\*(R" from
 Perl.)
 .Ip "$\s-1LIST_SEPARATOR\s0" 8
-.IX Item "$\s-1LIST_SEPARATOR\s0"
 .Ip "$\*(T"" 8
-.IX Item "$\*(T""
 This is like \*(L"\f(CW$,\fR\*(R" except that it applies to array values interpolated
 into a double-quoted string (or similar interpreted string).  Default
 is a space.  (Mnemonic: obvious, I think.)
 .Ip "$\s-1SUBSCRIPT_SEPARATOR\s0" 8
-.IX Item "$\s-1SUBSCRIPT_SEPARATOR\s0"
 .Ip "$\s-1SUBSEP\s0" 8
-.IX Item "$\s-1SUBSEP\s0"
 .Ip "$;" 8
-.IX Item "$;"
 The subscript separator for multidimensional array emulation.  If you
 refer to a hash element as
 .Sp
@@ -479,9 +436,7 @@ taken for something more important.)
 .Sp
 Consider using \*(L"real\*(R" multidimensional arrays.
 .Ip "$\s-1OFMT\s0" 8
-.IX Item "$\s-1OFMT\s0"
 .Ip "$#" 8
-.IX Item "$#"
 The output format for printed numbers.  This variable is a half-hearted
 attempt to emulate \fBawk\fR's \s-1OFMT\s0 variable.  There are times, however,
 when \fBawk\fR and Perl have differing notions of what is in fact
@@ -492,68 +447,45 @@ explicitly to get \fBawk\fR's value.  (Mnemonic: # is the number sign.)
 .Sp
 Use of \*(L"\f(CW$#\fR\*(R" is deprecated.
 .Ip "format_page_number \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_page_number \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_PAGE_NUMBER\s0" 8
-.IX Item "$\s-1FORMAT_PAGE_NUMBER\s0"
 .Ip "$%" 8
-.IX Item "$%"
 The current page number of the currently selected output channel.
 (Mnemonic: % is page number in \fBnroff\fR.)
 .Ip "format_lines_per_page \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_lines_per_page \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_LINES_PER_PAGE\s0" 8
-.IX Item "$\s-1FORMAT_LINES_PER_PAGE\s0"
 .Ip "$=" 8
-.IX Item "$="
 The current page length (printable lines) of the currently selected
 output channel.  Default is 60.  (Mnemonic: = has horizontal lines.)
 .Ip "format_lines_left \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_lines_left \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_LINES_LEFT\s0" 8
-.IX Item "$\s-1FORMAT_LINES_LEFT\s0"
 .Ip "$-" 8
-.IX Item "$-"
 The number of lines left on the page of the currently selected output
 channel.  (Mnemonic: lines_on_page \- lines_printed.)
 .Ip "format_name \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_name \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_NAME\s0" 8
-.IX Item "$\s-1FORMAT_NAME\s0"
 .Ip "$~" 8
-.IX Item "$~"
 The name of the current report format for the currently selected output
 channel.  Default is name of the filehandle.  (Mnemonic: brother to
 \*(L"\f(CW$^\fR\*(R".)
 .Ip "format_top_name \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_top_name \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_TOP_NAME\s0" 8
-.IX Item "$\s-1FORMAT_TOP_NAME\s0"
 .Ip "$^" 8
-.IX Item "$^"
 The name of the current top-of-page format for the currently selected
 output channel.  Default is name of the filehandle with _TOP
 appended.  (Mnemonic: points to top of page.)
 .Ip "format_line_break_characters \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_line_break_characters \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_LINE_BREAK_CHARACTERS\s0" 8
-.IX Item "$\s-1FORMAT_LINE_BREAK_CHARACTERS\s0"
 .Ip "$:" 8
-.IX Item "$:"
 The current set of characters after which a string may be broken to
 fill continuation fields (starting with ^) in a format.  Default is
 \*(L"\ \en-\*(R", to break on whitespace or hyphens.  (Mnemonic: a \*(L"colon\*(R" in
 poetry is a part of a line.)
 .Ip "format_formfeed \s-1HANDLE\s0 \s-1EXPR\s0" 8
-.IX Item "format_formfeed \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_FORMFEED\s0" 8
-.IX Item "$\s-1FORMAT_FORMFEED\s0"
 .Ip "$^L" 8
-.IX Item "$^L"
 What formats output to perform a form feed.  Default is \ef.
 .Ip "$\s-1ACCUMULATOR\s0" 8
-.IX Item "$\s-1ACCUMULATOR\s0"
 .Ip "$^A" 8
-.IX Item "$^A"
 The current value of the \fIwrite()\fR accumulator for \fIformat()\fR lines.  A format
 contains \fIformline()\fR commands that put their result into \f(CW$^A\fR.  After
 calling its format, \fIwrite()\fR prints out the contents of \f(CW$^A\fR and empties.
@@ -561,9 +493,7 @@ So you never actually see the contents of \f(CW$^A\fR unless you call
 \fIformline()\fR yourself and then look at it.  See the \fIperlform\fR manpage and
 the \f(CWformline()\fR entry in the \fIperlfunc\fR manpage.
 .Ip "$\s-1CHILD_ERROR\s0" 8
-.IX Item "$\s-1CHILD_ERROR\s0"
 .Ip "$?" 8
-.IX Item "$?"
 The status returned by the last pipe close, backtick (\f(CW``\fR) command,
 or \fIsystem()\fR operator.  Note that this is the status word returned by
 the \fIwait()\fR system call (or else is made up to look like it).  Thus,
@@ -583,11 +513,8 @@ Under \s-1VMS\s0, the pragma \f(CWuse vmsish 'status'\fR makes \f(CW$?\fR reflec
 actual \s-1VMS\s0 exit status, instead of the default emulation of \s-1POSIX\s0
 status.
 .Ip "$\s-1OS_ERROR\s0" 8
-.IX Item "$\s-1OS_ERROR\s0"
 .Ip "$\s-1ERRNO\s0" 8
-.IX Item "$\s-1ERRNO\s0"
 .Ip "$!" 8
-.IX Item "$!"
 If used in a numeric context, yields the current value of errno, with
 all the usual caveats.  (This means that you shouldn't depend on the
 value of \*(L"\f(CW$!\fR\*(R" to be anything in particular unless you've gotten a
@@ -597,23 +524,16 @@ to \*(L"\f(CW$!\fR\*(R" to set \fIerrno\fR if, for instance, you want \*(L"\f(CW
 string for error \fIn\fR, or you want to set the exit value for the \fIdie()\fR
 operator.  (Mnemonic: What just went bang?)
 .Ip "$\s-1EXTENDED_OS_ERROR\s0" 8
-.IX Item "$\s-1EXTENDED_OS_ERROR\s0"
 .Ip "$^E" 8
-.IX Item "$^E"
 More specific information about the last system error than that provided by
-\f(CW$!\fR, if available.  (If not, it's just \f(CW$!\fR again, except under \s-1OS/2\s0.)
+\f(CW$!\fR, if available.  (If not, it's just \f(CW$!\fR again.)
 At the moment, this differs from \f(CW$!\fR under only \s-1VMS\s0 and \s-1OS/2\s0, where it
 provides the \s-1VMS\s0 status value from the last system error, and \s-1OS/2\s0 error
-code of the last call to \s-1OS/2\s0 \s-1API\s0 which was not directed via \s-1CRT\s0.  The
+code of the last call to \s-1OS/2\s0 \s-1API\s0 either via \s-1CRT\s0, or directly from perl.  The
 caveats mentioned in the description of \f(CW$!\fR apply here, too.
 (Mnemonic: Extra error explanation.)
-.Sp
-Note that under \s-1OS/2\s0 \f(CW$!\fR and \f(CW$^E\fR do not track each other, so if an
-\s-1OS/2-\s0specific call is performed, you may need to check both.
 .Ip "$\s-1EVAL_ERROR\s0" 8
-.IX Item "$\s-1EVAL_ERROR\s0"
 .Ip "$@" 8
-.IX Item "$@"
 The Perl syntax error message from the last \fIeval()\fR command.  If null, the
 last \fIeval()\fR parsed and executed correctly (although the operations you
 invoked may have failed in the normal fashion).  (Mnemonic: Where was
@@ -623,27 +543,18 @@ Note that warning messages are not collected in this variable.  You can,
 however, set up a routine to process warnings by setting \f(CW$SIG{__WARN__}\fR
 as described below.
 .Ip "$\s-1PROCESS_ID\s0" 8
-.IX Item "$\s-1PROCESS_ID\s0"
 .Ip "$\s-1PID\s0" 8
-.IX Item "$\s-1PID\s0"
 .Ip "$$" 8
-.IX Item "$$"
 The process number of the Perl running this script.  (Mnemonic: same
 as shells.)
 .Ip "$\s-1REAL_USER_ID\s0" 8
-.IX Item "$\s-1REAL_USER_ID\s0"
 .Ip "$\s-1UID\s0" 8
-.IX Item "$\s-1UID\s0"
 .Ip "$<" 8
-.IX Item "$<"
 The real uid of this process.  (Mnemonic: it's the uid you came \fI\s-1FROM\s0\fR,
 if you're running setuid.)
 .Ip "$\s-1EFFECTIVE_USER_ID\s0" 8
-.IX Item "$\s-1EFFECTIVE_USER_ID\s0"
 .Ip "$\s-1EUID\s0" 8
-.IX Item "$\s-1EUID\s0"
 .Ip "$>" 8
-.IX Item "$>"
 The effective uid of this process.  Example:
 .Sp
 .Vb 2
@@ -654,11 +565,8 @@ The effective uid of this process.  Example:
 Note: \*(L"\f(CW$<\fR\*(R" and \*(L"\f(CW$>\fR\*(R" can be swapped only on machines
 supporting \fIsetreuid()\fR.
 .Ip "$\s-1REAL_GROUP_ID\s0" 8
-.IX Item "$\s-1REAL_GROUP_ID\s0"
 .Ip "$\s-1GID\s0" 8
-.IX Item "$\s-1GID\s0"
 .Ip "$(" 8
-.IX Item "$("
 The real gid of this process.  If you are on a machine that supports
 membership in multiple groups simultaneously, gives a space separated
 list of groups you are in.  The first number is the one returned by
@@ -672,11 +580,8 @@ back to \*(L"\f(CW$(\fR\*(R" without being forced numeric, such as by adding zer
 (Mnemonic: parentheses are used to \fI\s-1GROUP\s0\fR things.  The real gid is the
 group you \fI\s-1LEFT\s0\fR, if you're running setgid.)
 .Ip "$\s-1EFFECTIVE_GROUP_ID\s0" 8
-.IX Item "$\s-1EFFECTIVE_GROUP_ID\s0"
 .Ip "$\s-1EGID\s0" 8
-.IX Item "$\s-1EGID\s0"
 .Ip "$)" 8
-.IX Item "$)"
 The effective gid of this process.  If you are on a machine that
 supports membership in multiple groups simultaneously, gives a space
 separated list of groups you are in.  The first number is the one
@@ -697,9 +602,7 @@ Note: \*(L"\f(CW$<\fR\*(R", \*(L"\f(CW$>\fR\*(R", \*(L"\f(CW$(\fR\*(R" and \*(L"
 machines that support the corresponding \fIset[re][ug]id()\fR routine.  \*(L"\f(CW$(\fR\*(R"
 and \*(L"\f(CW$)\fR\*(R" can be swapped only on machines supporting \fIsetregid()\fR.
 .Ip "$\s-1PROGRAM_NAME\s0" 8
-.IX Item "$\s-1PROGRAM_NAME\s0"
 .Ip "$0" 8
-.IX Item "$0"
 Contains the name of the file containing the Perl script being
 executed.  On some operating systems
 assigning to \*(L"\f(CW$0\fR\*(R" modifies the argument area that the \fIps\fR\|(1)
@@ -707,7 +610,6 @@ program sees.  This is more useful as a way of indicating the
 current program state than it is for hiding the program you're running.
 (Mnemonic: same as \fBsh\fR and \fBksh\fR.)
 .Ip "$[" 8
-.IX Item "$["
 The index of the first element in an array, and of the first character
 in a substring.  Default is 0, but you could set it to 1 to make
 Perl behave more like \fBawk\fR (or Fortran) when subscripting and when
@@ -718,9 +620,7 @@ As of Perl 5, assignment to \*(L"\f(CW$[\fR\*(R" is treated as a compiler direct
 and cannot influence the behavior of any other file.  Its use is
 discouraged.
 .Ip "$\s-1PERL_VERSION\s0" 8
-.IX Item "$\s-1PERL_VERSION\s0"
 .Ip "$]" 8
-.IX Item "$]"
 The version + patchlevel / 1000 of the Perl interpreter.  This variable
 can be used to determine whether the Perl interpreter executing a
 script is in the right range of versions.  (Mnemonic: Is this version
@@ -732,15 +632,11 @@ of perl in the right bracket?)  Example:
 See also the documentation of \f(CWuse VERSION\fR and \f(CWrequire VERSION\fR
 for a convenient way to fail if the Perl interpreter is too old.
 .Ip "$\s-1DEBUGGING\s0" 8
-.IX Item "$\s-1DEBUGGING\s0"
 .Ip "$^D" 8
-.IX Item "$^D"
 The current value of the debugging flags.  (Mnemonic: value of \fB\-D\fR
 switch.)
 .Ip "$\s-1SYSTEM_FD_MAX\s0" 8
-.IX Item "$\s-1SYSTEM_FD_MAX\s0"
 .Ip "$^F" 8
-.IX Item "$^F"
 The maximum system file descriptor, ordinarily 2.  System file
 descriptors are passed to \fIexec()\fRed processes, while higher file
 descriptors are not.  Also, during an \fIopen()\fR, system file descriptors are
@@ -749,59 +645,74 @@ closed before the \fIopen()\fR is attempted.)  Note that the close-on-exec
 status of a file descriptor will be decided according to the value of
 \f(CW$^F\fR at the time of the open, not the time of the exec.
 .Ip "$^H" 8
-.IX Item "$^H"
-The current set of syntax checks enabled by \f(CWuse strict\fR.  See the
-documentation of \f(CWstrict\fR for more details.
+The current set of syntax checks enabled by \f(CWuse strict\fR and other block
+scoped compiler hints.  See the documentation of \f(CWstrict\fR for more details.
 .Ip "$\s-1INPLACE_EDIT\s0" 8
-.IX Item "$\s-1INPLACE_EDIT\s0"
 .Ip "$^I" 8
-.IX Item "$^I"
 The current value of the inplace-edit extension.  Use \f(CWundef\fR to disable
 inplace editing.  (Mnemonic: value of \fB\-i\fR switch.)
+.Ip "$^M" 8
+By default, running out of memory it is not trappable.  However, if
+compiled for this, Perl may use the contents of \f(CW$^M\fR as an emergency
+pool after \fIdie()\fRing with this message.  Suppose that your Perl were
+compiled with \-\s-1DPERL_EMERGENCY_SBRK\s0 and used Perl's malloc.  Then
+.Sp
+.Vb 1
+\&    $^M = 'a' x (1<<16);
+.Ve
+would allocate a 64K buffer for use when in emergency.  See the \fI\s-1INSTALL\s0\fR
+file for information on how to enable this option.  As a disincentive to
+casual use of this advanced feature, there is no the \fIEnglish\fR manpage long name for
+this variable.
 .Ip "$\s-1OSNAME\s0" 8
-.IX Item "$\s-1OSNAME\s0"
 .Ip "$^O" 8
-.IX Item "$^O"
 The name of the operating system under which this copy of Perl was
 built, as determined during the configuration process.  The value
 is identical to \f(CW$Config{'osname'}\fR.
 .Ip "$\s-1PERLDB\s0" 8
-.IX Item "$\s-1PERLDB\s0"
 .Ip "$^P" 8
-.IX Item "$^P"
-The internal flag that the debugger clears so that it doesn't debug
-itself.  You could conceivably disable debugging yourself by clearing
-it.
+The internal variable for debugging support.  Different bits mean the
+following (subject to change): 
+.Ip "0x01" 14
+Debug subroutine enter/exit.
+.Ip "0x02" 14
+Line-by-line debugging.
+.Ip "0x04" 14
+Switch off optimizations.
+.Ip "0x08" 14
+Preserve more data for future interactive inspections.
+.Ip "0x10" 14
+Keep info about source lines on which a subroutine is defined.
+.Ip "0x20" 14
+Start with single-step on.
+.Sp
+Note that some bits may be relevent at compile-time only, some at
+run-time only. This is a new mechanism and the details may change.
+.Ip "$^S" 8
+Current state of the interpreter.  Undefined if parsing of the current
+module/eval is not finished (may happen in \f(CW$SIG\fR{_\|_DIE_\|_} and
+\f(CW$SIG\fR{_\|_WARN_\|_} handlers).  True if inside an eval, othewise false.
 .Ip "$\s-1BASETIME\s0" 8
-.IX Item "$\s-1BASETIME\s0"
 .Ip "$^T" 8
-.IX Item "$^T"
 The time at which the script began running, in seconds since the
 epoch (beginning of 1970).  The values returned by the \fB\-M\fR, \fB\-A\fR,
 and \fB\-C\fR filetests are
 based on this value.
 .Ip "$\s-1WARNING\s0" 8
-.IX Item "$\s-1WARNING\s0"
 .Ip "$^W" 8
-.IX Item "$^W"
 The current value of the warning switch, either \s-1TRUE\s0 or \s-1FALSE\s0.
 (Mnemonic: related to the \fB\-w\fR switch.)
 .Ip "$\s-1EXECUTABLE_NAME\s0" 8
-.IX Item "$\s-1EXECUTABLE_NAME\s0"
 .Ip "$^X" 8
-.IX Item "$^X"
 The name that the Perl binary itself was executed as, from C's \f(CWargv[0]\fR.
 .Ip "$\s-1ARGV\s0" 8
-.IX Item "$\s-1ARGV\s0"
 contains the name of the current file when reading from <>.
 .Ip "@\s-1ARGV\s0" 8
-.IX Item "@\s-1ARGV\s0"
 The array \f(CW@ARGV\fR contains the command line arguments intended for the
 script.  Note that \f(CW$#ARGV\fR is the generally number of arguments minus
 one, because \f(CW$ARGV[0]\fR is the first argument, \fI\s-1NOT\s0\fR the command name.  See
 \*(L"\f(CW$0\fR\*(R" for the command name.
 .Ip "@\s-1INC\s0" 8
-.IX Item "@\s-1INC\s0"
 The array \f(CW@INC\fR contains the list of places to look for Perl scripts to
 be evaluated by the \f(CWdo EXPR\fR, \f(CWrequire\fR, or \f(CWuse\fR constructs.  It
 initially consists of the arguments to any \fB\-I\fR command line switches,
@@ -814,33 +725,33 @@ to get the machine-dependent library properly loaded also:
 \&    use lib '/mypath/libdir/';
 \&    use SomeMod;
 .Ve
+.Ip "@_" 8
+Within a subroutine the array \f(CW@_\fR contains the parameters passed to that
+subroutine. See the \fIperlsub\fR manpage.
 .Ip "%\s-1INC\s0" 8
-.IX Item "%\s-1INC\s0"
 The hash \f(CW%INC\fR contains entries for each filename that has
 been included via \f(CWdo\fR or \f(CWrequire\fR.  The key is the filename you
 specified, and the value is the location of the file actually found.
 The \f(CWrequire\fR command uses this array to determine whether a given file
 has already been included.
-.Ip "$\s-1ENV\s0{expr}" 8
-.IX Item "$\s-1ENV\s0{expr}"
+.Ip "%\s-1ENV\s0  $\s-1ENV\s0{expr}" 8
 The hash \f(CW%ENV\fR contains your current environment.  Setting a
 value in \f(CWENV\fR changes the environment for child processes.
-.Ip "$\s-1SIG\s0{expr}" 8
-.IX Item "$\s-1SIG\s0{expr}"
+.Ip "%\s-1SIG\s0  $\s-1SIG\s0{expr}" 8
 The hash \f(CW%SIG\fR is used to set signal handlers for various
 signals.  Example:
 .Sp
 .Vb 6
 \&    sub handler {       # 1st argument is signal name
-\&        local($sig) = @_;
+\&        my($sig) = @_;
 \&        print "Caught a SIG$sig--shutting down\en";
 \&        close(LOG);
 \&        exit(0);
 \&    }
 .Ve
 .Vb 5
-\&    $SIG{'INT'} = 'handler';
-\&    $SIG{'QUIT'} = 'handler';
+\&    $SIG{'INT'}  = \e&handler;
+\&    $SIG{'QUIT'} = \e&handler;
 \&    ...
 \&    $SIG{'INT'} = 'DEFAULT';    # restore default action
 \&    $SIG{'QUIT'} = 'IGNORE';    # ignore SIGQUIT
@@ -849,8 +760,8 @@ The \f(CW%SIG\fR array contains values for only the signals actually set within
 the Perl script.  Here are some other examples:
 .Sp
 .Vb 4
-\&    $SIG{PIPE} = Plumber;       # SCARY!!
-\&    $SIG{"PIPE"} = "Plumber";   # just fine, assumes main::Plumber
+\&    $SIG{"PIPE"} = Plumber;     # SCARY!!
+\&    $SIG{"PIPE"} = "Plumber";   # assumes main::Plumber (not recommended)
 \&    $SIG{"PIPE"} = \e&Plumber;   # just fine; assume current Plumber
 \&    $SIG{"PIPE"} = Plumber();   # oops, what did Plumber() return??
 .Ve
@@ -894,21 +805,298 @@ argument.  When a _\|_DIE_\|_ hook routine returns, the exception
 processing continues as it would have in the absence of the hook,
 unless the hook routine itself exits via a \f(CWgoto\fR, a loop exit, or a \fIdie()\fR.
 The \f(CW__DIE__\fR handler is explicitly disabled during the call, so that you
-can die from a \f(CW__DIE__\fR handler.  Similarly for \f(CW__WARN__\fR.  See
-the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the \f(CWwarn\fR entry in the \fIperlfunc\fR manpage and the \f(CWeval\fR entry in the \fIperlfunc\fR manpage.
-.Ip "$^M" 8
-.IX Item "$^M"
-By default, running out of memory it is not trappable.  However, if
-compiled for this, Perl may use the contents of \f(CW$^M\fR as an emergency
-pool after \fIdie()\fRing with this message.  Suppose that your Perl were
-compiled with \-\s-1DEMERGENCY_SBRK\s0 and used Perl's malloc.  Then
+can die from a \f(CW__DIE__\fR handler.  Similarly for \f(CW__WARN__\fR.
 .Sp
-.Vb 1
-\&    $^M = 'a' x (1<<16);
+Note that the \f(CW$SIG{__DIE__}\fR hook is called even inside \fIeval()\fRed
+blocks/strings.  See the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the section on \fI$^S\fR in the \fIperlvar\fR manpage for how to
+circumvent this.
+.Sp
+Note that \f(CW__DIE__\fR/\f(CW__WARN__\fR handlers are very special in one
+respect: they may be called to report (probable) errors found by the
+parser.  In such a case the parser may be in inconsistent state, so
+any attempt to evaluate Perl code from such a handler will probably
+result in a segfault.  This means that calls which result/may-result
+in parsing Perl should be used with extreme causion, like this:
+.Sp
+.Vb 4
+\&    require Carp if defined $^S;
+\&    Carp::confess("Something wrong") if defined &Carp::confess;
+\&    die "Something wrong, but could not load Carp to give backtrace...
+\&         To see backtrace try starting Perl with -MCarp switch";
 .Ve
-would allocate a 64K buffer for use when in emergency.  See the \fI\s-1INSTALL\s0\fR
-file for information on how to enable this option.  As a disincentive to
-casual use of this advanced feature, there is no the \fIEnglish\fR manpage long name for
-this variable.
+Here the first line will load Carp \fIunless\fR it is the parser who
+called the handler.  The second line will print backtrace and die if
+Carp was available.  The third line will be executed only if Carp was
+not available.
+.Sp
+See the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the \f(CWwarn\fR entry in the \fIperlfunc\fR manpage and the \f(CWeval\fR entry in the \fIperlfunc\fR manpage for
+additional info.
 
 .rn }` ''
+.IX Title "PERLVAR 1"
+.IX Name "perlvar - Perl predefined variables"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Predefined Names"
+
+.IX Item "$\s-1ARG\s0"
+
+.IX Item "$_"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "$<\fIdigit\fR>"
+
+.IX Item "$\s-1MATCH\s0"
+
+.IX Item "$&"
+
+.IX Item "$\s-1PREMATCH\s0"
+
+.IX Item "$`"
+
+.IX Item "$\s-1POSTMATCH\s0"
+
+.IX Item "$\*(T'"
+
+.IX Item "$\s-1LAST_PAREN_MATCH\s0"
+
+.IX Item "$+"
+
+.IX Item "$\s-1MULTILINE_MATCHING\s0"
+
+.IX Item "$*"
+
+.IX Item "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1INPUT_LINE_NUMBER\s0"
+
+.IX Item "$\s-1NR\s0"
+
+.IX Item "$."
+
+.IX Item "input_record_separator \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1INPUT_RECORD_SEPARATOR\s0"
+
+.IX Item "$\s-1RS\s0"
+
+.IX Item "$/"
+
+.IX Item "autoflush \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1OUTPUT_AUTOFLUSH\s0"
+
+.IX Item "$|"
+
+.IX Item "output_field_separator \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1OUTPUT_FIELD_SEPARATOR\s0"
+
+.IX Item "$\s-1OFS\s0"
+
+.IX Item "$,"
+
+.IX Item "output_record_separator \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1OUTPUT_RECORD_SEPARATOR\s0"
+
+.IX Item "$\s-1ORS\s0"
+
+.IX Item "$\e"
+
+.IX Item "$\s-1LIST_SEPARATOR\s0"
+
+.IX Item "$\*(T""
+
+.IX Item "$\s-1SUBSCRIPT_SEPARATOR\s0"
+
+.IX Item "$\s-1SUBSEP\s0"
+
+.IX Item "$;"
+
+.IX Item "$\s-1OFMT\s0"
+
+.IX Item "$#"
+
+.IX Item "format_page_number \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_PAGE_NUMBER\s0"
+
+.IX Item "$%"
+
+.IX Item "format_lines_per_page \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_LINES_PER_PAGE\s0"
+
+.IX Item "$="
+
+.IX Item "format_lines_left \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_LINES_LEFT\s0"
+
+.IX Item "$-"
+
+.IX Item "format_name \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_NAME\s0"
+
+.IX Item "$~"
+
+.IX Item "format_top_name \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_TOP_NAME\s0"
+
+.IX Item "$^"
+
+.IX Item "format_line_break_characters \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_LINE_BREAK_CHARACTERS\s0"
+
+.IX Item "$:"
+
+.IX Item "format_formfeed \s-1HANDLE\s0 \s-1EXPR\s0"
+
+.IX Item "$\s-1FORMAT_FORMFEED\s0"
+
+.IX Item "$^L"
+
+.IX Item "$\s-1ACCUMULATOR\s0"
+
+.IX Item "$^A"
+
+.IX Item "$\s-1CHILD_ERROR\s0"
+
+.IX Item "$?"
+
+.IX Item "$\s-1OS_ERROR\s0"
+
+.IX Item "$\s-1ERRNO\s0"
+
+.IX Item "$!"
+
+.IX Item "$\s-1EXTENDED_OS_ERROR\s0"
+
+.IX Item "$^E"
+
+.IX Item "$\s-1EVAL_ERROR\s0"
+
+.IX Item "$@"
+
+.IX Item "$\s-1PROCESS_ID\s0"
+
+.IX Item "$\s-1PID\s0"
+
+.IX Item "$$"
+
+.IX Item "$\s-1REAL_USER_ID\s0"
+
+.IX Item "$\s-1UID\s0"
+
+.IX Item "$<"
+
+.IX Item "$\s-1EFFECTIVE_USER_ID\s0"
+
+.IX Item "$\s-1EUID\s0"
+
+.IX Item "$>"
+
+.IX Item "$\s-1REAL_GROUP_ID\s0"
+
+.IX Item "$\s-1GID\s0"
+
+.IX Item "$("
+
+.IX Item "$\s-1EFFECTIVE_GROUP_ID\s0"
+
+.IX Item "$\s-1EGID\s0"
+
+.IX Item "$)"
+
+.IX Item "$\s-1PROGRAM_NAME\s0"
+
+.IX Item "$0"
+
+.IX Item "$["
+
+.IX Item "$\s-1PERL_VERSION\s0"
+
+.IX Item "$]"
+
+.IX Item "$\s-1DEBUGGING\s0"
+
+.IX Item "$^D"
+
+.IX Item "$\s-1SYSTEM_FD_MAX\s0"
+
+.IX Item "$^F"
+
+.IX Item "$^H"
+
+.IX Item "$\s-1INPLACE_EDIT\s0"
+
+.IX Item "$^I"
+
+.IX Item "$^M"
+
+.IX Item "$\s-1OSNAME\s0"
+
+.IX Item "$^O"
+
+.IX Item "$\s-1PERLDB\s0"
+
+.IX Item "$^P"
+
+.IX Item "0x01"
+
+.IX Item "0x02"
+
+.IX Item "0x04"
+
+.IX Item "0x08"
+
+.IX Item "0x10"
+
+.IX Item "0x20"
+
+.IX Item "$^S"
+
+.IX Item "$\s-1BASETIME\s0"
+
+.IX Item "$^T"
+
+.IX Item "$\s-1WARNING\s0"
+
+.IX Item "$^W"
+
+.IX Item "$\s-1EXECUTABLE_NAME\s0"
+
+.IX Item "$^X"
+
+.IX Item "$\s-1ARGV\s0"
+
+.IX Item "@\s-1ARGV\s0"
+
+.IX Item "@\s-1INC\s0"
+
+.IX Item "@_"
+
+.IX Item "%\s-1INC\s0"
+
+.IX Item "%\s-1ENV\s0  $\s-1ENV\s0{expr}"
+
+.IX Item "%\s-1SIG\s0  $\s-1SIG\s0{expr}"
+

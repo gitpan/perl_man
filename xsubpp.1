@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH XSUBPP 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "XSUBPP 1"
+.TH XSUBPP 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "xsubpp - compiler to convert Perl XS code into C code"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,13 +188,10 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 xsubpp \- compiler to convert Perl XS code into C code
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
-\fBxsubpp\fR [\fB\-v\fR] [\fB\-\*(C+\fR] [\fB\-except\fR] [\fB\-s pattern\fR] [\fB\-prototypes\fR] [\fB\-noversioncheck\fR] [\fB\-typemap typemap\fR]... file.xs
+\fBxsubpp\fR [\fB\-v\fR] [\fB\-\*(C+\fR] [\fB\-except\fR] [\fB\-s pattern\fR] [\fB\-prototypes\fR] [\fB\-noversioncheck\fR] [\fB\-nolinenumbers\fR] [\fB\-typemap typemap\fR]... file.xs
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 \fIxsubpp\fR will compile XS code into C code by embedding the constructs
 necessary to let C functions manipulate Perl values and creates the glue
 necessary to let Perl access those functions.  The compiler uses typemaps to
@@ -210,41 +205,65 @@ typemap taking precedence.
 \&        ../../../typemap:../../typemap:../typemap:typemap
 .Ve
 .SH "OPTIONS"
-.IX Header "OPTIONS"
 .Ip "\fB\-\*(C+\fR" 5
-.IX Item "\fB\-\*(C+\fR"
 Adds ``extern \*(L"C"'\*(R' to the C code.
 .Ip "\fB\-except\fR" 5
-.IX Item "\fB\-except\fR"
 Adds exception handling stubs to the C code.
 .Ip "\fB\-typemap typemap\fR" 5
-.IX Item "\fB\-typemap typemap\fR"
 Indicates that a user-supplied typemap should take precedence over the
 default typemaps.  This option may be used multiple times, with the last
 typemap having the highest precedence.
 .Ip "\fB\-v\fR" 5
-.IX Item "\fB\-v\fR"
 Prints the \fIxsubpp\fR version number to standard output, then exits.
 .Ip "\fB\-prototypes\fR" 5
-.IX Item "\fB\-prototypes\fR"
 By default \fIxsubpp\fR will not automatically generate prototype code for
 all xsubs. This flag will enable prototypes.
 .Ip "\fB\-noversioncheck\fR" 5
-.IX Item "\fB\-noversioncheck\fR"
 Disables the run time test that determines if the object file (derived
 from the \f(CW.xs\fR file) and the \f(CW.pm\fR files have the same version
 number.
+.Ip "\fB\-nolinenumbers\fR" 5
+Prevents the inclusion of `#line\*(R' directives in the output.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 No environment variables are used.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall
 .SH "MODIFICATION HISTORY"
-.IX Header "MODIFICATION HISTORY"
 See the file \fIchanges.pod\fR.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 \fIperl\fR\|(1), \fIperlxs\fR\|(1), \fIperlxstut\fR\|(1)
 
 .rn }` ''
+.IX Title "XSUBPP 1"
+.IX Name "xsubpp - compiler to convert Perl XS code into C code"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "OPTIONS"
+
+.IX Item "\fB\-\*(C+\fR"
+
+.IX Item "\fB\-except\fR"
+
+.IX Item "\fB\-typemap typemap\fR"
+
+.IX Item "\fB\-v\fR"
+
+.IX Item "\fB\-prototypes\fR"
+
+.IX Item "\fB\-noversioncheck\fR"
+
+.IX Item "\fB\-nolinenumbers\fR"
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "AUTHOR"
+
+.IX Header "MODIFICATION HISTORY"
+
+.IX Header "SEE ALSO"
+

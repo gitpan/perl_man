@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLPOD 1 "perl 5.004, patch 01" "11/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLPOD 1"
+.TH PERLPOD 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlpod - plain old documentation"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,22 +188,18 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlpod \- plain old documentation
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 A pod-to-whatever translator reads a pod file paragraph by paragraph,
 and translates it to the appropriate output format.  There are
 three kinds of paragraphs:
 .Ip "\(bu" 4
-.IX Item "\(bu"
 A verbatim paragraph, distinguished by being indented (that is,
 it starts with space or tab).  It should be reproduced exactly,
 with tabs assumed to be on 8-column boundaries.  There are no
 special formatting escapes, so you can't italicize or anything
 like that.  A \e means \e, and nothing else.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 A command.  All command paragraphs start with \*(L"=\*(R", followed by an
 identifier, followed by arbitrary text that the command can
 use however it pleases.  Currently recognized commands are
@@ -331,7 +325,6 @@ Some examples of lists include:
 \& =back
 .Ve
 .Ip "\(bu" 4
-.IX Item "\(bu"
 An ordinary block of text.  It will be filled, and maybe even
 justified.  Certain interior sequences are recognized both
 here and in commands:
@@ -389,7 +382,6 @@ TeX, and other markup languages, as used for online documentation.
 Translators exist for \fBpod2man\fR  (that's for \fInroff\fR\|(1) and \fItroff\fR\|(1)),
 \fBpod2html\fR, \fBpod2latex\fR, and \fBpod2fm\fR.
 .SH "Embedding Pods in Perl Modules"
-.IX Header "Embedding Pods in Perl Modules"
 You can embed pod documentation in your Perl scripts.  Start your
 documentation with a \*(L"=head1\*(R" command at the beginning, and end it
 with a \*(L"=cut\*(R" command.  Perl will ignore the pod text.  See any of the
@@ -410,21 +402,17 @@ directive.
 If you had not had that empty line there, then the translators wouldn't
 have seen it.
 .SH "Common Pod Pitfalls"
-.IX Header "Common Pod Pitfalls"
 .Ip "\(bu" 4
-.IX Item "\(bu"
 Pod translators usually will require paragraphs to be separated by
 completely empty lines.  If you have an apparently empty line with
 some spaces on it, this can cause odd formatting.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 Translators will mostly add wording around a L<> link, so that
 \f(CWL<\fIfoo\fR\|(1)>\fR becomes \*(L"the \fIfoo\fR(1) manpage\*(R", for example (see
 \fBpod2man\fR for details).  Thus, you shouldn't write things like \f(CWthe
 L<foo> manpage\fR, if you want the translated document to read
 sensibly.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 The script \fIpod/checkpods.\s-1PL\s0\fR in the Perl source distribution
 provides skeletal checking for lines that look empty but aren't
 \fBonly\fR, but is there as a placeholder until someone writes
@@ -433,10 +421,35 @@ one or more translators and proofread the result, or print out the
 result and proofread that.  Some of the problems found may be bugs in
 the translators, which you may or may not wish to work around.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 the \fIpod2man\fR manpage and the section on \fIPODs: Embedded Documentation\fR in the \fIperlsyn\fR manpage
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall
 
 .rn }` ''
+.IX Title "PERLPOD 1"
+.IX Name "perlpod - plain old documentation"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Header "Embedding Pods in Perl Modules"
+
+.IX Header "Common Pod Pitfalls"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Header "SEE ALSO"
+
+.IX Header "AUTHOR"
+

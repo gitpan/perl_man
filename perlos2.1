@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOS2 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLOS2 1"
+.TH PERLOS2 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlos2 - Perl under OS/2, DOS, Win0.3*, Win0.95 and WinNT."
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlos2 \- Perl under OS/2, DOS, Win0.3*, Win0.95 and WinNT.
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 One can read this document in the following formats:
 .PP
 .Vb 4
@@ -225,7 +221,6 @@ correctly, you can follow library links (you need to have \f(CWview emxbook\fR
 working by setting \f(CWEMXBOOK\fR environment variable as it is described
 in EMX docs).
 .Sh "Target"
-.IX Subsection "Target"
 The target is to make \s-1OS/2\s0 the best supported platform for
 using/building/developing Perl and \fIPerl applications\fR, as well as
 make Perl the best language to use under \s-1OS/2\s0. The secondary target is
@@ -233,15 +228,12 @@ to try to make this work under \s-1DOS\s0 and Win* as well (but not \fBtoo\fR ha
 .PP
 The current state is quite close to this target. Known limitations:
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Some *nix programs use \fIfork()\fR a lot, but currently \fIfork()\fR is not
 supported after \fIuse\fRing dynamically loaded extensions.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 You need a separate perl executable \fIperl_\|_.exe\fR (see the \fIperl_\|_.exe\fR manpage)
 to use \s-1PM\s0 code in your application (like the forthcoming Perl/Tk).
 .Ip "\(bu" 5
-.IX Item "\(bu"
 There is no simple way to access \s-1WPS\s0 objects. The only way I know
 is via \f(CWOS2::REXX\fR extension (see the \fI\s-1OS2::REXX\s0\fR manpage), and we do not have access to
 convenience methods of Object-\s-1REXX\s0. (Is it possible at all? I know
@@ -249,7 +241,6 @@ of no Object-\s-1REXX\s0 \s-1API\s0.)
 .PP
 Please keep this list up-to-date by informing me about other items.
 .Sh "Other OSes"
-.IX Subsection "Other OSes"
 Since \s-1OS/2\s0 port of perl uses a remarkable \s-1EMX\s0 environment, it can
 run (and build extensions, and \- possibly \- be build itself) under any
 environment which can run \s-1EMX\s0. The current list is \s-1DOS\s0,
@@ -262,9 +253,7 @@ probably \s-1RSX\s0 \- decided to implement.
 .PP
 Cf. the \fIPrerequisites\fR manpage.
 .Sh "Prerequisites"
-.IX Subsection "Prerequisites"
 .Ip "\s-1EMX\s0" 6
-.IX Item "\s-1EMX\s0"
 \s-1EMX\s0 runtime is required (may be substituted by \s-1RSX\s0). Note that
 it is possible to make \fIperl_.exe\fR to run under \s-1DOS\s0 without any
 external support by binding \fIemx.exe\fR/\fIrsx.exe\fR to it, see the \fIemxbind\fR manpage. Note
@@ -292,7 +281,6 @@ does not need to specify them explicitly (though this
 .Ve
 will work as well.)
 .Ip "\s-1RSX\s0" 6
-.IX Item "\s-1RSX\s0"
 To run Perl on \s-1DPMI\s0 platforms one needs \s-1RSX\s0 runtime. This is
 needed under \s-1DOS\s0\-inside-\s-1OS/2\s0, Win0.3*, Win0.95 and WinNT (see 
 the section on \fIOther OSes\fR). \s-1RSX\s0 would not work with \s-1VCPI\s0
@@ -318,7 +306,6 @@ The latest \fIsh.exe\fR with \s-1DOS\s0 hooks is available at
 \&  ftp://ftp.math.ohio-state.edu/pub/users/ilya/os2/sh_dos.zip
 .Ve
 .Ip "\s-1HPFS\s0" 6
-.IX Item "\s-1HPFS\s0"
 Perl does not care about file systems, but to install the whole perl
 library intact one needs a file system which supports long file names.
 .Sp
@@ -326,7 +313,6 @@ Note that if you do not plan to build the perl itself, it may be
 possible to fool \s-1EMX\s0 to truncate file names. This is not supported,
 read \s-1EMX\s0 docs to see how to do it.
 .Ip "pdksh" 6
-.IX Item "pdksh"
 To start external programs with complicated command lines (like with
 pipes in between, and/or quoting of arguments), Perl uses an external
 shell. With \s-1EMX\s0 port such shell should be named <sh.exe>, and located
@@ -341,7 +327,6 @@ the binary from
 \&  ftp://ftp.math.ohio-state.edu/pub/users/ilya/os2/sh_dos.zip
 .Ve
 .Sh "Starting Perl programs under \s-1OS/2\s0 (and \s-1DOS\s0 and...)"
-.IX Subsection "Starting Perl programs under \s-1OS/2\s0 (and \s-1DOS\s0 and...)"
 Start your Perl program \fIfoo.pl\fR with arguments \f(CWarg1 arg2 arg3\fR the
 same way as on any other platform, by
 .PP
@@ -392,8 +377,10 @@ There are also endless possibilities to use \fIexecutable extensions\fR of
 4os2, \fIassociations\fR of \s-1WPS\s0 and so on... However, if you use
 *nixish shell (like \fIsh.exe\fR supplied in the binary distribution),
 you need to follow the syntax specified in the section on \fISwitches\fR in the \fIperlrun\fR manpage.
+.PP
+Note that \fB\-S\fR switch enables a search with additional extensions 
+\&\fI.cmd\fR, \fI.btm\fR, \fI.bat\fR, \fI.pl\fR as well.
 .Sh "Starting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl"
-.IX Subsection "Starting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl"
 This is what \fIsystem()\fR (see the \f(CWsystem\fR entry in the \fIperlfunc\fR manpage), \f(CW``\fR (see
 the section on \fII/O Operators\fR in the \fIperlop\fR manpage), and \fIopen pipe\fR (see the \f(CWopen\fR entry in the \fIperlfunc\fR manpage)
 are for. (Avoid \fIexec()\fR (see the \f(CWexec\fR entry in the \fIperlfunc\fR manpage) unless you know what you
@@ -409,30 +396,22 @@ The only cases when the shell is not used is the multi-argument
 one-argument version thereof without redirection and shell
 meta-characters.
 .SH "Frequently asked questions"
-.IX Header "Frequently asked questions"
 .Sh "I cannot run external programs"
-.IX Subsection "I cannot run external programs"
 .Ip "" 4
-.IX Item ""
 Did you run your programs with \f(CW-w\fR switch? See 
 the section on \fIStarting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl\fR.
 .Ip "" 4
-.IX Item ""
 Do you try to run \fIinternal\fR shell commands, like \f(CW`copy a b`\fR
 (internal for \fIcmd.exe\fR), or \f(CW`glob a*b`\fR (internal for ksh)? You
 need to specify your shell explicitly, like \f(CW`cmd /c copy a b`\fR,
 since Perl cannot deduce which commands are internal to your shell.
 .Sh "I cannot embed perl into my program, or use \fIperl.dll\fR from my program. "
-.IX Subsection "I cannot embed perl into my program, or use \fIperl.dll\fR from my program. "
 .Ip "Is your program \s-1EMX\s0\-compiled with \f(CW-Zmt -Zcrtdll\fR?" 4
-.IX Item "Is your program \s-1EMX\s0\-compiled with \f(CW-Zmt -Zcrtdll\fR?"
 If not, you need to build a stand-alone \s-1DLL\s0 for perl. Contact me, I
 did it once. Sockets would not work, as a lot of other stuff.
 .Ip "Did you use the \fIExtUtils::Embed\fR manpage?" 4
-.IX Item "Did you use the \fIExtUtils::Embed\fR manpage?"
 I had reports it does not work. Somebody would need to fix it.
 .Sh "\f(CW``\fR and pipe-\f(CWopen\fR do not work under \s-1DOS\s0."
-.IX Subsection "\f(CW``\fR and pipe-\f(CWopen\fR do not work under \s-1DOS\s0."
 This may a variant of just the section on \fII cannot run external programs\fR, or a
 deeper problem. Basically: you \fIneed\fR \s-1RSX\s0 (see the section on \fIPrerequisites\fR)
 for these commands to work, and you may need a port of \fIsh.exe\fR which
@@ -442,7 +421,6 @@ the section on \fIPrerequisites\fR under \s-1RSX\s0. Do not forget to set variab
 .PP
 \s-1DPMI\s0 is required for \s-1RSX\s0.
 .Sh "Cannot start \f(CWfind.exe "pattern" file\fR"
-.IX Subsection "Cannot start \f(CWfind.exe "pattern" file\fR"
 Use one of
 .PP
 .Vb 2
@@ -460,9 +438,7 @@ equivalent:
 \&  find pattern file
 .Ve
 .SH "INSTALLATION"
-.IX Header "INSTALLATION"
 .Sh "Automatic binary installation"
-.IX Subsection "Automatic binary installation"
 The most convenient way of installing perl is via perl installer
 \fIinstall.exe\fR. Just follow the instructions, and 99% of the
 installation blues would go away. 
@@ -480,14 +456,11 @@ objects.
 .PP
 \fBThings not taken care of by automatic binary installation:\fR
 .Ip "\f(CWPERL_BADLANG\fR" 15
-.IX Item "\f(CWPERL_BADLANG\fR"
 may be needed if you change your codepage \fIafter\fR perl installation,
 and the new value is not supported by \s-1EMX\s0. See the section on \fI\s-1PERL_BADLANG\s0\fR.
 .Ip "\f(CWPERL_BADFREE\fR" 15
-.IX Item "\f(CWPERL_BADFREE\fR"
 see the section on \fI\s-1PERL_BADFREE\s0\fR.
 .Ip "\fIConfig.pm\fR" 15
-.IX Item "\fIConfig.pm\fR"
 This file resides somewhere deep in the location you installed your
 perl library, find it out by 
 .Sp
@@ -502,7 +475,6 @@ data, please keep me informed if you find one.
 would install a variable \f(CWPERL_SHPATH\fR into \fIConfig.sys\fR. Please
 remove this variable and put \f(CWthe \fIPERL_SH_DIR\fR\fR manpage instead.
 .Sh "Manual binary installation"
-.IX Subsection "Manual binary installation"
 As of version 5.00305, \s-1OS/2\s0 perl binary distribution comes split
 into 11 components. Unfortunately, to enable configurable binary
 installation, the file paths in the zip files are not absolute, but
@@ -519,7 +491,6 @@ unzipping. Upgrade to \f(CW(w)unzip\fR.
 Below is the sample of what to do to reproduce the configuration on my
 machine:
 .Ip "Perl \s-1VIO\s0 and \s-1PM\s0 executables (dynamically linked)" 3
-.IX Item "Perl \s-1VIO\s0 and \s-1PM\s0 executables (dynamically linked)"
 .Sp
 .Vb 2
 \&  unzip perl_exc.zip *.exe *.ico -d f:/emx.add/bin
@@ -528,21 +499,18 @@ machine:
 (have the directories with \f(CW*.exe\fR on \s-1PATH\s0, and \f(CW*.dll\fR on
 \s-1LIBPATH\s0);
 .Ip "Perl_ \s-1VIO\s0 executable (statically linked)" 3
-.IX Item "Perl_ \s-1VIO\s0 executable (statically linked)"
 .Sp
 .Vb 1
 \&  unzip perl_aou.zip -d f:/emx.add/bin
 .Ve
 (have the directory on \s-1PATH\s0);
 .Ip "Executables for Perl utilities" 3
-.IX Item "Executables for Perl utilities"
 .Sp
 .Vb 1
 \&  unzip perl_utl.zip -d f:/emx.add/bin
 .Ve
 (have the directory on \s-1PATH\s0);
 .Ip "Main Perl library" 3
-.IX Item "Main Perl library"
 .Sp
 .Vb 1
 \&  unzip perl_mlb.zip -d f:/perllib/lib
@@ -551,7 +519,6 @@ If this directory is preserved, you do not need to change
 anything. However, for perl to find it if it is changed, you need to
 \f(CWset PERLLIB_PREFIX\fR in \fIConfig.sys\fR, see the section on \fI\s-1PERLLIB_PREFIX\s0\fR.
 .Ip "Additional Perl modules" 3
-.IX Item "Additional Perl modules"
 .Sp
 .Vb 1
 \&  unzip perl_ste.zip -d f:/perllib/lib/site_perl
@@ -561,7 +528,6 @@ directory and subdirectory \fI./os2\fR in \f(CWPERLLIB\fR or \f(CWPERL5LIB\fR
 variable. Do not use \f(CWPERL5LIB\fR unless you have it set already. See
 the section on \fI\s-1ENVIRONMENT\s0\fR in the \fIperl\fR manpage. 
 .Ip "Tools to compile Perl modules" 3
-.IX Item "Tools to compile Perl modules"
 .Sp
 .Vb 1
 \&  unzip perl_blb.zip -d f:/perllib/lib
@@ -570,7 +536,6 @@ If this directory is preserved, you do not need to change
 anything. However, for perl to find it if it is changed, you need to
 \f(CWset PERLLIB_PREFIX\fR in \fIConfig.sys\fR, see the section on \fI\s-1PERLLIB_PREFIX\s0\fR.
 .Ip "Manpages for Perl and utilities" 3
-.IX Item "Manpages for Perl and utilities"
 .Sp
 .Vb 1
 \&  unzip perl_man.zip -d f:/perllib/man
@@ -578,7 +543,6 @@ anything. However, for perl to find it if it is changed, you need to
 This directory should better be on \f(CWMANPATH\fR. You need to have a
 working man to access these files.
 .Ip "Manpages for Perl modules" 3
-.IX Item "Manpages for Perl modules"
 .Sp
 .Vb 1
 \&  unzip perl_mam.zip -d f:/perllib/man
@@ -586,7 +550,6 @@ working man to access these files.
 This directory should better be on \f(CWMANPATH\fR. You need to have a
 working man to access these files.
 .Ip "Source for Perl documentation" 3
-.IX Item "Source for Perl documentation"
 .Sp
 .Vb 1
 \&  unzip perl_pod.zip -d f:/perllib/lib
@@ -596,14 +559,12 @@ generate \s-1HTML\s0 documentation usable by \s-1WWW\s0 browsers, and
 documentation in zillions of other formats: \f(CWinfo\fR, \f(CWLaTeX\fR,
 \f(CWAcrobat\fR, \f(CWFrameMaker\fR and so on.
 .Ip "Perl manual in \fI.\s-1INF\s0\fR format" 3
-.IX Item "Perl manual in \fI.\s-1INF\s0\fR format"
 .Sp
 .Vb 1
 \&  unzip perl_inf.zip -d d:/os2/book
 .Ve
 This directory should better be on \f(CWBOOKSHELF\fR.
 .Ip "Pdksh" 3
-.IX Item "Pdksh"
 .Sp
 .Vb 1
 \&  unzip perl_sh.zip -d f:/bin
@@ -629,17 +590,14 @@ installed your perl library, find it out by
 You need to correct all the entries which look like file paths (they
 currently start with \f(CWf:/\fR).
 .Sh "\fBWarning\fR"
-.IX Subsection "\fBWarning\fR"
 The automatic and manual perl installation leave precompiled paths
 inside perl executables. While these paths are overwriteable (see
 the section on \fI\s-1PERLLIB_PREFIX\s0\fR, the section on \fI\s-1PERL_SH_DIR\s0\fR), one may get better results by
 binary editing of paths inside the executables/DLLs.
 .SH "Accessing documentation"
-.IX Header "Accessing documentation"
 Depending on how you built/installed perl you may have (otherwise
 identical) Perl documentation in the following formats:
 .Sh "\s-1OS/2\s0 \fI.\s-1INF\s0\fR file"
-.IX Subsection "\s-1OS/2\s0 \fI.\s-1INF\s0\fR file"
 Most probably the most convenient form. Under \s-1OS/2\s0 view it as
 .PP
 .Vb 4
@@ -664,7 +622,6 @@ in \fI/perllib/lib/pod\fR directory, then
 (Expect a lot of errors during the both steps.) Now move it on your
 \s-1BOOKSHELF\s0 path.
 .Sh "Plain text"
-.IX Subsection "Plain text"
 If you have perl documentation in the source form, perl utilities
 installed, and \s-1GNU\s0 groff installed, you may use 
 .PP
@@ -678,7 +635,6 @@ better results using perl manpages).
 .PP
 Alternately, try running pod2text on \fI.pod\fR files.
 .Sh "Manpages"
-.IX Subsection "Manpages"
 If you have man installed on your system, and you installed perl
 manpages, use something like this:
 .PP
@@ -703,7 +659,6 @@ on our \f(CWMANPATH\fR, like this
 \&  set MANPATH=c:/man;f:/perllib/man
 .Ve
 .Sh "\s-1HTML\s0"
-.IX Subsection "\s-1HTML\s0"
 If you have some \s-1WWW\s0 browser available, installed the Perl
 documentation in the source form, and Perl utilities, you can build
 \s-1HTML\s0 docs. Cd to directory with \fI.pod\fR files, and do like this
@@ -720,23 +675,18 @@ directory, and go ahead with reading docs, like this:
 .Ve
 Alternatively you may be able to get these docs prebuilt from \s-1CPAN\s0.
 .Sh "\s-1GNU\s0 \f(CWinfo\fR files"
-.IX Subsection "\s-1GNU\s0 \f(CWinfo\fR files"
 Users of Emacs would appreciate it very much, especially with
 \f(CWCPerl\fR mode loaded. You need to get latest \f(CWpod2info\fR from \f(CWCPAN\fR,
 or, alternately, prebuilt info pages.
 .Sh "\fI.\s-1PDF\s0\fR files"
-.IX Subsection "\fI.\s-1PDF\s0\fR files"
 for \f(CWAcrobat\fR are available on \s-1CPAN\s0 (for slightly old version of
 perl).
 .Sh "\f(CWLaTeX\fR docs"
-.IX Subsection "\f(CWLaTeX\fR docs"
 can be constructed using \f(CWpod2latex\fR.
 .SH "BUILD"
-.IX Header "BUILD"
 Here we discuss how to build Perl under OS/2. There is an alternative
 (but maybe older) view on the section on \fI/www.shadow.net/~troc/os2perl.html\fR in the \fIhttp:\fR manpage.
 .Sh "Prerequisites"
-.IX Subsection "Prerequisites"
 You need to have the latest \s-1EMX\s0 development environment, the full
 \s-1GNU\s0 tool suite (gawk renamed to awk, and \s-1GNU\s0 \fIfind.exe\fR
 earlier on path than the \s-1OS/2\s0 \fIfind.exe\fR, same with \fIsort.exe\fR, to
@@ -790,7 +740,6 @@ shows you do not have it, do \fISelective install\fR, and choose \f(CWLink
 object modules\fR in \fIOptional system utilities/More\fR. If you get into
 link386, press \f(CWCtrl-C\fR.
 .Sh "Getting perl source"
-.IX Subsection "Getting perl source"
 You need to fetch the latest perl source (including developers
 releases). With some probability it is located in 
 .PP
@@ -821,7 +770,6 @@ because there is a conflict with a similarly-named file \fIconfigure\fR.
 .PP
 Change to the directory of extraction.
 .Sh "Application of the patches"
-.IX Subsection "Application of the patches"
 You need to apply the patches in \fI./os2/diff.*\fR and
 \&\fI./os2/\s-1POSIX\s0.mkfifo\fR like this:
 .PP
@@ -841,11 +789,9 @@ compatibility with XFree86-\s-1OS/2\s0). Get a corrected one from
 \&  ftp://ftp.math.ohio-state.edu/pub/users/ilya/os2/db_mt.zip
 .Ve
 .Sh "Hand-editing"
-.IX Subsection "Hand-editing"
 You may look into the file \fI./hints/os2.sh\fR and correct anything
 wrong you find there. I do not expect it is needed anywhere.
 .Sh "Making"
-.IX Subsection "Making"
 .PP
 .Vb 1
 \&  sh Configure -des -D prefix=f:/perllib
@@ -875,7 +821,6 @@ statically now.\fR
 Warnings which are safe to ignore: \fImkfifo() redefined\fR inside
 \fI\s-1POSIX\s0.c\fR.
 .Sh "Testing"
-.IX Subsection "Testing"
 Now run
 .PP
 .Vb 1
@@ -913,52 +858,38 @@ do not know why. Comments/fixes welcome.
 .PP
 The reasons for failed tests are:
 .Ip "\fIio/fs.t\fR" 8
-.IX Item "\fIio/fs.t\fR"
 Checks \fIfile system\fR operations. Tests:
 .Ip "2-5, 7-11" 18
-.IX Item "2-5, 7-11"
 Check \f(CWlink()\fR and \f(CWinode count\fR \- nonesuch under \s-1OS/2\s0.
 .Ip "18" 18
-.IX Item "18"
 Checks \f(CWatime\fR and \f(CWmtime\fR of \f(CWstat()\fR \- I could not understand this test.
 .Ip "25" 18
-.IX Item "25"
 Checks \f(CWtruncate()\fR on a filehandle just opened for write \- I do not
 know why this should or should not work.
 .Ip "\fIlib/io_pipe.t\fR" 8
-.IX Item "\fIlib/io_pipe.t\fR"
 Checks \f(CWIO::Pipe\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs with
 dynamic extension loaded \- unsupported now.
 .Ip "\fIlib/io_sock.t\fR" 8
-.IX Item "\fIlib/io_sock.t\fR"
 Checks \f(CWIO::Socket\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs
 with dynamic extension loaded \- unsupported now.
 .Ip "\fIop/stat.t\fR" 8
-.IX Item "\fIop/stat.t\fR"
 Checks \f(CWstat()\fR. Tests:
 .Ip "3" 12
-.IX Item "3"
 Checks \f(CWinode count\fR \- nonesuch under \s-1OS/2\s0.
 .Ip "4" 12
-.IX Item "4"
 Checks \f(CWmtime\fR and \f(CWctime\fR of \f(CWstat()\fR \- I could not understand this test.
 .Ip "20" 12
-.IX Item "20"
 Checks \f(CW-x\fR \- determined by the file extension only under \s-1OS/2\s0.
 .Ip "35" 12
-.IX Item "35"
 Needs \fI/usr/bin\fR.
 .Ip "39" 12
-.IX Item "39"
 Checks \f(CW-t\fR of \fI/dev/null\fR. Should not fail!
 .PP
 In addition to errors, you should get a lot of warnings. 
 .Ip "A lot of `bad free\*(T'" 4
-.IX Item "A lot of `bad free\*(T'"
 in databases related to Berkeley \s-1DB\s0. This is a confirmed bug of
 \s-1DB\s0. You may disable this warnings, see the section on \fI\s-1PERL_BADFREE\s0\fR.
 .Ip "Process terminated by \s-1SIGTERM/SIGINT\s0" 4
-.IX Item "Process terminated by \s-1SIGTERM/SIGINT\s0"
 This is a standard message issued by \s-1OS/2\s0 applications. *nix
 applications die in silence. It is considered a feature. One can
 easily disable this by appropriate sighandlers. 
@@ -967,9 +898,7 @@ However the test engine bleeds these message to screen in unexpected
 moments. Two messages of this kind \fIshould\fR be present during
 testing.
 .Ip "\fI*/sh.exe\fR: ln: not found" 4
-.IX Item "\fI*/sh.exe\fR: ln: not found"
 .Ip "\f(CWls\fR: /dev: No such file or directory" 4
-.IX Item "\f(CWls\fR: /dev: No such file or directory"
 The last two should be self-explanatory. The test suite discovers that
 the system it runs on is not \fIthat much\fR *nixish.
 .PP
@@ -977,7 +906,6 @@ A lot of `bad free\*(R'... in databases, bug in \s-1DB\s0 confirmed on other
 platforms. You may disable it by setting \s-1PERL_BADFREE\s0 environment variable
 to 1.
 .Sh "Installing the built perl"
-.IX Subsection "Installing the built perl"
 Run
 .PP
 .Vb 1
@@ -997,7 +925,6 @@ to convert perl utilities to \fI.cmd\fR files and put them on
 installed in \f(CW$prefix/bin\fR, here \f(CW$prefix\fR is what you gave to
 \fIConfigure\fR, see the \fIMaking\fR manpage.
 .Sh "\f(CWa.out\fR\-style build"
-.IX Subsection "\f(CWa.out\fR\-style build"
 Proceed as above, but make \fIperl_.exe\fR (see the section on \fIperl_.exe\fR) by
 .PP
 .Vb 1
@@ -1031,45 +958,33 @@ say, by doing
 .Ve
 first.
 .SH "Build FAQ"
-.IX Header "Build FAQ"
 .Sh "Some \f(CW/\fR became \f(CW\e\fR in pdksh."
-.IX Subsection "Some \f(CW/\fR became \f(CW\e\fR in pdksh."
 You have a very old pdksh. See the \fIPrerequisites\fR manpage.
 .Sh "\f(CW'errno'\fR \- unresolved external"
-.IX Subsection "\f(CW'errno'\fR \- unresolved external"
 You do not have \s-1MT\s0\-safe \fIdb.lib\fR. See the \fIPrerequisites\fR manpage.
 .Sh "Problems with tr"
-.IX Subsection "Problems with tr"
 reported with very old version of tr.
 .Sh "Some problem (forget which ;\-)"
-.IX Subsection "Some problem (forget which ;\-)"
 You have an older version of \fIperl.dll\fR on your \s-1LIBPATH\s0, which
 broke the build of extensions.
 .Sh "Library ... not found"
-.IX Subsection "Library ... not found"
 You did not run \f(CWomflibs\fR. See the \fIPrerequisites\fR manpage.
 .Sh "Segfault in make"
-.IX Subsection "Segfault in make"
 You use an old version of \s-1GNU\s0 make. See the \fIPrerequisites\fR manpage.
 .SH "Specific (mis)features of OS/2 port"
-.IX Header "Specific (mis)features of OS/2 port"
 .Sh "\f(CWsetpriority\fR, \f(CWgetpriority\fR"
-.IX Subsection "\f(CWsetpriority\fR, \f(CWgetpriority\fR"
 Note that these functions are compatible with *nix, not with the older
 ports of \*(L'94 \- 95. The priorities are absolute, go from 32 to \-95,
 lower is quicker. 0 is the default priority.
 .Sh "\f(CWsystem()\fR"
-.IX Subsection "\f(CWsystem()\fR"
 Multi-argument form of \f(CWsystem()\fR allows an additional numeric
 argument. The meaning of this argument is described in
 the \fI\s-1OS2::\s0Process\fR manpage.
 .Sh "\f(CWextproc\fR on the first line"
-.IX Subsection "\f(CWextproc\fR on the first line"
 If the first chars of a script are \f(CW"extproc "\fR, this line is treated
 as \f(CW#!\fR\-line, thus all the switches on this line are processed (twice
 if script was started via cmd.exe).
 .Sh "Additional modules:"
-.IX Subsection "Additional modules:"
 the \fI\s-1OS2::\s0Process\fR manpage, the \fI\s-1OS2::REXX\s0\fR manpage, the \fI\s-1OS2::\s0PrfDB\fR manpage, the \fI\s-1OS2::\s0ExtAttr\fR manpage. This
 modules provide access to additional numeric argument for \f(CWsystem\fR,
 to DLLs having functions with \s-1REXX\s0 signature and to \s-1REXX\s0 runtime, to
@@ -1078,45 +993,32 @@ to DLLs having functions with \s-1REXX\s0 signature and to \s-1REXX\s0 runtime, 
 Two additional extensions by Andreas Kaiser, \f(CWOS2::UPM\fR, and
 \f(CWOS2::FTP\fR, are included into my ftp directory, mirrored on \s-1CPAN\s0.
 .Sh "Prebuilt methods:"
-.IX Subsection "Prebuilt methods:"
 .Ip "\f(CWFile::Copy::syscopy\fR" 4
-.IX Item "\f(CWFile::Copy::syscopy\fR"
 used by \f(CWFile::Copy::copy\fR, see the \fIFile::Copy\fR manpage.
 .Ip "\f(CWDynaLoader::mod2fname\fR" 4
-.IX Item "\f(CWDynaLoader::mod2fname\fR"
 used by \f(CWDynaLoader\fR for \s-1DLL\s0 name mangling.
 .Ip "\f(CWCwd::current_drive()\fR" 4
-.IX Item "\f(CWCwd::current_drive()\fR"
 Self explanatory.
 .Ip "\f(CWCwd::sys_chdir(name)\fR" 4
-.IX Item "\f(CWCwd::sys_chdir(name)\fR"
 leaves drive as it is.
 .Ip "\f(CWCwd::change_drive(name)\fR" 4
-.IX Item "\f(CWCwd::change_drive(name)\fR"
 .Ip "\f(CWCwd::sys_is_absolute(name)\fR" 4
-.IX Item "\f(CWCwd::sys_is_absolute(name)\fR"
 means has drive letter and is_rooted.
 .Ip "\f(CWCwd::sys_is_rooted(name)\fR" 4
-.IX Item "\f(CWCwd::sys_is_rooted(name)\fR"
 means has leading \f(CW[/\e\e]\fR (maybe after a drive-letter:).
 .Ip "\f(CWCwd::sys_is_relative(name)\fR" 4
-.IX Item "\f(CWCwd::sys_is_relative(name)\fR"
 means changes with current dir.
 .Ip "\f(CWCwd::sys_cwd(name)\fR" 4
-.IX Item "\f(CWCwd::sys_cwd(name)\fR"
 Interface to cwd from \s-1EMX\s0. Used by \f(CWCwd::cwd\fR.
 .Ip "\f(CWCwd::sys_abspath(name, dir)\fR" 4
-.IX Item "\f(CWCwd::sys_abspath(name, dir)\fR"
 Really really odious function to implement. Returns absolute name of
 file which would have \f(CWname\fR if \s-1CWD\s0 were \f(CWdir\fR.  \f(CWDir\fR defaults to the
 current dir.
 .Ip "C<Cwd::extLibpath([type])" 4
-.IX Item "C<Cwd::extLibpath([type])"
 Get current value of extended library search path. If \f(CWtype\fR is
 present and \fItrue\fR, works with \s-1END_LIBPATH\s0, otherwise with
 \f(CWBEGIN_LIBPATH\fR. 
 .Ip "\f(CWCwd::extLibpath_set( path [, type ] )\fR" 4
-.IX Item "\f(CWCwd::extLibpath_set( path [, type ] )\fR"
 Set current value of extended library search path. If \f(CWtype\fR is
 present and \fItrue\fR, works with \s-1END_LIBPATH\s0, otherwise with
 \f(CWBEGIN_LIBPATH\fR. 
@@ -1124,31 +1026,23 @@ present and \fItrue\fR, works with \s-1END_LIBPATH\s0, otherwise with
 (Note that some of these may be moved to different libraries \-
 eventually).
 .Sh "Misfeatures"
-.IX Subsection "Misfeatures"
 .Ip "" 4
-.IX Item ""
 Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not functional, it is 
 emulated by perl.  To disable the emulations, set environment variable
 \f(CWUSE_PERL_FLOCK=0\fR.
 .Ip "" 4
-.IX Item ""
 Here is the list of things which may be \*(L"broken\*(R" on
 \s-1EMX\s0 (from \s-1EMX\s0 docs):
 .Ip "\(bu" 9
-.IX Item "\(bu"
 The functions the \fIrecvmsg(3)\fR manpage, the \fIsendmsg(3)\fR manpage, and the \fIsocketpair(3)\fR manpage are not
 implemented.
 .Ip "\(bu" 9
-.IX Item "\(bu"
 the \fIsock_init(3)\fR manpage is not required and not implemented.
 .Ip "\(bu" 9
-.IX Item "\(bu"
 the \fIflock(3)\fR manpage is not yet implemented (dummy function).  (Perl has a workaround.)
 .Ip "\(bu" 9
-.IX Item "\(bu"
 the \fIkill(3)\fR manpage:  Special treatment of \s-1PID\s0=0, \s-1PID\s0=1 and \s-1PID\s0=\-1 is not implemented.
 .Ip "\(bu" 9
-.IX Item "\(bu"
 the \fIwaitpid(3)\fR manpage:
 .Sp
 .Vb 3
@@ -1159,45 +1053,35 @@ the \fIwaitpid(3)\fR manpage:
 .Sp
 Note that \f(CWkill -9\fR does not work with the current version of \s-1EMX\s0.
 .Ip "" 4
-.IX Item ""
 Since \fIsh.exe\fR is used for globing (see the \f(CWglob\fR entry in the \fIperlfunc\fR manpage), the bugs
 of \fIsh.exe\fR plague perl as well. 
 .Sp
 In particular, uppercase letters do not work in \f(CW[...]\fR\-patterns with
 the current pdksh.
 .Sh "Modifications"
-.IX Subsection "Modifications"
 Perl modifies some standard C library calls in the following ways:
 .Ip "\f(CWpopen\fR" 9
-.IX Item "\f(CWpopen\fR"
 \f(CWmy_popen\fR uses \fIsh.exe\fR if shell is required, cf. the section on \fI\s-1PERL_SH_DIR\s0\fR.
 .Ip "\f(CWtmpnam\fR" 9
-.IX Item "\f(CWtmpnam\fR"
 is created using \f(CWTMP\fR or \f(CWTEMP\fR environment variable, via
 \f(CWtempnam\fR.
 .Ip "\f(CWtmpfile\fR" 9
-.IX Item "\f(CWtmpfile\fR"
 If the current directory is not writable, file is created using modified
 \f(CWtmpnam\fR, so there may be a race condition.
 .Ip "\f(CWctermid\fR" 9
-.IX Item "\f(CWctermid\fR"
 a dummy implementation.
 .Ip "\f(CWstat\fR" 9
-.IX Item "\f(CWstat\fR"
 \f(CWos2_stat\fR special-cases \fI/dev/tty\fR and \fI/dev/con\fR.
 .Ip "\f(CWflock\fR" 9
-.IX Item "\f(CWflock\fR"
 Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not functional, it is 
 emulated by perl.  To disable the emulations, set environment variable
 \f(CWUSE_PERL_FLOCK=0\fR.
 .SH "Perl flavors"
-.IX Header "Perl flavors"
 Because of idiosyncrasies of OS/2 one cannot have all the eggs in the
 same basket (though EMX environment tries hard to overcome this
 limitations, so the situation may somehow improve). There are 4
 executables for Perl provided by the distribution:
 .Sh "\fIperl.exe\fR"
-.IX Subsection "\fIperl.exe\fR"
 The main workhorse. This is a chimera executable: it is compiled as an
 \f(CWa.out\fR\-style executable, but is linked with \f(CWomf\fR\-style dynamic
 library \fIperl.dll\fR, and with dynamic \s-1CRT\s0 \s-1DLL\s0. This executable is a
@@ -1209,7 +1093,6 @@ extensions loaded (may be fixed by patches to \s-1EMX\s0).
 .PP
 \fBNote.\fR Keep in mind that \fIfork()\fR is needed to open a pipe to yourself.
 .Sh "\fIperl_.exe\fR"
-.IX Subsection "\fIperl_.exe\fR"
 This is a statically linked \f(CWa.out\fR\-style executable. It can \fIfork()\fR,
 but cannot load dynamic Perl extensions. The supplied executable has a
 lot of extensions prebuilt, thus there are situations when it can
@@ -1229,7 +1112,6 @@ friends locked into \f(CWM$\fR world would appreciate the fact that this
 executable runs under \s-1DOS\s0, Win0.3*, Win0.95 and WinNT with an
 appropriate extender. See the section on \fIOther OSes\fR.
 .Sh "\fIperl_\|_.exe\fR"
-.IX Subsection "\fIperl_\|_.exe\fR"
 This is the same executable as \fIperl_\|__.exe\fR, but it is a \s-1PM\s0
 application. 
 .PP
@@ -1243,7 +1125,6 @@ application.
 This flavor is required if you load extensions which use \s-1PM\s0, like
 the forthcoming \f(CWPerl/Tk\fR.
 .Sh "\fIperl_\|__.exe\fR"
-.IX Subsection "\fIperl_\|__.exe\fR"
 This is an \f(CWomf\fR\-style executable which is dynamically linked to
 \fIperl.dll\fR and \s-1CRT\s0 \s-1DLL\s0. I know no advantages of this executable
 over \f(CWperl.exe\fR, but it cannot \fIfork()\fR at all. Well, one advantage is
@@ -1251,7 +1132,6 @@ that the build process is not so convoluted as with \f(CWperl.exe\fR.
 .PP
 It is a \s-1VIO\s0 application.
 .Sh "Why strange names?"
-.IX Subsection "Why strange names?"
 Since Perl processes the \f(CW#!\fR\-line (cf. 
 the \f(CWDESCRIPTION\fR entry in the \fIperlrun\fR manpage, the \f(CWSwitches\fR entry in the \fIperlrun\fR manpage,
 the section on \fINot a perl script\fR in the \fIperldiag\fR manpage, 
@@ -1261,7 +1141,6 @@ Perl to distinguish correct lines from wrong ones. The above names are
 almost the only names allowed by this convention which do not contain
 digits (which have absolutely different semantics).
 .Sh "Why dynamic linking?"
-.IX Subsection "Why dynamic linking?"
 Well, having several executables dynamically linked to the same huge
 library has its advantages, but this would not substantiate the
 additional work to make it compile. The reason is stupid-but-quick
@@ -1290,7 +1169,6 @@ the number of problems during compilation). Since interpreter is in a \s-1DLL\s0
 the \s-1CRT\s0 is basically forced to reside in a \s-1DLL\s0 as well (otherwise
 extensions would not be able to use \s-1CRT\s0).
 .Sh "Why chimera build?"
-.IX Subsection "Why chimera build?"
 Current \s-1EMX\s0 environment does not allow DLLs compiled using Unixish
 \f(CWa.out\fR format to export symbols for data. This forces \f(CWomf\fR\-style
 compile of \fIperl.dll\fR.
@@ -1299,23 +1177,18 @@ Current \s-1EMX\s0 environment does not allow \fI.\s-1EXE\s0\fR files compiled i
 \f(CWomf\fR format to \fIfork()\fR. \fIfork()\fR is needed for exactly three Perl
 operations:
 .Ip "explicit fork()" 4
-.IX Item "explicit fork()"
 in the script, and
 .Ip "open \s-1FH\s0, \*(N"|\-\*(T"" 4
-.IX Item "open \s-1FH\s0, \*(N"|\-\*(T""
 .Ip "open \s-1FH\s0, \*(N"\-|\*(T"" 4
-.IX Item "open \s-1FH\s0, \*(N"\-|\*(T""
 opening pipes to itself.
 .PP
 While these operations are not questions of life and death, a lot of
 useful scripts use them. This forces \f(CWa.out\fR\-style compile of
 \fIperl.exe\fR.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 Here we list environment variables with are either OS/2- and DOS\- and
 Win*\-specific, or are more important under OS/2 than under other OSes.
 .Sh "\f(CWPERLLIB_PREFIX\fR"
-.IX Subsection "\f(CWPERLLIB_PREFIX\fR"
 Specific for \s-1EMX\s0 port. Should have the form
 .PP
 .Vb 1
@@ -1339,42 +1212,33 @@ in \fIf:/perllib/lib\fR, and you want to install the library in
 \&  set PERLLIB_PREFIX=f:/perllib/lib;h:/opt/gnu
 .Ve
 .Sh "\f(CWPERL_BADLANG\fR"
-.IX Subsection "\f(CWPERL_BADLANG\fR"
 If 1, perl ignores \fIsetlocale()\fR failing. May be useful with some
 strange \fIlocale\fRs.
 .Sh "\f(CWPERL_BADFREE\fR"
-.IX Subsection "\f(CWPERL_BADFREE\fR"
 If 1, perl would not warn of in case of unwarranted \fIfree()\fR. May be
 useful in conjunction with the module DB_File, since Berkeley \s-1DB\s0
 memory handling code is buggy.
 .Sh "\f(CWPERL_SH_DIR\fR"
-.IX Subsection "\f(CWPERL_SH_DIR\fR"
 Specific for \s-1EMX\s0 port. Gives the directory part of the location for
 \fIsh.exe\fR.
 .Sh "\f(CWUSE_PERL_FLOCK\fR"
-.IX Subsection "\f(CWUSE_PERL_FLOCK\fR"
 Specific for \s-1EMX\s0 port. Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not 
 functional, it is emulated by perl.  To disable the emulations, set 
 environment variable \f(CWUSE_PERL_FLOCK=0\fR.
 .Sh "\f(CWTMP\fR or \f(CWTEMP\fR"
-.IX Subsection "\f(CWTMP\fR or \f(CWTEMP\fR"
 Specific for \s-1EMX\s0 port. Used as storage place for temporary files, most
 notably \f(CW-e\fR scripts.
 .SH "Evolution"
-.IX Header "Evolution"
 Here we list major changes which could make you by surprise.
 .Sh "Priorities"
-.IX Subsection "Priorities"
 \f(CWsetpriority\fR and \f(CWgetpriority\fR are not compatible with earlier
 ports by Andreas Kaiser. See \f(CW"setpriority, getpriority"\fR.
 .Sh "\s-1DLL\s0 name mangling"
-.IX Subsection "\s-1DLL\s0 name mangling"
 With the release 5.003_01 the dynamically loadable libraries
 should be rebuilt. In particular, DLLs are now created with the names
 which contain a checksum, thus allowing workaround for \s-1OS/2\s0 scheme of
 caching DLLs.
 .Sh "Threading"
-.IX Subsection "Threading"
 As of release 5.003_01 perl is linked to multithreaded \s-1CRT\s0
 \s-1DLL\s0. Perl itself is not multithread-safe, as is not perl
 \fImalloc()\fR. However, extensions may use multiple thread on their own
@@ -1382,7 +1246,6 @@ risk.
 .PP
 Needed to compile \f(CWPerl/Tk\fR for XFree86-\s-1OS/2\s0 out-of-the-box.
 .Sh "Calls to external programs"
-.IX Subsection "Calls to external programs"
 Due to a popular demand the perl external program calling has been
 changed wrt Andreas Kaiser's port.  \fIIf\fR perl needs to call an
 external program \fIvia shell\fR, the \fIf:/bin/sh.exe\fR will be called, or
@@ -1433,7 +1296,6 @@ If you have some working code for \f(CWOS2::Cmd\fR, please send it to me,
 I will include it into distribution. I have no need for such a module, so
 cannot test it.
 .Sh "Memory allocation"
-.IX Subsection "Memory allocation"
 Perl uses its own \fImalloc()\fR under \s-1OS/2\s0 \- interpreters are usually malloc-bound
 for speed, but perl is not, since its malloc is lightning-fast. 
 Unfortunately, it is also quite frivolous with memory usage as well.
@@ -1451,10 +1313,293 @@ such functions, system memory-allocation functions are still available with
 the prefix \f(CWemx_\fR added. (Currently only \s-1DLL\s0 perl has this, it should 
 propagate to \fIperl_.exe\fR shortly.)
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Ilya Zakharevich, ilya@math.ohio-state.edu
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 \fIperl\fR\|(1).
 
 .rn }` ''
+.IX Title "PERLOS2 1"
+.IX Name "perlos2 - Perl under OS/2, DOS, Win0.3*, Win0.95 and WinNT."
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Subsection "Target"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "Other OSes"
+
+.IX Subsection "Prerequisites"
+
+.IX Item "\s-1EMX\s0"
+
+.IX Item "\s-1RSX\s0"
+
+.IX Item "\s-1HPFS\s0"
+
+.IX Item "pdksh"
+
+.IX Subsection "Starting Perl programs under \s-1OS/2\s0 (and \s-1DOS\s0 and...)"
+
+.IX Subsection "Starting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl"
+
+.IX Header "Frequently asked questions"
+
+.IX Subsection "I cannot run external programs"
+
+.IX Item ""
+
+.IX Item ""
+
+.IX Subsection "I cannot embed perl into my program, or use \fIperl.dll\fR from my program. "
+
+.IX Item "Is your program \s-1EMX\s0\-compiled with \f(CW-Zmt -Zcrtdll\fR?"
+
+.IX Item "Did you use the \fIExtUtils::Embed\fR manpage?"
+
+.IX Subsection "\f(CW``\fR and pipe-\f(CWopen\fR do not work under \s-1DOS\s0."
+
+.IX Subsection "Cannot start \f(CWfind.exe "pattern" file\fR"
+
+.IX Header "INSTALLATION"
+
+.IX Subsection "Automatic binary installation"
+
+.IX Item "\f(CWPERL_BADLANG\fR"
+
+.IX Item "\f(CWPERL_BADFREE\fR"
+
+.IX Item "\fIConfig.pm\fR"
+
+.IX Subsection "Manual binary installation"
+
+.IX Item "Perl \s-1VIO\s0 and \s-1PM\s0 executables (dynamically linked)"
+
+.IX Item "Perl_ \s-1VIO\s0 executable (statically linked)"
+
+.IX Item "Executables for Perl utilities"
+
+.IX Item "Main Perl library"
+
+.IX Item "Additional Perl modules"
+
+.IX Item "Tools to compile Perl modules"
+
+.IX Item "Manpages for Perl and utilities"
+
+.IX Item "Manpages for Perl modules"
+
+.IX Item "Source for Perl documentation"
+
+.IX Item "Perl manual in \fI.\s-1INF\s0\fR format"
+
+.IX Item "Pdksh"
+
+.IX Subsection "\fBWarning\fR"
+
+.IX Header "Accessing documentation"
+
+.IX Subsection "\s-1OS/2\s0 \fI.\s-1INF\s0\fR file"
+
+.IX Subsection "Plain text"
+
+.IX Subsection "Manpages"
+
+.IX Subsection "\s-1HTML\s0"
+
+.IX Subsection "\s-1GNU\s0 \f(CWinfo\fR files"
+
+.IX Subsection "\fI.\s-1PDF\s0\fR files"
+
+.IX Subsection "\f(CWLaTeX\fR docs"
+
+.IX Header "BUILD"
+
+.IX Subsection "Prerequisites"
+
+.IX Subsection "Getting perl source"
+
+.IX Subsection "Application of the patches"
+
+.IX Subsection "Hand-editing"
+
+.IX Subsection "Making"
+
+.IX Subsection "Testing"
+
+.IX Item "\fIio/fs.t\fR"
+
+.IX Item "2-5, 7-11"
+
+.IX Item "18"
+
+.IX Item "25"
+
+.IX Item "\fIlib/io_pipe.t\fR"
+
+.IX Item "\fIlib/io_sock.t\fR"
+
+.IX Item "\fIop/stat.t\fR"
+
+.IX Item "3"
+
+.IX Item "4"
+
+.IX Item "20"
+
+.IX Item "35"
+
+.IX Item "39"
+
+.IX Item "A lot of `bad free\*(T'"
+
+.IX Item "Process terminated by \s-1SIGTERM/SIGINT\s0"
+
+.IX Item "\fI*/sh.exe\fR: ln: not found"
+
+.IX Item "\f(CWls\fR: /dev: No such file or directory"
+
+.IX Subsection "Installing the built perl"
+
+.IX Subsection "\f(CWa.out\fR\-style build"
+
+.IX Header "Build FAQ"
+
+.IX Subsection "Some \f(CW/\fR became \f(CW\e\fR in pdksh."
+
+.IX Subsection "\f(CW'errno'\fR \- unresolved external"
+
+.IX Subsection "Problems with tr"
+
+.IX Subsection "Some problem (forget which ;\-)"
+
+.IX Subsection "Library ... not found"
+
+.IX Subsection "Segfault in make"
+
+.IX Header "Specific (mis)features of OS/2 port"
+
+.IX Subsection "\f(CWsetpriority\fR, \f(CWgetpriority\fR"
+
+.IX Subsection "\f(CWsystem()\fR"
+
+.IX Subsection "\f(CWextproc\fR on the first line"
+
+.IX Subsection "Additional modules:"
+
+.IX Subsection "Prebuilt methods:"
+
+.IX Item "\f(CWFile::Copy::syscopy\fR"
+
+.IX Item "\f(CWDynaLoader::mod2fname\fR"
+
+.IX Item "\f(CWCwd::current_drive()\fR"
+
+.IX Item "\f(CWCwd::sys_chdir(name)\fR"
+
+.IX Item "\f(CWCwd::change_drive(name)\fR"
+
+.IX Item "\f(CWCwd::sys_is_absolute(name)\fR"
+
+.IX Item "\f(CWCwd::sys_is_rooted(name)\fR"
+
+.IX Item "\f(CWCwd::sys_is_relative(name)\fR"
+
+.IX Item "\f(CWCwd::sys_cwd(name)\fR"
+
+.IX Item "\f(CWCwd::sys_abspath(name, dir)\fR"
+
+.IX Item "C<Cwd::extLibpath([type])"
+
+.IX Item "\f(CWCwd::extLibpath_set( path [, type ] )\fR"
+
+.IX Subsection "Misfeatures"
+
+.IX Item ""
+
+.IX Item ""
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item ""
+
+.IX Subsection "Modifications"
+
+.IX Item "\f(CWpopen\fR"
+
+.IX Item "\f(CWtmpnam\fR"
+
+.IX Item "\f(CWtmpfile\fR"
+
+.IX Item "\f(CWctermid\fR"
+
+.IX Item "\f(CWstat\fR"
+
+.IX Item "\f(CWflock\fR"
+
+.IX Header "Perl flavors"
+
+.IX Subsection "\fIperl.exe\fR"
+
+.IX Subsection "\fIperl_.exe\fR"
+
+.IX Subsection "\fIperl_\|_.exe\fR"
+
+.IX Subsection "\fIperl_\|__.exe\fR"
+
+.IX Subsection "Why strange names?"
+
+.IX Subsection "Why dynamic linking?"
+
+.IX Subsection "Why chimera build?"
+
+.IX Item "explicit fork()"
+
+.IX Item "open \s-1FH\s0, \*(N"|\-\*(T""
+
+.IX Item "open \s-1FH\s0, \*(N"\-|\*(T""
+
+.IX Header "ENVIRONMENT"
+
+.IX Subsection "\f(CWPERLLIB_PREFIX\fR"
+
+.IX Subsection "\f(CWPERL_BADLANG\fR"
+
+.IX Subsection "\f(CWPERL_BADFREE\fR"
+
+.IX Subsection "\f(CWPERL_SH_DIR\fR"
+
+.IX Subsection "\f(CWUSE_PERL_FLOCK\fR"
+
+.IX Subsection "\f(CWTMP\fR or \f(CWTEMP\fR"
+
+.IX Header "Evolution"
+
+.IX Subsection "Priorities"
+
+.IX Subsection "\s-1DLL\s0 name mangling"
+
+.IX Subsection "Threading"
+
+.IX Subsection "Calls to external programs"
+
+.IX Subsection "Memory allocation"
+
+.IX Header "AUTHOR"
+
+.IX Header "SEE ALSO"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFORM 1 "perl 5.004, patch 01" "4/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFORM 1"
+.TH PERLFORM 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlform - Perl formats"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlform \- Perl formats
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Perl has a mechanism to help you generate simple reports and charts.  To
 facilitate this, Perl helps you code up your output page close to how it
 will look when it's printed.  It can keep track of things like how many
@@ -223,13 +219,10 @@ Output record formats are declared as follows:
 If name is omitted, format \*(L"STDOUT\*(R" is defined.  FORMLIST consists of
 a sequence of lines, each of which may be one of three types:
 .Ip "1." 4
-.IX Item "1."
 A comment, indicated by putting a \*(L'#\*(R' in the first column.
 .Ip "2." 4
-.IX Item "2."
 A \*(L"picture\*(R" line giving the format for one output line.
 .Ip "3." 4
-.IX Item "3."
 An argument line supplying values to plug into the previous picture line.
 .PP
 Picture lines are printed exactly as they look, except for certain fields
@@ -342,7 +335,6 @@ It is possible to intermix \fIprint()\fRs with \fIwrite()\fRs on the same output
 channel, but you'll have to handle \f(CW$-\fR (\f(CW$FORMAT_LINES_LEFT\fR)
 yourself.
 .Sh "Format Variables"
-.IX Subsection "Format Variables"
 The current format name is stored in the variable \f(CW$~\fR (\f(CW$FORMAT_NAME\fR),
 and the current top of form format name is in \f(CW$^\fR (\f(CW$FORMAT_TOP_NAME\fR).
 The current output page number is stored in \f(CW$%\fR (\f(CW$FORMAT_PAGE_NUMBER\fR),
@@ -391,7 +383,6 @@ method names instead:
 .Ve
 Much better!
 .SH "NOTES"
-.IX Header "NOTES"
 Because the values line may contain arbitrary expressions (for at fields,
 not caret fields), you can farm out more sophisticated processing
 to other functions, like \fIsprintf()\fR or one of your own.  For example:
@@ -462,7 +453,6 @@ Here's a little program that's somewhat like \fIfmt\fR\|(1):
 \& }
 .Ve
 .Sh "Footers"
-.IX Subsection "Footers"
 While \f(CW$FORMAT_TOP_NAME\fR contains the name of the current header format,
 there is no corresponding mechanism to automatically do the same thing
 for a footer.  Not knowing how big a format is going to be until you
@@ -477,7 +467,6 @@ Here's another strategy: Open a pipe to yourself, using \f(CWopen(MYSELF, "|-")\
 Have your child process massage its \s-1STDIN\s0 to rearrange headers and footers
 however you like.  Not very convenient, but doable.
 .Sh "Accessing Formatting Internals"
-.IX Subsection "Accessing Formatting Internals"
 For low-level access to the formatting mechanism.  you may use \fIformline()\fR
 and access \f(CW$^A\fR (the \f(CW$ACCUMULATOR\fR variable) directly.
 .PP
@@ -512,7 +501,6 @@ is to \fIprintf()\fR, do this:
 \&    print $string;
 .Ve
 .SH "WARNINGS"
-.IX Header "WARNINGS"
 The lone dot that ends a format can also prematurely end an email
 message passing through a misconfigured Internet mailer (and based on
 experience, such misconfiguration is the rule, not the exception).  So
@@ -535,3 +523,26 @@ exist outside that block structure.  See the \fIperllocale\fR manpage for furthe
 discussion of locale handling.
 
 .rn }` ''
+.IX Title "PERLFORM 1"
+.IX Name "perlform - Perl formats"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "1."
+
+.IX Item "2."
+
+.IX Item "3."
+
+.IX Subsection "Format Variables"
+
+.IX Header "NOTES"
+
+.IX Subsection "Footers"
+
+.IX Subsection "Accessing Formatting Internals"
+
+.IX Header "WARNINGS"
+

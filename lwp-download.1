@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH LWP-DOWNLOAD 1 "perl 5.004, patch 01" "20/Jun/97" "User Contributed Perl Documentation"
-.IX Title "LWP-DOWNLOAD 1"
+.TH LWP-DOWNLOAD 1 "perl 5.004, patch 55" "28/Nov/97" "User Contributed Perl Documentation"
 .UC
-.IX Name "lwp-download - fetch large files from the net"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,16 +188,13 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 lwp-download \- fetch large files from the net
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 .PP
 .Vb 1
-\& lwp-download <url> [<local file>]
+\& lwp-download [-a] <url> [<local file>]
 .Ve
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 The \fIlwp-download\fR program will down load the document specified by the URL
 given as the first command line argument to a local file.  The local
 filename used to save the document is guessed from the URL unless
@@ -210,8 +205,9 @@ library.  It is better suited to down load big files than the
 \fIlwp-request\fR program because it does not store the file in memory.
 Another benefit is that it will keep you updated about it's progress
 and that you don't have any options to worry about.
+.PP
+Use the \f(CW-a\fR option to save the file in text (ascii) mode.
 .SH "EXAMPLE"
-.IX Header "EXAMPLE"
 Fetch the newest and greatest perl version:
 .PP
 .Vb 3
@@ -220,7 +216,19 @@ Fetch the newest and greatest perl version:
 \& 1.47 MB received in 22 seconds (68.7 KB/sec)
 .Ve
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Gisle Aas <gisle@aas.no>
 
 .rn }` ''
+.IX Title "LWP-DOWNLOAD 1"
+.IX Name "lwp-download - fetch large files from the net"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "EXAMPLE"
+
+.IX Header "AUTHOR"
+

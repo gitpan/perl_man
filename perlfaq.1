@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ 1 "perl 5.004, patch 01" "24/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ 1"
+.TH PERLFAQ 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq - frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,58 +188,43 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq \- frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This document is structured into the following sections:
 .Ip "perlfaq: Structural overview of the \s-1FAQ\s0." 5
-.IX Item "perlfaq: Structural overview of the \s-1FAQ\s0."
 This document.
 .Ip "the \fIperlfaq1\fR manpage: General Questions About Perl" 5
-.IX Item "the \fIperlfaq1\fR manpage: General Questions About Perl"
 Very general, high-level information about Perl.
 .Ip "the \fIperlfaq2\fR manpage: Obtaining and Learning about Perl" 5
-.IX Item "the \fIperlfaq2\fR manpage: Obtaining and Learning about Perl"
 Where to find source and documentation to Perl, support and training,
 and related matters.
 .Ip "the \fIperlfaq3\fR manpage: Programming Tools" 5
-.IX Item "the \fIperlfaq3\fR manpage: Programming Tools"
 Programmer tools and programming support.
 .Ip "the \fIperlfaq4\fR manpage: Data Manipulation" 5
-.IX Item "the \fIperlfaq4\fR manpage: Data Manipulation"
 Manipulating numbers, dates, strings, arrays, hashes, and
 miscellaneous data issues.
 .Ip "the \fIperlfaq5\fR manpage: Files and Formats" 5
-.IX Item "the \fIperlfaq5\fR manpage: Files and Formats"
 I/O and the \*(L"f\*(R" issues: filehandles, flushing, formats and footers.
 .Ip "the \fIperlfaq6\fR manpage: Regexps" 5
-.IX Item "the \fIperlfaq6\fR manpage: Regexps"
 Pattern matching and regular expressions.
 .Ip "the \fIperlfaq7\fR manpage: General Perl Language Issues" 5
-.IX Item "the \fIperlfaq7\fR manpage: General Perl Language Issues"
 General Perl language issues that don't clearly fit into any of the
 other sections.
 .Ip "the \fIperlfaq8\fR manpage: System Interaction" 5
-.IX Item "the \fIperlfaq8\fR manpage: System Interaction"
 Interprocess communication (\s-1IPC\s0), control over the user-interface
 (keyboard, screen and pointing devices).
 .Ip "the \fIperlfaq9\fR manpage: Networking" 5
-.IX Item "the \fIperlfaq9\fR manpage: Networking"
 Networking, the Internet, and a few on the web.
 .Sh "Where to get this document"
-.IX Subsection "Where to get this document"
 This document is posted regularly to comp.lang.perl.announce and
 several other related newsgroups.  It is available in a variety of
 formats from \s-1CPAN\s0 in the /\s-1CPAN/\s0doc/FAQs/\s-1FAQ\s0/ directory, or on the web
 at http://www.perl.com/perl/faq/ .
 .Sh "How to contribute to this document"
-.IX Subsection "How to contribute to this document"
 You may mail corrections, additions, and suggestions to
 perlfaq-suggestions@perl.com .  Mail sent to the old perlfaq alias
 will merely cause the \s-1FAQ\s0 to be sent to you.
 .Sh "What will happen if you mail your Perl programming problems to the authors"
-.IX Subsection "What will happen if you mail your Perl programming problems to the authors"
 Your questions will probably go unread, unless they're suggestions of
 new questions to add to the \s-1FAQ\s0, in which case they should have gone
 to the perlfaq-suggestions@perl.com instead.
@@ -251,18 +234,15 @@ learned that comp.lang.perl.misc is the appropriate place to go for
 free advice.  If your question is really important and you require a
 prompt and correct answer, you should hire a consultant.
 .SH "Credits"
-.IX Header "Credits"
 When I first began the Perl FAQ in the late 80s, I never realized it
 would have grown to over a hundred pages, nor that Perl would ever become
 so popular and widespread.  This document could not have been written
 without the tremendous help provided by Larry Wall and the rest of the
 Perl Porters.
 .SH "Author and Copyright Information"
-.IX Header "Author and Copyright Information"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.
 .Sh "Noncommercial Reproduction"
-.IX Subsection "Noncommercial Reproduction"
 Permission is granted to distribute this document, in part or in full,
 via electronic means or printed copy providing that (1) that all credits
 and copyright notices be retained, (2) that no charges beyond reproduction
@@ -274,7 +254,6 @@ full Perl source or binaries, in its verbatim documentation, or on a
 complete dump of the \s-1CPAN\s0 archive, providing that the three stipulations
 given above continue to be met.
 .Sh "Commercial Reproduction"
-.IX Subsection "Commercial Reproduction"
 Requests for all other distribution rights, including the incorporation
 in part or in full of this text or its code into commercial products
 such as but not limited to books, magazine articles, or \s-1CD\s0\-ROMs, must
@@ -282,19 +261,15 @@ be made to perlfaq-legal@perl.com.  Any commercial use of any portion
 of this document without prior written authorization by its authors
 will be subject to appropriate action.
 .Sh "Disclaimer"
-.IX Subsection "Disclaimer"
 This information is offered in good faith and in the hope that it may
 be of use, but is not guaranteed to be correct, up to date, or suitable
 for any particular purpose whatsoever.  The authors accept no liability
 in respect of this information or its use.
 .SH "Changes"
-.IX Header "Changes"
 .Ip "24/April/97" 4
-.IX Item "24/April/97"
 Style and whitespace changes from Chip, new question on reading one
 character at a time from a terminal using \s-1POSIX\s0 from Tom.
 .Ip "23/April/97" 4
-.IX Item "23/April/97"
 Added http://www.oasis.leo.org/perl/ to the \fIperlfaq2\fR manpage.  Style fix to
 the \fIperlfaq3\fR manpage.  Added floating point precision, fixed complex number
 arithmetic, cross-references, caveat for Text::Wrap, alternative
@@ -307,13 +282,11 @@ grouped module questions together in the \fIperlfaq8\fR manpage.  Expanded cavea
 for the simple \s-1URL\s0 extractor, gave \s-1LWP\s0 example, added \s-1CGI\s0 security
 question, expanded on the email address answer in the \fIperlfaq9\fR manpage.
 .Ip "25/March/97" 4
-.IX Item "25/March/97"
 Added more info to the binary distribution section of the \fIperlfaq2\fR manpage.
 Added Net::Telnet to the \fIperlfaq6\fR manpage.  Fixed typos in the \fIperlfaq8\fR manpage.  Added
 mail sending example to the \fIperlfaq9\fR manpage.  Added Merlyn's columns to
 the \fIperlfaq2\fR manpage.
 .Ip "18/March/97" 4
-.IX Item "18/March/97"
 Added the \s-1DATE\s0 to the \s-1NAME\s0 section, indicating which sections have
 changed.
 .Sp
@@ -322,13 +295,68 @@ the \fIperlfaq8\fR manpage.
 .Sp
 Fixed description of a regular expression in the \fIperlfaq4\fR manpage.
 .Ip "17/March/97 Version" 4
-.IX Item "17/March/97 Version"
 Various typos fixed throughout.
 .Sp
 Added new question on Perl \s-1BNF\s0 on the \fIperlfaq7\fR manpage.
 .Ip "Initial Release: 11/March/97" 4
-.IX Item "Initial Release: 11/March/97"
 This is the initial release of version 3 of the \s-1FAQ\s0; consequently there
 have been no changes since its initial release.
 
 .rn }` ''
+.IX Title "PERLFAQ 1"
+.IX Name "perlfaq - frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "perlfaq: Structural overview of the \s-1FAQ\s0."
+
+.IX Item "the \fIperlfaq1\fR manpage: General Questions About Perl"
+
+.IX Item "the \fIperlfaq2\fR manpage: Obtaining and Learning about Perl"
+
+.IX Item "the \fIperlfaq3\fR manpage: Programming Tools"
+
+.IX Item "the \fIperlfaq4\fR manpage: Data Manipulation"
+
+.IX Item "the \fIperlfaq5\fR manpage: Files and Formats"
+
+.IX Item "the \fIperlfaq6\fR manpage: Regexps"
+
+.IX Item "the \fIperlfaq7\fR manpage: General Perl Language Issues"
+
+.IX Item "the \fIperlfaq8\fR manpage: System Interaction"
+
+.IX Item "the \fIperlfaq9\fR manpage: Networking"
+
+.IX Subsection "Where to get this document"
+
+.IX Subsection "How to contribute to this document"
+
+.IX Subsection "What will happen if you mail your Perl programming problems to the authors"
+
+.IX Header "Credits"
+
+.IX Header "Author and Copyright Information"
+
+.IX Subsection "Noncommercial Reproduction"
+
+.IX Subsection "Commercial Reproduction"
+
+.IX Subsection "Disclaimer"
+
+.IX Header "Changes"
+
+.IX Item "24/April/97"
+
+.IX Item "23/April/97"
+
+.IX Item "25/March/97"
+
+.IX Item "18/March/97"
+
+.IX Item "17/March/97 Version"
+
+.IX Item "Initial Release: 11/March/97"
+

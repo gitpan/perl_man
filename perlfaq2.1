@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ2 1 "perl 5.004, patch 01" "23/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ2 1"
+.TH PERLFAQ2 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq2 - Obtaining and Learning about Perl ($Revision: 1.16 $, $Date: 1997/04/23 18:04:09 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,15 +188,12 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.16 $, \f(CW$Date:\fR 1997/04/23 18:04:09 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section of the FAQ answers questions about where to find
 source and documentation for Perl, support and training, and
 related matters.
 .Sh "What machines support Perl?  Where do I get it?"
-.IX Subsection "What machines support Perl?  Where do I get it?"
 The standard release of Perl (the one maintained by the perl
 development team) is distributed only in source code form.  You can
 find this at http://www.perl.com/\s-1CPAN/\s0src/latest.tar.gz, which is a
@@ -220,7 +215,6 @@ platform that are not supported in the source release of perl) or negative
 A useful \s-1FAQ\s0 for Win32 Perl users is
 http://www.endcontsw.com/people/evangelo/Perl_for_Win32_FAQ.html
 .Sh "How can I get a binary version of Perl?"
-.IX Subsection "How can I get a binary version of Perl?"
 If you don't have a C compiler because for whatever reasons your
 vendor did not include one with your system, the best thing to do is
 grab a binary version of gcc from the net and use that to compile perl
@@ -233,7 +227,6 @@ information is already available.  A simple installation guide for
 similarly for Windows 3.1 at http://www.cs.ruu.nl/~piet/perlwin3.html
 \&.
 .Sh "I don't have a C compiler on my system.  How can I compile perl?"
-.IX Subsection "I don't have a C compiler on my system.  How can I compile perl?"
 Since you don't have a C compiler, you're doomed and your vendor
 should be sacrificed to the Sun gods.  But that doesn't help you.
 .PP
@@ -241,7 +234,6 @@ What you need to do is get a binary version of gcc for your system
 first.  Consult the Usenet FAQs for your operating system for
 information on where to get such a binary version.
 .Sh "I copied the Perl binary from one machine to another, but scripts don't work."
-.IX Subsection "I copied the Perl binary from one machine to another, but scripts don't work."
 That's probably because you forgot libraries, or library paths differ.
 You really should build the whole distribution on the machine it will
 eventually live on, and then type \f(CWmake install\fR.  Most other
@@ -260,13 +252,11 @@ symlinks, aliases, or shortcuts appropriately.
 You might also want to check out the section on \fIHow do I keep my own
 module/library directory?\fR in the \fIperlfaq8\fR manpage.
 .Sh "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?"
-.IX Subsection "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?"
 Read the \fI\s-1INSTALL\s0\fR file, which is part of the source distribution.
 It describes in detail how to cope with most idiosyncracies that the
 Configure script can't work around for any given system or
 architecture.
 .Sh "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?"
-.IX Subsection "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?"
 \s-1CPAN\s0 stands for Comprehensive Perl Archive Network, a huge archive
 replicated on dozens of machines all over the world.  \s-1CPAN\s0 contains
 source code, non-native ports, documentation, scripts, and many
@@ -297,10 +287,8 @@ compression; image manipulation; mail and news; control flow
 utilities; filehandle and I/O; Microsoft Windows modules; and
 miscellaneous modules.
 .Sh "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?"
-.IX Subsection "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?"
 Certainly not.  Larry expects that he'll be certified before Perl is.
 .Sh "Where can I get information on Perl?"
-.IX Subsection "Where can I get information on Perl?"
 The complete Perl documentation is available with the perl
 distribution.  If you have perl installed locally, you probably have
 the documentation installed as well: type \f(CWman perl\fR if you're on a
@@ -325,7 +313,6 @@ directory.
 Many good books have been written about Perl -- see the section below
 for more details.
 .Sh "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?"
-.IX Subsection "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?"
 The now defunct comp.lang.perl newsgroup has been superseded by the
 following groups:
 .PP
@@ -342,14 +329,12 @@ There is also \s-1USENET\s0 gateway to the mailing list used by the crack
 Perl development team (perl5-porters) at
 news://genetics.upenn.edu/perl.porters-gw/ .
 .Sh "Where should I post source code?"
-.IX Subsection "Where should I post source code?"
 You should post source code to whichever group is most appropriate,
 but feel free to cross-post to comp.lang.perl.misc.  If you want to
 cross-post to alt.sources, please make sure it follows their posting
 standards, including setting the Followup-To header line to \s-1NOT\s0
 include alt.sources; see their \s-1FAQ\s0 for details.
 .Sh "Perl Books"
-.IX Subsection "Perl Books"
 A number books on Perl and/or \s-1CGI\s0 programming are available.  A few of
 these are good, some are ok, but many aren't worth your money.  Tom
 Christiansen maintains a list of these books, some with extensive
@@ -421,7 +406,6 @@ Recommended Perl books that are not from O'Reilly are the following:
 Note that some of these address specific application areas (e.g. the
 Web) and are not general-purpose programming books.
 .Sh "Perl in Magazines"
-.IX Subsection "Perl in Magazines"
 The Perl Journal is the first and only magazine dedicated to Perl.
 It is published (on paper, not online) quarterly by Jon Orwant
 (orwant@tpj.com), editor.  Subscription information is at http://tpj.com
@@ -434,7 +418,6 @@ http://www.webtechniques.com/) and Unix Review
 columns are available on the web at
 http://www.stonehenge.com/merlyn/WebTechniques/ .
 .Sh "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access"
-.IX Subsection "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access"
 To get the best (and possibly cheapest) performance, pick a site from
 the list below and use it to grab the complete list of mirror sites.
 From there you can find the quickest site for you.  Remember, the
@@ -450,7 +433,6 @@ following list is \fInot\fR the complete list of \s-1CPAN\s0 mirrors.
 http:/www.oasis.leo.org/perl/ has, amongst other things, source to
 versions 1 through 5 of Perl.
 .Sh "What mailing lists are there for perl?"
-.IX Subsection "What mailing lists are there for perl?"
 Most of the major modules (tk, \s-1CGI\s0, libwww-perl) have their own
 mailing lists.  Consult the documentation that came with the module for
 subscription information.  The following are a list of mailing lists
@@ -460,7 +442,6 @@ If you subscribe to a mailing list, it behooves you to know how to
 unsubscribe from it.  Strident pleas to the list itself to get you off
 will not be favorably received.
 .Ip "MacPerl" 4
-.IX Item "MacPerl"
 There is a mailing list for discussing Macintosh Perl.  Contact
 \*(L"mac-perl-request@iis.ee.ethz.ch\*(R".
 .Sp
@@ -469,13 +450,11 @@ webpage at http://www.iis.ee.ethz.ch/~neeri/macintosh/perl.html for
 many links to interesting MacPerl sites, and the applications/\s-1MPW\s0
 tools, precompiled.
 .Ip "Perl5-Porters" 4
-.IX Item "Perl5-Porters"
 The core development team have a mailing list for discussing fixes and
 changes to the language.  Send mail to
 \*(L"perl5-porters-request@perl.org\*(R" with help in the body of the message
 for information on subscribing.
 .Ip "NTPerl" 4
-.IX Item "NTPerl"
 This list is used to discuss issues involving Win32 Perl 5 (Windows \s-1NT\s0
 and Win95). Subscribe by emailing ListManager@ActiveWare.com with the
 message body:
@@ -493,7 +472,6 @@ the following in the message body to the same address like so:
 You can also check http://www.activeware.com/ and select \*(L"Mailing Lists\*(R"
 to join or leave this list.
 .Ip "Perl-Packrats" 4
-.IX Item "Perl-Packrats"
 Discussion related to archiving of perl materials, particularly the
 Comprehensive PerlArchive Network (\s-1CPAN\s0). Subscribe by emailing
 majordomo@cis.ufl.edu:
@@ -510,7 +488,6 @@ like so:
 \&    unsubscribe perl-packrats
 .Ve
 .Sh "Archives of comp.lang.perl.misc"
-.IX Subsection "Archives of comp.lang.perl.misc"
 Have you tried Deja News or Alta Vista?
 .PP
 ftp.cis.ufl.edu:/pub/perl/comp.lang.perl.*/monthly has an almost
@@ -527,7 +504,6 @@ very slow to select on 18000 articles.
 If you have, or know where can be found, the missing sections, please
 let perlfaq-suggestions@perl.com know.
 .Sh "Perl Training"
-.IX Subsection "Perl Training"
 While some large training companies offer their own courses on Perl,
 you may prefer to contact individuals near and dear to the heart of
 Perl development.  Two well-known members of the Perl development team
@@ -538,7 +514,6 @@ and seminars on Perl.  These courses include large public seminars,
 private corporate training, and fly-ins to Colorado and Oregon.
 See http://www.perl.com/perl/info/training.html for more details.
 .Sh "Where can I buy a commercial version of Perl?"
-.IX Subsection "Where can I buy a commercial version of Perl?"
 In a sense, Perl already \fIis\fR commercial software: It has a licence
 that you can grab and carefully read to your manager. It is
 distributed in releases and comes in well-defined packages. There is a
@@ -584,7 +559,6 @@ For more information, contact the The Perl Clinic:
 \&    Email:  perl-support-info@perl.co.uk or Tim.Bunce@ig.co.uk
 .Ve
 .Sh "Where do I send bug reports?"
-.IX Subsection "Where do I send bug reports?"
 If you are reporting a bug in the perl interpreter or the modules
 shipped with perl, use the perlbug program in the perl distribution or
 email your report to perlbug@perl.com.
@@ -597,7 +571,6 @@ bugs.
 .PP
 Read the perlbug man page (perl5.004 or later) for more information.
 .Sh "What is perl.com?  perl.org?  The Perl Institute?"
-.IX Subsection "What is perl.com?  perl.org?  The Perl Institute?"
 perl.org is the official vehicle for The Perl Institute.  The motto of
 \s-1TPI\s0 is \*(L"helping people help Perl help people\*(R" (or something like
 that).  It's a non-profit organization supporting development,
@@ -611,13 +584,68 @@ of the Perl world, a clearinghouse for information about all things
 Perlian, accepting no paid advertisements, glossy gifs, or (gasp!)
 java applets on its pages.
 .Sh "How do I learn about object-oriented Perl programming?"
-.IX Subsection "How do I learn about object-oriented Perl programming?"
 the \fIperltoot\fR manpage (distributed with 5.004 or later) is a good place to start.
 Also, the \fIperlobj\fR manpage, the \fIperlref\fR manpage, and the \fIperlmod\fR manpage are useful references,
 while the \fIperlbot\fR manpage has some excellent tips and tricks.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ2 1"
+.IX Name "perlfaq2 - Obtaining and Learning about Perl ($Revision: 1.16 $, $Date: 1997/04/23 18:04:09 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "What machines support Perl?  Where do I get it?"
+
+.IX Subsection "How can I get a binary version of Perl?"
+
+.IX Subsection "I don't have a C compiler on my system.  How can I compile perl?"
+
+.IX Subsection "I copied the Perl binary from one machine to another, but scripts don't work."
+
+.IX Subsection "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?"
+
+.IX Subsection "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?"
+
+.IX Subsection "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?"
+
+.IX Subsection "Where can I get information on Perl?"
+
+.IX Subsection "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?"
+
+.IX Subsection "Where should I post source code?"
+
+.IX Subsection "Perl Books"
+
+.IX Subsection "Perl in Magazines"
+
+.IX Subsection "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access"
+
+.IX Subsection "What mailing lists are there for perl?"
+
+.IX Item "MacPerl"
+
+.IX Item "Perl5-Porters"
+
+.IX Item "NTPerl"
+
+.IX Item "Perl-Packrats"
+
+.IX Subsection "Archives of comp.lang.perl.misc"
+
+.IX Subsection "Perl Training"
+
+.IX Subsection "Where can I buy a commercial version of Perl?"
+
+.IX Subsection "Where do I send bug reports?"
+
+.IX Subsection "What is perl.com?  perl.org?  The Perl Institute?"
+
+.IX Subsection "How do I learn about object-oriented Perl programming?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDELTA 1 "perl 5.004, patch 01" "10/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDELTA 1"
+.TH PERLDELTA 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perldelta - what's new for perl5.004"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,30 +188,23 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perldelta \- what's new for perl5.004
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This document describes differences between the 5.003 release (as
 documented in \fIProgramming Perl\fR, second edition\*(--the Camel Book) and
 this one.
 .SH "Supported Environments"
-.IX Header "Supported Environments"
 Perl5.004 builds out of the box on Unix, Plan 9, LynxOS, VMS, OS/2,
 QNX, AmigaOS, and Windows NT.  Perl runs on Windows 95 as well, but it
 cannot be built there, for lack of a reasonable command interpreter.
 .SH "Core Changes"
-.IX Header "Core Changes"
 Most importantly, many bugs were fixed, including several security
 problems.  See the \fIChanges\fR file in the distribution for details.
 .Sh "List assignment to \f(CW%ENV\fR works"
-.IX Subsection "List assignment to \f(CW%ENV\fR works"
 \f(CW%ENV = ()\fR and \f(CW%ENV = @list\fR now work as expected (except on \s-1VMS\s0
 where it generates a fatal error).
 .Sh "\*(M"Can't locate Foo.pm in \f(CW@INC\fR\*(S" error now lists \f(CW@INC\fR"
-.IX Subsection "\*(M"Can't locate Foo.pm in \f(CW@INC\fR\*(S" error now lists \f(CW@INC\fR"
 .Sh "Compilation option: Binary compatibility with 5.003"
-.IX Subsection "Compilation option: Binary compatibility with 5.003"
 There is a new Configure question that asks if you want to maintain
 binary compatibility with Perl 5.003.  If you choose binary
 compatibility, you do not have to recompile your extensions, but you
@@ -221,14 +212,12 @@ might have symbol conflicts if you embed Perl in another application,
 just as in the 5.003 release.  By default, binary compatibility
 is preserved at the expense of symbol table pollution.
 .Sh "\f(CW$PERL5OPT\fR environment variable"
-.IX Subsection "\f(CW$PERL5OPT\fR environment variable"
 You may now put Perl options in the \f(CW$PERL5OPT\fR environment variable.
 Unless Perl is running with taint checks, it will interpret this
 variable as if its contents had appeared on a \*(L"#!perl\*(R" line at the
 beginning of your script, except that hyphens are optional.  \s-1PERL5OPT\s0
 may only be used to set the following switches: \fB\-[DIMUdmw]\fR.
 .Sh "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options"
-.IX Subsection "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options"
 The \f(CW-M\fR and \f(CW-m\fR options are no longer allowed on the \f(CW#!\fR line of
 a script.  If a script needs a module, it should invoke it with the
 \f(CWuse\fR pragma.
@@ -252,14 +241,12 @@ probably not follow this rule.)  But \f(CWperl scriptname\fR is guaranteed
 to fail, since then there is no chance of \fB\-T\fR being found on the
 command line before it is found on the \f(CW#!\fR line.
 .Sh "More precise warnings"
-.IX Subsection "More precise warnings"
 If you removed the \fB\-w\fR option from your Perl 5.003 scripts because it
 made Perl too verbose, we recommend that you try putting it back when
 you upgrade to Perl 5.004.  Each new perl version tends to remove some
 undesirable warnings, while adding new warnings that may catch bugs in
 your scripts.
 .Sh "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods"
-.IX Subsection "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods"
 Before Perl 5.004, \f(CWAUTOLOAD\fR functions were looked up as methods
 (using the \f(CW@ISA\fR hierarchy), even when the function to be autoloaded
 was called as a plain function (e.g. \f(CWFoo::bar()\fR), not a method
@@ -275,13 +262,11 @@ non-methods.  The simple fix for old code is:  In any module that used to
 depend on inheriting \f(CWAUTOLOAD\fR for non-methods from a base class named
 \f(CWBaseClass\fR, execute \f(CW*AUTOLOAD = \e&BaseClass::AUTOLOAD\fR during startup.
 .Sh "Previously deprecated \f(CW%OVERLOAD\fR is no longer usable"
-.IX Subsection "Previously deprecated \f(CW%OVERLOAD\fR is no longer usable"
 Using \f(CW%OVERLOAD\fR to define overloading was deprecated in 5.003.
 Overloading is now defined using the overload pragma. \f(CW%OVERLOAD\fR is
 still used internally but should not be used by Perl scripts. See
 the \fIoverload\fR manpage for more details.
 .Sh "Subroutine arguments created only when they're modified"
-.IX Subsection "Subroutine arguments created only when they're modified"
 In Perl 5.004, nonexistent array and hash elements used as subroutine
 parameters are brought into existence only if they are actually
 assigned to (via \f(CW@_\fR).
@@ -305,7 +290,6 @@ After this code executes in Perl 5.004, \f(CW$a\fR{b} exists but \f(CW$a\fR[2] d
 not.  In Perl 5.002 and 5.003, both \f(CW$a\fR{b} and \f(CW$a\fR[2] would have existed
 (but \f(CW$a\fR[2]'s value would have been undefined).
 .Sh "Group vector changeable with \f(CW$)\fR"
-.IX Subsection "Group vector changeable with \f(CW$)\fR"
 The \f(CW$)\fR special variable has always (well, in Perl 5, at least)
 reflected not only the current effective group, but also the group list
 as returned by the \f(CWgetgroups()\fR C function (if there is one).
@@ -317,7 +301,6 @@ it: The first number in its string value is used as the effective gid;
 if there are any numbers after the first one, they are passed to the
 \f(CWsetgroups()\fR C function (if there is one).
 .Sh "Fixed parsing of $$<digit>, &$<digit>, etc."
-.IX Subsection "Fixed parsing of $$<digit>, &$<digit>, etc."
 Perl versions before 5.004 misinterpreted any type marker followed by
 \*(L"$\*(R" and a digit.  For example, \*(L"$$0\*(R" was incorrectly taken to mean
 \*(L"${$}0\*(R" instead of \*(L"${$0}\*(R".  This bug is (mostly) fixed in Perl 5.004.
@@ -327,21 +310,23 @@ because at least two widely-used modules depend on the old meaning of
 \*(L"$$0\*(R" in a string.  So Perl 5.004 still interprets \*(L"$$<digit>\*(R" in the
 old (broken) way inside strings; but it generates this message as a
 warning.  And in Perl 5.005, this special treatment will cease.
+.Sh "Fixed localization of $<digit>, $&, etc."
+Perl versions before 5.004 did not always properly localize the
+regex-related special variables.  Perl 5.004 does localize them, as
+the documentation has always said it should.  This may result in \f(CW$1\fR,
+\f(CW$2\fR, etc. no longer being set where existing programs use them.
 .Sh "No resetting of $. on implicit close"
-.IX Subsection "No resetting of $. on implicit close"
 The documentation for Perl 5.0 has always stated that \f(CW$.\fR is \fInot\fR
 reset when an already-open file handle is reopened with no intervening
 call to \f(CWclose\fR.  Due to a bug, perl versions 5.000 through 5.003
 \fIdid\fR reset \f(CW$.\fR under that circumstance; Perl 5.004 does not.
 .Sh "\f(CWwantarray\fR may return undef"
-.IX Subsection "\f(CWwantarray\fR may return undef"
 The \f(CWwantarray\fR operator returns true if a subroutine is expected to
 return a list, and false otherwise.  In Perl 5.004, \f(CWwantarray\fR can
 also return the undefined value if a subroutine's return value will
 not be used at all, which allows subroutines to avoid a time-consuming
 calculation of a return value if it isn't going to be used.
 .Sh "Changes to tainting checks"
-.IX Subsection "Changes to tainting checks"
 A bug in previous versions may have failed to detect some insecure
 conditions when taint checks are turned on.  (Taint checks are used
 in setuid or setgid scripts, or when explicitly turned on with the
@@ -352,17 +337,14 @@ hole was just plugged.
 .PP
 The new restrictions when tainting include:
 .Ip "No glob() or <*>" 5
-.IX Item "No glob() or <*>"
 These operators may spawn the C shell (csh), which cannot be made
 safe.  This restriction will be lifted in a future version of Perl
 when globbing is implemented without the use of an external program.
 .Ip "No spawning if tainted $\s-1CDPATH\s0, $\s-1ENV\s0, $\s-1BASH_ENV\s0" 5
-.IX Item "No spawning if tainted $\s-1CDPATH\s0, $\s-1ENV\s0, $\s-1BASH_ENV\s0"
 These environment variables may alter the behavior of spawned programs
 (especially shells) in ways that subvert security.  So now they are
 treated as dangerous, in the manner of \f(CW$IFS\fR and \f(CW$PATH\fR.
 .Ip "No spawning if tainted $\s-1TERM\s0 doesn't look like a terminal name" 5
-.IX Item "No spawning if tainted $\s-1TERM\s0 doesn't look like a terminal name"
 Some termcap libraries do unsafe things with \f(CW$TERM\fR.  However, it would be
 unnecessarily harsh to treat all \f(CW$TERM\fR values as unsafe, since only shell
 metacharacters can cause trouble in \f(CW$TERM\fR.  So a tainted \f(CW$TERM\fR is
@@ -370,13 +352,11 @@ considered to be safe if it contains only alphanumerics, underscores,
 dashes, and colons, and unsafe if it contains other characters (including
 whitespace).
 .Sh "New Opcode module and revised Safe module"
-.IX Subsection "New Opcode module and revised Safe module"
 A new Opcode module supports the creation, manipulation and
 application of opcode masks.  The revised Safe module has a new \s-1API\s0
 and is implemented using the new Opcode module.  Please read the new
 Opcode and Safe documentation.
 .Sh "Embedding improvements"
-.IX Subsection "Embedding improvements"
 In older versions of Perl it was not possible to create more than one
 Perl interpreter instance inside a single process without leaking like a
 sieve and/or crashing.  The bugs that caused this behavior have all been
@@ -384,7 +364,6 @@ fixed.  However, you still must take care when embedding Perl in a C
 program.  See the updated perlembed manpage for tips on how to manage
 your interpreters.
 .Sh "Internal change: FileHandle class based on \s-1IO\s0::* classes"
-.IX Subsection "Internal change: FileHandle class based on \s-1IO\s0::* classes"
 File handles are now stored internally as type \s-1IO::\s0Handle.  The
 FileHandle module is still supported for backwards compatibility, but
 it is now merely a front end to the \s-1IO\s0::* modules -- specifically,
@@ -394,14 +373,11 @@ require, that you use the \s-1IO\s0::* modules in new code.
 In harmony with this change, \f(CW*GLOB{FILEHANDLE}\fR is now just a
 backward-compatible synonym for \f(CW*GLOB{IO}\fR.
 .Sh "Internal change: PerlIO abstraction interface"
-.IX Subsection "Internal change: PerlIO abstraction interface"
 It is now possible to build Perl with \s-1AT\s0&T's sfio \s-1IO\s0 package
 instead of stdio.  See the \fIperlapio\fR manpage for more details, and
 the \fI\s-1INSTALL\s0\fR file for how to use it.
 .Sh "New and changed syntax"
-.IX Subsection "New and changed syntax"
 .Ip "$coderef->(\s-1PARAMS\s0)" 5
-.IX Item "$coderef->(\s-1PARAMS\s0)"
 A subroutine reference may now be suffixed with an arrow and a
 (possibly empty) parameter list.  This syntax denotes a call of the
 referenced subroutine, with the given parameters (if any).
@@ -412,32 +388,26 @@ This new syntax follows the pattern of \f(CW$hashref->{FOO}\fR and
 thus, \f(CW&{$table->{FOO}}($bar)\fR may now be written
 \f(CW$table->{FOO}->($bar)\fR.
 .Sh "New and changed builtin constants"
-.IX Subsection "New and changed builtin constants"
 .Ip "_\|_PACKAGE_\|_" 5
-.IX Item "_\|_PACKAGE_\|_"
 The current package name at compile time, or the undefined value if
 there is no current package (due to a \f(CWpackage;\fR directive).  Like
 \f(CW__FILE__\fR and \f(CW__LINE__\fR, \f(CW__PACKAGE__\fR does \fInot\fR interpolate
 into strings.
 .Sh "New and changed builtin variables"
-.IX Subsection "New and changed builtin variables"
 .Ip "$^E" 5
-.IX Item "$^E"
 Extended error message on some platforms.  (Also known as
 \f(CW$EXTENDED_OS_ERROR\fR if you \f(CWuse English\fR).
 .Ip "$^H" 5
-.IX Item "$^H"
 The current set of syntax checks enabled by \f(CWuse strict\fR.  See the
 documentation of \f(CWstrict\fR for more details.  Not actually new, but
 newly documented.
 Because it is intended for internal use by Perl core components,
 there is no \f(CWuse English\fR long name for this variable.
 .Ip "$^M" 5
-.IX Item "$^M"
 By default, running out of memory it is not trappable.  However, if
 compiled for this, Perl may use the contents of \f(CW$^M\fR as an emergency
 pool after \fIdie()\fRing with this message.  Suppose that your Perl were
-compiled with \-\s-1DEMERGENCY_SBRK\s0 and used Perl's malloc.  Then
+compiled with \-\s-1DPERL_EMERGENCY_SBRK\s0 and used Perl's malloc.  Then
 .Sp
 .Vb 1
 \&    $^M = 'a' x (1<<16);
@@ -447,16 +417,12 @@ See the \fI\s-1INSTALL\s0\fR file for information on how to enable this option.
 As a disincentive to casual use of this advanced feature,
 there is no \f(CWuse English\fR long name for this variable.
 .Sh "New and changed builtin functions"
-.IX Subsection "New and changed builtin functions"
 .Ip "delete on slices" 5
-.IX Item "delete on slices"
 This now works.  (e.g. \f(CWdelete @ENV{'PATH', 'MANPATH'}\fR)
 .Ip "flock" 5
-.IX Item "flock"
 is now supported on more platforms, prefers fcntl to lockf when
 emulating, and always flushes before (un)locking.
 .Ip "printf and sprintf" 5
-.IX Item "printf and sprintf"
 Perl now implements these functions itself; it doesn't use the C
 library function \fIsprintf()\fR any more, except for floating-point
 numbers, and even then only known flags are allowed.  As a result, it
@@ -486,7 +452,6 @@ the same effect as the \*(L'\-\*(R' flag: left-justification.
 .Sp
 See the \f(CWsprintf\fR entry in the \fIperlfunc\fR manpage for a complete list of conversion and flags.
 .Ip "keys as an lvalue" 5
-.IX Item "keys as an lvalue"
 As an lvalue, \f(CWkeys\fR allows you to increase the number of hash buckets
 allocated for the given hash.  This can gain you a measure of efficiency if
 you know the hash is going to get big.  (This is similar to pre-extending
@@ -502,7 +467,6 @@ You can't shrink the number of buckets allocated for the hash using
 \f(CWkeys\fR in this way (but you needn't worry about doing this by accident,
 as trying has no effect).
 .Ip "my() in Control Structures" 5
-.IX Item "my() in Control Structures"
 You can now use \fImy()\fR (with or without the parentheses) in the control
 expressions of control structures such as:
 .Sp
@@ -537,23 +501,23 @@ the loop, but not beyond it.
 Note that you still cannot use \fImy()\fR on global punctuation variables
 such as \f(CW$_\fR and the like.
 .Ip "pack() and unpack()" 5
-.IX Item "pack() and unpack()"
 A new format \*(L'w\*(R' represents a \s-1BER\s0 compressed integer (as defined in
 \s-1ASN\s0.1).  Its format is a sequence of one or more bytes, each of which
 provides seven bits of the total value, with the most significant
 first.  Bit eight of each byte is set, except for the last byte, in
 which bit eight is clear.
 .Sp
+If \*(L'p\*(R' or \*(L'P\*(R' are given undef as values, they now generate a \s-1NULL\s0
+pointer.
+.Sp
 Both \fIpack()\fR and \fIunpack()\fR now fail when their templates contain invalid
 types.  (Invalid types used to be ignored.)
 .Ip "sysseek()" 5
-.IX Item "sysseek()"
 The new \fIsysseek()\fR operator is a variant of \fIseek()\fR that sets and gets the
 file's system read/write position, using the \fIlseek\fR\|(2) system call.  It is
 the only reliable way to seek before using \fIsysread()\fR or \fIsyswrite()\fR.  Its
 return value is the new position, or the undefined value on failure.
 .Ip "use \s-1VERSION\s0" 5
-.IX Item "use \s-1VERSION\s0"
 If the first argument to \f(CWuse\fR is a number, it is treated as a version
 number instead of a module name.  If the version of the Perl interpreter
 is less than \s-1VERSION\s0, then an error message is printed and Perl exits
@@ -564,7 +528,6 @@ need to check the current Perl version before \f(CWuse\fRing library modules
 which have changed in incompatible ways from older versions of Perl.
 (We try not to do this more than we have to.)
 .Ip "use Module \s-1VERSION\s0 \s-1LIST\s0" 5
-.IX Item "use Module \s-1VERSION\s0 \s-1LIST\s0"
 If the \s-1VERSION\s0 argument is present between Module and \s-1LIST\s0, then the
 \f(CWuse\fR will call the \s-1VERSION\s0 method in class Module with the given
 version as an argument.  The default \s-1VERSION\s0 method, inherited from
@@ -577,13 +540,11 @@ in the Exporter module, but it is faster and can be used with modules
 that don't use the Exporter.  It is the recommended method for new
 code.
 .Ip "prototype(\s-1FUNCTION\s0)" 5
-.IX Item "prototype(\s-1FUNCTION\s0)"
 Returns the prototype of a function as a string (or \f(CWundef\fR if the
 function has no prototype).  \s-1FUNCTION\s0 is a reference to or the name of the
 function whose prototype you want to retrieve.
 (Not actually new; just never documented before.)
 .Ip "srand" 5
-.IX Item "srand"
 The default seed for \f(CWsrand\fR, which used to be \f(CWtime\fR, has been changed.
 Now it's a heady mix of difficult-to-predict system-dependent values,
 which should be sufficient for most everyday purposes.
@@ -595,11 +556,9 @@ Now, when perl sees that you're calling \f(CWrand\fR and haven't yet called
 \f(CWsrand\fR manually if your code might ever be run on a pre-5.004 system,
 of course, or if you want a seed other than the default.
 .Ip "$_ as Default" 5
-.IX Item "$_ as Default"
 Functions documented in the Camel to default to \f(CW$_\fR now in
 fact do, and all those that do are so documented in the \fIperlfunc\fR manpage.
 .Ip "\f(CWm//gc\fR does not reset search position on failure" 5
-.IX Item "\f(CWm//gc\fR does not reset search position on failure"
 The \f(CWm//g\fR match iteration construct has always reset its target
 string's search position (which is visible through the \f(CWpos\fR operator)
 when a match fails; as a result, the next \f(CWm//g\fR match after a failure
@@ -609,17 +568,14 @@ i.e. \f(CWm//gc\fR.  This feature, in conjunction with the \f(CW\eG\fR zero-widt
 assertion, makes it possible to chain matches together.  See the \fIperlop\fR manpage
 and the \fIperlre\fR manpage.
 .Ip "\f(CWm//x\fR ignores whitespace before ?*+{}" 5
-.IX Item "\f(CWm//x\fR ignores whitespace before ?*+{}"
 The \f(CWm//x\fR construct has always been intended to ignore all unescaped
 whitespace.  However, before Perl 5.004, whitespace had the effect of
 escaping repeat modifiers like \*(L"*\*(R" or \*(L"?\*(R"; for example, \f(CW/a *b/x\fR was
 (mis)interpreted as \f(CW/a\e*b/x\fR.  This bug has been fixed in 5.004.
 .Ip "nested \f(CWsub{}\fR closures work now" 5
-.IX Item "nested \f(CWsub{}\fR closures work now"
 Prior to the 5.004 release, nested anonymous functions didn't work
 right.  They do now.
 .Ip "formats work right on changing lexicals" 5
-.IX Item "formats work right on changing lexicals"
 Just like anonymous functions that contain lexical variables
 that change (like a lexical index variable for a \f(CWforeach\fR loop),
 formats now work properly.  For example, this silently failed
@@ -635,12 +591,26 @@ before (printed only zeros), but is fine now:
 \&        $i
 \&    .
 .Ve
+However, it still fails (without a warning) if the foreach is within a
+subroutine:
+.Sp
+.Vb 11
+\&    my $i;
+\&    sub foo {
+\&      foreach $i ( 1 .. 10 ) {
+\&        write;
+\&      }
+\&    }
+\&    foo;
+\&    format =
+\&        my i is @#
+\&        $i
+\&    .
+.Ve
 .Sh "New builtin methods"
-.IX Subsection "New builtin methods"
 The \f(CWUNIVERSAL\fR package automatically contains the following methods that
 are inherited by all other classes:
 .Ip "isa(\s-1CLASS\s0)" 5
-.IX Item "isa(\s-1CLASS\s0)"
 \f(CWisa\fR returns \fItrue\fR if its object is blessed into a subclass of \f(CWCLASS\fR
 .Sp
 \f(CWisa\fR is also exportable and can be called as a sub with two arguments. This
@@ -655,12 +625,10 @@ allows the ability to check what a reference points to. Example:
 \&    }
 .Ve
 .Ip "can(\s-1METHOD\s0)" 5
-.IX Item "can(\s-1METHOD\s0)"
 \f(CWcan\fR checks to see if its object has a method called \f(CWMETHOD\fR,
 if it does then a reference to the sub is returned; if it does not then
 \fIundef\fR is returned.
 .Ip "\s-1VERSION\s0( [\s-1NEED\s0] )" 5
-.IX Item "\s-1VERSION\s0( [\s-1NEED\s0] )"
 \f(CWVERSION\fR returns the version number of the class (package).  If the
 \s-1NEED\s0 argument is given then it will check that the current version (as
 defined by the \f(CW$VERSION\fR variable in the given package) not less than
@@ -683,10 +651,8 @@ You do not need to \f(CWuse UNIVERSAL\fR in order to make these methods
 available to your program.  This is necessary only if you wish to
 have \f(CWisa\fR available as a plain subroutine in the current package.
 .Sh "\s-1TIEHANDLE\s0 now supported"
-.IX Subsection "\s-1TIEHANDLE\s0 now supported"
 See the \fIperltie\fR manpage for other kinds of \fItie()\fRs.
 .Ip "\s-1TIEHANDLE\s0 classname, \s-1LIST\s0" 5
-.IX Item "\s-1TIEHANDLE\s0 classname, \s-1LIST\s0"
 This is the constructor for the class.  That means it is expected to
 return an object of some sort. The reference can be used to
 hold some internal information.
@@ -699,7 +665,6 @@ hold some internal information.
 \&    }
 .Ve
 .Ip "\s-1PRINT\s0 this, \s-1LIST\s0" 5
-.IX Item "\s-1PRINT\s0 this, \s-1LIST\s0"
 This method will be triggered every time the tied handle is printed to.
 Beyond its self reference it also expects the list that was passed to
 the print function.
@@ -712,7 +677,6 @@ the print function.
 \&    }
 .Ve
 .Ip "\s-1PRINTF\s0 this, \s-1LIST\s0" 5
-.IX Item "\s-1PRINTF\s0 this, \s-1LIST\s0"
 This method will be triggered every time the tied handle is printed to
 with the \f(CWprintf()\fR function.
 Beyond its self reference it also expects the format and list that was
@@ -726,7 +690,6 @@ passed to the printf function.
 \&    }
 .Ve
 .Ip "\s-1READ\s0 this \s-1LIST\s0" 5
-.IX Item "\s-1READ\s0 this \s-1LIST\s0"
 This method will be called when the handle is read from via the \f(CWread\fR
 or \f(CWsysread\fR functions.
 .Sp
@@ -738,7 +701,6 @@ or \f(CWsysread\fR functions.
 \&    }
 .Ve
 .Ip "\s-1READLINE\s0 this" 5
-.IX Item "\s-1READLINE\s0 this"
 This method will be called when the handle is read from. The method
 should return undef when there is no more data.
 .Sp
@@ -749,14 +711,12 @@ should return undef when there is no more data.
 \&    }
 .Ve
 .Ip "\s-1GETC\s0 this" 5
-.IX Item "\s-1GETC\s0 this"
 This method will be called when the \f(CWgetc\fR function is called.
 .Sp
 .Vb 1
 \&    sub GETC { print "Don't GETC, Get Perl"; return "a"; }
 .Ve
 .Ip "\s-1DESTROY\s0 this" 5
-.IX Item "\s-1DESTROY\s0 this"
 As with the other types of ties, this method will be called when the
 tied handle is about to be destroyed. This is useful for debugging and
 possibly for cleaning up.
@@ -767,28 +727,25 @@ possibly for cleaning up.
 \&    }
 .Ve
 .Sh "Malloc enhancements"
-.IX Subsection "Malloc enhancements"
-Four new compilation flags are recognized by malloc.c.  (They have no
-effect if perl is compiled with system \fImalloc()\fR.)
-.Ip "-\s-1DDEBUGGING_MSTATS\s0" 5
-.IX Item "-\s-1DDEBUGGING_MSTATS\s0"
-If perl is compiled with \f(CWDEBUGGING_MSTATS\fR defined, you can print
+If perl is compiled with the malloc included with the perl distribution
+(that is, if \f(CWperl -V:d_mymalloc\fR is \*(L'define') then you can print
 memory statistics at runtime by running Perl thusly:
-.Sp
+.PP
 .Vb 1
 \&  env PERL_DEBUG_MSTATS=2 perl your_script_here
 .Ve
 The value of 2 means to print statistics after compilation and on
-exit; with a value of 1, the statistics ares printed only on exit.
+exit; with a value of 1, the statistics are printed only on exit.
 (If you want the statistics at an arbitrary time, you'll need to
 install the optional module Devel::Peek.)
-.Ip "-\s-1DEMERGENCY_SBRK\s0" 5
-.IX Item "-\s-1DEMERGENCY_SBRK\s0"
+.PP
+Three new compilation flags are recognized by malloc.c.  (They have no
+effect if perl is compiled with system \fImalloc()\fR.)
+.Ip "-\s-1DPERL_EMERGENCY_SBRK\s0" 5
 If this macro is defined, running out of memory need not be a fatal
 error: a memory pool can allocated by assigning to the special
 variable \f(CW$^M\fR.  See the section on \fI$^M\fR.
 .Ip "-\s-1DPACK_MALLOC\s0" 5
-.IX Item "-\s-1DPACK_MALLOC\s0"
 Perl memory allocation is by bucket with sizes close to powers of two.
 Because of these malloc overhead may be big, especially for data of
 size exactly a power of two.  If \f(CWPACK_MALLOC\fR is defined, perl uses
@@ -801,7 +758,6 @@ about 20% for typical Perl usage.  Expected slowdown due to additional
 malloc overhead is in fractions of a percent (hard to measure, because
 of the effect of saved memory on speed).
 .Ip "-\s-1DTWO_POT_OPTIMIZE\s0" 5
-.IX Item "-\s-1DTWO_POT_OPTIMIZE\s0"
 Similarly to \f(CWPACK_MALLOC\fR, this macro improves allocations of data
 with size close to a power of two; but this works for big allocations
 (starting with 16K by default).  Such allocations are typical for big
@@ -818,7 +774,6 @@ Expected saving of memory is 0-100% (100% in applications which
 require most memory in such 2**n chunks); expected slowdown is
 negligible.
 .Sh "Miscellaneous efficiency enhancements"
-.IX Subsection "Miscellaneous efficiency enhancements"
 Functions that have an empty prototype and that do nothing but return
 a fixed value are now inlined (e.g. \f(CWsub PI () { 3.14159 }\fR).
 .PP
@@ -826,13 +781,12 @@ Each unique hash key is only allocated once, no matter how many hashes
 have an entry with that key.  So even if you have 100 copies of the
 same hash, the hash keys never have to be reallocated.
 .SH "Support for More Operating Systems"
-.IX Header "Support for More Operating Systems"
 Support for the following operating systems is new in Perl 5.004.
 .Sh "Win32"
-.IX Subsection "Win32"
 Perl 5.004 now includes support for building a \*(L"native\*(R" perl under
 Windows \s-1NT\s0, using the Microsoft Visual \*(C+ compiler (versions 2.0
-and above).  The resulting perl can be used under Windows 95 (if it
+and above) or the Borland \*(C+ compiler (versions 5.02 and above).
+The resulting perl can be used under Windows 95 (if it
 is installed in the same directory locations as it got installed
 in Windows \s-1NT\s0).  This port includes support for perl extension
 building tools like the \fIMakeMaker\fR manpage and the \fIh2xs\fR manpage, so that many extensions
@@ -846,29 +800,20 @@ Cygwin32 is a set of \s-1GNU\s0 tools that make it possible to compile and run
 many \s-1UNIX\s0 programs under Windows \s-1NT\s0 by providing a mostly \s-1UNIX\s0\-like 
 interface for compilation and execution.  See the \fI\s-1README\s0.cygwin32\fR manpage for
 more details on this port, and how to obtain the Cygwin32 toolkit.
-This port has not been as well tested as the \*(L"native\*(R" port described
-above (which is not as well tested as we'd like either :)
 .Sh "Plan 9"
-.IX Subsection "Plan 9"
 See the \fI\s-1README\s0.plan9\fR manpage.
 .Sh "\s-1QNX\s0"
-.IX Subsection "\s-1QNX\s0"
 See the \fI\s-1README\s0.qnx\fR manpage.
 .Sh "AmigaOS"
-.IX Subsection "AmigaOS"
 See the \fI\s-1README\s0.amigaos\fR manpage.
 .SH "Pragmata"
-.IX Header "Pragmata"
 Six new pragmatic modules exist:
 .Ip "use autouse \s-1MODULE\s0 => qw(sub1 sub2 sub3)" 5
-.IX Item "use autouse \s-1MODULE\s0 => qw(sub1 sub2 sub3)"
 Defers \f(CWrequire MODULE\fR until someone calls one of the specified
 subroutines (which must be exported by \s-1MODULE\s0).  This pragma should be
 used with caution, and only when necessary.
 .Ip "use blib" 5
-.IX Item "use blib"
 .Ip "use blib \*(N'dir\*(T'" 5
-.IX Item "use blib \*(N'dir\*(T'"
 Looks for MakeMaker-like \fI'blib\*(R'\fR directory structure starting in
 \fIdir\fR (or current directory) and working back up to five levels of
 parent directories.
@@ -876,11 +821,9 @@ parent directories.
 Intended for use on command line with \fB\-M\fR option as a way of testing
 arbitrary scripts against an uninstalled version of a package.
 .Ip "use constant \s-1NAME\s0 => \s-1VALUE\s0" 5
-.IX Item "use constant \s-1NAME\s0 => \s-1VALUE\s0"
 Provides a convenient interface for creating compile-time constants,
 See the section on \fIConstant Functions\fR in the \fIperlsub\fR manpage.
 .Ip "use locale" 5
-.IX Item "use locale"
 Tells the compiler to enable (or disable) the use of \s-1POSIX\s0 locales for
 builtin operations.
 .Sp
@@ -897,10 +840,8 @@ current file.  Locales can be switched and queried with
 .Sp
 See the \fIperllocale\fR manpage for more information.
 .Ip "use ops" 5
-.IX Item "use ops"
 Disable unsafe opcodes, or any named opcodes, when compiling Perl code.
 .Ip "use vmsish" 5
-.IX Item "use vmsish"
 Enable \s-1VMS\s0\-specific language features.  Currently, there are three
 \s-1VMS\s0\-specific features available: \*(L'status\*(R', which makes \f(CW$?\fR and
 \f(CWsystem\fR return genuine \s-1VMS\s0 status values instead of emulating \s-1POSIX\s0;
@@ -908,9 +849,7 @@ Enable \s-1VMS\s0\-specific language features.  Currently, there are three
 assuming that \f(CWexit 1\fR is an error; and \*(L'time\*(R', which makes all times
 relative to the local time zone, in the \s-1VMS\s0 tradition.
 .SH "Modules"
-.IX Header "Modules"
 .Sh "Required Updates"
-.IX Subsection "Required Updates"
 Though Perl 5.004 is compatible with almost all modules that work
 with Perl 5.003, there are a few exceptions:
 .PP
@@ -925,7 +864,6 @@ Also, the majordomo mailing list program, version 1.94.1, doesn't work
 with Perl 5.004 (nor with perl 4), because it executes an invalid
 regular expression.  This bug is fixed in majordomo version 1.94.2.
 .Sh "Installation directories"
-.IX Subsection "Installation directories"
 The \fIinstallperl\fR script now places the Perl source files for
 extensions in the architecture-specific library directory, which is
 where the shared libraries for extensions have always been.  This
@@ -934,7 +872,6 @@ library directory unchanged from a previous version, without running
 the risk of binary incompatibility between extensions\*(R' Perl source and
 shared libraries.
 .Sh "Module information summary"
-.IX Subsection "Module information summary"
 Brand new modules, arranged by topic rather than strictly
 alphabetically:
 .PP
@@ -990,7 +927,6 @@ alphabetically:
 \&    UNIVERSAL.pm         Base class for *ALL* classes
 .Ve
 .Sh "Fcntl"
-.IX Subsection "Fcntl"
 New constants in the existing Fcntl modules are now supported,
 provided that your operating system happens to support them:
 .PP
@@ -1015,7 +951,6 @@ no \fIflock()\fR system call, Perl emulates it).  However, for historical
 reasons, these constants are not exported unless they are explicitly
 requested with the \*(L":flock\*(R" tag (e.g. \f(CWuse Fcntl ':flock'\fR).
 .Sh "\s-1IO\s0"
-.IX Subsection "\s-1IO\s0"
 The \s-1IO\s0 module provides a simple mechanism to load all of the \s-1IO\s0 modules at one
 go.  Currently this includes:
 .PP
@@ -1029,7 +964,6 @@ go.  Currently this includes:
 For more information on any of these modules, please see its
 respective documentation.
 .Sh "Math::Complex"
-.IX Subsection "Math::Complex"
 The Math::Complex module has been totally rewritten, and now supports
 more operations.  These are overloaded:
 .PP
@@ -1052,44 +986,33 @@ And these functions are now exported:
 \&    cplx cplxe
 .Ve
 .Sh "Math::Trig"
-.IX Subsection "Math::Trig"
 This new module provides a simpler interface to parts of Math::Complex for
 those who need trigonometric functions only for real numbers.
 .Sh "DB_File"
-.IX Subsection "DB_File"
 There have been quite a few changes made to DB_File. Here are a few of
 the highlights:
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Fixed a handful of bugs.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 By public demand, added support for the standard hash function \fIexists()\fR.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Made it compatible with Berkeley \s-1DB\s0 1.86.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Made negative subscripts work with \s-1RECNO\s0 interface.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Changed the default flags from O_RDWR to O_CREAT|O_RDWR and the default
 mode from 0640 to 0666.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Made DB_File automatically import the \fIopen()\fR constants (O_RDWR,
 O_CREAT etc.) from Fcntl, if available.
 .Ip "\(bu" 5
-.IX Item "\(bu"
 Updated documentation.
 .PP
 Refer to the \s-1HISTORY\s0 section in DB_File.pm for a complete list of
 changes. Everything after DB_File 1.01 has been added since 5.003.
 .Sh "Net::Ping"
-.IX Subsection "Net::Ping"
 Major rewrite \- support added for both udp echo and real icmp pings.
 .Sh "Object-oriented overrides for builtin operators"
-.IX Subsection "Object-oriented overrides for builtin operators"
 Many of the Perl builtins returning lists now have
 object-oriented overrides.  These are:
 .PP
@@ -1112,19 +1035,14 @@ For example, you can now say
 \&    $his = (stat($filename)->st_uid == pwent($whoever)->pw_uid);
 .Ve
 .SH "Utility Changes"
-.IX Header "Utility Changes"
 .Sh "pod2html"
-.IX Subsection "pod2html"
 .Ip "Sends converted \s-1HTML\s0 to standard output" 5
-.IX Item "Sends converted \s-1HTML\s0 to standard output"
 The \fIpod2html\fR utility included with Perl 5.004 is entirely new.
 By default, it sends the converted \s-1HTML\s0 to its standard output,
 instead of writing it to a file like Perl 5.003's \fIpod2html\fR did.
 Use the \fB--outfile=\s-1FILENAME\s0\fR option to write to a file.
 .Sh "xsubpp"
-.IX Subsection "xsubpp"
 .Ip "\f(CWvoid\fR XSUBs now default to returning nothing" 5
-.IX Item "\f(CWvoid\fR XSUBs now default to returning nothing"
 Due to a documentation/implementation bug in previous versions of
 Perl, XSUBs with a return type of \f(CWvoid\fR have actually been
 returning one value.  Usually that value was the \s-1GV\s0 for the \s-1XSUB\s0,
@@ -1142,9 +1060,7 @@ It does so by examining the text of the \s-1XSUB\s0: if \fIxsubpp\fR finds
 what looks like an assignment to \f(CWST(0)\fR, it assumes that the
 \s-1XSUB\s0's return type is really \f(CWSV *\fR.
 .SH "C Language API Changes"
-.IX Header "C Language API Changes"
 .Ip "\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR" 5
-.IX Item "\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR"
 The \f(CWgv_fetchmethod\fR function finds a method for an object, just like
 in Perl 5.003.  The \s-1GV\s0 it returns may be a method cache entry.
 However, in Perl 5.004, method cache entries are not visible to users;
@@ -1157,13 +1073,11 @@ The most likely symptom of passing the result of \f(CWgv_fetchmethod\fR to
 error on the \fIsecond\fR call to a given method (since there is no cache
 on the first call).
 .Ip "\f(CWperl_eval_pv\fR" 5
-.IX Item "\f(CWperl_eval_pv\fR"
 A new function handy for eval'ing strings of Perl code inside C code.
 This function returns the value from the eval statement, which can
 be used instead of fetching globals from the symbol table.  See
 the \fIperlguts\fR manpage, the \fIperlembed\fR manpage and the \fIperlcall\fR manpage for details and examples.
 .Ip "Extended \s-1API\s0 for manipulating hashes" 5
-.IX Item "Extended \s-1API\s0 for manipulating hashes"
 Internal handling of hash keys has changed.  The old hashtable \s-1API\s0 is
 still fully supported, and will likely remain so.  The additions to the
 \s-1API\s0 allow passing keys as \f(CWSV*\fRs, so that \f(CWtied\fR hashes can be given
@@ -1173,36 +1087,26 @@ access functions and macros if they wish to use \f(CWSV*\fR keys.  These
 additions also make it feasible to manipulate \f(CWHE*\fRs (hash entries),
 which can be more efficient.  See the \fIperlguts\fR manpage for details.
 .SH "Documentation Changes"
-.IX Header "Documentation Changes"
 Many of the base and library pods were updated.  These
 new pods are included in section 1:
 .Ip "the \fIperldelta\fR manpage" 5
-.IX Item "the \fIperldelta\fR manpage"
 This document.
 .Ip "the \fIperlfaq\fR manpage" 5
-.IX Item "the \fIperlfaq\fR manpage"
 Frequently asked questions.
 .Ip "the \fIperllocale\fR manpage" 5
-.IX Item "the \fIperllocale\fR manpage"
 Locale support (internationalization and localization).
 .Ip "the \fIperltoot\fR manpage" 5
-.IX Item "the \fIperltoot\fR manpage"
 Tutorial on Perl \s-1OO\s0 programming.
 .Ip "the \fIperlapio\fR manpage" 5
-.IX Item "the \fIperlapio\fR manpage"
 Perl internal \s-1IO\s0 abstraction interface.
 .Ip "the \fIperlmodlib\fR manpage" 5
-.IX Item "the \fIperlmodlib\fR manpage"
 Perl module library and recommended practice for module creation.
 Extracted from the \fIperlmod\fR manpage (which is much smaller as a result).
 .Ip "the \fIperldebug\fR manpage" 5
-.IX Item "the \fIperldebug\fR manpage"
 Although not new, this has been massively updated.
 .Ip "the \fIperlsec\fR manpage" 5
-.IX Item "the \fIperlsec\fR manpage"
 Although not new, this has been massively updated.
 .SH "New Diagnostics"
-.IX Header "New Diagnostics"
 Several new conditions will trigger warnings that were
 silent before.  Some only affect certain platforms.
 The following new warnings and errors outline these.
@@ -1219,14 +1123,12 @@ increasing order of desperation):
 \&   (A) An alien error message (not generated by Perl).
 .Ve
 .Ip "\*(N"my\*(T" variable %s masks earlier declaration in same scope" 5
-.IX Item "\*(N"my\*(T" variable %s masks earlier declaration in same scope"
-(S) A lexical variable has been redeclared in the same scope, effectively
+(W) A lexical variable has been redeclared in the same scope, effectively
 eliminating all access to the previous instance.  This is almost always
 a typographical error.  Note that the earlier variable will still exist
 until the end of the scope or until all closure referents to it are
 destroyed.
 .Ip "%s argument is not a \s-1HASH\s0 element or slice" 5
-.IX Item "%s argument is not a \s-1HASH\s0 element or slice"
 (F) The argument to \fIdelete()\fR must be either a hash element, such as
 .Sp
 .Vb 2
@@ -1240,13 +1142,10 @@ or a hash slice, such as
 \&    @{$ref->[12]}{"susie", "queue"}
 .Ve
 .Ip "Allocation too large: %lx" 5
-.IX Item "Allocation too large: %lx"
 (X) You can't allocate more than 64K on an \s-1MS\s0\-\s-1DOS\s0 machine.
 .Ip "Allocation too large" 5
-.IX Item "Allocation too large"
 (F) You can't allocate more than 2^31+"small amount\*(R" bytes.
 .Ip "Applying %s to %s will act on scalar(%s)" 5
-.IX Item "Applying %s to %s will act on scalar(%s)"
 (W) The pattern match (//), substitution (s///), and translation (tr///)
 operators work on scalar values.  If you apply one of them to an array
 or a hash, it will convert the array or hash to a scalar value -- the
@@ -1254,79 +1153,63 @@ length of an array, or the population info of a hash -- and then work on
 that scalar value.  This is probably not what you meant to do.  See
 the \f(CWgrep\fR entry in the \fIperlfunc\fR manpage and the \f(CWmap\fR entry in the \fIperlfunc\fR manpage for alternatives.
 .Ip "Attempt to free nonexistent shared string" 5
-.IX Item "Attempt to free nonexistent shared string"
 (P) Perl maintains a reference counted internal table of strings to
 optimize the storage and access of hash keys and other strings.  This
 indicates someone tried to decrement the reference count of a string
 that can no longer be found in the table.
 .Ip "Attempt to use reference as lvalue in substr" 5
-.IX Item "Attempt to use reference as lvalue in substr"
 (W) You supplied a reference as the first argument to \fIsubstr()\fR used
 as an lvalue, which is pretty strange.  Perhaps you forgot to
 dereference it first.  See the \f(CWsubstr\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Can't redefine active sort subroutine %s" 5
-.IX Item "Can't redefine active sort subroutine %s"
 (F) Perl optimizes the internal handling of sort subroutines and keeps
 pointers into them.  You tried to redefine one such sort subroutine when it
 was currently active, which is not allowed.  If you really want to do
 this, you should write \f(CWsort { &func } @x\fR instead of \f(CWsort func @x\fR.
 .Ip "Can't use bareword '%s' as %s ref while \*(N"strict refs\*(T" in use" 5
-.IX Item "Can't use bareword '%s' as %s ref while \*(N"strict refs\*(T" in use"
 (F) Only hard references are allowed by \*(L"strict refs\*(R".  Symbolic references
 are disallowed.  See the \fIperlref\fR manpage.
 .Ip "Cannot resolve method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'" 5
-.IX Item "Cannot resolve method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
 (P) Internal error trying to resolve overloading specified by a method
 name (as opposed to a subroutine reference).
 .Ip "Constant subroutine %s redefined" 5
-.IX Item "Constant subroutine %s redefined"
 (S) You redefined a subroutine which had previously been eligible for
 inlining.  See the section on \fIConstant Functions\fR in the \fIperlsub\fR manpage for commentary and
 workarounds.
 .Ip "Constant subroutine %s undefined" 5
-.IX Item "Constant subroutine %s undefined"
 (S) You undefined a subroutine which had previously been eligible for
 inlining.  See the section on \fIConstant Functions\fR in the \fIperlsub\fR manpage for commentary and
 workarounds.
 .Ip "Copy method did not return a reference" 5
-.IX Item "Copy method did not return a reference"
 (F) The method which overloads \*(L"=\*(R" is buggy. See the section on \fICopy Constructor\fR in the \fIoverload\fR manpage.
 .Ip "Died" 5
-.IX Item "Died"
 (F) You passed \fIdie()\fR an empty string (the equivalent of \f(CWdie ""\fR) or
 you called it with no args and both \f(CW$@\fR and \f(CW$_\fR were empty.
 .Ip "Exiting pseudo-block via %s" 5
-.IX Item "Exiting pseudo-block via %s"
 (W) You are exiting a rather special block construct (like a sort block or
 subroutine) by unconventional means, such as a goto, or a loop control
 statement.  See the \f(CWsort\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Identifier too long" 5
-.IX Item "Identifier too long"
 (F) Perl limits identifiers (names for variables, functions, etc.) to
 252 characters for simple names, somewhat more for compound names (like
 \f(CW$A::B\fR).  You've exceeded Perl's limits.  Future versions of Perl are
 likely to eliminate these arbitrary limitations.
 .Ip "Illegal character %s (carriage return)" 5
-.IX Item "Illegal character %s (carriage return)"
 (F) A carriage return character was found in the input.  This is an
 error, and not a warning, because carriage return characters can break
 multi-line strings, including here documents (e.g., \f(CWprint <<EOF;\fR).
 .Ip "Illegal switch in \s-1PERL5OPT\s0: %s" 5
-.IX Item "Illegal switch in \s-1PERL5OPT\s0: %s"
 (X) The \s-1PERL5OPT\s0 environment variable may only be used to set the
 following switches: \fB\-[DIMUdmw]\fR.
 .Ip "Integer overflow in hex number" 5
-.IX Item "Integer overflow in hex number"
 (S) The literal hex number you have specified is too big for your
 architecture. On a 32-bit architecture the largest hex literal is
 0xFFFFFFFF.
 .Ip "Integer overflow in octal number" 5
-.IX Item "Integer overflow in octal number"
 (S) The literal octal number you have specified is too big for your
 architecture. On a 32-bit architecture the largest octal literal is
 037777777777.
 .Ip "internal error: glob failed" 5
-.IX Item "internal error: glob failed"
 (P) Something went wrong with the external \fIprogram\fR\|(s) used for \f(CWglob\fR
 and \f(CW<*.c>\fR.  This may mean that your csh (C shell) is
 broken.  If so, you should change all of the csh-related variables in
@@ -1336,34 +1219,27 @@ empty (except that \f(CWd_csh\fR should be \f(CW'undef'\fR) so that Perl will
 think csh is missing.  In either case, after editing config.sh, run
 \&\f(CW./Configure -S\fR and rebuild Perl.
 .Ip "Invalid conversion in %s: \*(N"%s\*(T"" 5
-.IX Item "Invalid conversion in %s: \*(N"%s\*(T""
 (W) Perl does not understand the given format conversion.
 See the \f(CWsprintf\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Invalid type in pack: \*(N'%s\*(T'" 5
-.IX Item "Invalid type in pack: \*(N'%s\*(T'"
 (F) The given character is not a valid pack type.  See the \f(CWpack\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Invalid type in unpack: \*(N'%s\*(T'" 5
-.IX Item "Invalid type in unpack: \*(N'%s\*(T'"
 (F) The given character is not a valid unpack type.  See the \f(CWunpack\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Name \*(N"%s::%s\*(T" used only once: possible typo" 5
-.IX Item "Name \*(N"%s::%s\*(T" used only once: possible typo"
 (W) Typographical errors often show up as unique variable names.
 If you had a good reason for having a unique name, then just mention
 it again somehow to suppress the message (the \f(CWuse vars\fR pragma is
 provided for just this purpose).
 .Ip "Null picture in formline" 5
-.IX Item "Null picture in formline"
 (F) The first argument to formline must be a valid format picture
 specification.  It was found to be empty, which probably means you
 supplied it an uninitialized value.  See the \fIperlform\fR manpage.
 .Ip "Offset outside string" 5
-.IX Item "Offset outside string"
 (F) You tried to do a read/write/send/recv operation with an offset
 pointing outside the buffer.  This is difficult to imagine.
 The sole exception to this is that \f(CWsysread()\fRing past the buffer
 will extend the buffer and zero pad the new area.
 .Ip "Out of memory!" 5
-.IX Item "Out of memory!"
 (X|F) The \fImalloc()\fR function returned 0, indicating there was insufficient
 remaining memory (or virtual memory) to satisfy the request.
 .Sp
@@ -1373,16 +1249,13 @@ However, if compiled for this, Perl may use the contents of \f(CW$^M\fR as
 an emergency pool after \fIdie()\fRing with this message.  In this case the
 error is trappable \fIonce\fR.
 .Ip "Out of memory during request for %s" 5
-.IX Item "Out of memory during request for %s"
 (F) The \fImalloc()\fR function returned 0, indicating there was insufficient
 remaining memory (or virtual memory) to satisfy the request. However,
 the request was judged large enough (compile-time default is 64K), so
 a possibility to shut down by trapping this error is granted.
 .Ip "panic: frexp" 5
-.IX Item "panic: frexp"
 (P) The library function \fIfrexp()\fR failed, making \fIprintf\fR\|("%f") impossible.
 .Ip "Possible attempt to put comments in qw() list" 5
-.IX Item "Possible attempt to put comments in qw() list"
 (W) \fIqw()\fR lists contain items separated by whitespace; as with literal
 strings, comment characters are not ignored, but are instead treated
 as literal data.  (You may have used different delimiters than the
@@ -1415,7 +1288,6 @@ old-fashioned way, with quotes and commas:
 \&    );
 .Ve
 .Ip "Possible attempt to separate words with commas" 5
-.IX Item "Possible attempt to separate words with commas"
 (W) \fIqw()\fR lists contain items separated by whitespace; therefore commas
 aren't needed to separate the items. (You may have used different
 delimiters than the parentheses shown here; braces are also frequently
@@ -1433,7 +1305,6 @@ commas if you don't want them to appear in your data:
 \&    qw! a b c !;
 .Ve
 .Ip "Scalar value @%s{%s} better written as $%s{%s}" 5
-.IX Item "Scalar value @%s{%s} better written as $%s{%s}"
 (W) You've used a hash slice (indicated by @) to select a single element of
 a hash.  Generally it's better to ask for a scalar value (indicated by $).
 The difference is that \f(CW$foo{&bar}\fR always behaves like a scalar, both when
@@ -1441,35 +1312,29 @@ assigning to it and when evaluating its argument, while \f(CW@foo{&bar}\fR behav
 like a list when you assign to it, and provides a list context to its
 subscript, which can do weird things if you're expecting only one subscript.
 .Ip "Stub found while resolving method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'" 5
-.IX Item "Stub found while resolving method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
 (P) Overloading resolution over \f(CW@ISA\fR tree may be broken by importing stubs.
 Stubs should never be implicitely created, but explicit calls to \f(CWcan\fR
 may break this.
 .Ip "Too late for \*(N"\fB\-T\fR\*(T" option" 5
-.IX Item "Too late for \*(N"\fB\-T\fR\*(T" option"
 (X) The #! line (or local equivalent) in a Perl script contains the
 \fB\-T\fR option, but Perl was not invoked with \fB\-T\fR in its argument
 list.  This is an error because, by the time Perl discovers a \fB\-T\fR in
 a script, it's too late to properly taint everything from the
 environment.  So Perl gives up.
 .Ip "untie attempted while %d inner references still exist" 5
-.IX Item "untie attempted while %d inner references still exist"
 (W) A copy of the object returned from \f(CWtie\fR (or \f(CWtied\fR) was still
 valid when \f(CWuntie\fR was called.
 .Ip "Unrecognized character %s" 5
-.IX Item "Unrecognized character %s"
 (F) The Perl parser has no idea what to do with the specified character
 in your Perl script (or eval).  Perhaps you tried to run a compressed
 script, a binary program, or a directory as a Perl program.
 .Ip "Unsupported function fork" 5
-.IX Item "Unsupported function fork"
 (F) Your version of executable does not support forking.
 .Sp
 Note that under some systems, like \s-1OS/2\s0, there may be different flavors of
 Perl executables, some of which may support fork, some not. Try changing
 the name you call Perl by to \f(CWperl_\fR, \f(CWperl__\fR, and so on.
 .Ip "Use of \*(N"$$<digit>\*(T" to mean \*(N"${$}<digit>\*(T" is deprecated" 5
-.IX Item "Use of \*(N"$$<digit>\*(T" to mean \*(N"${$}<digit>\*(T" is deprecated"
 (D) Perl versions before 5.004 misinterpreted any type marker followed
 by \*(L"$\*(R" and a digit.  For example, \*(L"$$0\*(R" was incorrectly taken to mean
 \*(L"${$}0\*(R" instead of \*(L"${$0}\*(R".  This bug is (mostly) fixed in Perl 5.004.
@@ -1480,14 +1345,12 @@ because at least two widely-used modules depend on the old meaning of
 old (broken) way inside strings; but it generates this message as a
 warning.  And in Perl 5.005, this special treatment will cease.
 .Ip "Value of %s can be \*(N"0\*(T"; test with defined()" 5
-.IX Item "Value of %s can be \*(N"0\*(T"; test with defined()"
 (W) In a conditional expression, you used <\s-1HANDLE\s0>, <*> (glob), \f(CWeach()\fR,
 or \f(CWreaddir()\fR as a boolean value.  Each of these constructs can return a
 value of \*(L"0\*(R"; that would make the conditional expression false, which is
 probably not what you intended.  When using these constructs in conditional
 expressions, test their values with the \f(CWdefined\fR operator.
 .Ip "Variable \*(N"%s\*(T" may be unavailable" 5
-.IX Item "Variable \*(N"%s\*(T" may be unavailable"
 (W) An inner (nested) \fIanonymous\fR subroutine is inside a \fInamed\fR
 subroutine, and outside that is another subroutine; and the anonymous
 (innermost) subroutine is referencing a lexical variable defined in
@@ -1509,7 +1372,6 @@ subroutine anonymous, using the \f(CWsub {}\fR syntax.  Perl has specific
 support for shared variables in nested anonymous subroutines; a named
 subroutine in between interferes with this feature.
 .Ip "Variable \*(N"%s\*(T" will not stay shared" 5
-.IX Item "Variable \*(N"%s\*(T" will not stay shared"
 (W) An inner (nested) \fInamed\fR subroutine is referencing a lexical
 variable defined in an outer subroutine.
 .Sp
@@ -1530,11 +1392,9 @@ reference variables in outer subroutines are called or referenced,
 they are automatically rebound to the current values of such
 variables.
 .Ip "Warning: something's wrong" 5
-.IX Item "Warning: something's wrong"
 (W) You passed \fIwarn()\fR an empty string (the equivalent of \f(CWwarn ""\fR) or
 you called it with no args and \f(CW$_\fR was empty.
 .Ip "Ill-formed logical name |%s| in prime_env_iter" 5
-.IX Item "Ill-formed logical name |%s| in prime_env_iter"
 (W) A warning peculiar to \s-1VMS\s0.  A logical name was encountered when preparing
 to iterate over \f(CW%ENV\fR which violates the syntactic rules governing logical
 names.  Since it cannot be translated normally, it is skipped, and will not
@@ -1542,11 +1402,9 @@ appear in \f(CW%ENV\fR.  This may be a benign occurrence, as some software packa
 might directly modify logical name tables and introduce nonstandard names,
 or it may indicate that a logical name table has been corrupted.
 .Ip "Got an error from DosAllocMem" 5
-.IX Item "Got an error from DosAllocMem"
 (P) An error peculiar to \s-1OS/2\s0.  Most probably you're using an obsolete
 version of Perl, and this should not happen anyway.
 .Ip "Malformed \s-1PERLLIB_PREFIX\s0" 5
-.IX Item "Malformed \s-1PERLLIB_PREFIX\s0"
 (F) An error peculiar to \s-1OS/2\s0.  \s-1PERLLIB_PREFIX\s0 should be of the form
 .Sp
 .Vb 1
@@ -1562,18 +1420,15 @@ of a builtin library search path, prefix2 is substituted.  The error
 may appear if components are not found, or are too long.  See
 \*(L"\s-1PERLLIB_PREFIX\s0\*(R" in \fI\s-1README\s0.os2\fR.
 .Ip "\s-1PERL_SH_DIR\s0 too long" 5
-.IX Item "\s-1PERL_SH_DIR\s0 too long"
 (F) An error peculiar to \s-1OS/2\s0. \s-1PERL_SH_DIR\s0 is the directory to find the
 \f(CWsh\fR\-shell in.  See \*(L"\s-1PERL_SH_DIR\s0\*(R" in \fI\s-1README\s0.os2\fR.
 .Ip "Process terminated by \s-1SIG\s0%s" 5
-.IX Item "Process terminated by \s-1SIG\s0%s"
 (W) This is a standard message issued by \s-1OS/2\s0 applications, while *nix
 applications die in silence.  It is considered a feature of the \s-1OS/2\s0
 port.  One can easily disable this by appropriate sighandlers, see
 the section on \fISignals\fR in the \fIperlipc\fR manpage.  See also \*(L"Process terminated by \s-1SIGTERM/SIGINT\s0\*(R"
 in \fI\s-1README\s0.os2\fR.
 .SH "BUGS"
-.IX Header "BUGS"
 If you find what you think is a bug, you might check the headers of
 recently posted articles in the comp.lang.perl.misc newsgroup.
 There may also be information at http://www.perl.com/perl/, the Perl
@@ -1585,7 +1440,6 @@ to a tiny but sufficient test case.  Your bug report, along with the
 output of \f(CWperl -V\fR, will be sent off to <\fIperlbug@perl.com\fR> to be
 analysed by the Perl porting team.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 The \fIChanges\fR file for exhaustive details on what changed.
 .PP
 The \fIINSTALL\fR file for how to build Perl.  This file has been
@@ -1596,7 +1450,6 @@ The \fIREADME\fR file for general stuff.
 .PP
 The \fICopying\fR file for copyright information.
 .SH "HISTORY"
-.IX Header "HISTORY"
 Constructed by Tom Christiansen, grabbing material with permission
 from innumerable contributors, with kibitzing by more than a few Perl
 porters.
@@ -1604,3 +1457,344 @@ porters.
 Last update: Wed May 14 11:14:09 EDT 1997
 
 .rn }` ''
+.IX Title "PERLDELTA 1"
+.IX Name "perldelta - what's new for perl5.004"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "Supported Environments"
+
+.IX Header "Core Changes"
+
+.IX Subsection "List assignment to \f(CW%ENV\fR works"
+
+.IX Subsection "\*(M"Can't locate Foo.pm in \f(CW@INC\fR\*(S" error now lists \f(CW@INC\fR"
+
+.IX Subsection "Compilation option: Binary compatibility with 5.003"
+
+.IX Subsection "\f(CW$PERL5OPT\fR environment variable"
+
+.IX Subsection "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options"
+
+.IX Subsection "More precise warnings"
+
+.IX Subsection "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods"
+
+.IX Subsection "Previously deprecated \f(CW%OVERLOAD\fR is no longer usable"
+
+.IX Subsection "Subroutine arguments created only when they're modified"
+
+.IX Subsection "Group vector changeable with \f(CW$)\fR"
+
+.IX Subsection "Fixed parsing of $$<digit>, &$<digit>, etc."
+
+.IX Subsection "Fixed localization of $<digit>, $&, etc."
+
+.IX Subsection "No resetting of $. on implicit close"
+
+.IX Subsection "\f(CWwantarray\fR may return undef"
+
+.IX Subsection "Changes to tainting checks"
+
+.IX Item "No glob() or <*>"
+
+.IX Item "No spawning if tainted $\s-1CDPATH\s0, $\s-1ENV\s0, $\s-1BASH_ENV\s0"
+
+.IX Item "No spawning if tainted $\s-1TERM\s0 doesn't look like a terminal name"
+
+.IX Subsection "New Opcode module and revised Safe module"
+
+.IX Subsection "Embedding improvements"
+
+.IX Subsection "Internal change: FileHandle class based on \s-1IO\s0::* classes"
+
+.IX Subsection "Internal change: PerlIO abstraction interface"
+
+.IX Subsection "New and changed syntax"
+
+.IX Item "$coderef->(\s-1PARAMS\s0)"
+
+.IX Subsection "New and changed builtin constants"
+
+.IX Item "_\|_PACKAGE_\|_"
+
+.IX Subsection "New and changed builtin variables"
+
+.IX Item "$^E"
+
+.IX Item "$^H"
+
+.IX Item "$^M"
+
+.IX Subsection "New and changed builtin functions"
+
+.IX Item "delete on slices"
+
+.IX Item "flock"
+
+.IX Item "printf and sprintf"
+
+.IX Item "keys as an lvalue"
+
+.IX Item "my() in Control Structures"
+
+.IX Item "pack() and unpack()"
+
+.IX Item "sysseek()"
+
+.IX Item "use \s-1VERSION\s0"
+
+.IX Item "use Module \s-1VERSION\s0 \s-1LIST\s0"
+
+.IX Item "prototype(\s-1FUNCTION\s0)"
+
+.IX Item "srand"
+
+.IX Item "$_ as Default"
+
+.IX Item "\f(CWm//gc\fR does not reset search position on failure"
+
+.IX Item "\f(CWm//x\fR ignores whitespace before ?*+{}"
+
+.IX Item "nested \f(CWsub{}\fR closures work now"
+
+.IX Item "formats work right on changing lexicals"
+
+.IX Subsection "New builtin methods"
+
+.IX Item "isa(\s-1CLASS\s0)"
+
+.IX Item "can(\s-1METHOD\s0)"
+
+.IX Item "\s-1VERSION\s0( [\s-1NEED\s0] )"
+
+.IX Subsection "\s-1TIEHANDLE\s0 now supported"
+
+.IX Item "\s-1TIEHANDLE\s0 classname, \s-1LIST\s0"
+
+.IX Item "\s-1PRINT\s0 this, \s-1LIST\s0"
+
+.IX Item "\s-1PRINTF\s0 this, \s-1LIST\s0"
+
+.IX Item "\s-1READ\s0 this \s-1LIST\s0"
+
+.IX Item "\s-1READLINE\s0 this"
+
+.IX Item "\s-1GETC\s0 this"
+
+.IX Item "\s-1DESTROY\s0 this"
+
+.IX Subsection "Malloc enhancements"
+
+.IX Item "-\s-1DPERL_EMERGENCY_SBRK\s0"
+
+.IX Item "-\s-1DPACK_MALLOC\s0"
+
+.IX Item "-\s-1DTWO_POT_OPTIMIZE\s0"
+
+.IX Subsection "Miscellaneous efficiency enhancements"
+
+.IX Header "Support for More Operating Systems"
+
+.IX Subsection "Win32"
+
+.IX Subsection "Plan 9"
+
+.IX Subsection "\s-1QNX\s0"
+
+.IX Subsection "AmigaOS"
+
+.IX Header "Pragmata"
+
+.IX Item "use autouse \s-1MODULE\s0 => qw(sub1 sub2 sub3)"
+
+.IX Item "use blib"
+
+.IX Item "use blib \*(N'dir\*(T'"
+
+.IX Item "use constant \s-1NAME\s0 => \s-1VALUE\s0"
+
+.IX Item "use locale"
+
+.IX Item "use ops"
+
+.IX Item "use vmsish"
+
+.IX Header "Modules"
+
+.IX Subsection "Required Updates"
+
+.IX Subsection "Installation directories"
+
+.IX Subsection "Module information summary"
+
+.IX Subsection "Fcntl"
+
+.IX Subsection "\s-1IO\s0"
+
+.IX Subsection "Math::Complex"
+
+.IX Subsection "Math::Trig"
+
+.IX Subsection "DB_File"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "Net::Ping"
+
+.IX Subsection "Object-oriented overrides for builtin operators"
+
+.IX Header "Utility Changes"
+
+.IX Subsection "pod2html"
+
+.IX Item "Sends converted \s-1HTML\s0 to standard output"
+
+.IX Subsection "xsubpp"
+
+.IX Item "\f(CWvoid\fR XSUBs now default to returning nothing"
+
+.IX Header "C Language API Changes"
+
+.IX Item "\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR"
+
+.IX Item "\f(CWperl_eval_pv\fR"
+
+.IX Item "Extended \s-1API\s0 for manipulating hashes"
+
+.IX Header "Documentation Changes"
+
+.IX Item "the \fIperldelta\fR manpage"
+
+.IX Item "the \fIperlfaq\fR manpage"
+
+.IX Item "the \fIperllocale\fR manpage"
+
+.IX Item "the \fIperltoot\fR manpage"
+
+.IX Item "the \fIperlapio\fR manpage"
+
+.IX Item "the \fIperlmodlib\fR manpage"
+
+.IX Item "the \fIperldebug\fR manpage"
+
+.IX Item "the \fIperlsec\fR manpage"
+
+.IX Header "New Diagnostics"
+
+.IX Item "\*(N"my\*(T" variable %s masks earlier declaration in same scope"
+
+.IX Item "%s argument is not a \s-1HASH\s0 element or slice"
+
+.IX Item "Allocation too large: %lx"
+
+.IX Item "Allocation too large"
+
+.IX Item "Applying %s to %s will act on scalar(%s)"
+
+.IX Item "Attempt to free nonexistent shared string"
+
+.IX Item "Attempt to use reference as lvalue in substr"
+
+.IX Item "Can't redefine active sort subroutine %s"
+
+.IX Item "Can't use bareword '%s' as %s ref while \*(N"strict refs\*(T" in use"
+
+.IX Item "Cannot resolve method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
+
+.IX Item "Constant subroutine %s redefined"
+
+.IX Item "Constant subroutine %s undefined"
+
+.IX Item "Copy method did not return a reference"
+
+.IX Item "Died"
+
+.IX Item "Exiting pseudo-block via %s"
+
+.IX Item "Identifier too long"
+
+.IX Item "Illegal character %s (carriage return)"
+
+.IX Item "Illegal switch in \s-1PERL5OPT\s0: %s"
+
+.IX Item "Integer overflow in hex number"
+
+.IX Item "Integer overflow in octal number"
+
+.IX Item "internal error: glob failed"
+
+.IX Item "Invalid conversion in %s: \*(N"%s\*(T""
+
+.IX Item "Invalid type in pack: \*(N'%s\*(T'"
+
+.IX Item "Invalid type in unpack: \*(N'%s\*(T'"
+
+.IX Item "Name \*(N"%s::%s\*(T" used only once: possible typo"
+
+.IX Item "Null picture in formline"
+
+.IX Item "Offset outside string"
+
+.IX Item "Out of memory!"
+
+.IX Item "Out of memory during request for %s"
+
+.IX Item "panic: frexp"
+
+.IX Item "Possible attempt to put comments in qw() list"
+
+.IX Item "Possible attempt to separate words with commas"
+
+.IX Item "Scalar value @%s{%s} better written as $%s{%s}"
+
+.IX Item "Stub found while resolving method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
+
+.IX Item "Too late for \*(N"\fB\-T\fR\*(T" option"
+
+.IX Item "untie attempted while %d inner references still exist"
+
+.IX Item "Unrecognized character %s"
+
+.IX Item "Unsupported function fork"
+
+.IX Item "Use of \*(N"$$<digit>\*(T" to mean \*(N"${$}<digit>\*(T" is deprecated"
+
+.IX Item "Value of %s can be \*(N"0\*(T"; test with defined()"
+
+.IX Item "Variable \*(N"%s\*(T" may be unavailable"
+
+.IX Item "Variable \*(N"%s\*(T" will not stay shared"
+
+.IX Item "Warning: something's wrong"
+
+.IX Item "Ill-formed logical name |%s| in prime_env_iter"
+
+.IX Item "Got an error from DosAllocMem"
+
+.IX Item "Malformed \s-1PERLLIB_PREFIX\s0"
+
+.IX Item "\s-1PERL_SH_DIR\s0 too long"
+
+.IX Item "Process terminated by \s-1SIG\s0%s"
+
+.IX Header "BUGS"
+
+.IX Header "SEE ALSO"
+
+.IX Header "HISTORY"
+

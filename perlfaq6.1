@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ6 1 "perl 5.004, patch 01" "13/May/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ6 1"
+.TH PERLFAQ6 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq6 - Regexps ($Revision: 1.17 $, $Date: 1997/04/24 22:44:10 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq6 \- Regexps ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:10 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section is surprisingly small because the rest of the FAQ is
 littered with answers involving regular expressions.  For example,
 decoding a URL and checking whether something is a number are handled
@@ -201,11 +197,9 @@ with regular expressions, but those answers are found elsewhere in
 this document (in the section on Data and the Networking one on
 networking, to be precise).
 .Sh "How can I hope to use regular expressions without creating illegible and unmaintainable code?"
-.IX Subsection "How can I hope to use regular expressions without creating illegible and unmaintainable code?"
 Three techniques can make regular expressions maintainable and
 understandable.
 .Ip "Comments Outside the Regexp" 4
-.IX Item "Comments Outside the Regexp"
 Describe what you're doing and how you're doing it, using normal Perl
 comments.
 .Sp
@@ -215,7 +209,6 @@ comments.
 \&    s/^(\ew+)(.*)/ lc($1) . ":" . length($2) /ge;
 .Ve
 .Ip "Comments Inside the Regexp" 4
-.IX Item "Comments Inside the Regexp"
 The \f(CW/x\fR modifier causes whitespace to be ignored in a regexp pattern
 (except in a character class), and also allows you to use normal
 comments there, too.  As you can imagine, whitespace and comments help
@@ -243,7 +236,6 @@ into this:
 It's still not quite so clear as prose, but it is very useful for
 describing the meaning of each part of the pattern.
 .Ip "Different Delimiters" 4
-.IX Item "Different Delimiters"
 While we normally think of patterns as being delimited with \f(CW/\fR
 characters, they can be delimited by almost any character.  the \fIperlre\fR manpage
 describes this.  For example, the \f(CWs///\fR above uses braces as
@@ -255,7 +247,6 @@ delimiter within the pattern:
 \&    s#/usr/local#/usr/share#g;          # better
 .Ve
 .Sh "I'm having trouble matching over more than one line.  What's wrong?"
-.IX Subsection "I'm having trouble matching over more than one line.  What's wrong?"
 Either you don't have newlines in your string, or you aren't using the
 correct \fImodifier\fR\|(s) on your pattern.
 .PP
@@ -309,7 +300,6 @@ Here's code that finds everything between \s-1START\s0 and \s-1END\s0 in a parag
 \&    }
 .Ve
 .Sh "How can I pull out lines between two patterns that are themselves on different lines?"
-.IX Subsection "How can I pull out lines between two patterns that are themselves on different lines?"
 You can use Perl's somewhat exotic \f(CW..\fR operator (documented in
 the \fIperlop\fR manpage):
 .PP
@@ -325,7 +315,6 @@ But if you want nested occurrences of \f(CWSTART\fR through \f(CWEND\fR, you'll
 run up against the problem described in the question in this section
 on matching balanced text.
 .Sh "I put a regular expression into $/ but it didn't work. What's wrong?"
-.IX Subsection "I put a regular expression into $/ but it didn't work. What's wrong?"
 $/ must be a string, not a regular expression.  Awk has to be better
 for something. :\-)
 .PP
@@ -361,7 +350,6 @@ appear within a certain time.
 \&    print $file->getline;
 .Ve
 .Sh "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?"
-.IX Subsection "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?"
 It depends on what you mean by \*(L"preserving case\*(R".  The following
 script makes the substitution have the same case, letter by letter, as
 the original.  If the substitution has more characters than the string
@@ -412,15 +400,12 @@ This prints:
 \&    this is a SUcCESS case
 .Ve
 .Sh "How can I make \f(CW\ew\fR match accented characters?"
-.IX Subsection "How can I make \f(CW\ew\fR match accented characters?"
 See the \fIperllocale\fR manpage.
 .Sh "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?"
-.IX Subsection "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?"
 One alphabetic character would be \f(CW/[^\eW\ed_]/\fR, no matter what locale
 you're in.  Non-alphabetics would be \f(CW/[\eW\ed_]/\fR (assuming you don't
 consider an underscore a letter).
 .Sh "How can I quote a variable to use in a regexp?"
-.IX Subsection "How can I quote a variable to use in a regexp?"
 The Perl parser will expand \f(CW$variable\fR and \f(CW@variable\fR references in
 regular expressions unless the delimiter is a single quote.  Remember,
 too, that the right-hand side of a \f(CWs///\fR substitution is considered
@@ -439,7 +424,6 @@ precede the substitution with \eQ.  Here's an example:
 .Ve
 Without the \eQ, the regexp would also spuriously match \*(L"di\*(R".
 .Sh "What is \f(CW/o\fR really for?"
-.IX Subsection "What is \f(CW/o\fR really for?"
 Using a variable in a regular expression match forces a re-evaluation
 (and perhaps recompilation) each time through.  The \f(CW/o\fR modifier
 locks in the regexp the first time it's used.  This always happens in a
@@ -466,7 +450,6 @@ For example, here's a \*(L"paragrep\*(R" program:
 \&    }
 .Ve
 .Sh "How do I use a regular expression to strip C style comments from a file?"
-.IX Subsection "How do I use a regular expression to strip C style comments from a file?"
 While this actually can be done, it's much harder than you'd think.
 For example, this one-liner
 .PP
@@ -487,7 +470,6 @@ created by Jeffrey Friedl:
 This could, of course, be more legibly written with the \f(CW/x\fR modifier, adding
 whitespace and comments.
 .Sh "Can I use Perl regular expressions to match balanced text?"
-.IX Subsection "Can I use Perl regular expressions to match balanced text?"
 Although Perl regular expressions are more powerful than \*(L"mathematical\*(R"
 regular expressions, because they feature conveniences like backreferences
 (\f(CW\e1\fR and its ilk), they still aren't powerful enough. You still need
@@ -502,7 +484,6 @@ http://www.perl.com/\s-1CPAN/\s0authors/id/\s-1TOMC/\s0scripts/pull_quotes.gz .
 The C::Scan module from \s-1CPAN\s0 contains such subs for internal usage,
 but they are undocumented.
 .Sh "What does it mean that regexps are greedy?  How can I get around it?"
-.IX Subsection "What does it mean that regexps are greedy?  How can I get around it?"
 Most people mean that greedy regexps match as much as they can.
 Technically speaking, it's actually the quantifiers (\f(CW?\fR, \f(CW*\fR, \f(CW+\fR,
 \f(CW{}\fR) that are greedy rather than the whole pattern; Perl prefers local
@@ -522,7 +503,6 @@ expression engine to find a match as quickly as possible and pass
 control on to whatever is next in line, like you would if you were
 playing hot potato.
 .Sh "How do I process each word on each line?"
-.IX Subsection "How do I process each word on each line?"
 Use the split function:
 .PP
 .Vb 5
@@ -545,7 +525,6 @@ To work with only alphanumeric sequences, you might consider
 \&    }
 .Ve
 .Sh "How can I print out a word-frequency or line-frequency summary?"
-.IX Subsection "How can I print out a word-frequency or line-frequency summary?"
 To do this, you have to parse out each word in the input stream.  We'll
 pretend that by word you mean chunk of alphabetics, hyphens, or
 apostrophes, rather than the non-whitespace chunk idea of a word given
@@ -574,10 +553,8 @@ regular expression:
 .Ve
 If you want these output in a sorted order, see the section on Hashes.
 .Sh "How can I do approximate matching?"
-.IX Subsection "How can I do approximate matching?"
 See the module String::Approx available from \s-1CPAN\s0.
 .Sh "How do I efficiently match many regular expressions at once?"
-.IX Subsection "How do I efficiently match many regular expressions at once?"
 The following is super-inefficient:
 .PP
 .Vb 7
@@ -629,7 +606,6 @@ in Jeffrey Friedl's book:
 \&    }
 .Ve
 .Sh "Why don't word-boundary searches with \f(CW\eb\fR work for me?"
-.IX Subsection "Why don't word-boundary searches with \f(CW\eb\fR work for me?"
 Two common misconceptions are that \f(CW\eb\fR is a synonym for \f(CW\es+\fR, and
 that it's the edge between whitespace characters and non-whitespace
 characters.  Neither is correct.  \f(CW\eb\fR is the place between a \f(CW\ew\fR
@@ -657,7 +633,6 @@ An example of using \f(CW\eB\fR is the pattern \f(CW\eBis\eB\fR.  This will find
 occurrences of \*(L"is\*(R" on the insides of words only, as in \*(L"thistle\*(R", but
 not \*(L"this\*(R" or \*(L"island\*(R".
 .Sh "Why does using $&, $`, or $\*(S' slow my program down?"
-.IX Subsection "Why does using $&, $`, or $\*(S' slow my program down?"
 Because once Perl sees that you need one of these variables anywhere
 in the program, it has to provide them on each and every pattern
 match.  The same mechanism that handles these provides for the use of
@@ -668,7 +643,6 @@ avoid $&, $\*(R', and $` if you can, but if you can't (and some algorithms
 really appreciate them), once you've used them once, use them at will,
 because you've already paid the price.
 .Sh "What good is \f(CW\eG\fR in a regular expression?"
-.IX Subsection "What good is \f(CW\eG\fR in a regular expression?"
 The notation \f(CW\eG\fR is used in a match or substitution in conjunction the
 \f(CW/g\fR modifier (and ignored if there's no \f(CW/g\fR) to anchor the regular
 expression to the point just past where the last match occurred, i.e. the
@@ -731,7 +705,6 @@ Of course, that could have been written as
 .Ve
 But then you lose the vertical alignment of the regular expressions.
 .Sh "Are Perl regexps DFAs or NFAs?  Are they \s-1POSIX\s0 compliant?"
-.IX Subsection "Are Perl regexps DFAs or NFAs?  Are they \s-1POSIX\s0 compliant?"
 While it's true that Perl's regular expressions resemble the DFAs
 (deterministic finite automata) of the \fIegrep\fR\|(1) program, they are in
 fact implemented as NFAs (non-deterministic finite automata) to allow
@@ -743,7 +716,6 @@ guaranteed is slowness.)  See the book \*(L"Mastering Regular Expressions\*(R"
 hope to know on these matters (a full citation appears in
 the \fIperlfaq2\fR manpage).
 .Sh "What's wrong with using grep or map in a void context?"
-.IX Subsection "What's wrong with using grep or map in a void context?"
 Strictly speaking, nothing.  Stylistically speaking, it's not a good
 way to write maintainable code.  That's because you're using these
 constructs not for their return values but rather for their
@@ -751,7 +723,6 @@ side-effects, and side-effects can be mystifying.  There's no void
 \fIgrep()\fR that's not better written as a \f(CWfor\fR (well, \f(CWforeach\fR,
 technically) loop.
 .Sh "How can I match strings with multibyte characters?"
-.IX Subsection "How can I match strings with multibyte characters?"
 This is hard, and there's no good way.  Perl does not directly support
 wide characters.  It pretends that a byte and a character are
 synonymous.  The following set of approaches was offered by Jeffrey
@@ -809,8 +780,66 @@ There are many double- (and multi-) byte encodings commonly used these
 days.  Some versions of these have 1-, 2-, 3-, and 4-byte characters,
 all mixed.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ6 1"
+.IX Name "perlfaq6 - Regexps ($Revision: 1.17 $, $Date: 1997/04/24 22:44:10 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "How can I hope to use regular expressions without creating illegible and unmaintainable code?"
+
+.IX Item "Comments Outside the Regexp"
+
+.IX Item "Comments Inside the Regexp"
+
+.IX Item "Different Delimiters"
+
+.IX Subsection "I'm having trouble matching over more than one line.  What's wrong?"
+
+.IX Subsection "How can I pull out lines between two patterns that are themselves on different lines?"
+
+.IX Subsection "I put a regular expression into $/ but it didn't work. What's wrong?"
+
+.IX Subsection "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?"
+
+.IX Subsection "How can I make \f(CW\ew\fR match accented characters?"
+
+.IX Subsection "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?"
+
+.IX Subsection "How can I quote a variable to use in a regexp?"
+
+.IX Subsection "What is \f(CW/o\fR really for?"
+
+.IX Subsection "How do I use a regular expression to strip C style comments from a file?"
+
+.IX Subsection "Can I use Perl regular expressions to match balanced text?"
+
+.IX Subsection "What does it mean that regexps are greedy?  How can I get around it?"
+
+.IX Subsection "How do I process each word on each line?"
+
+.IX Subsection "How can I print out a word-frequency or line-frequency summary?"
+
+.IX Subsection "How can I do approximate matching?"
+
+.IX Subsection "How do I efficiently match many regular expressions at once?"
+
+.IX Subsection "Why don't word-boundary searches with \f(CW\eb\fR work for me?"
+
+.IX Subsection "Why does using $&, $`, or $\*(S' slow my program down?"
+
+.IX Subsection "What good is \f(CW\eG\fR in a regular expression?"
+
+.IX Subsection "Are Perl regexps DFAs or NFAs?  Are they \s-1POSIX\s0 compliant?"
+
+.IX Subsection "What's wrong with using grep or map in a void context?"
+
+.IX Subsection "How can I match strings with multibyte characters?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

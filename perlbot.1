@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLBOT 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "PERLBOT 1"
+.TH PERLBOT 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlbot - Bag'o Object Tricks (the BOT)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlbot \- Bag'o Object Tricks (the BOT)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 The following collection of tricks and hints is intended to whet curious
 appetites about such things as the use of instance variables and the
 mechanics of object and class relationships.  The reader is encouraged to
@@ -204,54 +200,43 @@ nor should it be construed as a style guide.
 .PP
 The Perl motto still holds:  There's more than one way to do it.
 .SH "OO SCALING TIPS"
-.IX Header "OO SCALING TIPS"
 .Ip "1" 5
-.IX Item "1"
 Do not attempt to verify the type of \f(CW$self\fR.  That'll break if the class is
 inherited, when the type of \f(CW$self\fR is valid but its package isn't what you
 expect.  See rule 5.
 .Ip "2" 5
-.IX Item "2"
 If an object-oriented (\s-1OO\s0) or indirect-object (\s-1IO\s0) syntax was used, then the
 object is probably the correct type and there's no need to become paranoid
 about it.  Perl isn't a paranoid language anyway.  If people subvert the \s-1OO\s0
 or \s-1IO\s0 syntax then they probably know what they're doing and you should let
 them do it.  See rule 1.
 .Ip "3" 5
-.IX Item "3"
 Use the two-argument form of \fIbless()\fR.  Let a subclass use your constructor.
 See the section on \fI\s-1INHERITING\s0 A \s-1CONSTRUCTOR\s0\fR.
 .Ip "4" 5
-.IX Item "4"
 The subclass is allowed to know things about its immediate superclass, the
 superclass is allowed to know nothing about a subclass.
 .Ip "5" 5
-.IX Item "5"
 Don't be trigger happy with inheritance.  A \*(L"using\*(R", \*(L"containing\*(R", or
 \*(L"delegation\*(R" relationship (some sort of aggregation, at least) is often more
 appropriate.  See the section on \fI\s-1OBJECT\s0 \s-1RELATIONSHIPS\s0\fR, the section on \fI\s-1USING\s0 \s-1RELATIONSHIP\s0 \s-1WITH\s0 \s-1SDBM\s0\fR,
 and the section on \fI\s-1DELEGATION\s0\fR.
 .Ip "6" 5
-.IX Item "6"
 The object is the namespace.  Make package globals accessible via the
 object.  This will remove the guess work about the symbol's home package.
 See the section on \fI\s-1CLASS\s0 \s-1CONTEXT\s0 \s-1AND\s0 \s-1THE\s0 \s-1OBJECT\s0\fR.
 .Ip "7" 5
-.IX Item "7"
 \s-1IO\s0 syntax is certainly less noisy, but it is also prone to ambiguities that
 can cause difficult-to-find bugs.  Allow people to use the sure-thing \s-1OO\s0
 syntax, even if you don't like it.
 .Ip "8" 5
-.IX Item "8"
 Do not use function-call syntax on a method.  You're going to be bitten
 someday.  Someone might move that method into a superclass and your code
 will be broken.  On top of that you're feeding the paranoia in rule 2.
 .Ip "9" 5
-.IX Item "9"
 Don't assume you know the home package of a method.  You're making it
 difficult for someone to override that method.  See the section on \fI\s-1THINKING\s0 \s-1OF\s0 \s-1CODE\s0 \s-1REUSE\s0\fR.
 .SH "INSTANCE VARIABLES"
-.IX Header "INSTANCE VARIABLES"
 An anonymous array or anonymous hash can be used to hold instance
 variables.  Named parameters are also demonstrated.
 .PP
@@ -295,7 +280,6 @@ variables.  Named parameters are also demonstrated.
 \&        print "Right=$b->[1]\en";
 .Ve
 .SH "SCALAR INSTANCE VARIABLES"
-.IX Header "SCALAR INSTANCE VARIABLES"
 An anonymous scalar can be used when only one instance variable is needed.
 .PP
 .Vb 1
@@ -317,7 +301,6 @@ An anonymous scalar can be used when only one instance variable is needed.
 \&        print "a=$$a\en";
 .Ve
 .SH "INSTANCE VARIABLE INHERITANCE"
-.IX Header "INSTANCE VARIABLE INHERITANCE"
 This example demonstrates how one might inherit instance variables from a
 superclass for inclusion in the new class.  This requires calling the
 superclass's constructor and adding one's own instance variables to the new
@@ -355,7 +338,6 @@ object.
 \&        print "biz = ", $a->{'biz'}, "\en";
 .Ve
 .SH "OBJECT RELATIONSHIPS"
-.IX Header "OBJECT RELATIONSHIPS"
 The following demonstrates how one might implement \*(L"containing\*(R" and \*(L"using\*(R"
 relationships between objects.
 .PP
@@ -391,7 +373,6 @@ relationships between objects.
 \&        print "biz = ", $a->{'biz'}, "\en";
 .Ve
 .SH "OVERRIDING SUPERCLASS METHODS"
-.IX Header "OVERRIDING SUPERCLASS METHODS"
 The following example demonstrates how to override a superclass method and
 then call the overridden method.  The \fBSUPER\fR pseudo-class allows the
 programmer to call an overridden superclass method without actually knowing
@@ -443,7 +424,6 @@ where that method is defined.
 \&        $foo->google;
 .Ve
 .SH "USING RELATIONSHIP WITH SDBM"
-.IX Header "USING RELATIONSHIP WITH SDBM"
 This example demonstrates an interface for the SDBM class.  This creates a
 \*(L"using\*(R" relationship between the SDBM class and the new class Mydbm.
 .PP
@@ -491,7 +471,6 @@ This example demonstrates an interface for the SDBM class.  This creates a
 \&        print "bar-Cathy = $bar{'Cathy'}\en";
 .Ve
 .SH "THINKING OF CODE REUSE"
-.IX Header "THINKING OF CODE REUSE"
 One strength of Object-Oriented languages is the ease with which old code
 can use new code.  The following examples will demonstrate first how one can
 hinder code reuse and then how one can promote code reuse.
@@ -616,7 +595,6 @@ method \fIGOOP::BAZ()\fR to be used in place of \fIFOO::BAZ()\fR.
 \&        $a->bar;
 .Ve
 .SH "CLASS CONTEXT AND THE OBJECT"
-.IX Header "CLASS CONTEXT AND THE OBJECT"
 Use the object to solve package and class context problems.  Everything a
 method needs should be available via the object or should be passed as a
 parameter to the method.
@@ -687,7 +665,6 @@ method where that data is located.
 \&        $b->enter;
 .Ve
 .SH "INHERITING A CONSTRUCTOR"
-.IX Header "INHERITING A CONSTRUCTOR"
 An inheritable constructor should use the second form of \fIbless()\fR which allows
 blessing directly into a specified class.  Notice in this example that the
 object will be a BAR not a FOO, even though the constructor is in class FOO.
@@ -724,7 +701,6 @@ object will be a BAR not a FOO, even though the constructor is in class FOO.
 \&        $a->baz;
 .Ve
 .SH "DELEGATION"
-.IX Header "DELEGATION"
 Some classes, such as SDBM_File, cannot be effectively subclassed because
 they create foreign objects.  Such a class can be extended with some sort of
 aggregation technique such as the \*(L"using\*(R" relationship mentioned earlier or
@@ -782,3 +758,50 @@ behavior by adding custom \fIFETCH()\fR and \fISTORE()\fR methods, if this is de
 .Ve
 
 .rn }` ''
+.IX Title "PERLBOT 1"
+.IX Name "perlbot - Bag'o Object Tricks (the BOT)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "OO SCALING TIPS"
+
+.IX Item "1"
+
+.IX Item "2"
+
+.IX Item "3"
+
+.IX Item "4"
+
+.IX Item "5"
+
+.IX Item "6"
+
+.IX Item "7"
+
+.IX Item "8"
+
+.IX Item "9"
+
+.IX Header "INSTANCE VARIABLES"
+
+.IX Header "SCALAR INSTANCE VARIABLES"
+
+.IX Header "INSTANCE VARIABLE INHERITANCE"
+
+.IX Header "OBJECT RELATIONSHIPS"
+
+.IX Header "OVERRIDING SUPERCLASS METHODS"
+
+.IX Header "USING RELATIONSHIP WITH SDBM"
+
+.IX Header "THINKING OF CODE REUSE"
+
+.IX Header "CLASS CONTEXT AND THE OBJECT"
+
+.IX Header "INHERITING A CONSTRUCTOR"
+
+.IX Header "DELEGATION"
+

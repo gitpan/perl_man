@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH SPLAIN 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "SPLAIN 1"
+.TH SPLAIN 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "diagnostics - Perl compiler pragma to force verbose warning diagnostics"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,10 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 diagnostics \- Perl compiler pragma to force verbose warning diagnostics
 .PP
 splain \- standalone program to do the same thing
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 As a pragma:
 .PP
 .Vb 2
@@ -213,9 +209,7 @@ Aa a program:
 \&    splain [-v] [-p] diag.out
 .Ve
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "The \f(CWdiagnostics\fR Pragma"
-.IX Subsection "The \f(CWdiagnostics\fR Pragma"
 This module extends the terse diagnostics normally emitted by both the
 perl compiler and the perl interpeter, augmenting them with the more
 explicative and endearing descriptions found in the \fIperldiag\fR manpage.  Like the
@@ -242,7 +236,6 @@ The \fB\-verbose\fR flag first prints out the the \fIperldiag\fR manpage introdu
 any other diagnostics.  The \f(CW$diagnostics::PRETTY\fR variable can generate nicer
 escape sequences for pagers.
 .Sh "The \fIsplain\fR Program"
-.IX Subsection "The \fIsplain\fR Program"
 While apparently a whole nuther program, \fIsplain\fR is actually nothing
 more than a link to the (executable) \fIdiagnostics.pm\fR module, as well as
 a link to the \fIdiagnostics.pod\fR documentation.  The \fB\-v\fR flag is like
@@ -253,7 +246,6 @@ The \fB\-p\fR flag is like the
 .PP
 Output from \fIsplain\fR is directed to \fB\s-1STDOUT\s0\fR, unlike the pragma.
 .SH "EXAMPLES"
-.IX Header "EXAMPLES"
 The following file is certain to trigger a few errors at both
 runtime and compiletime:
 .PP
@@ -320,7 +312,6 @@ at the \fIenable()\fR or \fIdisable()\fR methods.
 \&        print "done with 4th bogus\en";
 .Ve
 .SH "INTERNALS"
-.IX Header "INTERNALS"
 Diagnostic messages derive from the \fIperldiag.pod\fR file when available at
 runtime.  Otherwise, they may be embedded in the file itself when the
 splain package is built.   See the \fIMakefile\fR for details.
@@ -337,7 +328,6 @@ curious what sorts of things are being intercepted.
 \&    BEGIN { $diagnostics::DEBUG = 1 } 
 .Ve
 .SH "BUGS"
-.IX Header "BUGS"
 Not being able to say \*(L"no diagnostics\*(R" is annoying, but may not be
 insurmountable.
 .PP
@@ -354,7 +344,27 @@ in Perl 5.001e.
 While it's true that this documentation is somewhat subserious, if you use
 a program named \fIsplain\fR, you should expect a bit of whimsy.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Tom Christiansen <\fItchrist@mox.perl.com\fR>, 25 June 1995.
 
 .rn }` ''
+.IX Title "SPLAIN 1"
+.IX Name "diagnostics - Perl compiler pragma to force verbose warning diagnostics"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "The \f(CWdiagnostics\fR Pragma"
+
+.IX Subsection "The \fIsplain\fR Program"
+
+.IX Header "EXAMPLES"
+
+.IX Header "INTERNALS"
+
+.IX Header "BUGS"
+
+.IX Header "AUTHOR"
+

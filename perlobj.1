@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOBJ 1 "perl 5.004, patch 01" "28/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLOBJ 1"
+.TH PERLOBJ 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlobj - Perl objects"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlobj \- Perl objects
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 First of all, you need to understand what references are in Perl.
 See the \fIperlref\fR manpage for that.  Second, if you still find the following
 reference work too complicated, a tutorial on object-oriented programming
@@ -202,21 +198,17 @@ in Perl can be found in the \fIperltoot\fR manpage.
 If you're still with us, then
 here are three very simple definitions that you should find reassuring.
 .Ip "1." 4
-.IX Item "1."
 An object is simply a reference that happens to know which class it
 belongs to.
 .Ip "2." 4
-.IX Item "2."
 A class is simply a package that happens to provide methods to deal
 with object references.
 .Ip "3." 4
-.IX Item "3."
 A method is simply a subroutine that expects an object reference (or
 a package name, for class methods) as the first argument.
 .PP
 We'll cover these points now in more depth.
 .Sh "An Object is Simply a Reference"
-.IX Subsection "An Object is Simply a Reference"
 Unlike say \*(C+, Perl doesn't provide any special syntax for
 constructors.  A constructor is merely a subroutine that returns a
 reference to something \*(L"blessed\*(R" into a class, generally the
@@ -306,7 +298,6 @@ the following example:
 This reports \f(CW$b\fR as being a \s-1BLAH\s0, so obviously \fIbless()\fR
 operated on the object and not on the reference.
 .Sh "A Class is Simply a Package"
-.IX Subsection "A Class is Simply a Package"
 Unlike say \*(C+, Perl doesn't provide any special syntax for class
 definitions.  You use a package as a class by putting method
 definitions into the class.
@@ -340,7 +331,6 @@ an anonymous hash, which serves as its own little namespace to be
 carved up by the various classes that might want to do something
 with the object.
 .Sh "A Method is Simply a Subroutine"
-.IX Subsection "A Method is Simply a Subroutine"
 Unlike say \*(C+, Perl doesn't provide any special syntax for method
 definition.  (It does provide a little syntax for method invocation
 though.  More on that later.)  A method expects its first argument
@@ -379,7 +369,6 @@ and then uses that as an ordinary reference.
 \&    }
 .Ve
 .Sh "Method Invocation"
-.IX Subsection "Method Invocation"
 There are two ways to invoke a method, one of which you're already
 familiar with, and the other of which will look familiar.  Perl 4
 already had an \*(L"indirect object\*(R" syntax that you use when you say
@@ -475,11 +464,9 @@ with a simple scalar variable containing the method name:
 \&    $fred->$method(@args);
 .Ve
 .Sh "Default \s-1UNIVERSAL\s0 methods"
-.IX Subsection "Default \s-1UNIVERSAL\s0 methods"
 The \f(CWUNIVERSAL\fR package automatically contains the following methods that
 are inherited by all other classes:
 .Ip "isa(\s-1CLASS\s0)" 4
-.IX Item "isa(\s-1CLASS\s0)"
 \f(CWisa\fR returns \fItrue\fR if its object is blessed into a subclass of \f(CWCLASS\fR
 .Sp
 \f(CWisa\fR is also exportable and can be called as a sub with two arguments. This
@@ -494,12 +481,10 @@ allows the ability to check what a reference points to. Example
 \&    }
 .Ve
 .Ip "can(\s-1METHOD\s0)" 4
-.IX Item "can(\s-1METHOD\s0)"
 \f(CWcan\fR checks to see if its object has a method called \f(CWMETHOD\fR,
 if it does then a reference to the sub is returned, if it does not then
 \fIundef\fR is returned.
 .Ip "\s-1VERSION\s0( [\s-1NEED\s0] )" 4
-.IX Item "\s-1VERSION\s0( [\s-1NEED\s0] )"
 \f(CWVERSION\fR returns the version number of the class (package).  If the
 \s-1NEED\s0 argument is given then it will check that the current version (as
 defined by the \f(CW$VERSION\fR variable in the given package) not less than
@@ -522,7 +507,6 @@ You do not need to \f(CWuse UNIVERSAL\fR in order to make these methods
 available to your program.  This is necessary only if you wish to
 have \f(CWisa\fR available as a plain subroutine in the current package.
 .Sh "Destructors"
-.IX Subsection "Destructors"
 When the last reference to an object goes away, the object is
 automatically destroyed.  (This may even be after you exit, if you've
 stored references in global variables.)  If you want to capture control
@@ -537,7 +521,6 @@ to only re-blessed objects\*(--an object reference that is merely
 \fI\s-1CONTAINED\s0\fR in the current object will be freed and destroyed
 automatically when the current object is freed.
 .Sh "\s-1WARNING\s0"
-.IX Subsection "\s-1WARNING\s0"
 An indirect object is limited to a name, a scalar variable, or a block,
 because it would have to do too much lookahead otherwise, just like any
 other postfix dereference in the language.  The left side of \-> is not so
@@ -553,12 +536,10 @@ C and D are equivalent, but A/B and C/D are different:
 \&    D: method {$obref->{"fieldname"}}
 .Ve
 .Sh "Summary"
-.IX Subsection "Summary"
 That's about all there is to it.  Now you need just to go off and buy a
 book about object-oriented design methodology, and bang your forehead
 with it for the next six months or so.
 .Sh "Two-Phased Garbage Collection"
-.IX Subsection "Two-Phased Garbage Collection"
 For most purposes, Perl uses a fast and simple reference-based
 garbage collection system.  For this reason, there's an extra
 dereference going on at some level, so if you haven't built
@@ -665,7 +646,6 @@ by setting the \s-1PERL_DESTRUCT_LEVEL\s0 environment variable, presuming
 A more complete garbage collection strategy will be implemented
 at a future date.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 A kinder, gentler tutorial on object-oriented programming in Perl can
 be found in the \fIperltoot\fR manpage.
 You should also check out the \fIperlbot\fR manpage for other object tricks, traps, and tips,
@@ -673,3 +653,42 @@ as well as the \fIperlmodlib\fR manpage for some style guides on constructing bo
 and classes.
 
 .rn }` ''
+.IX Title "PERLOBJ 1"
+.IX Name "perlobj - Perl objects"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "1."
+
+.IX Item "2."
+
+.IX Item "3."
+
+.IX Subsection "An Object is Simply a Reference"
+
+.IX Subsection "A Class is Simply a Package"
+
+.IX Subsection "A Method is Simply a Subroutine"
+
+.IX Subsection "Method Invocation"
+
+.IX Subsection "Default \s-1UNIVERSAL\s0 methods"
+
+.IX Item "isa(\s-1CLASS\s0)"
+
+.IX Item "can(\s-1METHOD\s0)"
+
+.IX Item "\s-1VERSION\s0( [\s-1NEED\s0] )"
+
+.IX Subsection "Destructors"
+
+.IX Subsection "\s-1WARNING\s0"
+
+.IX Subsection "Summary"
+
+.IX Subsection "Two-Phased Garbage Collection"
+
+.IX Header "SEE ALSO"
+

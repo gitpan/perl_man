@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ7 1 "perl 5.004, patch 01" "24/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ7 1"
+.TH PERLFAQ7 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq7 - Perl Language Issues ($Revision: 1.18 $, $Date: 1997/04/24 22:44:14 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,19 +188,15 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq7 \- Perl Language Issues ($Revision: 1.18 $, \f(CW$Date:\fR 1997/04/24 22:44:14 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section deals with general Perl language issues that don't
 clearly fit into any of the other sections.
 .Sh "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?"
-.IX Subsection "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?"
 No, in the words of Chaim Frenkel: \*(L"Perl's grammar can not be reduced
 to \s-1BNF\s0.  The work of parsing perl is distributed between yacc, the
 lexer, smoke and mirrors.\*(R"
 .Sh "What are all these $@%* punctuation signs, and how do I know when to use them?"
-.IX Subsection "What are all these $@%* punctuation signs, and how do I know when to use them?"
 They are type specifiers, as detailed in the \fIperldata\fR manpage:
 .PP
 .Vb 5
@@ -231,7 +225,6 @@ besides \f(CW<>\fR on files, or even talking about the handle, do
 \fInot\fR use the brackets.  These are correct: \f(CWeof(FH)\fR, \f(CWseek(FH, 0,
 2)\fR and \*(L"copying from \s-1STDIN\s0 to \s-1FILE\s0\*(R".
 .Sh "Do I always/never have to quote my strings or use semicolons and commas?"
-.IX Subsection "Do I always/never have to quote my strings or use semicolons and commas?"
 Normally, a bareword doesn't need to be quoted, but in most cases
 probably should be (and must be under \f(CWuse strict\fR).  But a hash key
 consisting of a simple word (that isn't the name of a defined
@@ -262,7 +255,6 @@ one-liners:
 \&    );
 .Ve
 .Sh "How do I skip some return values?"
-.IX Subsection "How do I skip some return values?"
 One way is to treat the return values as a list and index into it:
 .PP
 .Vb 1
@@ -274,7 +266,6 @@ Another way is to use undef as an element on the left-hand-side:
 \&    ($dev, $ino, undef, undef, $uid, $gid) = stat($file);
 .Ve
 .Sh "How do I temporarily block warnings?"
-.IX Subsection "How do I temporarily block warnings?"
 The \f(CW$^W\fR variable (documented in the \fIperlvar\fR manpage) controls
 runtime warnings for a block:
 .PP
@@ -291,11 +282,9 @@ A new \f(CWuse warnings\fR pragma is in the works to provide finer control
 over all this.  The curious should check the perl5-porters mailing list
 archives for details.
 .Sh "What's an extension?"
-.IX Subsection "What's an extension?"
 A way of calling compiled C code from Perl.  Reading the \fIperlxstut\fR manpage
 is a good place to learn more about extensions.
 .Sh "Why do Perl operators have different precedence than C operators?"
-.IX Subsection "Why do Perl operators have different precedence than C operators?"
 Actually, they don't.  All C operators that Perl copies have the same
 precedence in Perl as they do in C.  The problem is with operators that C
 doesn't have, especially functions that give a list context to everything
@@ -329,7 +318,6 @@ binds more tightly even than unary minus, making \f(CW-2**2\fR product a
 negative not a positive four.  It is also right-associating, meaning
 that \f(CW2**3**2\fR is two raised to the ninth power, not eight squared.
 .Sh "How do I declare/create a structure?"
-.IX Subsection "How do I declare/create a structure?"
 In general, you don't \*(L"declare\*(R" a structure.  Just use a (probably
 anonymous) hash reference.  See the \fIperlref\fR manpage and the \fIperldsc\fR manpage for details.
 Here's an example:
@@ -341,7 +329,6 @@ Here's an example:
 .Ve
 If you're looking for something a bit more rigorous, try the \fIperltoot\fR manpage.
 .Sh "How do I create a module?"
-.IX Subsection "How do I create a module?"
 A module is a package that lives in a file of the same name.  For
 example, the Hello::There module would live in Hello/There.pm.  For
 details, read the \fIperlmod\fR manpage.  You'll also find the \fIExporter\fR manpage helpful.  If
@@ -431,11 +418,9 @@ own module.  Make sure to change the names appropriately.
 \&    1;            # modules must return true
 .Ve
 .Sh "How do I create a class?"
-.IX Subsection "How do I create a class?"
 See the \fIperltoot\fR manpage for an introduction to classes and objects, as well as
 the \fIperlobj\fR manpage and the \fIperlbot\fR manpage.
 .Sh "How can I tell if a variable is tainted?"
-.IX Subsection "How can I tell if a variable is tainted?"
 See the section on \fILaundering and Detecting Tainted Data\fR in the \fIperlsec\fR manpage.  Here's an
 example (which doesn't use any system calls, because the \fIkill()\fR
 is given no processes to signal):
@@ -449,7 +434,6 @@ This is not \f(CW-w\fR clean, however.  There is no \f(CW-w\fR clean way to
 detect taintedness \- take this as a hint that you should untaint
 all possibly-tainted data.
 .Sh "What's a closure?"
-.IX Subsection "What's a closure?"
 Closures are documented in the \fIperlref\fR manpage.
 .PP
 \fIClosure\fR is a computer science term with a precise but
@@ -514,7 +498,6 @@ If the code to execute had been passed in as a string, \f(CW'$line =
 \fItimeout()\fR function to access the lexical variable \f(CW$line\fR back in its
 caller's scope.
 .Sh "What is variable suicide and how can I prevent it?"
-.IX Subsection "What is variable suicide and how can I prevent it?"
 Variable suicide is when you (temporarily or permanently) lose the
 value of a variable.  It is caused by scoping through \fImy()\fR and \fIlocal()\fR
 interacting with either closures or aliased \fIforeach()\fR interator
@@ -534,12 +517,10 @@ The \f(CW$f\fR that has \*(L"bar\*(R" added to it three times should be a new \f
 (\f(CWmy $f\fR should create a new local variable each time through the
 loop).  It isn't, however.  This is a bug, and will be fixed.
 .Sh "How can I pass/return a {Function, FileHandle, Array, Hash, Method, Regexp}?"
-.IX Subsection "How can I pass/return a {Function, FileHandle, Array, Hash, Method, Regexp}?"
 With the exception of regexps, you need to pass references to these
 objects.  See the section on \fIPass by Reference\fR in the \fIperlsub\fR manpage for this particular
 question, and the \fIperlref\fR manpage for information on references.
 .Ip "Passing Variables and Functions" 4
-.IX Item "Passing Variables and Functions"
 Regular variables and functions are quite easy: just pass in a
 reference to an existing or anonymous variable or function:
 .Sp
@@ -559,7 +540,6 @@ reference to an existing or anonymous variable or function:
 \&    func( sub { $_[0] ** $_[1] }   );
 .Ve
 .Ip "Passing Filehandles" 4
-.IX Item "Passing Filehandles"
 To create filehandles you can pass to subroutines, you can use \f(CW*FH\fR
 or \f(CW\e*FH\fR notation ("typeglobs\*(R" \- see the \fIperldata\fR manpage for more information),
 or create filehandles dynamically using the old FileHandle or the new
@@ -573,7 +553,6 @@ or create filehandles dynamically using the old FileHandle or the new
 \&    func($fh);
 .Ve
 .Ip "Passing Regexps" 4
-.IX Item "Passing Regexps"
 To pass regexps around, you'll need to either use one of the highly
 experimental regular expression modules from \s-1CPAN\s0 (Nick Ing-Simmons's
 Regexp or Ilya Zakharevich's Devel::Regexp), pass around strings
@@ -610,7 +589,6 @@ Those preferring to be very, very clever might see the O'Reilly book,
 \fIBuild_MatchMany_Function()\fR is particularly interesting.  A complete
 citation of this book is given in the \fIperlfaq2\fR manpage.
 .Ip "Passing Methods" 4
-.IX Item "Passing Methods"
 To pass an object method into a subroutine, you can do this:
 .Sp
 .Vb 7
@@ -636,7 +614,6 @@ and arguments:
 You could also investigate the \fIcan()\fR method in the \s-1UNIVERSAL\s0 class
 (part of the standard perl distribution).
 .Sh "How do I create a static variable?"
-.IX Subsection "How do I create a static variable?"
 As with most things in Perl, \s-1TMTOWTDI\s0.  What is a \*(L"static variable\*(R" in
 other languages could be either a function-private variable (visible
 only within a single function, retaining its value between calls to
@@ -675,7 +652,6 @@ could conceivably have several packages in that same file all
 accessing the same private variable, but another file with the same
 package couldn't get to it.
 .Sh "What's the difference between dynamic and lexical (static) scoping?  Between \fIlocal()\fR and \fImy()\fR?"
-.IX Subsection "What's the difference between dynamic and lexical (static) scoping?  Between \fIlocal()\fR and \fImy()\fR?"
 \f(CWlocal($x)\fR saves away the old value of the global variable \f(CW$x\fR,
 and assigns a new value for the duration of the subroutine, \fIwhich is
 visible in other functions called from that subroutine\fR.  This is done
@@ -724,7 +700,6 @@ what you're looking for if you want private variables.
 .PP
 See also the \fIperlsub\fR manpage, which explains this all in more detail.
 .Sh "How can I access a dynamic variable while a similarly named lexical is in scope?"
-.IX Subsection "How can I access a dynamic variable while a similarly named lexical is in scope?"
 You can do this via symbolic references, provided you haven't set
 \f(CWuse strict "refs"\fR.  So instead of \f(CW$var\fR, use \f(CW${'var'}\fR.
 .PP
@@ -746,7 +721,6 @@ package, as though you had written \f(CW$main::var\fR.  Specifying the package
 directly makes you hard-code its name, but it executes faster and
 avoids running afoul of \f(CWuse strict "refs"\fR.
 .Sh "What's the difference between deep and shallow binding?"
-.IX Subsection "What's the difference between deep and shallow binding?"
 In deep binding, lexical variables mentioned in anonymous subroutines
 are the same ones that were in scope when the subroutine was created.
 In shallow binding, they are whichever variables with the same names
@@ -756,7 +730,6 @@ However, dynamic variables (aka global, local, or package variables)
 are effectively shallowly bound.  Consider this just one more reason
 not to use them.  See the answer to the section on \fIWhat's a closure?\fR.
 .Sh "Why doesn't \*(M"\fIlocal\fR\|($foo) = <\s-1FILE\s0>;\*(S" work right?"
-.IX Subsection "Why doesn't \*(M"\fIlocal\fR\|($foo) = <\s-1FILE\s0>;\*(S" work right?"
 \f(CWlocal()\fR gives list context to the right hand side of \f(CW=\fR.  The
 <\s-1FH\s0> read operation, like so many of Perl's functions and
 operators, can tell which context it was called in and behaves
@@ -782,7 +755,6 @@ issue is the same here:
 \&    my $foo  = <FILE>;  # right
 .Ve
 .Sh "How do I redefine a builtin function, operator, or method?"
-.IX Subsection "How do I redefine a builtin function, operator, or method?"
 Why do you want to do that? :\-)
 .PP
 If you want to override a predefined function, such as \fIopen()\fR,
@@ -797,7 +769,6 @@ in the \fIoverload\fR manpage.
 If you're talking about obscuring method calls in parent classes,
 see the section on \fIOverridden Methods\fR in the \fIperltoot\fR manpage.
 .Sh "What's the difference between calling a function as &foo and \fIfoo()\fR?"
-.IX Subsection "What's the difference between calling a function as &foo and \fIfoo()\fR?"
 When you call a function as \f(CW&foo\fR, you allow that function access to
 your current \f(CW@_\fR values, and you by-pass prototypes.  That means that
 the function doesn't get an empty \f(CW@_\fR, it gets yours!  While not
@@ -814,7 +785,6 @@ or via a forward reference or \f(CWuse subs\fR declaration.  Even in this
 case, you get a clean \f(CW@_\fR without any of the old values leaking through
 where they don't belong.
 .Sh "How do I create a switch or case statement?"
-.IX Subsection "How do I create a switch or case statement?"
 This is explained in more depth in the the \fIperlsyn\fR manpage.  Briefly, there's
 no official case statement, because of the variety of tests possible
 in Perl (numeric comparison, string comparison, glob comparison,
@@ -867,7 +837,6 @@ do a multi-way conditional based on the type of reference stored in
 \&    }
 .Ve
 .Sh "How can I catch accesses to undefined variables/functions/methods?"
-.IX Subsection "How can I catch accesses to undefined variables/functions/methods?"
 The \s-1AUTOLOAD\s0 method, discussed in the section on \fIAutoloading\fR in the \fIperlsub\fR manpage and
 the section on \fI\s-1AUTOLOAD\s0: Proxy Methods\fR in the \fIperltoot\fR manpage, lets you capture calls to
 undefined functions and methods.
@@ -899,7 +868,6 @@ under \f(CW-w\fR, you can use a handler to trap the pseudo-signal
 \&    };
 .Ve
 .Sh "Why can't a method included in this same file be found?"
-.IX Subsection "Why can't a method included in this same file be found?"
 Some possible reasons: your inheritance is getting confused, you've
 misspelled the method name, or the object is of the wrong type.  Check
 out the \fIperltoot\fR manpage for details on these.  You may also use \f(CWprint
@@ -914,7 +882,6 @@ will be taken care of if you use the \f(CWuse\fR statement instead of
 \f(CWGuru-\fR\fIfind\fR\|("Samy")>) instead.  Object notation is explained in
 the \fIperlobj\fR manpage.
 .Sh "How can I find out my current package?"
-.IX Subsection "How can I find out my current package?"
 If you're just a random program, you can do this to find
 out what the currently compiled package is:
 .PP
@@ -933,7 +900,6 @@ not necessarily the same as the one in which you were compiled):
 \&    }
 .Ve
 .Sh "How can I comment out a large block of perl code?"
-.IX Subsection "How can I comment out a large block of perl code?"
 Use embedded \s-1POD\s0 to discard it:
 .PP
 .Vb 1
@@ -963,8 +929,76 @@ Use embedded \s-1POD\s0 to discard it:
 \&    =cut
 .Ve
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ7 1"
+.IX Name "perlfaq7 - Perl Language Issues ($Revision: 1.18 $, $Date: 1997/04/24 22:44:14 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?"
+
+.IX Subsection "What are all these $@%* punctuation signs, and how do I know when to use them?"
+
+.IX Subsection "Do I always/never have to quote my strings or use semicolons and commas?"
+
+.IX Subsection "How do I skip some return values?"
+
+.IX Subsection "How do I temporarily block warnings?"
+
+.IX Subsection "What's an extension?"
+
+.IX Subsection "Why do Perl operators have different precedence than C operators?"
+
+.IX Subsection "How do I declare/create a structure?"
+
+.IX Subsection "How do I create a module?"
+
+.IX Subsection "How do I create a class?"
+
+.IX Subsection "How can I tell if a variable is tainted?"
+
+.IX Subsection "What's a closure?"
+
+.IX Subsection "What is variable suicide and how can I prevent it?"
+
+.IX Subsection "How can I pass/return a {Function, FileHandle, Array, Hash, Method, Regexp}?"
+
+.IX Item "Passing Variables and Functions"
+
+.IX Item "Passing Filehandles"
+
+.IX Item "Passing Regexps"
+
+.IX Item "Passing Methods"
+
+.IX Subsection "How do I create a static variable?"
+
+.IX Subsection "What's the difference between dynamic and lexical (static) scoping?  Between \fIlocal()\fR and \fImy()\fR?"
+
+.IX Subsection "How can I access a dynamic variable while a similarly named lexical is in scope?"
+
+.IX Subsection "What's the difference between deep and shallow binding?"
+
+.IX Subsection "Why doesn't \*(M"\fIlocal\fR\|($foo) = <\s-1FILE\s0>;\*(S" work right?"
+
+.IX Subsection "How do I redefine a builtin function, operator, or method?"
+
+.IX Subsection "What's the difference between calling a function as &foo and \fIfoo()\fR?"
+
+.IX Subsection "How do I create a switch or case statement?"
+
+.IX Subsection "How can I catch accesses to undefined variables/functions/methods?"
+
+.IX Subsection "Why can't a method included in this same file be found?"
+
+.IX Subsection "How can I find out my current package?"
+
+.IX Subsection "How can I comment out a large block of perl code?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

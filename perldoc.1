@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDOC 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDOC 1"
+.TH PERLDOC 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perldoc - Look up Perl documentation in pod format."
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,15 +188,12 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perldoc \- Look up Perl documentation in pod format.
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBperldoc\fR [\fB\-h\fR] [\fB\-v\fR] [\fB\-t\fR] [\fB\-u\fR] [\fB\-m\fR] [\fB\-l\fR] PageName|ModuleName|ProgramName
 .PP
 \fBperldoc\fR \fB\-f\fR BuiltinFunction
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 \fIperldoc\fR looks up a piece of documentation in .pod format that is embedded
 in the perl installation tree or in a perl script, and displays it via
 \f(CWpod2man | nroff -man | $PAGER\fR. (In addition, if running under HP\-UX,
@@ -208,35 +203,26 @@ the perl library modules.
 Your system may also have man pages installed for those modules, in
 which case you can probably just use the \fIman\fR\|(1) command.
 .SH "OPTIONS"
-.IX Header "OPTIONS"
 .Ip "\fB\-h\fR help" 5
-.IX Item "\fB\-h\fR help"
 Prints out a brief help message.
 .Ip "\fB\-v\fR verbose" 5
-.IX Item "\fB\-v\fR verbose"
 Describes search for the item in detail.
 .Ip "\fB\-t\fR text output" 5
-.IX Item "\fB\-t\fR text output"
 Display docs using plain text converter, instead of nroff. This may be faster,
 but it won't look as nice.
 .Ip "\fB\-u\fR unformatted" 5
-.IX Item "\fB\-u\fR unformatted"
 Find docs only; skip reformatting by pod2*
 .Ip "\fB\-m\fR module" 5
-.IX Item "\fB\-m\fR module"
 Display the entire module: both code and unformatted pod documentation.
 This may be useful if the docs don't explain a function in the detail
 you need, and you'd like to inspect the code directly; perldoc will find
 the file for you and simply hand it off for display.
 .Ip "\fB\-l\fR file name only" 5
-.IX Item "\fB\-l\fR file name only"
 Display the file name of the module found.
 .Ip "\fB\-f\fR perlfunc" 5
-.IX Item "\fB\-f\fR perlfunc"
 The \fB\-f\fR option followed by the name of a perl built in function will
 extract the documentation of this function from the \fIperlfunc\fR manpage.
 .Ip "\fBPageName|ModuleName|ProgramName\fR" 5
-.IX Item "\fBPageName|ModuleName|ProgramName\fR"
 The item you want to look up.  Nested modules (such as \f(CWFile::Basename\fR)
 are specified either as \f(CWFile::Basename\fR or \f(CWFile/Basename\fR.  You may also
 give a descriptive name of a page, such as \f(CWperlfunc\fR. You make also give a
@@ -244,7 +230,6 @@ partial or wrong-case name, such as \*(L"basename\*(R" for \*(L"File::Basename\*
 this will be slower, if there is more then one page with the same partial
 name, you will only get the first one.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 Any switches in the \f(CWPERLDOC\fR environment variable will be used before the 
 command line arguments.  \f(CWperldoc\fR also searches directories
 specified by the \f(CWPERL5LIB\fR (or \f(CWPERLLIB\fR if \f(CWPERL5LIB\fR is not
@@ -252,9 +237,39 @@ defined) and \f(CWPATH\fR environment variables.
 (The latter is so that embedded pods for executables, such as
 \f(CWperldoc\fR itself, are available.)
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Kenneth Albanowski <kjahds@kjahds.com>
 .PP
 Minor updates by Andy Dougherty <doughera@lafcol.lafayette.edu>
 
 .rn }` ''
+.IX Title "PERLDOC 1"
+.IX Name "perldoc - Look up Perl documentation in pod format."
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "OPTIONS"
+
+.IX Item "\fB\-h\fR help"
+
+.IX Item "\fB\-v\fR verbose"
+
+.IX Item "\fB\-t\fR text output"
+
+.IX Item "\fB\-u\fR unformatted"
+
+.IX Item "\fB\-m\fR module"
+
+.IX Item "\fB\-l\fR file name only"
+
+.IX Item "\fB\-f\fR perlfunc"
+
+.IX Item "\fBPageName|ModuleName|ProgramName\fR"
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "AUTHOR"
+

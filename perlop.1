@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOP 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLOP 1"
+.TH PERLOP 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlop - Perl operators and precedence"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlop \- Perl operators and precedence
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 Perl operators have the following associativity and precedence,
 listed from highest precedence to lowest.  Note that all operators
 borrowed from C keep the same precedence relationship with each other,
@@ -229,9 +225,7 @@ operate on scalar values only, not array values.
 .Ve
 In the following sections, these operators are covered in precedence order.
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "Terms and List Operators (Leftward)"
-.IX Subsection "Terms and List Operators (Leftward)"
 A \s-1TERM\s0 has the highest precedence in Perl.  They includes variables,
 quote and quote-like operators, any expression in parentheses,
 and any function whose arguments are parenthesized.  Actually, there
@@ -285,7 +279,6 @@ constructors \f(CW[]\fR and \f(CW{}\fR.
 See also the section on \fIQuote and Quote-like Operators\fR toward the end of this section,
 as well as the section on \fII/O Operators\fR.
 .Sh "The Arrow Operator"
-.IX Subsection "The Arrow Operator"
 Just as in C and \*(C+, \*(L"\f(CW->\fR\*(R" is an infix dereference operator.  If the
 right side is either a \f(CW[...]\fR or \f(CW{...}\fR subscript, then the left side
 must be either a hard or symbolic reference to an array or hash (or
@@ -297,7 +290,6 @@ containing the method name, and the left side must either be an object
 (a blessed reference) or a class name (that is, a package name).
 See the \fIperlobj\fR manpage.
 .Sh "Auto-increment and Auto-decrement"
-.IX Subsection "Auto-increment and Auto-decrement"
 \*(L"++\*(R" and \*(L"--\*(R" work as in C.  That is, if placed before a variable, they
 increment or decrement the variable before returning the value, and if
 placed after, increment or decrement the variable after returning the value.
@@ -318,13 +310,11 @@ character within its range, with carry:
 .Ve
 The auto-decrement operator is not magical.
 .Sh "Exponentiation"
-.IX Subsection "Exponentiation"
 Binary \*(L"**\*(R" is the exponentiation operator.  Note that it binds even more
 tightly than unary minus, so \-2**4 is \-(2**4), not (\-2)**4. (This is
 implemented using C's \fIpow\fR\|(3) function, which actually works on doubles
 internally.)
 .Sh "Symbolic Unary Operators"
-.IX Subsection "Symbolic Unary Operators"
 Unary \*(L"!\*(R" performs logical negation, i.e., \*(L"not\*(R".  See also \f(CWnot\fR for a lower
 precedence version of this.
 .PP
@@ -348,7 +338,6 @@ Do not confuse this behavior with the behavior of backslash within a
 string, although both forms do convey the notion of protecting the next
 thing from interpretation.
 .Sh "Binding Operators"
-.IX Subsection "Binding Operators"
 Binary \*(L"=~\*(R" binds a scalar expression to a pattern match.  Certain operations
 search or modify the string \f(CW$_\fR by default.  This operator makes that kind
 of operation work on some other string.  The right argument is a search
@@ -363,7 +352,6 @@ pattern must be compiled every time the expression is evaluated.
 Binary \*(L"!~\*(R" is just like \*(L"=~\*(R" except the return value is negated in
 the logical sense.
 .Sh "Multiplicative Operators"
-.IX Subsection "Multiplicative Operators"
 Binary \*(L"*\*(R" multiplies two numbers.
 .PP
 Binary \*(L"/\*(R" divides two numbers.
@@ -391,14 +379,12 @@ operand is a list in parentheses, it repeats the list.
 \&    @ones = (5) x @ones;        # set all elements to 5
 .Ve
 .Sh "Additive Operators"
-.IX Subsection "Additive Operators"
 Binary \*(L"+\*(R" returns the sum of two numbers.
 .PP
 Binary \*(L"\-\*(R" returns the difference of two numbers.
 .PP
 Binary \*(L".\*(R" concatenates two strings.
 .Sh "Shift Operators"
-.IX Subsection "Shift Operators"
 Binary \*(L"<<\*(R" returns the value of its left argument shifted left by the
 number of bits specified by the right argument.  Arguments should be
 integers.  (See also the section on \fIInteger Arithmetic\fR.)
@@ -407,7 +393,6 @@ Binary \*(L">>\*(R" returns the value of its left argument shifted right by
 the number of bits specified by the right argument.  Arguments should
 be integers.  (See also the section on \fIInteger Arithmetic\fR.)
 .Sh "Named Unary Operators"
-.IX Subsection "Named Unary Operators"
 The various named unary operators are treated as functions with one
 argument, with optional parentheses.  These include the filetest
 operators, like \f(CW-f\fR, \f(CW-M\fR, etc.  See the \fIperlfunc\fR manpage.
@@ -439,7 +424,6 @@ but, because * is higher precedence than ||:
 .Ve
 See also the section on \fITerms and List Operators (Leftward)\fR.
 .Sh "Relational Operators"
-.IX Subsection "Relational Operators"
 Binary \*(L"<\*(R" returns true if the left argument is numerically less than
 the right argument.
 .PP
@@ -464,7 +448,6 @@ or equal to the right argument.
 Binary \*(L"ge\*(R" returns true if the left argument is stringwise greater
 than or equal to the right argument.
 .Sh "Equality Operators"
-.IX Subsection "Equality Operators"
 Binary \*(L"==\*(R" returns true if the left argument is numerically equal to
 the right argument.
 .PP
@@ -487,24 +470,20 @@ less than, equal to, or greater than the right argument.
 \*(L"lt\*(R", \*(L"le\*(R", \*(L"ge\*(R", \*(L"gt\*(R" and \*(L"cmp\*(R" use the collation (sort) order specified
 by the current locale if \f(CWuse locale\fR is in effect.  See the \fIperllocale\fR manpage.
 .Sh "Bitwise And"
-.IX Subsection "Bitwise And"
 Binary \*(L"&\*(R" returns its operators ANDed together bit by bit.
 (See also the section on \fIInteger Arithmetic\fR.)
 .Sh "Bitwise Or and Exclusive Or"
-.IX Subsection "Bitwise Or and Exclusive Or"
 Binary \*(L"|\*(R" returns its operators ORed together bit by bit.
 (See also the section on \fIInteger Arithmetic\fR.)
 .PP
 Binary \*(L"^\*(R" returns its operators XORed together bit by bit.
 (See also the section on \fIInteger Arithmetic\fR.)
 .Sh "C\-style Logical And"
-.IX Subsection "C\-style Logical And"
 Binary \*(L"&&\*(R" performs a short-circuit logical \s-1AND\s0 operation.  That is,
 if the left operand is false, the right operand is not even evaluated.
 Scalar or list context propagates down to the right operand if it
 is evaluated.
 .Sh "C\-style Logical Or"
-.IX Subsection "C\-style Logical Or"
 Binary \*(L"||\*(R" performs a short-circuit logical \s-1OR\s0 operation.  That is,
 if the left operand is true, the right operand is not even evaluated.
 Scalar or list context propagates down to the right operand if it
@@ -535,7 +514,6 @@ With the C\-style operators that would have been written like this:
 \&            || (gripe(), next LINE);
 .Ve
 .Sh "Range Operator"
-.IX Subsection "Range Operator"
 Binary \*(L"..\*(R" is the range operator, which is really two different
 operators depending on the context.  In a list context, it returns an
 array of values counting (by ones) from the left value to the right
@@ -609,7 +587,6 @@ in the sequence that the magical increment would produce, the sequence
 goes until the next value would be longer than the final value
 specified.
 .Sh "Conditional Operator"
-.IX Subsection "Conditional Operator"
 Ternary \*(L"?:\*(R" is the conditional operator, just as in C.  It works much
 like an if-then-else.  If the argument before the ? is true, the
 argument before the : is returned, otherwise the argument after the :
@@ -635,7 +612,6 @@ legal lvalues (meaning that you can assign to them):
 .Ve
 This is not necessarily guaranteed to contribute to the readability of your program.
 .Sh "Assignment Operators"
-.IX Subsection "Assignment Operators"
 \*(L"=\*(R" is the ordinary assignment operator.
 .PP
 Assignment operators work as in C.  That is,
@@ -681,7 +657,6 @@ is equivalent to
 \&    $a *= 3;
 .Ve
 .Sh "Comma Operator"
-.IX Subsection "Comma Operator"
 Binary \*(L",\*(R" is the comma operator.  In a scalar context it evaluates
 its left argument, throws that value away, then evaluates its right
 argument and returns that value.  This is just like C's comma operator.
@@ -693,7 +668,6 @@ The => digraph is mostly just a synonym for the comma operator.  It's useful for
 documenting arguments that come in pairs.  As of release 5.001, it also forces
 any word to the left of it to be interpreted as a string.
 .Sh "List Operators (Rightward)"
-.IX Subsection "List Operators (Rightward)"
 On the right side of a list operator, it has very low precedence,
 such that it controls all comma-separated expressions found there.
 The only operators with lower precedence are the logical operators
@@ -706,17 +680,14 @@ operators without the need for extra parentheses:
 .Ve
 See also discussion of list operators in the section on \fITerms and List Operators (Leftward)\fR.
 .Sh "Logical Not"
-.IX Subsection "Logical Not"
 Unary \*(L"not\*(R" returns the logical negation of the expression to its right.
 It's the equivalent of \*(L"!\*(R" except for the very low precedence.
 .Sh "Logical And"
-.IX Subsection "Logical And"
 Binary \*(L"and\*(R" returns the logical conjunction of the two surrounding
 expressions.  It's equivalent to && except for the very low
 precedence.  This means that it short-circuits: i.e., the right
 expression is evaluated only if the left expression is true.
 .Sh "Logical or and Exclusive Or"
-.IX Subsection "Logical or and Exclusive Or"
 Binary \*(L"or\*(R" returns the logical disjunction of the two surrounding
 expressions.  It's equivalent to || except for the very low
 precedence.  This means that it short-circuits: i.e., the right
@@ -725,20 +696,15 @@ expression is evaluated only if the left expression is false.
 Binary \*(L"xor\*(R" returns the exclusive-\s-1OR\s0 of the two surrounding expressions.
 It cannot short circuit, of course.
 .Sh "C Operators Missing From Perl"
-.IX Subsection "C Operators Missing From Perl"
 Here is what C has that Perl doesn't:
 .Ip "unary &" 8
-.IX Item "unary &"
 Address-of operator.  (But see the \*(L"\e\*(R" operator for taking a reference.)
 .Ip "unary *" 8
-.IX Item "unary *"
 Dereference-address operator. (Perl's prefix dereferencing
 operators are typed: $, @, %, and &.)
 .Ip "(\s-1TYPE\s0)" 8
-.IX Item "(\s-1TYPE\s0)"
 Type casting operator.
 .Sh "Quote and Quote-like Operators"
-.IX Subsection "Quote and Quote-like Operators"
 While we usually think of quotes as literal values, in Perl they
 function as operators, providing various kinds of interpolating and
 pattern matching capabilities.  Perl provides customary quote characters
@@ -757,6 +723,16 @@ the same character fore and aft, but the 4 sorts of brackets
 \&        //       m{}    Pattern match      yes
 \&                 s{}{}   Substitution      yes
 \&                tr{}{}   Translation       no
+.Ve
+Note that there can be whitespace between the operator and the quoting
+characters, except when \f(CW#\fR is being used as the quoting character.
+\f(CWq#foo#\fR is parsed as being the string \f(CWfoo\fR, which \f(CWq #foo#\fR is the
+operator \f(CWq\fR followed by a comment. Its argument will be taken from the
+next line. This allows you to write:
+.PP
+.Vb 2
+\&    s {foo}  # Replace foo
+\&      {bar}  # with bar.
 .Ve
 For constructs that do interpolation, variables beginning with \*(L"\f(CW$\fR\*(R" or \*(L"\f(CW@\fR\*(R"
 are interpolated, as are the following sequences:
@@ -793,11 +769,9 @@ particular, contrary to the expectations of shell programmers, back-quotes
 do \fI\s-1NOT\s0\fR interpolate within double quotes, nor do single quotes impede
 evaluation of variables when used within double quotes.
 .Sh "Regexp Quote-Like Operators"
-.IX Subsection "Regexp Quote-Like Operators"
 Here are the quote-like operators that apply to pattern
 matching and related activities.
 .Ip "?\s-1PATTERN\s0?" 8
-.IX Item "?\s-1PATTERN\s0?"
 This is just like the \f(CW/pattern/\fR search, except that it matches only
 once between calls to the \fIreset()\fR operator.  This is a useful
 optimization when you want to see only the first occurrence of
@@ -806,10 +780,8 @@ patterns local to the current package are reset.
 .Sp
 This usage is vaguely deprecated, and may be removed in some future
 version of Perl.
-.Ip "m/\s-1PATTERN/\s0gimosx" 8
-.IX Item "m/\s-1PATTERN/\s0gimosx"
-.Ip "/\s-1PATTERN/\s0gimosx" 8
-.IX Item "/\s-1PATTERN/\s0gimosx"
+.Ip "m/\s-1PATTERN/\s0cgimosx" 8
+.Ip "/\s-1PATTERN/\s0cgimosx" 8
 Searches a string for a pattern match, and in a scalar context returns
 true (1) or false ('').  If no string is specified via the \f(CW=~\fR or
 \f(CW!~\fR operator, the \f(CW$_\fR string is searched.  (The string specified with
@@ -821,7 +793,8 @@ when \f(CWuse locale\fR is in effect.
 .Sp
 Options are:
 .Sp
-.Vb 6
+.Vb 7
+\&    c   Do not reset search position on a failed match when /g is in effect.
 \&    g   Match globally, i.e., find all occurrences.
 \&    i   Do case-insensitive pattern matching.
 \&    m   Treat string as multiple lines.
@@ -895,7 +868,7 @@ each time it matches, and \s-1FALSE\s0 when it eventually runs out of matches.
 the search at that point.  You can actually find the current match
 position of a string or set it using the \fIpos()\fR function; see
 the \f(CWpos\fR entry in the \fIperlfunc\fR manpage.)  A failed match normally resets the search position to
-the beginning of the string, but you can avoid that by adding the \*(L"c\*(R"
+the beginning of the string, but you can avoid that by adding the \f(CW/c\fR
 modifier (e.g. \f(CWm//gc\fR).  Modifying the target string also resets the
 search position.
 .Sp
@@ -973,9 +946,7 @@ Here is the output (split into several lines):
 \& MiXeD line-noise. That's all!
 .Ve
 .Ip "q/\s-1STRING\s0/" 8
-.IX Item "q/\s-1STRING\s0/"
 .Ip "\f(CW'STRING'\fR" 8
-.IX Item "\f(CW'STRING'\fR"
 A single-quoted, literal string. A backslash represents a backslash
 unless followed by the delimiter or another backslash, in which case
 the delimiter or backslash is interpolated.
@@ -986,9 +957,7 @@ the delimiter or backslash is interpolated.
 \&    $baz = '\en';                # a two-character string
 .Ve
 .Ip "qq/\s-1STRING\s0/" 8
-.IX Item "qq/\s-1STRING\s0/"
 .Ip "\*(N"\s-1STRING\s0\*(T"" 8
-.IX Item "\*(N"\s-1STRING\s0\*(T""
 A double-quoted, interpolated string.
 .Sp
 .Vb 4
@@ -998,9 +967,7 @@ A double-quoted, interpolated string.
 \&    $baz = "\en";                # a one-character string
 .Ve
 .Ip "qx/\s-1STRING\s0/" 8
-.IX Item "qx/\s-1STRING\s0/"
 .Ip "`\s-1STRING\s0`" 8
-.IX Item "`\s-1STRING\s0`"
 A string which is interpolated and then executed as a system command.
 The collected standard output of the command is returned.  In scalar
 context, it comes back as a single (potentially multi-line) string.
@@ -1010,9 +977,26 @@ with $/ or \f(CW$INPUT_RECORD_SEPARATOR\fR).
 .Vb 1
 \&    $today = qx{ date };
 .Ve
+Note that how the string gets evaluated is entirely subject to the
+command interpreter on your system.  On most platforms, you will have
+to protect shell metacharacters if you want them treated literally.
+On some platforms (notably \s-1DOS\s0\-like ones), the shell may not be
+capable of dealing with multiline commands, so putting newlines in
+the string may not get you what you want.  You may be able to evaluate
+multiple commands in a single line by separating them with the command
+separator character, if your shell supports that (e.g. \f(CW;\fR on many Unix
+shells; \f(CW&\fR on the Windows \s-1NT\s0 \f(CWcmd\fR shell).
+.Sp
+Beware that some command shells may place restrictions on the length
+of the command line.  You must ensure your strings don't exceed this
+limit after any necessary interpolations.  See the platform-specific
+release notes for more details about your particular environment.
+.Sp
+Also realize that using this operator frequently leads to unportable
+programs.
+.Sp
 See the section on \fII/O Operators\fR for more discussion.
 .Ip "qw/\s-1STRING\s0/" 8
-.IX Item "qw/\s-1STRING\s0/"
 Returns a list of the words extracted out of \s-1STRING\s0, using embedded
 whitespace as the word delimiters.  It is exactly equivalent to
 .Sp
@@ -1030,7 +1014,6 @@ comments into a multi-line qw-string.  For this reason the \f(CW-w\fR
 switch produce warnings if the \s-1STRING\s0 contains the \*(L",\*(R" or the \*(L"#\*(R"
 character.
 .Ip "s/\s-1PATTERN/REPLACEMENT/\s0egimosx" 8
-.IX Item "s/\s-1PATTERN/REPLACEMENT/\s0egimosx"
 Searches a string for a pattern, and if found, replaces that pattern
 with the replacement text and returns the number of substitutions
 made.  Otherwise it returns false (specifically, the empty string).
@@ -1138,9 +1121,7 @@ to occur.  Here are two common cases:
 \&    1 while s/\et+/' ' x (length($&)*8 - length($`)%8)/e;
 .Ve
 .Ip "tr/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds" 8
-.IX Item "tr/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds"
 .Ip "y/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds" 8
-.IX Item "y/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds"
 Translates all occurrences of the characters found in the search list
 with the corresponding character in the replacement list.  It returns
 the number of characters replaced or deleted.  If no string is
@@ -1222,7 +1203,6 @@ an \fIeval()\fR:
 \&    eval "tr/$oldlist/$newlist/, 1" or die $@;
 .Ve
 .Sh "I/O Operators"
-.IX Subsection "I/O Operators"
 There are several I/O operators you should know about.
 A string is enclosed by backticks (grave accents) first undergoes
 variable substitution just like a double quoted string.  It is then
@@ -1399,7 +1379,6 @@ to become confused with the indirect filehandle notation.
 \&    @files = glob($files[$i]);
 .Ve
 .Sh "Constant Folding"
-.IX Subsection "Constant Folding"
 Like C, Perl does a certain amount of expression evaluation at
 compile time, whenever it determines that all of the arguments to an
 operator are static and have no side effects.  In particular, string
@@ -1423,7 +1402,6 @@ the compiler will precompute the number that
 expression represents so that the interpreter
 won't have to.
 .Sh "Integer Arithmetic"
-.IX Subsection "Integer Arithmetic"
 By default Perl assumes that it must do most of its arithmetic in
 floating point.  But by saying
 .PP
@@ -1446,7 +1424,6 @@ integers.  However, if \f(CWuse integer\fR is in effect, their results are
 interpreted as signed integers.  For example, \f(CW~0\fR usually evaluates
 to a large integral value.  However, \f(CWuse integer; ~0\fR is \-1.
 .Sh "Floating-point Arithmetic"
-.IX Subsection "Floating-point Arithmetic"
 While \f(CWuse integer\fR provides integer-only arithmetic, there is no
 similar ways to provide rounding or truncation at a certain number of
 decimal places.  For rounding to a certain number of digits, \fIsprintf()\fR
@@ -1466,3 +1443,106 @@ being used by Perl, but to instead implement the rounding function you
 need yourself.
 
 .rn }` ''
+.IX Title "PERLOP 1"
+.IX Name "perlop - Perl operators and precedence"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Terms and List Operators (Leftward)"
+
+.IX Subsection "The Arrow Operator"
+
+.IX Subsection "Auto-increment and Auto-decrement"
+
+.IX Subsection "Exponentiation"
+
+.IX Subsection "Symbolic Unary Operators"
+
+.IX Subsection "Binding Operators"
+
+.IX Subsection "Multiplicative Operators"
+
+.IX Subsection "Additive Operators"
+
+.IX Subsection "Shift Operators"
+
+.IX Subsection "Named Unary Operators"
+
+.IX Subsection "Relational Operators"
+
+.IX Subsection "Equality Operators"
+
+.IX Subsection "Bitwise And"
+
+.IX Subsection "Bitwise Or and Exclusive Or"
+
+.IX Subsection "C\-style Logical And"
+
+.IX Subsection "C\-style Logical Or"
+
+.IX Subsection "Range Operator"
+
+.IX Subsection "Conditional Operator"
+
+.IX Subsection "Assignment Operators"
+
+.IX Subsection "Comma Operator"
+
+.IX Subsection "List Operators (Rightward)"
+
+.IX Subsection "Logical Not"
+
+.IX Subsection "Logical And"
+
+.IX Subsection "Logical or and Exclusive Or"
+
+.IX Subsection "C Operators Missing From Perl"
+
+.IX Item "unary &"
+
+.IX Item "unary *"
+
+.IX Item "(\s-1TYPE\s0)"
+
+.IX Subsection "Quote and Quote-like Operators"
+
+.IX Subsection "Regexp Quote-Like Operators"
+
+.IX Item "?\s-1PATTERN\s0?"
+
+.IX Item "m/\s-1PATTERN/\s0cgimosx"
+
+.IX Item "/\s-1PATTERN/\s0cgimosx"
+
+.IX Item "q/\s-1STRING\s0/"
+
+.IX Item "\f(CW'STRING'\fR"
+
+.IX Item "qq/\s-1STRING\s0/"
+
+.IX Item "\*(N"\s-1STRING\s0\*(T""
+
+.IX Item "qx/\s-1STRING\s0/"
+
+.IX Item "`\s-1STRING\s0`"
+
+.IX Item "qw/\s-1STRING\s0/"
+
+.IX Item "s/\s-1PATTERN/REPLACEMENT/\s0egimosx"
+
+.IX Item "tr/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds"
+
+.IX Item "y/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds"
+
+.IX Subsection "I/O Operators"
+
+.IX Subsection "Constant Folding"
+
+.IX Subsection "Integer Arithmetic"
+
+.IX Subsection "Floating-point Arithmetic"
+

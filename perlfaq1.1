@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ1 1 "perl 5.004, patch 01" "11/May/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ1 1"
+.TH PERLFAQ1 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq1 - General Questions About Perl ($Revision: 1.12 $, $Date: 1997/04/24 22:43:34 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,14 +188,11 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section of the FAQ answers very general, high-level questions
 about Perl.
 .Sh "What is Perl?"
-.IX Subsection "What is Perl?"
 Perl is a high-level programming language with an eclectic heritage
 written by Larry Wall and a cast of thousands.  It derives from the
 ubiquitous C programming language and to a lesser extent from sed,
@@ -210,7 +205,6 @@ These strengths make it especially popular with system administrators
 and \s-1CGI\s0 script authors, but mathematicians, geneticists, journalists,
 and even managers also use Perl.  Maybe you should, too.
 .Sh "Who supports Perl?  Who develops it?  Why is it free?"
-.IX Subsection "Who supports Perl?  Who develops it?  Why is it free?"
 The original culture of the pre-populist Internet and the deeply-held
 beliefs of Perl's author, Larry Wall, gave rise to the free and open
 distribution policy of perl.  Perl is supported by its users.  The
@@ -235,7 +229,6 @@ You can get commercial support of Perl if you wish, although for most
 users the informal support will more than suffice.  See the answer to
 \*(L"Where can I buy a commercial version of perl?\*(R" for more information.
 .Sh "Which version of Perl should I use?"
-.IX Subsection "Which version of Perl should I use?"
 You should definitely use version 5.  Version 4 is old, limited, and
 no longer maintained; its last patch (4.036) was in 1992.  The most
 recent production release is 5.004.  Further references to the Perl
@@ -244,7 +237,6 @@ otherwise specified.  There may be one or more official bug fixes for
 5.004 by the time you read this, and also perhaps some experimental
 versions on the way to the next release.
 .Sh "What are perl4 and perl5?"
-.IX Subsection "What are perl4 and perl5?"
 Perl4 and perl5 are informal names for different versions of the Perl
 programming language.  It's easier to say \*(L"perl5\*(R" than it is to say
 \*(L"the \fI5\fR\|(.004) release of Perl\*(R", but some people have interpreted this
@@ -263,7 +255,6 @@ To avoid the \*(L"what language is perl5?\*(R" confusion, some people prefer to
 simply use \*(L"perl\*(R" to refer to the latest version of perl and avoid using
 \*(L"perl5\*(R" altogether.  It's not really that big a deal, though.
 .Sh "How stable is Perl?"
-.IX Subsection "How stable is Perl?"
 Production releases, which incorporate bug fixes and new functionality,
 are widely tested before release.  Since the 5.000 release, we have
 averaged only about one production release per year.
@@ -275,7 +266,6 @@ under perl5, an update to perl should nearly never invalidate a program
 written for an earlier version of perl (barring accidental bug fixes
 and the rare new keyword).
 .Sh "Is Perl difficult to learn?"
-.IX Subsection "Is Perl difficult to learn?"
 Perl is easy to start learning -- and easy to keep learning.  It looks
 like most programming languages you're likely to have had experience
 with, so if you've ever written an C program, an awk script, a shell
@@ -301,7 +291,6 @@ usually available for free.  Don't forget the new perl modules, either.
 They're discussed in Part 3 of this \s-1FAQ\s0, along with the \s-1CPAN\s0, which is
 discussed in Part 2.
 .Sh "How does Perl compare with other languages like Java, Python, \s-1REXX\s0, Scheme, or Tcl?"
-.IX Subsection "How does Perl compare with other languages like Java, Python, \s-1REXX\s0, Scheme, or Tcl?"
 Favorably in some areas, unfavorably in others.  Precisely which areas
 are good and bad is often a personal choice, so asking this question
 on Usenet runs a strong risk of starting an unproductive Holy War.
@@ -310,7 +299,6 @@ Probably the best thing to do is try to write equivalent code to do a
 set of tasks.  These languages have their own newsgroups in which you
 can learn about (but hopefully not argue about) them.
 .Sh "Can I do [task] in Perl?"
-.IX Subsection "Can I do [task] in Perl?"
 Perl is flexible and extensible enough for you to use on almost any
 task, from one-line file-processing tasks to complex systems.  For
 many people, Perl serves as a great replacement for shell scripting.
@@ -332,7 +320,6 @@ convenient for certain kinds of problems.  Perl tries to be all things
 to all people, but nothing special to anyone.  Examples of specialized
 languages that come to mind include prolog and matlab.
 .Sh "When shouldn't I program in Perl?"
-.IX Subsection "When shouldn't I program in Perl?"
 When your manager forbids it -- but do consider replacing them :\-).
 .PP
 Actually, one good reason is when you already have an existing
@@ -354,7 +341,6 @@ trust nuclear-plant or brain-surgery monitoring code to it.  And
 Larry will sleep easier, too -- Wall Street programs not
 withstanding. :\-)
 .Sh "What's the difference between \*(M"perl\*(S" and \*(M"Perl\*(S"?"
-.IX Subsection "What's the difference between \*(M"perl\*(S" and \*(M"Perl\*(S"?"
 One bit.  Oh, you weren't talking \s-1ASCII\s0? :\-) Larry now uses \*(L"Perl\*(R" to
 signify the language proper and \*(L"perl\*(R" the implementation of it,
 i.e. the current interpreter.  Hence Tom's quip that \*(L"Nothing but perl
@@ -362,7 +348,6 @@ can parse Perl.\*(R"  You may or may not choose to follow this usage.  For
 example, parallelism means \*(L"awk and perl\*(R" and \*(L"Python and Perl\*(R" look
 ok, while \*(L"awk and Perl\*(R" and \*(L"Python and perl\*(R" do not.
 .Sh "Is it a Perl program or a Perl script?"
-.IX Subsection "Is it a Perl program or a Perl script?"
 It doesn't matter.
 .PP
 In \*(L"standard terminology\*(R" a \fIprogram\fR has been compiled to physical
@@ -376,16 +361,13 @@ is destined for a pure interpreter, a parse-tree interpreter, a byte
 code interpreter, or a native-code compiler, so it's hard to give a
 definitive answer here.
 .Sh "What is a \s-1JAPH\s0?"
-.IX Subsection "What is a \s-1JAPH\s0?"
 These are the \*(L"just another perl hacker\*(R" signatures that some people
 sign their postings with.  About 100 of the of the earlier ones are
 available from http://www.perl.com/\s-1CPAN/\s0misc/japh .
 .Sh "Where can I get a list of Larry Wall witticisms?"
-.IX Subsection "Where can I get a list of Larry Wall witticisms?"
 Over a hundred quips by Larry, from postings of his or source code,
 can be found at http://www.perl.com/\s-1CPAN/\s0misc/lwall-quotes .
 .Sh "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
-.IX Subsection "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
 If your manager or employees are wary of unsupported software, or
 software which doesn't officially ship with your Operating System, you
 might try to appeal to their self-interest.  If programmers can be
@@ -419,8 +401,44 @@ although 5.003 isn't that bad (it's just one year and one release
 behind).  Several important bugs were fixed from the 5.000 through
 5.002 versions, though, so try upgrading past them if possible.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ1 1"
+.IX Name "perlfaq1 - General Questions About Perl ($Revision: 1.12 $, $Date: 1997/04/24 22:43:34 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "What is Perl?"
+
+.IX Subsection "Who supports Perl?  Who develops it?  Why is it free?"
+
+.IX Subsection "Which version of Perl should I use?"
+
+.IX Subsection "What are perl4 and perl5?"
+
+.IX Subsection "How stable is Perl?"
+
+.IX Subsection "Is Perl difficult to learn?"
+
+.IX Subsection "How does Perl compare with other languages like Java, Python, \s-1REXX\s0, Scheme, or Tcl?"
+
+.IX Subsection "Can I do [task] in Perl?"
+
+.IX Subsection "When shouldn't I program in Perl?"
+
+.IX Subsection "What's the difference between \*(M"perl\*(S" and \*(M"Perl\*(S"?"
+
+.IX Subsection "Is it a Perl program or a Perl script?"
+
+.IX Subsection "What is a \s-1JAPH\s0?"
+
+.IX Subsection "Where can I get a list of Larry Wall witticisms?"
+
+.IX Subsection "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

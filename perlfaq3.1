@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ3 1 "perl 5.004, patch 01" "28/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ3 1"
+.TH PERLFAQ3 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq3 - Programming Tools ($Revision: 1.22 $, $Date: 1997/04/24 22:43:42 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,14 +188,11 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq3 \- Programming Tools ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:43:42 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section of the FAQ answers questions related to programmer tools
 and programming support.
 .Sh "How do I do (anything)?"
-.IX Subsection "How do I do (anything)?"
 Have you looked at \s-1CPAN\s0 (see the \fIperlfaq2\fR manpage)?  The chances are that
 someone has already written a module that can solve your problem.
 Have you read the appropriate man pages?  Here's a brief index:
@@ -214,7 +209,6 @@ Have you read the appropriate man pages?  Here's a brief index:
 .Ve
 the \fIperltoc\fR manpage provides a crude table of contents for the perl man page set.
 .Sh "How can I use Perl interactively?"
-.IX Subsection "How can I use Perl interactively?"
 The typical approach uses the Perl debugger, described in the
 \fIperldebug\fR\|(1) man page, on an \*(L"empty\*(R" program, like this:
 .PP
@@ -226,13 +220,11 @@ evaluated.  You can also examine the symbol table, get stack
 backtraces, check variable values, set breakpoints, and other
 operations typically found in symbolic debuggers
 .Sh "Is there a Perl shell?"
-.IX Subsection "Is there a Perl shell?"
 In general, no.  The Shell.pm module (distributed with perl) makes
 perl try commands which aren't part of the Perl language as shell
 commands.  perlsh from the source distribution is simplistic and
 uninteresting, but may still be what you want.
 .Sh "How do I debug my Perl programs?"
-.IX Subsection "How do I debug my Perl programs?"
 Have you used \f(CW-w\fR?
 .PP
 Have you tried \f(CWuse strict\fR?
@@ -243,13 +235,11 @@ Did you read the \fIperltrap\fR manpage?
 .PP
 Have you tried the Perl debugger, described in the \fIperldebug\fR manpage?
 .Sh "How do I profile my Perl programs?"
-.IX Subsection "How do I profile my Perl programs?"
 You should get the Devel::DProf module from \s-1CPAN\s0, and also use
 Benchmark.pm from the standard distribution.  Benchmark lets you time
 specific portions of your code, while Devel::DProf gives detailed
 breakdowns of where your code spends its time.
 .Sh "How do I cross-reference my Perl programs?"
-.IX Subsection "How do I cross-reference my Perl programs?"
 The B::Xref module, shipped with the new, alpha-release Perl compiler
 (not the general distribution), can be used to generate
 cross-reference reports for Perl programs.
@@ -258,7 +248,6 @@ cross-reference reports for Perl programs.
 \&    perl -MO=Xref[,OPTIONS] foo.pl
 .Ve
 .Sh "Is there a pretty-printer (formatter) for Perl?"
-.IX Subsection "Is there a pretty-printer (formatter) for Perl?"
 There is no program that will reformat Perl as much as \fIindent\fR\|(1) will
 do for C.  The complex feedback between the scanner and the parser
 (this feedback is what confuses the vgrind and emacs programs) makes it
@@ -277,19 +266,16 @@ a laser printer, you can take a stab at this using
 http://www.perl.com/\s-1CPAN/\s0doc/misc/tips/working.vgrind.entry, but the
 results are not particularly satisfying for sophisticated code.
 .Sh "Is there a ctags for Perl?"
-.IX Subsection "Is there a ctags for Perl?"
 There's a simple one at
 http://www.perl.com/\s-1CPAN/\s0authors/id/\s-1TOMC/\s0scripts/ptags.gz which may do
 the trick.
 .Sh "Where can I get Perl macros for vi?"
-.IX Subsection "Where can I get Perl macros for vi?"
 For a complete version of Tom Christiansen's vi configuration file,
 see ftp://ftp.perl.com/pub/vi/toms.exrc, the standard benchmark file
 for vi emulators.  This runs best with nvi, the current version of vi
 out of Berkeley, which incidentally can be built with an embedded Perl
 interpreter -- see http://www.perl.com/\s-1CPAN/\s0src/misc .
 .Sh "Where can I get perl-mode for emacs?"
-.IX Subsection "Where can I get perl-mode for emacs?"
 Since Emacs version 19 patchlevel 22 or so, there have been both a
 perl-mode.el and support for the perl debugger built in.  These should
 come with the standard Emacs 19 distribution.
@@ -302,28 +288,22 @@ Note that the perl-mode of emacs will have fits with \*(L"main'foo\*(R"
 (single quote), and mess up the indentation and hilighting.  You
 should be using \*(L"main::foo\*(R", anyway.
 .Sh "How can I use curses with Perl?"
-.IX Subsection "How can I use curses with Perl?"
 The Curses module from \s-1CPAN\s0 provides a dynamically loadable object
 module interface to a curses library.
 .Sh "How can I use X or Tk with Perl?"
-.IX Subsection "How can I use X or Tk with Perl?"
 Tk is a completely Perl-based, object-oriented interface to the Tk
 toolkit that doesn't force you to use Tcl just to get at Tk.  Sx is an
 interface to the Athena Widget set.  Both are available from \s-1CPAN\s0.
 .Sh "How can I generate simple menus without using \s-1CGI\s0 or Tk?"
-.IX Subsection "How can I generate simple menus without using \s-1CGI\s0 or Tk?"
 The http://www.perl.com/\s-1CPAN/\s0authors/id/\s-1SKUNZ/\s0perlmenu.v4.0.tar.gz
 module, which is curses-based, can help with this.
 .Sh "Can I dynamically load C routines into Perl?"
-.IX Subsection "Can I dynamically load C routines into Perl?"
 If your system architecture supports it, then the standard perl
 on your system should also provide you with this via the
 DynaLoader module.  Read the \fIperlxstut\fR manpage for details.
 .Sh "What is undump?"
-.IX Subsection "What is undump?"
 See the next questions.
 .Sh "How can I make my Perl program run faster?"
-.IX Subsection "How can I make my Perl program run faster?"
 The best way to do this is to come up with a better algorithm.
 This can often make a dramatic difference.  Chapter 8 in the Camel
 has some efficiency tips in it you might want to look at.
@@ -359,7 +339,6 @@ by storing the already-compiled form to disk.  This is no longer
 a viable option, as it only worked on a few architectures, and
 wasn't a good solution anyway.
 .Sh "How can I make my Perl program take less memory?"
-.IX Subsection "How can I make my Perl program take less memory?"
 When it comes to time-space tradeoffs, Perl nearly always prefers to
 throw memory at a problem.  Scalars in Perl use more memory than
 strings in C, arrays take more that, and hashes use even more.  While
@@ -383,7 +362,6 @@ Information about malloc is in the \fI\s-1INSTALL\s0\fR file in the source
 distribution.  You can find out whether you are using perl's malloc by
 typing \f(CWperl -V:usemymalloc\fR.
 .Sh "Is it unsafe to return a pointer to local data?"
-.IX Subsection "Is it unsafe to return a pointer to local data?"
 No, Perl's garbage collection system takes care of this.
 .PP
 .Vb 4
@@ -404,7 +382,6 @@ No, Perl's garbage collection system takes care of this.
 \&    print "@many\en";
 .Ve
 .Sh "How can I free an array or hash so my program shrinks?"
-.IX Subsection "How can I free an array or hash so my program shrinks?"
 You can't.  Memory the system allocates to a program will never be
 returned to the system.  That's why long-running programs sometimes
 re-exec themselves.
@@ -419,7 +396,6 @@ In general, memory allocation and de-allocation isn't something you can
 or should be worrying about much in Perl, but even this capability
 (preallocation of data types) is in the works.
 .Sh "How can I make my \s-1CGI\s0 script more efficient?"
-.IX Subsection "How can I make my \s-1CGI\s0 script more efficient?"
 Beyond the normal measures described to make general Perl programs
 faster or smaller, a \s-1CGI\s0 program has additional issues.  It may be run
 several times per second.  Given that each time it runs it will need
@@ -445,7 +421,6 @@ Both of these solutions can have far-reaching effects on your system
 and on the way you write your \s-1CGI\s0 scripts, so investigate them with
 care.
 .Sh "How can I hide the source for my Perl program?"
-.IX Subsection "How can I hide the source for my Perl program?"
 Delete it. :\-) Seriously, there are a number of (mostly
 unsatisfactory) solutions with varying levels of \*(L"security\*(R".
 .PP
@@ -479,7 +454,6 @@ Your access to it does not give you permission to use it blah blah
 blah.\*(R"  We are not lawyers, of course, so you should see a lawyer if
 you want to be sure your licence's wording will stand up in court.
 .Sh "How can I compile my Perl program into byte code or C?"
-.IX Subsection "How can I compile my Perl program into byte code or C?"
 Malcolm Beattie has written a multifunction backend compiler,
 available from \s-1CPAN\s0, that can do both these things.  It is as of
 Feb-1997 in late alpha release, which means it's fun to play with if
@@ -511,7 +485,6 @@ you link your main perl binary with this, it will make it miniscule.
 For example, on one author's system, /usr/bin/perl is only 11k in
 size!
 .Sh "How can I get \*(M'#!perl\*(S' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
-.IX Subsection "How can I get \*(M'#!perl\*(S' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
 For \s-1OS/2\s0 just use
 .PP
 .Vb 1
@@ -536,7 +509,6 @@ throw the perl interpreter into your cgi-bin directory, in order to
 get your scripts working for a web server.  This is an \s-1EXTREMELY\s0 big
 security risk.  Take the time to figure out how to do it correctly.
 .Sh "Can I write useful perl programs on the command line?"
-.IX Subsection "Can I write useful perl programs on the command line?"
 Yes.  Read the \fIperlrun\fR manpage for more information.  Some examples follow.
 (These assume standard Unix shell quoting rules.)
 .PP
@@ -567,7 +539,6 @@ Yes.  Read the \fIperlrun\fR manpage for more information.  Some examples follow
 .Ve
 Ok, the last one was actually an obfuscated perl entry. :\-)
 .Sh "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?"
-.IX Subsection "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?"
 The problem is usually that the command interpreters on those systems
 have rather different ideas about quoting than the Unix shells under
 which the one-liners were created.  On some systems, you may have to
@@ -611,7 +582,6 @@ mess, pure and simple.
 .PP
 [Some of this answer was contributed by Kenneth Albanowski.]
 .Sh "Where can I learn about \s-1CGI\s0 or Web programming in Perl?"
-.IX Subsection "Where can I learn about \s-1CGI\s0 or Web programming in Perl?"
 For modules, get the \s-1CGI\s0 or \s-1LWP\s0 modules from \s-1CPAN\s0.  For textbooks,
 see the two especially dedicated to web stuff in the question on
 books.  For problems and questions related to the web, like \*(L"Why
@@ -640,13 +610,11 @@ when it runs fine on the command line\*(R", see these sources:
 \&        http://www.boutell.com/faq/
 .Ve
 .Sh "Where can I learn about object-oriented Perl programming?"
-.IX Subsection "Where can I learn about object-oriented Perl programming?"
 the \fIperltoot\fR manpage is a good place to start, and you can use the \fIperlobj\fR manpage and
 the \fIperlbot\fR manpage for reference.  Perltoot didn't come out until the 5.004
 release, but you can get a copy (in pod, html, or postscript) from
 http://www.perl.com/\s-1CPAN/\s0doc/\s-1FMTEYEWTK\s0/ .
 .Sh "Where can I learn about linking C with Perl? [h2xs, xsubpp]"
-.IX Subsection "Where can I learn about linking C with Perl? [h2xs, xsubpp]"
 If you want to call C from Perl, start with the \fIperlxstut\fR manpage,
 moving on to the \fIperlxs\fR manpage, the \fIxsubpp\fR manpage, and the \fIperlguts\fR manpage.  If you want to
 call Perl from C, then read the \fIperlembed\fR manpage, the \fIperlcall\fR manpage, and
@@ -654,13 +622,11 @@ the \fIperlguts\fR manpage.  Don't forget that you can learn a lot from looking 
 how the authors of existing extension modules wrote their code and
 solved their problems.
 .Sh "I've read perlembed, perlguts, etc., but I can't embed perl in my C program, what am I doing wrong?"
-.IX Subsection "I've read perlembed, perlguts, etc., but I can't embed perl in my C program, what am I doing wrong?"
 Download the ExtUtils::Embed kit from \s-1CPAN\s0 and run `make test\*(R'.  If
 the tests pass, read the pods again and again and again.  If they
 fail, see the \fIperlbug\fR manpage and send a bugreport with the output of
 \f(CWmake test TEST_VERBOSE=1\fR along with \f(CWperl -V\fR.
 .Sh "When I tried to run my script, I got this message. What does it mean?"
-.IX Subsection "When I tried to run my script, I got this message. What does it mean?"
 the \fIperldiag\fR manpage has a complete list of perl's error messages and warnings,
 with explanatory text.  You can also use the splain program (distributed
 with perl) to explain the error messages:
@@ -680,13 +646,82 @@ or
 \&    use diagnostics -verbose;
 .Ve
 .Sh "What's MakeMaker?"
-.IX Subsection "What's MakeMaker?"
 This module (part of the standard perl distribution) is designed to
 write a Makefile for an extension module from a Makefile.\s-1PL\s0.  For more
 information, see the \fIExtUtils::MakeMaker\fR manpage.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ3 1"
+.IX Name "perlfaq3 - Programming Tools ($Revision: 1.22 $, $Date: 1997/04/24 22:43:42 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "How do I do (anything)?"
+
+.IX Subsection "How can I use Perl interactively?"
+
+.IX Subsection "Is there a Perl shell?"
+
+.IX Subsection "How do I debug my Perl programs?"
+
+.IX Subsection "How do I profile my Perl programs?"
+
+.IX Subsection "How do I cross-reference my Perl programs?"
+
+.IX Subsection "Is there a pretty-printer (formatter) for Perl?"
+
+.IX Subsection "Is there a ctags for Perl?"
+
+.IX Subsection "Where can I get Perl macros for vi?"
+
+.IX Subsection "Where can I get perl-mode for emacs?"
+
+.IX Subsection "How can I use curses with Perl?"
+
+.IX Subsection "How can I use X or Tk with Perl?"
+
+.IX Subsection "How can I generate simple menus without using \s-1CGI\s0 or Tk?"
+
+.IX Subsection "Can I dynamically load C routines into Perl?"
+
+.IX Subsection "What is undump?"
+
+.IX Subsection "How can I make my Perl program run faster?"
+
+.IX Subsection "How can I make my Perl program take less memory?"
+
+.IX Subsection "Is it unsafe to return a pointer to local data?"
+
+.IX Subsection "How can I free an array or hash so my program shrinks?"
+
+.IX Subsection "How can I make my \s-1CGI\s0 script more efficient?"
+
+.IX Subsection "How can I hide the source for my Perl program?"
+
+.IX Subsection "How can I compile my Perl program into byte code or C?"
+
+.IX Subsection "How can I get \*(M'#!perl\*(S' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
+
+.IX Subsection "Can I write useful perl programs on the command line?"
+
+.IX Subsection "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?"
+
+.IX Subsection "Where can I learn about \s-1CGI\s0 or Web programming in Perl?"
+
+.IX Subsection "Where can I learn about object-oriented Perl programming?"
+
+.IX Subsection "Where can I learn about linking C with Perl? [h2xs, xsubpp]"
+
+.IX Subsection "I've read perlembed, perlguts, etc., but I can't embed perl in my C program, what am I doing wrong?"
+
+.IX Subsection "When I tried to run my script, I got this message. What does it mean?"
+
+.IX Subsection "What's MakeMaker?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

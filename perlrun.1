@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLRUN 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLRUN 1"
+.TH PERLRUN 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlrun - how to execute the Perl interpreter"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlrun \- how to execute the Perl interpreter
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBperl\fR	[\ \fB\-sTuU\fR\ ]
 	[\ \fB\-hv\fR\ ]\ [\ \fB\-V\fR[:\fIconfigvar\fR]\ ]
 	[\ \fB\-cw\fR\ ]\ [\ \fB\-d\fR[:\fIdebugger\fR]\ ]\ [\ \fB\-D\fR[\fInumber/list\fR]\ ]
@@ -205,18 +201,14 @@ perlrun \- how to execute the Perl interpreter
 	[\ \fB\-i\fR[\fIextension\fR]\ ]
 	[\ \fB\-e\fR\ \fI'command\*(R'\fR\ ]\ [\ \fB--\fR\ ]\ [\ \fIprogramfile\fR\ ]\ [\ \fIargument\fR\ ]...
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Upon startup, Perl looks for your script in one of the following
 places:
 .Ip "1." 4
-.IX Item "1."
 Specified line by line via \fB\-e\fR switches on the command line.
 .Ip "2." 4
-.IX Item "2."
 Contained in the file specified by the first filename on the command line.
 (Note that systems supporting the #! notation invoke interpreters this way.)
 .Ip "3." 4
-.IX Item "3."
 Passed in implicitly via standard input.  This works only if there are
 no filename arguments\*(--to pass arguments to a \s-1STDIN\s0 script you
 must explicitly specify a \*(L"\-\*(R" for the script name.
@@ -244,6 +236,11 @@ getting a \- instead of a complete switch could cause Perl to try to
 execute standard input instead of your script.  And a partial \fB\-I\fR switch
 could also cause odd results.
 .PP
+Some switches do care if they are processed twice, for instance combinations
+of \fB\-l\fR and \fB\-0\fR.  Either put all the switches after the 32 character
+boundary (if applicable), or replace the use of \fB\-0\fR\fIdigits\fR by 
+\f(CWBEGIN{ $/ = "\e0digits"; }\fR.
+.PP
 Parsing of the #! switches starts wherever \*(L"perl\*(R" is mentioned in the line.
 The sequences \*(L"\-*\*(R" and \*(L"\- \*(L" are specifically ignored so that you could,
 if you were so inclined, say
@@ -270,10 +267,8 @@ If the script is syntactically correct, it is executed.  If the script
 runs off the end without hitting an \fIexit()\fR or \fIdie()\fR operator, an implicit
 \f(CWexit(0)\fR is provided to indicate successful completion.
 .Sh "#! and quoting on non-Unix systems"
-.IX Subsection "#! and quoting on non-Unix systems"
 Unix's #! technique can be simulated on other systems:
 .Ip "\s-1OS/2\s0" 4
-.IX Item "\s-1OS/2\s0"
 Put
 .Sp
 .Vb 1
@@ -282,19 +277,16 @@ Put
 as the first line in \f(CW*.cmd\fR file (\f(CW-S\fR due to a bug in cmd.exe's
 `extproc\*(R' handling).
 .Ip "\s-1MS\s0\-\s-1DOS\s0" 4
-.IX Item "\s-1MS\s0\-\s-1DOS\s0"
 Create a batch file to run your script, and codify it in
 \f(CWALTERNATIVE_SHEBANG\fR (see the \fIdosish.h\fR file in the source
 distribution for more information).
 .Ip "Win95/\s-1NT\s0" 4
-.IX Item "Win95/\s-1NT\s0"
 The Win95/\s-1NT\s0 installation, when using the Activeware port of Perl,
 will modify the Registry to associate the .pl extension with the perl
 interpreter.  If you install another port of Perl, including the one
 in the Win32 directory of the Perl distribution, then you'll have to
 modify the Registry yourself.
 .Ip "Macintosh" 4
-.IX Item "Macintosh"
 Macintosh perl scripts will have the appropriate Creator and
 Type, so that double-clicking them will invoke the perl application.
 .PP
@@ -345,7 +337,6 @@ characters as control characters.
 .PP
 There is no general solution to all of this.  It's just a mess.
 .Sh "Switches"
-.IX Subsection "Switches"
 A single-character switch may be combined with the following switch, if
 any.
 .PP
@@ -354,7 +345,6 @@ any.
 .Ve
 Switches include:
 .Ip "\fB\-0\fR[\fIdigits\fR]" 5
-.IX Item "\fB\-0\fR[\fIdigits\fR]"
 specifies the input record separator (\f(CW$/\fR) as an octal number.  If there are
 no digits, the null character is the separator.  Other switches may
 precede or follow the digits.  For example, if you have a version of
@@ -368,7 +358,6 @@ The special value 00 will cause Perl to slurp files in paragraph mode.
 The value 0777 will cause Perl to slurp files whole because there is no
 legal character with that value.
 .Ip "\fB\-a\fR" 5
-.IX Item "\fB\-a\fR"
 turns on autosplit mode when used with a \fB\-n\fR or \fB\-p\fR.  An implicit
 split command to the \f(CW@F\fR array is done as the first thing inside the
 implicit while loop produced by the \fB\-n\fR or \fB\-p\fR.
@@ -386,50 +375,44 @@ is equivalent to
 .Ve
 An alternate delimiter may be specified using \fB\-F\fR.
 .Ip "\fB\-c\fR" 5
-.IX Item "\fB\-c\fR"
 causes Perl to check the syntax of the script and then exit without
 executing it.  Actually, it \fIwill\fR execute \f(CWBEGIN\fR, \f(CWEND\fR, and \f(CWuse\fR blocks,
 because these are considered as occurring outside the execution of
 your program.
 .Ip "\fB\-d\fR" 5
-.IX Item "\fB\-d\fR"
 runs the script under the Perl debugger.  See the \fIperldebug\fR manpage.
 .Ip "\fB\-d:\fR\fIfoo\fR" 5
-.IX Item "\fB\-d:\fR\fIfoo\fR"
 runs the script under the control of a debugging or tracing module
 installed as Devel::foo. E.g., \fB\-d:DProf\fR executes the script using the
 Devel::DProf profiler.  See the \fIperldebug\fR manpage.
+.Ip "\fB\-D\fR\fIletters\fR" 5
 .Ip "\fB\-D\fR\fInumber\fR" 5
-.IX Item "\fB\-D\fR\fInumber\fR"
-.Ip "\fB\-D\fR\fIlist\fR" 5
-.IX Item "\fB\-D\fR\fIlist\fR"
 sets debugging flags.  To watch how it executes your script, use
-\fB\-D14\fR.  (This works only if debugging is compiled into your
-Perl.)  Another nice value is \fB\-D1024\fR, which lists your compiled
-syntax tree.  And \fB\-D512\fR displays compiled regular expressions. As an
-alternative specify a list of letters instead of numbers (e.g., \fB\-D14\fR is
+\fB\-Dtls\fR.  (This works only if debugging is compiled into your
+Perl.)  Another nice value is \fB\-Dx\fR, which lists your compiled
+syntax tree.  And \fB\-Dr\fR displays compiled regular expressions. As an
+alternative, specify a number instead of list of letters (e.g., \fB\-D14\fR is
 equivalent to \fB\-Dtls\fR):
 .Sp
 .Vb 16
-\&        1  p  Tokenizing and Parsing
-\&        2  s  Stack Snapshots
-\&        4  l  Label Stack Processing
-\&        8  t  Trace Execution
-\&       16  o  Operator Node Construction
-\&       32  c  String/Numeric Conversions
-\&       64  P  Print Preprocessor Command for -P
-\&      128  m  Memory Allocation
-\&      256  f  Format Processing
-\&      512  r  Regular Expression Parsing
-\&     1024  x  Syntax Tree Dump
-\&     2048  u  Tainting Checks
-\&     4096  L  Memory Leaks (not supported anymore)
-\&     8192  H  Hash Dump -- usurps values()
-\&    16384  X  Scratchpad Allocation
-\&    32768  D  Cleaning Up
+\&        1  p  Tokenizing and parsing
+\&        2  s  Stack snapshots
+\&        4  l  Context (loop) stack processing
+\&        8  t  Trace execution
+\&       16  o  Method and overloading resolution
+\&       32  c  String/numeric conversions
+\&       64  P  Print preprocessor command for -P
+\&      128  m  Memory allocation
+\&      256  f  Format processing
+\&      512  r  Regular expression parsing and execution
+\&     1024  x  Syntax tree dump
+\&     2048  u  Tainting checks
+\&     4096  L  Memory leaks (not supported anymore)
+\&     8192  H  Hash dump -- usurps values()
+\&    16384  X  Scratchpad allocation
+\&    32768  D  Cleaning up
 .Ve
 .Ip "\fB\-e\fR \fIcommandline\fR" 5
-.IX Item "\fB\-e\fR \fIcommandline\fR"
 may be used to enter one line of script.
 If \fB\-e\fR is given, Perl
 will not look for a script filename in the argument list.
@@ -437,15 +420,12 @@ Multiple \fB\-e\fR commands may
 be given to build up a multi-line script.
 Make sure to use semicolons where you would in a normal program.
 .Ip "\fB\-F\fR\fIpattern\fR" 5
-.IX Item "\fB\-F\fR\fIpattern\fR"
 specifies the pattern to split on if \fB\-a\fR is also in effect.  The
 pattern may be surrounded by \f(CW//\fR, \f(CW""\fR, or \f(CW''\fR, otherwise it will be
 put in single quotes.
 .Ip "\fB\-h\fR" 5
-.IX Item "\fB\-h\fR"
 prints a summary of the options.
 .Ip "\fB\-i\fR[\fIextension\fR]" 5
-.IX Item "\fB\-i\fR[\fIextension\fR]"
 specifies that files processed by the \f(CW<>\fR construct are to be edited
 in-place.  It does this by renaming the input file, opening the output
 file by the original name, and selecting that output file as the default
@@ -489,13 +469,11 @@ You can use \f(CWeof\fR without parenthesis to locate the end of each input file
 in case you want to append to each file, or reset line numbering (see
 example in the \f(CWeof\fR entry in the \fIperlfunc\fR manpage).
 .Ip "\fB\-I\fR\fIdirectory\fR" 5
-.IX Item "\fB\-I\fR\fIdirectory\fR"
 Directories specified by \fB\-I\fR are prepended to the search path for
 modules (\f(CW@INC\fR), and also tells the C preprocessor where to search for
 include files.  The C preprocessor is invoked with \fB\-P\fR; by default it
 searches /usr/include and /usr/lib/perl.
 .Ip "\fB\-l\fR[\fIoctnum\fR]" 5
-.IX Item "\fB\-l\fR[\fIoctnum\fR]"
 enables automatic line-ending processing.  It has two effects:  first,
 it automatically chomps \*(L"\f(CW$/\fR\*(R" (the input record separator) when used
 with \fB\-n\fR or \fB\-p\fR, and second, it assigns \*(L"\f(CW$\e\fR\*(R"
@@ -516,13 +494,9 @@ separator if the \fB\-l\fR switch is followed by a \fB\-0\fR switch:
 .Ve
 This sets \f(CW$\e\fR to newline and then sets \f(CW$/\fR to the null character.
 .Ip "\fB\-m\fR[\fB\-\fR]\fImodule\fR" 5
-.IX Item "\fB\-m\fR[\fB\-\fR]\fImodule\fR"
 .Ip "\fB\-M\fR[\fB\-\fR]\fImodule\fR" 5
-.IX Item "\fB\-M\fR[\fB\-\fR]\fImodule\fR"
 .Ip "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(T'\fR" 5
-.IX Item "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(T'\fR"
 .Ip "\fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR" 5
-.IX Item "\fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR"
 \f(CW-m\fR\fImodule\fR executes \f(CWuse\fR \fImodule\fR \f(CW();\fR before executing your
 script.
 .Sp
@@ -540,7 +514,6 @@ importing symbols.  The actual code generated by \f(CW-Mmodule=foo,bar\fR is
 \f(CWuse module split(/,/,q{foo,bar})\fR.  Note that the \f(CW=\fR form
 removes the distinction between \f(CW-m\fR and \f(CW-M\fR.
 .Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
 causes Perl to assume the following loop around your script, which
 makes it iterate over filename arguments somewhat like \fBsed \-n\fR or
 \fBawk\fR:
@@ -551,8 +524,10 @@ makes it iterate over filename arguments somewhat like \fBsed \-n\fR or
 \&    }
 .Ve
 Note that the lines are not printed by default.  See \fB\-p\fR to have
-lines printed.  Here is an efficient way to delete all files older than
-a week:
+lines printed.  If a file named by an argument cannot be opened for
+some reason, Perl warns you about it, and moves on to the next file.
+.Sp
+Here is an efficient way to delete all files older than a week:
 .Sp
 .Vb 1
 \&    find . -mtime +7 -print | perl -nle 'unlink;'
@@ -563,7 +538,6 @@ have to start a process on every filename found.
 \f(CWBEGIN\fR and \f(CWEND\fR blocks may be used to capture control before or after
 the implicit loop, just as in \fBawk\fR.
 .Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
 causes Perl to assume the following loop around your script, which
 makes it iterate over filename arguments somewhat like \fBsed\fR:
 .Sp
@@ -571,22 +545,23 @@ makes it iterate over filename arguments somewhat like \fBsed\fR:
 \&    while (<>) {
 \&        ...             # your script goes here
 \&    } continue {
-\&        print;
+\&        print or die "-p destination: $!\en";
 \&    }
 .Ve
-Note that the lines are printed automatically.  To suppress printing
-use the \fB\-n\fR switch.  A \fB\-p\fR overrides a \fB\-n\fR switch.
+If a file named by an argument cannot be opened for some reason, Perl
+warns you about it, and moves on to the next file.  Note that the
+lines are printed automatically.  An error occuring during printing is
+treated as fatal.  To suppress printing use the \fB\-n\fR switch.  A \fB\-p\fR
+overrides a \fB\-n\fR switch.
 .Sp
 \f(CWBEGIN\fR and \f(CWEND\fR blocks may be used to capture control before or after
 the implicit loop, just as in awk.
 .Ip "\fB\-P\fR" 5
-.IX Item "\fB\-P\fR"
 causes your script to be run through the C preprocessor before
 compilation by Perl.  (Because both comments and cpp directives begin
 with the # character, you should avoid starting comments with any words
 recognized by the C preprocessor such as \*(L"if\*(R", \*(L"else\*(R", or \*(L"define\*(R".)
 .Ip "\fB\-s\fR" 5
-.IX Item "\fB\-s\fR"
 enables some rudimentary switch parsing for switches on the command
 line after the script name but before any filename arguments (or before
 a \fB--\fR).  Any switch found there is removed from \f(CW@ARGV\fR and sets the
@@ -598,11 +573,28 @@ prints \*(L"true\*(R" if and only if the script is invoked with a \fB\-xyz\fR sw
 \&    if ($xyz) { print "true\en"; }
 .Ve
 .Ip "\fB\-S\fR" 5
-.IX Item "\fB\-S\fR"
 makes Perl use the \s-1PATH\s0 environment variable to search for the
-script (unless the name of the script starts with a slash).  Typically
-this is used to emulate #! startup on machines that don't support #!,
-in the following manner:
+script (unless the name of the script contains directory separators).
+On some platforms, this also makes Perl append suffixes to the
+filename while searching for it.  For example, on Win32 platforms,
+the \*(L".bat\*(R" and \*(L".cmd\*(R" suffixes are appended if a lookup for the
+original name fails, and if the name does not already end in one
+of those suffixes.  If your Perl was compiled with \s-1DEBUGGING\s0 turned
+on, using the \-Dp switch to Perl shows how the search progresses.
+.Sp
+If the file supplied contains directory separators (i.e. it is an
+absolute or relative pathname), and if the file is not found,
+platforms that append file extensions will do so and try to look
+for the file with those extensions added, one by one.
+.Sp
+On \s-1DOS\s0\-like platforms, if the script does not contain directory
+separators, it will first be searched for in the current directory
+before being searched for on the \s-1PATH\s0.  On Unix platforms, the
+script will be searched for strictly on the \s-1PATH\s0.
+.Sp
+Typically this is used to emulate #! startup on platforms that
+don't support #!.  This example works on many platforms that
+have a shell compatible with Bourne shell:
 .Sp
 .Vb 3
 \&    #!/usr/bin/perl
@@ -630,13 +622,11 @@ will work under any of csh, sh, or Perl, such as the following:
 \&                if $running_under_some_shell;
 .Ve
 .Ip "\fB\-T\fR" 5
-.IX Item "\fB\-T\fR"
 forces \*(L"taint\*(R" checks to be turned on so you can test them.  Ordinarily these checks are
 done only when running setuid or setgid.  It's a good idea to turn
 them on explicitly for programs run on another's behalf, such as \s-1CGI\s0
 programs.  See the \fIperlsec\fR manpage.
 .Ip "\fB\-u\fR" 5
-.IX Item "\fB\-u\fR"
 causes Perl to dump core after compiling your script.  You can then
 take this core dump and turn it into an executable file by using the
 \fBundump\fR program (not supplied).  This speeds startup at the expense of
@@ -647,23 +637,20 @@ use the \fIdump()\fR operator instead.  Note: availability of \fBundump\fR is
 platform specific and may not be available for a specific port of
 Perl.
 .Ip "\fB\-U\fR" 5
-.IX Item "\fB\-U\fR"
 allows Perl to do unsafe operations.  Currently the only \*(L"unsafe\*(R"
 operations are the unlinking of directories while running as superuser,
 and running setuid programs with fatal taint checks turned into
-warnings.
+warnings. Note that the \fB\-w\fR switch (or the \f(CW$^W\fR variable) must
+be used along with this option to actually \fBgenerate\fR the
+taint-check warnings.
 .Ip "\fB\-v\fR" 5
-.IX Item "\fB\-v\fR"
 prints the version and patchlevel of your Perl executable.
 .Ip "\fB\-V\fR" 5
-.IX Item "\fB\-V\fR"
 prints summary of the major perl configuration values and the current
 value of \f(CW@INC\fR.
 .Ip "\fB\-V:\fR\fIname\fR" 5
-.IX Item "\fB\-V:\fR\fIname\fR"
 Prints to \s-1STDOUT\s0 the value of the named configuration variable.
 .Ip "\fB\-w\fR" 5
-.IX Item "\fB\-w\fR"
 prints warnings about variable names that are mentioned only once, and
 scalar variables that are used before being set.  Also warns about
 redefined subroutines, and references to undefined filehandles or
@@ -675,7 +662,6 @@ more than 100 deep, and innumerable other things.
 You can disable specific warnings using \f(CW__WARN__\fR hooks, as described
 in the \fIperlvar\fR manpage and the \f(CWwarn\fR entry in the \fIperlfunc\fR manpage. See also the \fIperldiag\fR manpage and the \fIperltrap\fR manpage.
 .Ip "\fB\-x\fR \fIdirectory\fR" 5
-.IX Item "\fB\-x\fR \fIdirectory\fR"
 tells Perl that the script is embedded in a message.  Leading
 garbage will be discarded until the first line that starts with #! and
 contains the string \*(L"perl\*(R".  Any meaningful switches on that line will
@@ -686,19 +672,14 @@ terminated with \f(CW__END__\fR if there is trailing garbage to be ignored (the
 script can process any or all of the trailing garbage via the \s-1DATA\s0
 filehandle if desired).
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 .Ip "\s-1HOME\s0" 12
-.IX Item "\s-1HOME\s0"
 Used if chdir has no argument.
 .Ip "\s-1LOGDIR\s0" 12
-.IX Item "\s-1LOGDIR\s0"
 Used if chdir has no argument and \s-1HOME\s0 is not set.
 .Ip "\s-1PATH\s0" 12
-.IX Item "\s-1PATH\s0"
 Used in executing subprocesses, and in finding the script if \fB\-S\fR is
 used.
 .Ip "\s-1PERL5LIB\s0" 12
-.IX Item "\s-1PERL5LIB\s0"
 A colon-separated list of directories in which to look for Perl library
 files before looking in the standard library and the current
 directory.  If \s-1PERL5LIB\s0 is not defined, \s-1PERLLIB\s0 is used.  When running
@@ -710,26 +691,22 @@ instead say
 \&    use lib "/my/directory";
 .Ve
 .Ip "\s-1PERL5OPT\s0" 12
-.IX Item "\s-1PERL5OPT\s0"
 Command-line options (switches).  Switches in this variable are taken
 as if they were on every Perl command line.  Only the \fB\-[DIMUdmw]\fR
 switches are allowed.  When running taint checks (because the script
 was running setuid or setgid, or the \fB\-T\fR switch was used), this
 variable is ignored.
 .Ip "\s-1PERLLIB\s0" 12
-.IX Item "\s-1PERLLIB\s0"
 A colon-separated list of directories in which to look for Perl library
 files before looking in the standard library and the current directory.
 If \s-1PERL5LIB\s0 is defined, \s-1PERLLIB\s0 is not used.
 .Ip "\s-1PERL5DB\s0" 12
-.IX Item "\s-1PERL5DB\s0"
 The command used to load the debugger code.  The default is:
 .Sp
 .Vb 1
 \&        BEGIN { require 'perl5db.pl' }
 .Ve
 .Ip "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)" 12
-.IX Item "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)"
 May be set to an alternative shell that perl must use internally for
 executing \*(L"backtick\*(R" commands or \fIsystem()\fR.  Perl doesn't use \s-1COMSPEC\s0
 for this purpose because \s-1COMSPEC\s0 has a high degree of variability
@@ -739,13 +716,11 @@ to such a shell may interfere with the proper functioning of other
 programs (which usually look in \s-1COMSPEC\s0 to find a shell fit for
 interactive use).
 .Ip "\s-1PERL_DEBUG_MSTATS\s0" 12
-.IX Item "\s-1PERL_DEBUG_MSTATS\s0"
 Relevant only if your perl executable was built with \fB\-\s-1DDEBUGGING_MSTATS\s0\fR,
 if set, this causes memory statistics to be dumped after execution.  If set
 to an integer greater than one, also causes memory statistics to be dumped
 after compilation.
 .Ip "\s-1PERL_DESTRUCT_LEVEL\s0" 12
-.IX Item "\s-1PERL_DESTRUCT_LEVEL\s0"
 Relevant only if your perl executable was built with \fB\-\s-1DDEBUGGING\s0\fR,
 this controls the behavior of global destruction of objects and other
 references.
@@ -766,3 +741,112 @@ honest:
 .Ve
 
 .rn }` ''
+.IX Title "PERLRUN 1"
+.IX Name "perlrun - how to execute the Perl interpreter"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "1."
+
+.IX Item "2."
+
+.IX Item "3."
+
+.IX Subsection "#! and quoting on non-Unix systems"
+
+.IX Item "\s-1OS/2\s0"
+
+.IX Item "\s-1MS\s0\-\s-1DOS\s0"
+
+.IX Item "Win95/\s-1NT\s0"
+
+.IX Item "Macintosh"
+
+.IX Subsection "Switches"
+
+.IX Item "\fB\-0\fR[\fIdigits\fR]"
+
+.IX Item "\fB\-a\fR"
+
+.IX Item "\fB\-c\fR"
+
+.IX Item "\fB\-d\fR"
+
+.IX Item "\fB\-d:\fR\fIfoo\fR"
+
+.IX Item "\fB\-D\fR\fIletters\fR"
+
+.IX Item "\fB\-D\fR\fInumber\fR"
+
+.IX Item "\fB\-e\fR \fIcommandline\fR"
+
+.IX Item "\fB\-F\fR\fIpattern\fR"
+
+.IX Item "\fB\-h\fR"
+
+.IX Item "\fB\-i\fR[\fIextension\fR]"
+
+.IX Item "\fB\-I\fR\fIdirectory\fR"
+
+.IX Item "\fB\-l\fR[\fIoctnum\fR]"
+
+.IX Item "\fB\-m\fR[\fB\-\fR]\fImodule\fR"
+
+.IX Item "\fB\-M\fR[\fB\-\fR]\fImodule\fR"
+
+.IX Item "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(T'\fR"
+
+.IX Item "\fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR"
+
+.IX Item "\fB\-n\fR"
+
+.IX Item "\fB\-p\fR"
+
+.IX Item "\fB\-P\fR"
+
+.IX Item "\fB\-s\fR"
+
+.IX Item "\fB\-S\fR"
+
+.IX Item "\fB\-T\fR"
+
+.IX Item "\fB\-u\fR"
+
+.IX Item "\fB\-U\fR"
+
+.IX Item "\fB\-v\fR"
+
+.IX Item "\fB\-V\fR"
+
+.IX Item "\fB\-V:\fR\fIname\fR"
+
+.IX Item "\fB\-w\fR"
+
+.IX Item "\fB\-x\fR \fIdirectory\fR"
+
+.IX Header "ENVIRONMENT"
+
+.IX Item "\s-1HOME\s0"
+
+.IX Item "\s-1LOGDIR\s0"
+
+.IX Item "\s-1PATH\s0"
+
+.IX Item "\s-1PERL5LIB\s0"
+
+.IX Item "\s-1PERL5OPT\s0"
+
+.IX Item "\s-1PERLLIB\s0"
+
+.IX Item "\s-1PERL5DB\s0"
+
+.IX Item "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)"
+
+.IX Item "\s-1PERL_DEBUG_MSTATS\s0"
+
+.IX Item "\s-1PERL_DESTRUCT_LEVEL\s0"
+

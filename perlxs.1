@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXS 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "PERLXS 1"
+.TH PERLXS 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlxs - XS language reference manual"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,9 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlxs \- XS language reference manual
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "Introduction"
-.IX Subsection "Introduction"
 \s-1XS\s0 is a language used to create an extension interface
 between Perl and some C library which one wishes to use with
 Perl.  The \s-1XS\s0 interface is combined with the library to
@@ -215,7 +210,6 @@ linked.
 .PP
 See the \fIperlxstut\fR manpage for a tutorial on the whole extension creation process.
 .Sh "On The Road"
-.IX Subsection "On The Road"
 Many of the examples which follow will concentrate on creating an interface
 between Perl and the \s-1ONC\s0+ \s-1RPC\s0 bind library functions.  The \fIrpcb_gettime()\fR
 function is used to demonstrate many features of the \s-1XS\s0 language.  This
@@ -301,7 +295,6 @@ function is called with the correct parameters.  This abstraction will
 allow the programmer to create a more Perl-like interface to the C
 function.
 .Sh "The Anatomy of an \s-1XSUB\s0"
-.IX Subsection "The Anatomy of an \s-1XSUB\s0"
 The following \s-1XSUB\s0 allows a Perl program to access a C library function
 called \fIsin()\fR.  The \s-1XSUB\s0 will imitate the C function which takes a single
 argument and returns a single value.
@@ -341,7 +334,6 @@ document will indent the body.
 \&  double x
 .Ve
 .Sh "The Argument Stack"
-.IX Subsection "The Argument Stack"
 The argument stack is used to store the values which are
 sent as parameters to the \s-1XSUB\s0 and to store the \s-1XSUB\s0's
 return value.  In reality all Perl functions keep their
@@ -358,7 +350,6 @@ simple cases the \fBxsubpp\fR compiler will generate the code necessary to
 handle the argument stack by embedding code fragments found in the
 typemaps.  In more complex cases the programmer must supply the code.
 .Sh "The \s-1RETVAL\s0 Variable"
-.IX Subsection "The \s-1RETVAL\s0 Variable"
 The \s-1RETVAL\s0 variable is a magic variable which always matches
 the return type of the C library function.  The \fBxsubpp\fR compiler will
 supply this variable in each \s-1XSUB\s0 and by default will use it to hold the
@@ -384,7 +375,6 @@ some heuristic code which tries to disambiguate between \*(L"truely-void\*(R"
 and \*(L"old-practice-declared-as-void\*(R" functions. Hence your code is at
 mercy of this heuristics unless you use \f(CWSV *\fR as return value.)
 .Sh "The \s-1MODULE\s0 Keyword"
-.IX Subsection "The \s-1MODULE\s0 Keyword"
 The \s-1MODULE\s0 keyword is used to start the \s-1XS\s0 code and to
 specify the package of the functions which are being
 defined.  All text preceding the first \s-1MODULE\s0 keyword is
@@ -403,7 +393,6 @@ all functions in a package named \s-1RPC\s0.
 \&     MODULE = RPC
 .Ve
 .Sh "The \s-1PACKAGE\s0 Keyword"
-.IX Subsection "The \s-1PACKAGE\s0 Keyword"
 When functions within an \s-1XS\s0 source file must be separated into packages
 the \s-1PACKAGE\s0 keyword should be used.  This keyword is used with the \s-1MODULE\s0
 keyword and must follow immediately after it when used.
@@ -430,7 +419,6 @@ Although this keyword is optional and in some cases provides redundant
 information it should always be used.  This keyword will ensure that the
 XSUBs appear in the desired package.
 .Sh "The \s-1PREFIX\s0 Keyword"
-.IX Subsection "The \s-1PREFIX\s0 Keyword"
 The \s-1PREFIX\s0 keyword designates prefixes which should be
 removed from the Perl function names.  If the C function is
 \f(CWrpcb_gettime()\fR and the \s-1PREFIX\s0 value is \f(CWrpcb_\fR then Perl will
@@ -447,7 +435,6 @@ keyword.
 \&     MODULE = RPC  PACKAGE = RPCB  PREFIX = rpcb_
 .Ve
 .Sh "The \s-1OUTPUT\s0: Keyword"
-.IX Subsection "The \s-1OUTPUT\s0: Keyword"
 The \s-1OUTPUT\s0: keyword indicates that certain function parameters should be
 updated (new values made visible to Perl) when the \s-1XSUB\s0 terminates or that
 certain values should be returned to the calling Perl function.  For
@@ -488,7 +475,6 @@ typemap.
 \&          timep sv_setnv(ST(1), (double)timep);
 .Ve
 .Sh "The \s-1CODE\s0: Keyword"
-.IX Subsection "The \s-1CODE\s0: Keyword"
 This keyword is used in more complicated XSUBs which require
 special handling for the C function.  The \s-1RETVAL\s0 variable is
 available but will not be returned unless it is specified
@@ -514,7 +500,6 @@ The \s-1XSUB\s0 follows.
 \&          RETVAL
 .Ve
 .Sh "The \s-1INIT\s0: Keyword"
-.IX Subsection "The \s-1INIT\s0: Keyword"
 The \s-1INIT\s0: keyword allows initialization to be inserted into the \s-1XSUB\s0 before
 the compiler generates the call to the C function.  Unlike the \s-1CODE\s0: keyword
 above, this keyword does not affect the way the compiler handles \s-1RETVAL\s0.
@@ -530,7 +515,6 @@ above, this keyword does not affect the way the compiler handles \s-1RETVAL\s0.
 \&          timep
 .Ve
 .Sh "The \s-1NO_INIT\s0 Keyword"
-.IX Subsection "The \s-1NO_INIT\s0 Keyword"
 The \s-1NO_INIT\s0 keyword is used to indicate that a function
 parameter is being used only as an output value.  The \fBxsubpp\fR
 compiler will normally generate code to read the values of
@@ -553,7 +537,6 @@ not care about its initial contents.
 \&          timep
 .Ve
 .Sh "Initializing Function Parameters"
-.IX Subsection "Initializing Function Parameters"
 Function parameters are normally initialized with their
 values from the argument stack.  The typemaps contain the
 code segments which are used to transfer the Perl values to
@@ -579,7 +562,6 @@ would normally use this when a function parameter must be processed by
 another library function before it can be used.  Default parameters are
 covered in the next section.
 .Sh "Default Parameter Values"
-.IX Subsection "Default Parameter Values"
 Default values can be specified for function parameters by
 placing an assignment statement in the parameter list.  The
 default value may be a number or a string.  Defaults should
@@ -613,7 +595,6 @@ the parameters in the correct order for that function.
 \&          RETVAL
 .Ve
 .Sh "The \s-1PREINIT\s0: Keyword"
-.IX Subsection "The \s-1PREINIT\s0: Keyword"
 The \s-1PREINIT\s0: keyword allows extra variables to be declared before the
 typemaps are expanded.  If a variable is declared in a \s-1CODE\s0: block then that
 variable will follow any typemap code.  This may result in a C syntax
@@ -650,7 +631,6 @@ A correct, but error-prone example.
 \&          RETVAL
 .Ve
 .Sh "The \s-1SCOPE\s0: Keyword"
-.IX Subsection "The \s-1SCOPE\s0: Keyword"
 The \s-1SCOPE\s0: keyword allows scoping to be enabled for a particular \s-1XSUB\s0. If
 enabled, the \s-1XSUB\s0 will invoke \s-1ENTER\s0 and \s-1LEAVE\s0 automatically.
 .PP
@@ -669,7 +649,6 @@ To disable scoping:
 \&    SCOPE: DISABLE
 .Ve
 .Sh "The \s-1INPUT\s0: Keyword"
-.IX Subsection "The \s-1INPUT\s0: Keyword"
 The \s-1XSUB\s0's parameters are usually evaluated immediately after entering the
 \s-1XSUB\s0.  The \s-1INPUT\s0: keyword can be used to force those parameters to be
 evaluated a little later.  The \s-1INPUT\s0: keyword can be used multiple times
@@ -716,7 +695,6 @@ The next example shows each input parameter evaluated late.
 \&          RETVAL
 .Ve
 .Sh "Variable-length Parameter Lists"
-.IX Subsection "Variable-length Parameter Lists"
 XSUBs can have variable-length parameter lists by specifying an ellipsis
 \f(CW(...)\fR in the parameter list.  This use of the ellipsis is similar to that
 found in \s-1ANSI\s0 C.  The programmer is able to determine the number of
@@ -752,7 +730,6 @@ The \s-1XS\s0 code, with ellipsis, follows.
 \&          RETVAL
 .Ve
 .Sh "The \s-1PPCODE\s0: Keyword"
-.IX Subsection "The \s-1PPCODE\s0: Keyword"
 The \s-1PPCODE\s0: keyword is an alternate form of the \s-1CODE\s0: keyword and is used
 to tell the \fBxsubpp\fR compiler that the programmer is supplying the code to
 control the argument stack for the XSUBs return values.  Occasionally one
@@ -801,7 +778,6 @@ the following statement.
 \&     ($status, $timep) = rpcb_gettime("localhost");
 .Ve
 .Sh "Returning Undef And Empty Lists"
-.IX Subsection "Returning Undef And Empty Lists"
 Occasionally the programmer will want to return simply
 \f(CWundef\fR or an empty list if a function fails rather than a
 separate status value.  The \fIrpcb_gettime()\fR function offers
@@ -873,7 +849,6 @@ situations \f(CWXSRETURN_EMPTY\fR should be used, instead.  This will ensure tha
 the \s-1XSUB\s0 stack is properly adjusted.  Consult the section on \fI\s-1API\s0 \s-1LISTING\s0\fR in the \fIperlguts\fR manpage for
 other \f(CWXSRETURN\fR macros.
 .Sh "The \s-1REQUIRE\s0: Keyword"
-.IX Subsection "The \s-1REQUIRE\s0: Keyword"
 The \s-1REQUIRE\s0: keyword is used to indicate the minimum version of the
 \fBxsubpp\fR compiler needed to compile the \s-1XS\s0 module.  An \s-1XS\s0 module which
 contains the following statement will compile with only \fBxsubpp\fR version
@@ -883,14 +858,12 @@ contains the following statement will compile with only \fBxsubpp\fR version
 \&        REQUIRE: 1.922
 .Ve
 .Sh "The \s-1CLEANUP\s0: Keyword"
-.IX Subsection "The \s-1CLEANUP\s0: Keyword"
 This keyword can be used when an \s-1XSUB\s0 requires special cleanup procedures
 before it terminates.  When the \s-1CLEANUP\s0:  keyword is used it must follow
 any \s-1CODE\s0:, \s-1PPCODE\s0:, or \s-1OUTPUT\s0: blocks which are present in the \s-1XSUB\s0.  The
 code specified for the cleanup block will be added as the last statements
 in the \s-1XSUB\s0.
 .Sh "The \s-1BOOT\s0: Keyword"
-.IX Subsection "The \s-1BOOT\s0: Keyword"
 The \s-1BOOT\s0: keyword is used to add code to the extension's bootstrap
 function.  The bootstrap function is generated by the \fBxsubpp\fR compiler and
 normally holds the statements necessary to register any XSUBs with Perl.
@@ -908,7 +881,6 @@ terminate the code block.
 \&     printf("Hello from the bootstrap!\en");
 .Ve
 .Sh "The \s-1VERSIONCHECK\s0: Keyword"
-.IX Subsection "The \s-1VERSIONCHECK\s0: Keyword"
 The \s-1VERSIONCHECK\s0: keyword corresponds to \fBxsubpp\fR's \f(CW-versioncheck\fR and
 \f(CW-noversioncheck\fR options.  This keyword overrides the command line
 options.  Version checking is enabled by default.  When version checking is
@@ -926,7 +898,6 @@ To disable version checking:
 \&    VERSIONCHECK: DISABLE
 .Ve
 .Sh "The \s-1PROTOTYPES\s0: Keyword"
-.IX Subsection "The \s-1PROTOTYPES\s0: Keyword"
 The \s-1PROTOTYPES\s0: keyword corresponds to \fBxsubpp\fR's \f(CW-prototypes\fR and
 \f(CW-noprototypes\fR options.  This keyword overrides the command line options.
 Prototypes are enabled by default.  When prototypes are enabled XSUBs will
@@ -944,7 +915,6 @@ To disable prototypes:
 \&    PROTOTYPES: DISABLE
 .Ve
 .Sh "The \s-1PROTOTYPE\s0: Keyword"
-.IX Subsection "The \s-1PROTOTYPE\s0: Keyword"
 This keyword is similar to the \s-1PROTOTYPES\s0: keyword above but can be used to
 force \fBxsubpp\fR to use a specific prototype for the \s-1XSUB\s0.  This keyword
 overrides all other prototype options and keywords but affects only the
@@ -967,7 +937,6 @@ prototypes.
 \&          RETVAL
 .Ve
 .Sh "The \s-1ALIAS\s0: Keyword"
-.IX Subsection "The \s-1ALIAS\s0: Keyword"
 The \s-1ALIAS\s0: keyword allows an \s-1XSUB\s0 to have two more unique Perl names
 and to know which of those names was used when it was invoked.  The Perl
 names may be fully-qualified with package names.  Each alias is given an
@@ -992,7 +961,6 @@ The following example will create aliases \f(CWFOO::gettime()\fR and
 \&          timep
 .Ve
 .Sh "The \s-1INCLUDE\s0: Keyword"
-.IX Subsection "The \s-1INCLUDE\s0: Keyword"
 This keyword can be used to pull other files into the \s-1XS\s0 module.  The other
 files may have \s-1XS\s0 code.  \s-1INCLUDE\s0: can also be used to run a command to
 generate the \s-1XS\s0 code to be pulled into the module.
@@ -1019,7 +987,6 @@ the compiler will interpret the parameters as a command.
 \&    INCLUDE: cat Rpcb1.xsh |
 .Ve
 .Sh "The \s-1CASE\s0: Keyword"
-.IX Subsection "The \s-1CASE\s0: Keyword"
 The \s-1CASE\s0: keyword allows an \s-1XSUB\s0 to have multiple distinct parts with each
 part acting as a virtual \s-1XSUB\s0.  \s-1CASE\s0: is greedy and if it is used then all
 other \s-1XS\s0 keywords must be contained within a \s-1CASE\s0:.  This means nothing may
@@ -1069,7 +1036,6 @@ the different argument lists.
 \&        $status = x_gettime( $timep, $host );
 .Ve
 .Sh "The & Unary Operator"
-.IX Subsection "The & Unary Operator"
 The & unary operator is used to tell the compiler that it should dereference
 the object when it calls the C function.  This is used when a \s-1CODE\s0: block is
 not used and the object is a not a pointer type (the object is an \f(CWint\fR or
@@ -1102,7 +1068,6 @@ parameters \f(CW(char *host, time_t *timep)\fR.  It does this by carrying the
 \&          timep
 .Ve
 .Sh "Inserting Comments and C Preprocessor Directives"
-.IX Subsection "Inserting Comments and C Preprocessor Directives"
 C preprocessor directives are allowed within \s-1BOOT\s0:, \s-1PREINIT\s0: \s-1INIT\s0:,
 \s-1CODE\s0:, \s-1PPCODE\s0:, and \s-1CLEANUP\s0: blocks, as well as outside the functions.
 Comments are allowed anywhere after the \s-1MODULE\s0 keyword.  The compiler
@@ -1135,7 +1100,6 @@ because otherwise xsubpp will believe that you made a duplicate
 definition of the function.  Also, put a blank line before the
 #else/#endif so it will not be seen as part of the function body.
 .Sh "Using \s-1XS\s0 With \*(C+"
-.IX Subsection "Using \s-1XS\s0 With \*(C+"
 If a function is defined as a \*(C+ method then it will assume
 its first argument is an object pointer.  The object pointer
 will be stored in a variable called \s-1THIS\s0.  The object should
@@ -1238,7 +1202,6 @@ example.
 \&        }
 .Ve
 .Sh "Interface Strategy"
-.IX Subsection "Interface Strategy"
 When designing an interface between Perl and a C library a straight
 translation from C to \s-1XS\s0 is often sufficient.  The interface will often be
 very C\-like and occasionally nonintuitive, especially when the C function
@@ -1265,7 +1228,6 @@ cases it may be helpful to use the T_PTROBJ typemap for
 these structures so they can be manipulated by Perl as
 blessed objects.
 .Sh "Perl Objects And C Structures"
-.IX Subsection "Perl Objects And C Structures"
 When dealing with C structures one should select either
 \fBT_PTROBJ\fR or \fBT_PTRREF\fR for the \s-1XS\s0 type.  Both types are
 designed to handle pointers to complex objects.  The
@@ -1338,7 +1300,6 @@ does not care, that this object is a C struct and not a Perl object.  In
 this sense, there is no difference between the object created by the
 \fIgetnetconfigent()\fR \s-1XSUB\s0 and an object created by a normal Perl subroutine.
 .Sh "The Typemap"
-.IX Subsection "The Typemap"
 The typemap is a collection of code fragments which are used by the \fBxsubpp\fR
 compiler to map C function parameters and values to Perl values.  The
 typemap file may consist of three sections labeled \f(CWTYPEMAP\fR, \f(CWINPUT\fR, and
@@ -1369,8 +1330,40 @@ that the C unary operator \f(CW*\fR is considered to be a part of the C type nam
 \&     TYPEMAP
 \&     Netconfig *<tab>T_PTROBJ
 .Ve
+Here's a more complicated example: suppose that you wanted \f(CWstruct
+netconfig\fR to be blessed into the class \f(CWNet::Config\fR.  One way to do
+this is to use underscores (_) to separate package names, as follows:
+.PP
+.Vb 1
+\&        typedef struct netconfig * Net_Config;
+.Ve
+And then provide a typemap entry \f(CWT_PTROBJ_SPECIAL\fR that maps underscores to
+double-colons (::), and declare \f(CWNet_Config\fR to be of that type:
+.PP
+.Vb 2
+\&        TYPEMAP
+\&        Net_Config      T_PTROBJ_SPECIAL
+.Ve
+.Vb 8
+\&        INPUT
+\&        T_PTROBJ_SPECIAL
+\&                if (sv_derived_from($arg, \e"${(my $ntt=$ntype)=~s/_/::/g;\e$ntt}\e")) {
+\&                        IV tmp = SvIV((SV*)SvRV($arg));
+\&                $var = ($type) tmp;
+\&                }
+\&                else
+\&                        croak(\e"$var is not of type ${(my $ntt=$ntype)=~s/_/::/g;\e$ntt}\e")
+.Ve
+.Vb 4
+\&        OUTPUT
+\&        T_PTROBJ_SPECIAL
+\&                sv_setref_pv($arg, \e"${(my $ntt=$ntype)=~s/_/::/g;\e$ntt}\e",
+\&                (void*)$var);
+.Ve
+The \s-1INPUT\s0 and \s-1OUTPUT\s0 sections substitute underscores for double-colons
+on the fly, giving the desired effect.  This example demonstrates some
+of the power and versatility of the typemap facility.
 .SH "EXAMPLES"
-.IX Header "EXAMPLES"
 File \f(CWRPC.xs\fR: Interface to some ONC+ RPC bind library functions.
 .PP
 .Vb 3
@@ -1453,11 +1446,92 @@ File \f(CWrpctest.pl\fR: Perl test program for the RPC extension.
 \&     print "netconf = $netconf\en";
 .Ve
 .SH "XS VERSION"
-.IX Header "XS VERSION"
 This document covers features supported by \f(CWxsubpp\fR 1.935.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Dean Roehrich <\fIroehrich@cray.com\fR>
 Jul 8, 1996
 
 .rn }` ''
+.IX Title "PERLXS 1"
+.IX Name "perlxs - XS language reference manual"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Introduction"
+
+.IX Subsection "On The Road"
+
+.IX Subsection "The Anatomy of an \s-1XSUB\s0"
+
+.IX Subsection "The Argument Stack"
+
+.IX Subsection "The \s-1RETVAL\s0 Variable"
+
+.IX Subsection "The \s-1MODULE\s0 Keyword"
+
+.IX Subsection "The \s-1PACKAGE\s0 Keyword"
+
+.IX Subsection "The \s-1PREFIX\s0 Keyword"
+
+.IX Subsection "The \s-1OUTPUT\s0: Keyword"
+
+.IX Subsection "The \s-1CODE\s0: Keyword"
+
+.IX Subsection "The \s-1INIT\s0: Keyword"
+
+.IX Subsection "The \s-1NO_INIT\s0 Keyword"
+
+.IX Subsection "Initializing Function Parameters"
+
+.IX Subsection "Default Parameter Values"
+
+.IX Subsection "The \s-1PREINIT\s0: Keyword"
+
+.IX Subsection "The \s-1SCOPE\s0: Keyword"
+
+.IX Subsection "The \s-1INPUT\s0: Keyword"
+
+.IX Subsection "Variable-length Parameter Lists"
+
+.IX Subsection "The \s-1PPCODE\s0: Keyword"
+
+.IX Subsection "Returning Undef And Empty Lists"
+
+.IX Subsection "The \s-1REQUIRE\s0: Keyword"
+
+.IX Subsection "The \s-1CLEANUP\s0: Keyword"
+
+.IX Subsection "The \s-1BOOT\s0: Keyword"
+
+.IX Subsection "The \s-1VERSIONCHECK\s0: Keyword"
+
+.IX Subsection "The \s-1PROTOTYPES\s0: Keyword"
+
+.IX Subsection "The \s-1PROTOTYPE\s0: Keyword"
+
+.IX Subsection "The \s-1ALIAS\s0: Keyword"
+
+.IX Subsection "The \s-1INCLUDE\s0: Keyword"
+
+.IX Subsection "The \s-1CASE\s0: Keyword"
+
+.IX Subsection "The & Unary Operator"
+
+.IX Subsection "Inserting Comments and C Preprocessor Directives"
+
+.IX Subsection "Using \s-1XS\s0 With \*(C+"
+
+.IX Subsection "Interface Strategy"
+
+.IX Subsection "Perl Objects And C Structures"
+
+.IX Subsection "The Typemap"
+
+.IX Header "EXAMPLES"
+
+.IX Header "XS VERSION"
+
+.IX Header "AUTHOR"
+

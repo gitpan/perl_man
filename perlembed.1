@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLEMBED 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLEMBED 1"
+.TH PERLEMBED 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlembed - how to embed perl in your C program"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,31 +188,22 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlembed \- how to embed perl in your C program
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "\s-1PREAMBLE\s0"
-.IX Subsection "\s-1PREAMBLE\s0"
 Do you want to:
 .Ip "\fBUse C from Perl?\fR" 5
-.IX Item "\fBUse C from Perl?\fR"
 Read the \fIperlcall\fR manpage and the \fIperlxs\fR manpage.
 .Ip "\fBUse a Unix program from Perl?\fR" 5
-.IX Item "\fBUse a Unix program from Perl?\fR"
 Read about back-quotes and about \f(CWsystem\fR and \f(CWexec\fR in the \fIperlfunc\fR manpage.
 .Ip "\fBUse Perl from Perl?\fR" 5
-.IX Item "\fBUse Perl from Perl?\fR"
 Read about the \f(CWdo\fR entry in the \fIperlfunc\fR manpage and the \f(CWeval\fR entry in the \fIperlfunc\fR manpage and the \f(CWrequire\fR entry in the \fIperlfunc\fR manpage
 and the \f(CWuse\fR entry in the \fIperlfunc\fR manpage.
 .Ip "\fBUse C from C?\fR" 5
-.IX Item "\fBUse C from C?\fR"
 Rethink your design.
 .Ip "\fBUse Perl from C?\fR" 5
-.IX Item "\fBUse Perl from C?\fR"
 Read on...
 .Sh "\s-1ROADMAP\s0"
-.IX Subsection "\s-1ROADMAP\s0"
 the section on \fICompiling your C program\fR
 .PP
 There's one example in each of the nine sections:
@@ -237,7 +226,6 @@ the section on \fIUsing Perl modules, which themselves use C libraries, from you
 .PP
 the section on \fIEmbedding Perl under Win32\fR
 .Sh "Compiling your C program"
-.IX Subsection "Compiling your C program"
 If you have trouble compiling the scripts in this documentation,
 you're not alone.  The cardinal rule: \s-1COMPILE\s0 \s-1THE\s0 \s-1PROGRAMS\s0 \s-1IN\s0 \s-1EXACTLY\s0
 \s-1THE\s0 \s-1SAME\s0 \s-1WAY\s0 \s-1THAT\s0 \s-1YOUR\s0 \s-1PERL\s0 \s-1WAS\s0 \s-1COMPILED\s0.  (Sorry for yelling.)
@@ -334,7 +322,6 @@ The \fBExtUtils::Embed\fR kit on \s-1CPAN\s0 also contains all source code for
 the examples in this document, tests, additional examples and other
 information you may find useful.
 .Sh "Adding a Perl interpreter to your C program"
-.IX Subsection "Adding a Perl interpreter to your C program"
 In a sense, perl (the C program) is a good example of embedding Perl
 (the language), so I'll demonstrate embedding with \fIminiperlmain.c\fR,
 from the source distribution.  Here's a bastardized, nonportable
@@ -388,7 +375,6 @@ You can also read and execute Perl statements from a file while in the
 midst of your C program, by placing the filename in \fIargv[1]\fR before
 calling \fIperl_run()\fR.
 .Sh "Calling a Perl subroutine from your C program"
-.IX Subsection "Calling a Perl subroutine from your C program"
 To call individual Perl subroutines, you can use any of the \fBperl_call_*\fR
 functions documented in the the \fIperlcall\fR manpage manpage.
 In this example we'll use \fIperl_call_argv\fR.
@@ -462,7 +448,6 @@ you'll need to manipulate the Perl stack.  That's demonstrated in the
 last section of this document: the section on \fIFiddling with the Perl stack from
 your C program\fR.
 .Sh "Evaluating a Perl statement from your C program"
-.IX Subsection "Evaluating a Perl statement from your C program"
 Perl provides two \s-1API\s0 functions to evaluate pieces of Perl code.
 These are the \f(CWperl_eval_sv()\fR entry in the \fIperlguts\fR manpage and the \f(CWperl_eval_pv()\fR entry in the \fIperlguts\fR manpage.
 .PP
@@ -534,163 +519,177 @@ from the \fIperl_eval_pv\fR manpage instead.  Example:
 This way, we avoid namespace pollution by not creating global
 variables and we've simplified our code as well.
 .Sh "Performing Perl pattern matches and substitutions from your C program"
-.IX Subsection "Performing Perl pattern matches and substitutions from your C program"
-The \fIperl_eval_pv()\fR function lets us evaluate strings of Perl code, so we can
+The \fIperl_eval_sv()\fR function lets us evaluate chunks of Perl code, so we can
 define some functions that use it to \*(L"specialize\*(R" in matches and
 substitutions: \fImatch()\fR, \fIsubstitute()\fR, and \fImatches()\fR.
 .PP
 .Vb 1
-\&   char match(char *string, char *pattern);
+\&   char match(SV *string, char *pattern);
 .Ve
 Given a string and a pattern (e.g., \f(CWm/clasp/\fR or \f(CW/\eb\ew*\eb/\fR, which
 in your C program might appear as \*(L"/\e\eb\e\ew*\e\eb/"), \fImatch()\fR
 returns 1 if the string matches the pattern and 0 otherwise.
 .PP
 .Vb 1
-\&   int substitute(char *string[], char *pattern);
+\&   int substitute(SV **string, char *pattern);
 .Ve
-Given a pointer to a string and an \f(CW=~\fR operation (e.g.,
+Given a pointer to an \f(CWSV\fR and an \f(CW=~\fR operation (e.g.,
 \f(CWs/bob/robert/g\fR or \f(CWtr[A-Z][a-z]\fR), \fIsubstitute()\fR modifies the string
-according to the operation, returning the number of substitutions
+within the \f(CWAV\fR at according to the operation, returning the number of substitutions
 made.
 .PP
 .Vb 1
-\&   int matches(char *string, char *pattern, char **matches[]);
+\&   int matches(SV *string, char *pattern, AV **matches);
 .Ve
-Given a string, a pattern, and a pointer to an empty array of strings,
+Given an \f(CWSV\fR, a pattern, and a pointer to an empty \f(CWAV\fR,
 \fImatches()\fR evaluates \f(CW$string =~ $pattern\fR in an array context, and
-fills in \fImatches\fR with the array elements (allocating memory as it
-does so), returning the number of matches found.
+fills in \fImatches\fR with the array elements, returning the number of matches found.
 .PP
 Here's a sample program, \fImatch.c\fR, that uses all three (long lines have
 been wrapped here):
 .PP
-.Vb 2
-\&   #include <EXTERN.h>
-\&   #include <perl.h>
-.Ve
-.Vb 1
-\&   static PerlInterpreter *my_perl;
-.Ve
-.Vb 74
-\&   /** match(string, pattern)
-\&   **
-\&   ** Used for matches in a scalar context.
-\&   **
-\&   ** Returns 1 if the match was successful; 0 otherwise.
-\&   **/
-\&   char match(char *string, char *pattern)
-\&   {
-\&     char *command;
-\&     command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 37);
-\&     sprintf(command, "$string = '%s'; $return = $string =~ %s",
-\&                      string, pattern);
-\&     perl_eval_pv(command, TRUE);
-\&     free(command);
-\&     return SvIV(perl_get_sv("return", FALSE));
-\&   }
-\&   /** substitute(string, pattern)
-\&   **
-\&   ** Used for =~ operations that modify their left-hand side (s/// and tr///)
-\&   **
-\&   ** Returns the number of successful matches, and
-\&   ** modifies the input string if there were any.
-\&   **/
-\&   int substitute(char *string[], char *pattern)
-\&   {
-\&     char *command;
-\&     STRLEN length;
-\&     command = malloc(sizeof(char) * strlen(*string) + strlen(pattern) + 35);
-\&     sprintf(command, "$string = '%s'; $ret = ($string =~ %s)",
-\&                      *string, pattern);
-\&     perl_eval_pv(command, TRUE);
-\&     free(command);
-\&     *string = SvPV(perl_get_sv("string", FALSE), length);
-\&     return SvIV(perl_get_sv("ret", FALSE));
-\&   }
-\&   /** matches(string, pattern, matches)
-\&   **
-\&   ** Used for matches in an array context.
-\&   **
-\&   ** Returns the number of matches,
-\&   ** and fills in **matches with the matching substrings (allocates memory!)
-\&   **/
-\&   int matches(char *string, char *pattern, char **match_list[])
-\&   {
-\&     char *command;
-\&     SV *current_match;
-\&     AV *array;
+.Vb 141
+\& #include <EXTERN.h>
+\& #include <perl.h>
+\& 
+\& /** my_perl_eval_sv(code, error_check)
+\& ** kinda like perl_eval_sv(), 
+\& ** but we pop the return value off the stack 
+\& **/
+\& SV* my_perl_eval_sv(SV *sv, I32 croak_on_error)
+\& {
+\&     dSP;
+\&     SV* retval;
+\& 
+\&     PUSHMARK(sp);
+\&     perl_eval_sv(sv, G_SCALAR);
+\& 
+\&     SPAGAIN;
+\&     retval = POPs;
+\&     PUTBACK;
+\& 
+\&     if (croak_on_error && SvTRUE(GvSV(errgv)))
+\&        croak(SvPVx(GvSV(errgv), na));
+\& 
+\&     return retval;
+\& }
+\& 
+\& /** match(string, pattern)
+\& **
+\& ** Used for matches in a scalar context.
+\& **
+\& ** Returns 1 if the match was successful; 0 otherwise.
+\& **/
+\& 
+\& I32 match(SV *string, char *pattern)
+\& {
+\&     SV *command = newSV(0), *retval;
+\& 
+\&     sv_setpvf(command, "my $string = '%s'; $string =~ %s",
+\&              SvPV(string,na), pattern);
+\& 
+\&     retval = my_perl_eval_sv(command, TRUE);
+\&     SvREFCNT_dec(command);
+\& 
+\&     return SvIV(retval);
+\& }
+\& 
+\& /** substitute(string, pattern)
+\& **
+\& ** Used for =~ operations that modify their left-hand side (s/// and tr///)
+\& **
+\& ** Returns the number of successful matches, and
+\& ** modifies the input string if there were any.
+\& **/
+\& 
+\& I32 substitute(SV **string, char *pattern)
+\& {
+\&     SV *command = newSV(0), *retval;
+\& 
+\&     sv_setpvf(command, "$string = '%s'; ($string =~ %s)",
+\&              SvPV(*string,na), pattern);
+\& 
+\&     retval = my_perl_eval_sv(command, TRUE);
+\&     SvREFCNT_dec(command);
+\& 
+\&     *string = perl_get_sv("string", FALSE);
+\&     return SvIV(retval);
+\& }
+\& 
+\& /** matches(string, pattern, matches)
+\& **
+\& ** Used for matches in an array context.
+\& **
+\& ** Returns the number of matches,
+\& ** and fills in **matches with the matching substrings
+\& **/
+\& 
+\& I32 matches(SV *string, char *pattern, AV **match_list)
+\& {
+\&     SV *command = newSV(0);
 \&     I32 num_matches;
-\&     STRLEN length;
-\&     int i;
-\&     command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 38);
-\&     sprintf(command, "$string = '%s'; @array = ($string =~ %s)",
-\&                      string, pattern);
-\&     perl_eval_pv(command, TRUE);
-\&     free(command);
-\&     array = perl_get_av("array", FALSE);
-\&     num_matches = av_len(array) + 1; /** assume $[ is 0 **/
-\&     *match_list = (char **) malloc(sizeof(char *) * num_matches);
-\&     for (i = 0; i <= num_matches; i++) {
-\&       current_match = av_shift(array);
-\&       (*match_list)[i] = SvPV(current_match, length);
-\&     }
+\& 
+\&     sv_setpvf(command, "my $string = '%s'; @array = ($string =~ %s)",
+\&              SvPV(string,na), pattern);
+\& 
+\&     my_perl_eval_sv(command, TRUE);
+\&     SvREFCNT_dec(command);
+\& 
+\&     *match_list = perl_get_av("array", FALSE);
+\&     num_matches = av_len(*match_list) + 1; /** assume $[ is 0 **/
+\& 
 \&     return num_matches;
-\&   }
-\&   main (int argc, char **argv, char **env)
-\&   {
+\& }
+\& 
+\& main (int argc, char **argv, char **env)
+\& {
+\&     PerlInterpreter *my_perl = perl_alloc();
 \&     char *embedding[] = { "", "-e", "0" };
-\&     char *text, **match_list;
-\&     int num_matches, i;
-\&     int j;
-\&     my_perl = perl_alloc();
-\&     perl_construct( my_perl );
+\&     AV *match_list;
+\&     I32 num_matches, i;
+\&     SV *text = newSV(0);
+\& 
+\&     perl_construct(my_perl);
 \&     perl_parse(my_perl, NULL, 3, embedding, NULL);
-\&     perl_run(my_perl);
-.Ve
-.Vb 42
-\&     text = (char *) malloc(sizeof(char) * 486); /** A long string follows! **/
-\&     sprintf(text, "%s", "When he is at a convenience store and the bill \e
-\&     comes to some amount like 76 cents, Maynard is aware that there is \e
-\&     something he *should* do, something that will enable him to get back \e
-\&     a quarter, but he has no idea *what*.  He fumbles through his red \e
-\&     squeezey changepurse and gives the boy three extra pennies with his \e
-\&     dollar, hoping that he might luck into the correct amount.  The boy \e
-\&     gives him back two of his own pennies and then the big shiny quarter \e
-\&     that is his prize. -RICHH");
+\& 
+\&     sv_setpv(text, "When he is at a convenience store and the bill comes to some amount like 76 cents, Maynard is aware that there is something he *should* do, something that will enable him to get back a quarter, but he has no idea *what*.  He fumbles through his red squeezey changepurse and gives the boy three extra pennies with his dollar, hoping that he might luck into the correct amount.  The boy gives him back two of his own pennies and then the big shiny quarter that is his prize. -RICHH");
+\& 
 \&     if (match(text, "m/quarter/")) /** Does text contain 'quarter'? **/
-\&       printf("match: Text contains the word 'quarter'.\en\en");
+\&        printf("match: Text contains the word 'quarter'.\en\en");
 \&     else
-\&       printf("match: Text doesn't contain the word 'quarter'.\en\en");
+\&        printf("match: Text doesn't contain the word 'quarter'.\en\en");
+\& 
 \&     if (match(text, "m/eighth/")) /** Does text contain 'eighth'? **/
-\&       printf("match: Text contains the word 'eighth'.\en\en");
+\&        printf("match: Text contains the word 'eighth'.\en\en");
 \&     else
-\&       printf("match: Text doesn't contain the word 'eighth'.\en\en");
+\&        printf("match: Text doesn't contain the word 'eighth'.\en\en");
+\& 
 \&     /** Match all occurrences of /wi../ **/
 \&     num_matches = matches(text, "m/(wi..)/g", &match_list);
 \&     printf("matches: m/(wi..)/g found %d matches...\en", num_matches);
+\& 
 \&     for (i = 0; i < num_matches; i++)
-\&       printf("match: %s\en", match_list[i]);
+\&        printf("match: %s\en", SvPV(*av_fetch(match_list, i, FALSE),na));
 \&     printf("\en");
-\&     for (i = 0; i < num_matches; i++) {
-\&       free(match_list[i]);
-\&     }
-\&     free(match_list);
+\& 
 \&     /** Remove all vowels from text **/
 \&     num_matches = substitute(&text, "s/[aeiou]//gi");
 \&     if (num_matches) {
-\&       printf("substitute: s/[aeiou]//gi...%d substitutions made.\en",
-\&              num_matches);
-\&       printf("Now text is: %s\en\en", text);
+\&        printf("substitute: s/[aeiou]//gi...%d substitutions made.\en",
+\&               num_matches);
+\&        printf("Now text is: %s\en\en", SvPV(text,na));
 \&     }
+\& 
 \&     /** Attempt a substitution **/
 \&     if (!substitute(&text, "s/Perl/C/")) {
-\&       printf("substitute: s/Perl/C...No substitution made.\en\en");
+\&        printf("substitute: s/Perl/C...No substitution made.\en\en");
 \&     }
-\&     free(text);
+\& 
+\&     SvREFCNT_dec(text);
+\&     perl_destruct_level = 1;
 \&     perl_destruct(my_perl);
 \&     perl_free(my_perl);
-\&   }
+\& }
 .Ve
 which produces the output (again, long lines have been wrapped here)
 .PP
@@ -717,7 +716,6 @@ which produces the output (again, long lines have been wrapped here)
 \&   substitute: s/Perl/C...No substitution made.
 .Ve
 .Sh "Fiddling with the Perl stack from your C program"
-.IX Subsection "Fiddling with the Perl stack from your C program"
 When trying to explain stacks, most computer science textbooks mumble
 something about spring-loaded columns of cafeteria plates: the last
 thing you pushed on the stack is the first thing you pop off.  That'll
@@ -780,18 +778,14 @@ deep breath...
 .Vb 3
 \&    int main (int argc, char **argv, char **env)
 \&    {
-\&      char *my_argv[2];
+\&      char *my_argv[] = { "", "power.pl" };
 .Ve
 .Vb 2
 \&      my_perl = perl_alloc();
 \&      perl_construct( my_perl );
 .Ve
 .Vb 2
-\&      my_argv[1] = (char *) malloc(10);
-\&      sprintf(my_argv[1], "power.pl");
-.Ve
-.Vb 2
-\&      perl_parse(my_perl, NULL, argc, my_argv, NULL);
+\&      perl_parse(my_perl, NULL, 2, my_argv, (char **)NULL);
 \&      perl_run(my_perl);
 .Ve
 .Vb 1
@@ -812,7 +806,6 @@ Compile and run:
 \&    3 to the 4th power is 81.
 .Ve
 .Sh "Maintaining a persistent interpreter"
-.IX Subsection "Maintaining a persistent interpreter"
 When developing interactive and/or potentially long-running
 applications, it's a good idea to maintain a persistent interpreter
 rather than allocating and constructing a new interpreter multiple
@@ -1033,7 +1026,6 @@ Now run:
 \& Enter file name: ^C
 .Ve
 .Sh "Maintaining multiple interpreter instances"
-.IX Subsection "Maintaining multiple interpreter instances"
 Some rare applications will need to create more than one interpreter
 during a session.  Such an application might sporadically decide to
 release any resources associated with the interpreter.
@@ -1125,7 +1117,6 @@ Run it, Run it:
 \& Hi, I'm two_perl
 .Ve
 .Sh "Using Perl modules, which themselves use C libraries, from your C program"
-.IX Subsection "Using Perl modules, which themselves use C libraries, from your C program"
 If you've played with the examples above and tried to embed a script
 that \fIuse()\fRs a Perl module (such as \fISocket\fR) which itself uses a C or \*(C+ library,
 this probably happened:
@@ -1213,7 +1204,6 @@ Then compile:
 .Ve
 Consult the \fIperlxs\fR manpage and the \fIperlguts\fR manpage for more details.
 .SH "Embedding Perl under Win32"
-.IX Header "Embedding Perl under Win32"
 At the time of this writing, there are two versions of Perl which run
 under Win32.  Interfacing to Activeware's Perl library is quite
 different from the examples in this documentation, as significant
@@ -1250,12 +1240,10 @@ include files.  This path can be added via the Tools \-> Options \->
 Directories menu.  Finnally, select Build \-> Build interp.exe and
 you're ready to go!
 .SH "MORAL"
-.IX Header "MORAL"
 You can sometimes \fIwrite faster code\fR in C, but
 you can always \fIwrite code faster\fR in Perl.  Because you can use
 each from the other, combine them as you wish.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Jon Orwant and <\fIorwant@tpj.com\fR> and Doug MacEachern <\fIdougm@osf.org\fR>,
 with small contributions from Tim Bunce, Tom Christiansen, Hallvard Furuseth,
 Dov Grobgeld, and Ilya Zakharevich.
@@ -1263,13 +1251,12 @@ Dov Grobgeld, and Ilya Zakharevich.
 Check out Doug's article on embedding in Volume 1, Issue 4 of The Perl
 Journal.  Info about TPJ is available from http://tpj.com.
 .PP
-April 14, 1997
+July 17, 1997
 .PP
 Some of this material is excerpted from Jon Orwant's book: \fIPerl 5
 Interactive\fR, Waite Group Press, 1996 (ISBN 1-57169-064-6) and appears
 courtesy of Waite Group Press.
 .SH "COPYRIGHT"
-.IX Header "COPYRIGHT"
 Copyright (C) 1995, 1996, 1997 Doug MacEachern and Jon Orwant.  All
 Rights Reserved.
 .PP
@@ -1282,3 +1269,50 @@ permitted and encouraged to use its code and derivatives thereof in
 your own source code for fun or for profit as you see fit.
 
 .rn }` ''
+.IX Title "PERLEMBED 1"
+.IX Name "perlembed - how to embed perl in your C program"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "\s-1PREAMBLE\s0"
+
+.IX Item "\fBUse C from Perl?\fR"
+
+.IX Item "\fBUse a Unix program from Perl?\fR"
+
+.IX Item "\fBUse Perl from Perl?\fR"
+
+.IX Item "\fBUse C from C?\fR"
+
+.IX Item "\fBUse Perl from C?\fR"
+
+.IX Subsection "\s-1ROADMAP\s0"
+
+.IX Subsection "Compiling your C program"
+
+.IX Subsection "Adding a Perl interpreter to your C program"
+
+.IX Subsection "Calling a Perl subroutine from your C program"
+
+.IX Subsection "Evaluating a Perl statement from your C program"
+
+.IX Subsection "Performing Perl pattern matches and substitutions from your C program"
+
+.IX Subsection "Fiddling with the Perl stack from your C program"
+
+.IX Subsection "Maintaining a persistent interpreter"
+
+.IX Subsection "Maintaining multiple interpreter instances"
+
+.IX Subsection "Using Perl modules, which themselves use C libraries, from your C program"
+
+.IX Header "Embedding Perl under Win32"
+
+.IX Header "MORAL"
+
+.IX Header "AUTHOR"
+
+.IX Header "COPYRIGHT"
+

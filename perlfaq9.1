@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ9 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ9 1"
+.TH PERLFAQ9 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq9 - Networking ($Revision: 1.17 $, $Date: 1997/04/24 22:44:29 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,14 +188,11 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This section deals with questions related to networking, the internet,
 and a few on the web.
 .Sh "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
-.IX Subsection "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
 Sure, but you probably can't afford our contracting rates :\-)
 .PP
 Seriously, if you can demonstrate that you've read the following FAQs
@@ -218,7 +213,6 @@ The useful FAQs are:
 \&    http://www.boutell.com/faq/
 .Ve
 .Sh "How do I remove \s-1HTML\s0 from a string?"
-.IX Subsection "How do I remove \s-1HTML\s0 from a string?"
 The most correct way (albeit not the fastest) is to use \s-1HTML::\s0Parse
 from \s-1CPAN\s0 (part of the libwww-perl distribution, which is a must-have
 module for all web hackers).
@@ -240,7 +234,6 @@ program in
 http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/striphtml.gz
 \&.
 .Sh "How do I extract URLs?"
-.IX Subsection "How do I extract URLs?"
 A quick but imperfect approach is
 .PP
 .Vb 7
@@ -260,18 +253,15 @@ of modules, such as the
 http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/xurl.gz
 program.
 .Sh "How do I download a file from the user's machine?  How do I open a file on another machine?"
-.IX Subsection "How do I download a file from the user's machine?  How do I open a file on another machine?"
 In the context of an \s-1HTML\s0 form, you can use what's known as
 \fBmultipart/form-data\fR encoding.  The \s-1CGI\s0.pm module (available from
 \s-1CPAN\s0) supports this in the \fIstart_multipart_form()\fR method, which isn't
 the same as the \fIstartform()\fR method.
 .Sh "How do I make a pop-up menu in \s-1HTML\s0?"
-.IX Subsection "How do I make a pop-up menu in \s-1HTML\s0?"
 Use the \fB<\s-1SELECT\s0>\fR and \fB<\s-1OPTION\s0>\fR tags.  The \s-1CGI\s0.pm
 module (available from \s-1CPAN\s0) supports this widget, as well as many
 others, including some that it cleverly synthesizes on its own.
 .Sh "How do I fetch an \s-1HTML\s0 file?"
-.IX Subsection "How do I fetch an \s-1HTML\s0 file?"
 One approach, if you have the lynx text-based \s-1HTML\s0 browser installed
 on your system, is this:
 .PP
@@ -300,7 +290,6 @@ do this.  They work through proxies, and don't require lynx:
 \&    print $ascii;
 .Ve
 .Sh "how do I decode or create those %\-encodings on the web?"
-.IX Subsection "how do I decode or create those %\-encodings on the web?"
 Here's an example of decoding:
 .PP
 .Vb 2
@@ -314,7 +303,6 @@ It's important that characters with special meaning like \f(CW/\fR and \f(CW?\fR
 to avoid reinventing the wheel and just use the \s-1URI::\s0Escape module,
 which is part of the libwww-perl package (\s-1LWP\s0) available from \s-1CPAN\s0.
 .Sh "How do I redirect to another page?"
-.IX Subsection "How do I redirect to another page?"
 Instead of sending back a \f(CWContent-Type\fR as the headers of your
 reply, send back a \f(CWLocation:\fR header.  Officially this should be a
 \f(CWURI:\fR header, so the \s-1CGI\s0.pm module (available from \s-1CPAN\s0) sends back
@@ -327,11 +315,9 @@ both:
 Note that relative URLs in these headers can cause strange effects
 because of \*(L"optimizations\*(R" that servers do.
 .Sh "How do I put a password on my web pages?"
-.IX Subsection "How do I put a password on my web pages?"
 That depends.  You'll need to read the documentation for your web
 server, or perhaps check some of the other FAQs referenced above.
 .Sh "How do I edit my .htpasswd and .htgroup files with Perl?"
-.IX Subsection "How do I edit my .htpasswd and .htgroup files with Perl?"
 The \s-1HTTPD::\s0UserAdmin and \s-1HTTPD::\s0GroupAdmin modules provide a
 consistent \s-1OO\s0 interface to these files, regardless of how they're
 stored.  Databases may be text, dbm, Berkley \s-1DB\s0 or any database with a
@@ -345,7 +331,6 @@ stored.  Databases may be text, dbm, Berkley \s-1DB\s0 or any database with a
 \&          ->add($username => $password);
 .Ve
 .Sh "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
-.IX Subsection "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
 Read the \s-1CGI\s0 security \s-1FAQ\s0, at
 http://www-genome.wi.mit.edu/\s-1WWW/\s0faqs/www-security-faq.html, and the
 Perl/\s-1CGI\s0 \s-1FAQ\s0 at
@@ -357,7 +342,6 @@ from outside your script (eg, \s-1CGI\s0 parameters) are never used in
 single-argument form of \fIsystem()\fR or \fIexec()\fR.  Instead, supply the
 command and arguments as a list, which prevents shell globbing.
 .Sh "How do I parse an email header?"
-.IX Subsection "How do I parse an email header?"
 For a quick-and-dirty solution, try this solution derived
 from page 222 of the 2nd edition of \*(L"Programming Perl":
 .PP
@@ -371,7 +355,6 @@ That solution doesn't do well if, for example, you're trying to
 maintain all the Received lines.  A more complete approach is to use
 the Mail::Header module from \s-1CPAN\s0 (part of the MailTools package).
 .Sh "How do I decode a \s-1CGI\s0 form?"
-.IX Subsection "How do I decode a \s-1CGI\s0 form?"
 A lot of people are tempted to code this up themselves, so you've
 probably all seen a lot of code involving \f(CW$ENV{CONTENT_LENGTH}\fR and
 \f(CW$ENV{QUERY_STRING}\fR.  It's true that this can work, but there are
@@ -383,7 +366,6 @@ Please do not be tempted to reinvent the wheel.  Instead, use the
 the module-free land of perl1 .. perl4, you might look into cgi-lib.pl
 (available from http://www.bio.cam.ac.uk/web/form.html).
 .Sh "How do I check a valid email address?"
-.IX Subsection "How do I check a valid email address?"
 You can't.
 .PP
 Without sending mail to the address and seeing whether it bounces (and
@@ -410,7 +392,6 @@ the regexp matched the address, accept the address.  If the regexp
 didn't match the address, request confirmation from the user that the
 email address they entered was correct.
 .Sh "How do I decode a \s-1MIME/BASE64\s0 string?"
-.IX Subsection "How do I decode a \s-1MIME/BASE64\s0 string?"
 The \s-1MIME\s0\-tools package (available from \s-1CPAN\s0) handles this and a lot
 more.  Decoding \s-1BASE64\s0 becomes as simple as:
 .PP
@@ -428,7 +409,6 @@ format after minor transliterations:
 \&    print unpack("u", $len . $_);         # uudecode and print
 .Ve
 .Sh "How do I return the user's email address?"
-.IX Subsection "How do I return the user's email address?"
 On systems that support getpwuid, the $< variable and the
 Sys::Hostname module (which is part of the standard perl distribution),
 you can probably try using something like this:
@@ -448,7 +428,6 @@ It makes a more intelligent guess than the code above, using information
 given when the module was installed, but it could still be incorrect.
 Again, the best way is often just to ask the user.
 .Sh "How do I send/read mail?"
-.IX Subsection "How do I send/read mail?"
 Sending mail: the Mail::Mailer module from \s-1CPAN\s0 (part of the MailTools
 package) is \s-1UNIX\s0\-centric, while Mail::Internet uses Net::\s-1SMTP\s0 which is
 not \s-1UNIX\s0\-centric.  Reading mail: use the Mail::Folder module from \s-1CPAN\s0
@@ -474,7 +453,6 @@ not \s-1UNIX\s0\-centric.  Reading mail: use the Mail::Folder module from \s-1CP
 \&    $mail->smtpsend or die;
 .Ve
 .Sh "How do I find out my hostname/domainname/\s-1IP\s0 address?"
-.IX Subsection "How do I find out my hostname/domainname/\s-1IP\s0 address?"
 A lot of code has historically cavalierly called the \f(CW`hostname`\fR
 program.  While sometimes expedient, this isn't very portable.  It's
 one of those tradeoffs of convenience versus portability.
@@ -497,7 +475,6 @@ that it exists.
 (We still need a good \s-1DNS\s0 domain name-learning method for non-Unix
 systems.)
 .Sh "How do I fetch a news article or the active newsgroups?"
-.IX Subsection "How do I fetch a news article or the active newsgroups?"
 Use the Net::\s-1NNTP\s0 or News::NNTPClient modules, both available from \s-1CPAN\s0.
 This can make tasks like fetching the newsgroup list as simple as:
 .PP
@@ -506,17 +483,65 @@ This can make tasks like fetching the newsgroup list as simple as:
 \&      -e 'print News::NNTPClient->new->list("newsgroups")'
 .Ve
 .Sh "How do I fetch/put an \s-1FTP\s0 file?"
-.IX Subsection "How do I fetch/put an \s-1FTP\s0 file?"
 \s-1LWP::\s0Simple (available from \s-1CPAN\s0) can fetch but not put.  Net::\s-1FTP\s0 (also
 available from \s-1CPAN\s0) is more complex but can put as well as fetch.
 .Sh "How can I do \s-1RPC\s0 in Perl?"
-.IX Subsection "How can I do \s-1RPC\s0 in Perl?"
 A \s-1DCE::RPC\s0 module is being developed (but is not yet available), and
 will be released as part of the \s-1DCE\s0\-Perl package (available from
 \s-1CPAN\s0).  No \s-1ONC::RPC\s0 module is known.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ9 1"
+.IX Name "perlfaq9 - Networking ($Revision: 1.17 $, $Date: 1997/04/24 22:44:29 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+
+.IX Subsection "How do I remove \s-1HTML\s0 from a string?"
+
+.IX Subsection "How do I extract URLs?"
+
+.IX Subsection "How do I download a file from the user's machine?  How do I open a file on another machine?"
+
+.IX Subsection "How do I make a pop-up menu in \s-1HTML\s0?"
+
+.IX Subsection "How do I fetch an \s-1HTML\s0 file?"
+
+.IX Subsection "how do I decode or create those %\-encodings on the web?"
+
+.IX Subsection "How do I redirect to another page?"
+
+.IX Subsection "How do I put a password on my web pages?"
+
+.IX Subsection "How do I edit my .htpasswd and .htgroup files with Perl?"
+
+.IX Subsection "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
+
+.IX Subsection "How do I parse an email header?"
+
+.IX Subsection "How do I decode a \s-1CGI\s0 form?"
+
+.IX Subsection "How do I check a valid email address?"
+
+.IX Subsection "How do I decode a \s-1MIME/BASE64\s0 string?"
+
+.IX Subsection "How do I return the user's email address?"
+
+.IX Subsection "How do I send/read mail?"
+
+.IX Subsection "How do I find out my hostname/domainname/\s-1IP\s0 address?"
+
+.IX Subsection "How do I fetch a news article or the active newsgroups?"
+
+.IX Subsection "How do I fetch/put an \s-1FTP\s0 file?"
+
+.IX Subsection "How can I do \s-1RPC\s0 in Perl?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

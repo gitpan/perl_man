@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLRE 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLRE 1"
+.TH PERLRE 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlre - Perl regular expressions"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlre \- Perl regular expressions
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 This page describes the syntax of regular expressions in Perl.  For a
 description of how to \fIuse\fR regular expressions in matching
 operations, plus various examples of the same, see \f(CWm//\fR and \f(CWs///\fR in
@@ -204,22 +200,18 @@ which relate to the interpretation of the regular expression inside
 are listed below.  For the modifiers that alter the behaviour of the
 operation, see the section on \fIm//\fR in the \fIperlop\fR manpage and the section on \fIs//\fR in the \fIperlop\fR manpage.
 .Ip "i" 4
-.IX Item "i"
 Do case-insensitive pattern matching.
 .Sp
 If \f(CWuse locale\fR is in effect, the case map is taken from the current
 locale.  See the \fIperllocale\fR manpage.
 .Ip "m" 4
-.IX Item "m"
 Treat string as multiple lines.  That is, change \*(L"^\*(R" and \*(L"$\*(R" from matching
 at only the very start or end of the string to the start or end of any
 line anywhere within the string,
 .Ip "s" 4
-.IX Item "s"
 Treat string as single line.  That is, change \*(L".\*(R" to match any character
 whatsoever, even a newline, which it normally would not match.
 .Ip "x" 4
-.IX Item "x"
 Extend your pattern's legibility by permitting whitespace and comments.
 .PP
 These are usually written as \*(L"the \f(CW/x\fR modifier\*(R", even though the delimiter
@@ -238,7 +230,6 @@ escape them or encode them using octal or hex escapes.  Taken together,
 these features go a long way towards making Perl's regular expressions
 more readable.  See the C comment deletion code in the \fIperlop\fR manpage.
 .Sh "Regular Expressions"
-.IX Subsection "Regular Expressions"
 The patterns used in pattern matching are regular expressions such as
 those supplied in the Version 8 regexp routines.  (In fact, the
 routines are derived (distantly) from Henry Spencer's freely
@@ -321,7 +312,7 @@ also work:
 \&    \eL          lowercase till \eE (think vi)
 \&    \eU          uppercase till \eE (think vi)
 \&    \eE          end case modification (think vi)
-\&    \eQ          quote regexp metacharacters till \eE
+\&    \eQ          quote (disable) regexp metacharacters till \eE
 .Ve
 If \f(CWuse locale\fR is in effect, the case map used by \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR
 and <\eU> is taken from the current locale.  See the \fIperllocale\fR manpage.
@@ -415,20 +406,21 @@ you've used them once, use them at will, because you've already paid
 the price.
 .PP
 You will note that all backslashed metacharacters in Perl are
-alphanumeric, such as \f(CW\eb\fR, \f(CW\ew\fR, \f(CW\en\fR.  Unlike some other regular expression
-languages, there are no backslashed symbols that aren't alphanumeric.
-So anything that looks like \e\e, \e(, \e), \e<, \e>, \e{, or \e} is always
-interpreted as a literal character, not a metacharacter.  This makes it
-simple to quote a string that you want to use for a pattern but that
-you are afraid might contain metacharacters.  Quote simply all the
+alphanumeric, such as \f(CW\eb\fR, \f(CW\ew\fR, \f(CW\en\fR.  Unlike some other regular
+expression languages, there are no backslashed symbols that aren't
+alphanumeric.  So anything that looks like \e\e, \e(, \e), \e<, \e>,
+\e{, or \e} is always interpreted as a literal character, not a
+metacharacter.  This was once used in a common idiom to disable or
+quote the special meanings of regular expression metacharacters in a
+string that you want to use for a pattern. Simply quote all the
 non-alphanumeric characters:
 .PP
 .Vb 1
 \&    $pattern =~ s/(\eW)/\e\e$1/g;
 .Ve
-You can also use the builtin \fIquotemeta()\fR function to do this.
-An even easier way to quote metacharacters right in the match operator
-is to say
+Now it is much more common to see either the \fIquotemeta()\fR function or
+the \eQ escape sequence used to disable the metacharacters special
+meanings like this:
 .PP
 .Vb 1
 \&    /$unquoted\eQ$quoted\eE$unquoted/
@@ -439,11 +431,9 @@ thing within the parentheses (this was a syntax error in older
 versions of Perl).  The character after the question mark gives the
 function of the extension.  Several extensions are already supported:
 .Ip "(?#text)" 10
-.IX Item "(?#text)"
 A comment.  The text is ignored.  If the \f(CW/x\fR switch is used to enable
 whitespace formatting, a simple \f(CW#\fR will suffice.
 .Ip "(?:regexp)" 10
-.IX Item "(?:regexp)"
 This groups things like \*(L"()\*(R" but doesn't make backreferences like \*(L"()\*(R" does.  So
 .Sp
 .Vb 1
@@ -456,11 +446,9 @@ is like
 .Ve
 but doesn't spit out extra fields.
 .Ip "(?=regexp)" 10
-.IX Item "(?=regexp)"
 A zero-width positive lookahead assertion.  For example, \f(CW/\ew+(?=\et)/\fR
 matches a word followed by a tab, without including the tab in \f(CW$&\fR.
 .Ip "(?!regexp)" 10
-.IX Item "(?!regexp)"
 A zero-width negative lookahead assertion.  For example \f(CW/foo(?!bar)/\fR
 matches any occurrence of \*(L"foo\*(R" that isn't followed by \*(L"bar\*(R".  Note
 however that lookahead and lookbehind are \s-1NOT\s0 the same thing.  You cannot
@@ -478,21 +466,95 @@ easier just to say:
 .Ve
 For lookbehind see below.
 .Ip "(?<=regexp)" 10
-.IX Item "(?<=regexp)"
 A zero-width positive lookbehind assertion.  For example, \f(CW/(?=\et)\ew+/\fR
 matches a word following a tab, without including the tab in \f(CW$&\fR.
 Works only for fixed-width lookbehind.
 .Ip "(?<!regexp)" 10
-.IX Item "(?<!regexp)"
 A zero-width negative lookbehind assertion.  For example C</(?<!bar)foo/>
 matches any occurrence of \*(L"foo\*(R" that isn't following \*(L"bar\*(R".  
 Works only for fixed-width lookbehind.
 .Ip "(?{ code })" 10
-.IX Item "(?{ code })"
-Experimental \*(L"execute any Perl code\*(R" zero-length assertion.  Always
-succeeds.  Currently works only for regexps defined inside \f(CWeval ""\fR.
+Experimental \*(L"evaluate any Perl code\*(R" zero-width assertion.  Always
+succeeds.  Currently the quoting rules are somewhat convoluted, as is the
+determination where the \f(CWcode\fR ends.
+.Ip "\f(CW(?>regexp)\fR" 10
+An \*(L"independend\*(R" subexpression.  Matches the substring which a
+\fIstandalone\fR \f(CWregexp\fR would match if anchored at the given position,
+\fBand only this substring\fR.
+.Sp
+Say, \f(CW^(?>a*)ab\fR will never match, since \f(CW(?>a*)\fR (anchored
+at the beginning of string, as above) will match \fIall\fR the characters
+\f(CWa\fR at the beginning of string, leaving no \f(CWa\fR for \f(CWab\fR to match.
+In contrast, \f(CWa*ab\fR will match the same as \f(CWa+b\fR, since the match of
+the subgroup \f(CWa*\fR is influenced by the following group \f(CWab\fR (see
+the section on \fIBacktracking\fR).  In particular, \f(CWa*\fR inside \f(CWa*ab\fR will match
+less characters that a standalone \f(CWa*\fR, since this makes the tail match.
+.Sp
+Note that a similar effect to \f(CW(?>regexp)\fR may be achieved by
+.Sp
+.Vb 1
+\&   (?=(regexp))\e1
+.Ve
+since the lookahead is in \fI"logical\*(R"\fR context, thus matches the same
+substring as a standalone \f(CWa+\fR.  The following \f(CW\e1\fR eats the matched
+string, thus making a zero-length assertion into an analogue of
+\f(CW(?\fR...)>.  (The difference of these two constructions is that the
+second one uses a catching group, thus shifts ordinals of
+backreferences in the rest of a regular expression.)
+.Sp
+This construction is very useful for optimizations of \*(L"eternal\*(R"
+matches, since it will not backtrack (see the section on \fIBacktracking\fR).  Say,
+.Sp
+.Vb 6
+\&  / \e( ( 
+\&         [^()]+ 
+\&       | 
+\&         \e( [^()]* \e)
+\&       )+
+\&    \e) /x
+.Ve
+will match a nonempty group with matching two-or-less-level-deep
+parentheses.  It is very efficient in finding such groups.  However,
+if there is no such group, it is going to take forever (on reasonably
+long string), since there are so many different ways to split a long
+string into several substrings (this is essentially what \f(CW(.+)+\fR is
+doing, and this is a subpattern of the above pattern).  Say, on
+\f(CW((()aaaaaaaaaaaaaaaaaa\fR the above pattern detects no-match in 5sec
+(on kitchentop'96 processor), and each extra letter doubles this time.
+.Sp
+However, a tiny modification of this
+.Sp
+.Vb 6
+\&  / \e( ( 
+\&         (?> [^()]+ )
+\&       | 
+\&         \e( [^()]* \e)
+\&       )+
+\&    \e) /x
+.Ve
+which uses (?>...) matches exactly when the above one does (it is a
+good excercise to check this), but finishes in a fourth of the above
+time on a similar string with 1000000 \f(CWa\fRs.
+.Sp
+Note that on simple groups like the above \f(CW(?\fR [^()]+ )> a similar
+effect may be achieved by negative lookahead, as in \f(CW[^()]+ (?! [^()] )\fR.
+This was only 4 times slower on a string with 1000000 \f(CWa\fRs.
+.Ip "(?(condition)yes-regexp|no-regexp)" 10
+.Ip "(?(condition)yes-regexp)" 10
+Conditional expression.  \f(CW(condition)\fR should be either an integer in
+parentheses (which is valid if the corresponding pair of parentheses
+matched), or lookahead/lookbehind/evaluate zero-width assertion.
+.Sp
+Say,
+.Sp
+.Vb 3
+\&    / ( \e( )? 
+\&      [^()]+ 
+\&      (?(1) \e) )/x
+.Ve
+matches a chunk of non-parentheses, possibly included in parentheses
+themselves.
 .Ip "(?imsx)" 10
-.IX Item "(?imsx)"
 One or more embedded pattern-match modifiers.  This is particularly
 useful for patterns that are specified in a table somewhere, some of
 which want to be case sensitive, and some of which don't.  The case
@@ -510,17 +572,25 @@ pattern.  For example:
 \&    $pattern = "(?i)foobar";
 \&    if ( /$pattern/ )
 .Ve
+Note that these modifiers are localized inside an enclosing group (if
+any).  Say,
+.Sp
+.Vb 1
+\&    ( (?i) blah ) \es+ \e1
+.Ve
+(assuming \f(CWx\fR modifier, and no \f(CWi\fR modifier outside of this group)
+will match a repeated (\fIincluding the case\fR!) word \f(CWblah\fR in any
+case.
 .PP
 The specific choice of question mark for this and the new minimal
 matching construct was because 1) question mark is pretty rare in older
 regular expressions, and 2) whenever you see one, you should stop
 and \*(L"question\*(R" exactly what is going on.  That's psychology...
 .Sh "Backtracking"
-.IX Subsection "Backtracking"
-A fundamental feature of regular expression matching involves the notion
-called \fIbacktracking\fR.  which is used (when needed) by all regular
-expression quantifiers, namely \f(CW*\fR, \f(CW*?\fR, \f(CW+\fR, \f(CW+?\fR, \f(CW{n,m}\fR, and
-\f(CW{n,m}?\fR.
+A fundamental feature of regular expression matching involves the
+notion called \fIbacktracking\fR.  which is currently used (when needed)
+by all regular expression quantifiers, namely \f(CW*\fR, \f(CW*?\fR, \f(CW+\fR,
+\f(CW+?\fR, \f(CW{n,m}\fR, and \f(CW{n,m}?\fR.
 .PP
 For a regular expression to match, the \fIentire\fR regular expression must
 match, not just part of it.  So if the beginning of a pattern containing a
@@ -716,8 +786,15 @@ time to run
 .Ve
 And if you used \f(CW*\fR's instead of limiting it to 0 through 5 matches, then
 it would take literally forever\*(--or until you ran out of stack space.
+.PP
+A powerful tool for optimizing such beasts is \*(L"independent\*(R" groups,
+which do not backtrace (see the \fI\f(CW(?>regexp)\fR\fR manpage).  Note also that
+zero-length lookahead/lookbehind assertions will not backtrace to make
+the tail match, since they are in \*(L"logical\*(R" context: only the fact
+whether they match or not is considered relevant.  For an example
+where side-effects of a lookahead \fImight\fR have influenced the
+following match, see the \fI\f(CW(?>regexp)\fR\fR manpage.
 .Sh "Version 8 Regular Expressions"
-.IX Subsection "Version 8 Regular Expressions"
 In case you're not familiar with the \*(L"regular\*(R" Version 8 regexp
 routines, here are the pattern-matching rules not described above.
 .PP
@@ -734,7 +811,11 @@ in \f(CW[]\fR, which will match any one of the characters in the list.  If the
 first character after the \*(L"[\*(R" is \*(L"^\*(R", the class matches any character not
 in the list.  Within a list, the \*(L"\-\*(R" character is used to specify a
 range, so that \f(CWa-z\fR represents all the characters between \*(L"a\*(R" and \*(L"z\*(R",
-inclusive.
+inclusive.  If you want \*(L"\-\*(R" itself to be a member of a class, put it
+at the start or end of the list, or escape it with a backslash.  (The
+following all specify the same class of three characters: \f(CW[-az]\fR,
+\f(CW[az-]\fR, and \f(CW[a\e-z]\fR.  All are different from \f(CW[a-z]\fR, which
+specifies a class containing twenty-six characters.)
 .PP
 Characters may be specified using a metacharacter syntax much like that
 used in C: \*(L"\en\*(R" matches a newline, \*(L"\et\*(R" a tab, \*(L"\er\*(R" a carriage return,
@@ -768,7 +849,6 @@ match \*(L"0x1234 0x4321\*(R",but not \*(L"0x1234 01234\*(R", because subpattern
 actually matched \*(L"0x\*(R", even though the rule \f(CW0|0x\fR could
 potentially match the leading 0 in the second number.
 .Sh "\s-1WARNING\s0 on \e1 vs \f(CW$1\fR"
-.IX Subsection "\s-1WARNING\s0 on \e1 vs \f(CW$1\fR"
 Some people get too used to writing things like
 .PP
 .Vb 1
@@ -795,7 +875,53 @@ You can't disambiguate that by saying \f(CW\e{1}000\fR, whereas you can fix it w
 with the operation of matching a backreference.  Certainly they mean two
 different things on the \fIleft\fR side of the \f(CWs///\fR.
 .Sh "\s-1SEE\s0 \s-1ALSO\s0"
-.IX Subsection "\s-1SEE\s0 \s-1ALSO\s0"
 \*(L"Mastering Regular Expressions\*(R" (see the \fIperlbook\fR manpage) by Jeffrey Friedl.
 
 .rn }` ''
+.IX Title "PERLRE 1"
+.IX Name "perlre - Perl regular expressions"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "i"
+
+.IX Item "m"
+
+.IX Item "s"
+
+.IX Item "x"
+
+.IX Subsection "Regular Expressions"
+
+.IX Item "(?#text)"
+
+.IX Item "(?:regexp)"
+
+.IX Item "(?=regexp)"
+
+.IX Item "(?!regexp)"
+
+.IX Item "(?<=regexp)"
+
+.IX Item "(?<!regexp)"
+
+.IX Item "(?{ code })"
+
+.IX Item "\f(CW(?>regexp)\fR"
+
+.IX Item "(?(condition)yes-regexp|no-regexp)"
+
+.IX Item "(?(condition)yes-regexp)"
+
+.IX Item "(?imsx)"
+
+.IX Subsection "Backtracking"
+
+.IX Subsection "Version 8 Regular Expressions"
+
+.IX Subsection "\s-1WARNING\s0 on \e1 vs \f(CW$1\fR"
+
+.IX Subsection "\s-1SEE\s0 \s-1ALSO\s0"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH S2P 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "s2p - Sed to Perl translator"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,32 +188,24 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 s2p \- Sed to Perl translator
 .SH "SYNOPSIS"
-.IX Header "SYNOPSIS"
 \fBs2p [options] filename\fR
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 \fIS2p\fR takes a sed script specified on the command line (or from
 standard input) and produces a comparable \fIperl\fR script on the
 standard output.
 .Sh "Options"
-.IX Subsection "Options"
 Options include:
 .Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
 sets debugging flags.
 .Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
 specifies that this sed script was always invoked with a \fBsed \-n\fR.
 Otherwise a switch parser is prepended to the front of the script.
 .Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
 specifies that this sed script was never invoked with a \fBsed \-n\fR.
 Otherwise a switch parser is prepended to the front of the script.
 .Sh "Considerations"
-.IX Subsection "Considerations"
 The perl script produced looks very sed-ish, and there may very well
 be better ways to express what you want to do in perl.  For instance,
 s2p does not make any use of the split operator, but you might want
@@ -228,15 +218,11 @@ sed doesn't do, you have no choice.  It's often possible to speed up
 the perl script by various methods, such as deleting all references to
 $\e and chop.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 S2p uses no environment variables.
 .SH "AUTHOR"
-.IX Header "AUTHOR"
 Larry Wall <\fIlarry@wall.org\fR>
 .SH "FILES"
-.IX Header "FILES"
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 .PP
 .Vb 3
 \& perl   The perl compiler/interpreter
@@ -244,8 +230,37 @@ Larry Wall <\fIlarry@wall.org\fR>
 \& a2p    awk to perl translator
 .Ve
 .SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
 .SH "BUGS"
-.IX Header "BUGS"
 
 .rn }` ''
+.IX Title "S2P 1"
+.IX Name "s2p - Sed to Perl translator"
+
+.IX Header "NAME"
+
+.IX Header "SYNOPSIS"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Options"
+
+.IX Item "\fB\-D<number>\fR"
+
+.IX Item "\fB\-n\fR"
+
+.IX Item "\fB\-p\fR"
+
+.IX Subsection "Considerations"
+
+.IX Header "ENVIRONMENT"
+
+.IX Header "AUTHOR"
+
+.IX Header "FILES"
+
+.IX Header "SEE ALSO"
+
+.IX Header "DIAGNOSTICS"
+
+.IX Header "BUGS"
+

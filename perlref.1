@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLREF 1 "perl 5.004, patch 01" "29/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLREF 1"
+.TH PERLREF 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlref - Perl references and nested data structures"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlref \- Perl references and nested data structures
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Before release 5 of Perl it was difficult to represent complex data
 structures, because all references had to be symbolic, and even that was
 difficult to do when you wanted to refer to a variable rather than a
@@ -233,7 +229,6 @@ tell it explicitly to do so, by dereferencing it.
 .PP
 References can be constructed in several ways.
 .Ip "1." 4
-.IX Item "1."
 By using the backslash operator on a variable, subroutine, or value.
 (This works much like the & (address-of) operator in C.)  Note
 that this typically creates \fI\s-1ANOTHER\s0\fR reference to a variable, because
@@ -254,7 +249,6 @@ dirhandle) using the backslash operator.  See the explanation of the
 out there using globrefs as though they were \s-1IO\s0 handles, which is
 grandfathered into continued functioning.)
 .Ip "2." 4
-.IX Item "2."
 A reference to an anonymous array can be constructed using square
 brackets:
 .Sp
@@ -278,7 +272,6 @@ a list of references!
 As a special case, \f(CW\e(@foo)\fR returns a list of references to the contents
 of \f(CW@foo\fR, not a reference to \f(CW@foo\fR itself.  Likewise for \f(CW%foo\fR.
 .Ip "3." 4
-.IX Item "3."
 A reference to an anonymous hash can be constructed using curly
 brackets:
 .Sp
@@ -311,7 +304,6 @@ reference to it, you have these options:
 \&    sub hashem { return { @_ } }   # ok
 .Ve
 .Ip "4." 4
-.IX Item "4."
 A reference to an anonymous subroutine can be constructed by using
 \f(CWsub\fR without a subname:
 .Sp
@@ -373,7 +365,6 @@ This applies to only lexical variables, by the way.  Dynamic variables
 continue to work as they have always worked.  Closure is not something
 that most Perl programmers need trouble themselves about to begin with.
 .Ip "5." 4
-.IX Item "5."
 References are often returned by special subroutines called constructors.
 Perl objects are just references to a special kind of object that happens to know
 which package it's associated with.  Constructors are just special
@@ -386,12 +377,10 @@ named \fInew()\fR, but don't have to be:
 \&    $objref = new Doggie (Tail => 'short', Ears => 'long');
 .Ve
 .Ip "6." 4
-.IX Item "6."
 References of the appropriate type can spring into existence if you
 dereference them in a context that assumes they exist.  Because we haven't
 talked about dereferencing yet, we can't show you any examples yet.
 .Ip "7." 4
-.IX Item "7."
 A reference can be created by using a special syntax, lovingly known as
 the *foo{\s-1THING\s0} syntax.  *foo{\s-1THING\s0} returns a reference to the \s-1THING\s0
 slot in *foo (which is the symbol table entry which holds everything
@@ -451,7 +440,6 @@ That's it for creating references.  By now you're probably dying to
 know how to use references to get back to your long-lost data.  There
 are several basic methods.
 .Ip "1." 4
-.IX Item "1."
 Anywhere you'd put an identifier (or chain of identifiers) as part
 of a variable or subroutine name, you can replace the identifier with
 a simple scalar variable containing a reference of the correct type:
@@ -476,7 +464,6 @@ However, a \*(L"simple scalar\*(R" includes an identifier that itself uses metho
 \&    print $$$$refrefref;
 .Ve
 .Ip "2." 4
-.IX Item "2."
 Anywhere you'd put an identifier (or chain of identifiers) as part of a
 variable or subroutine name, you can replace the identifier with a
 \s-1BLOCK\s0 returning a reference of the correct type.  In other words, the
@@ -514,7 +501,6 @@ Case 2 is also deceptive in that you're accessing a variable
 called \f(CW%hashref\fR, not dereferencing through \f(CW$hashref\fR to the hash
 it's presumably referencing.  That would be case 3.
 .Ip "3." 4
-.IX Item "3."
 Subroutine calls and lookups of individual array elements arise often
 enough that it gets cumbersome to use method 2.  As a form of
 syntactic sugar, the examples for method 2 may be written:
@@ -553,7 +539,6 @@ multidimensional arrays just like C's:
 Well, okay, not entirely like C's arrays, actually.  C doesn't know how
 to grow its arrays on demand.  Perl does.
 .Ip "4." 4
-.IX Item "4."
 If a reference happens to be a reference to an object, then there are
 probably methods to access the things referred to, and you should probably
 stick to those methods unless you're in the class package that defines the
@@ -588,7 +573,6 @@ chicanery is also useful for arbitrary expressions:
 \&    print "That yields @{[$n + 5]} widgets\en";
 .Ve
 .Sh "Symbolic references"
-.IX Subsection "Symbolic references"
 We said that references spring into existence as necessary if they are
 undefined, but we didn't say what happens if a value used as a
 reference is already defined, but \fI\s-1ISN\s0'T\fR a hard reference.  If you
@@ -639,7 +623,6 @@ invisible to this mechanism.  For example:
 This will still print 10, not 20.  Remember that \fIlocal()\fR affects package
 variables, which are all \*(L"global\*(R" to the package.
 .Sh "Not-so-symbolic references"
-.IX Subsection "Not-so-symbolic references"
 A new feature contributing to readability in perl version 5.001 is that the
 brackets around a symbolic reference behave more like quotes, just as they
 always have within a string.  That is,
@@ -700,7 +683,6 @@ The \fB\-w\fR switch will warn you if it interprets a reserved word as a string.
 But it will no longer warn you about using lowercase words, because the
 string is effectively quoted.
 .SH "WARNING"
-.IX Header "WARNING"
 You may not (usefully) use a reference as the key to a hash.  It will be
 converted into a string:
 .PP
@@ -718,7 +700,6 @@ more like
 And then at least you can use the \fIvalues()\fR, which will be
 real refs, instead of the \fIkeys()\fR, which won't.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 Besides the obvious documents, source code can be instructive.
 Some rather pathological examples of the use of references can be found
 in the \fIt/op/ref.t\fR regression test in the Perl source directory.
@@ -728,3 +709,40 @@ complex data structures, and the \fIperlobj\fR manpage for how to use them to cr
 objects.
 
 .rn }` ''
+.IX Title "PERLREF 1"
+.IX Name "perlref - Perl references and nested data structures"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Item "1."
+
+.IX Item "2."
+
+.IX Item "3."
+
+.IX Item "4."
+
+.IX Item "5."
+
+.IX Item "6."
+
+.IX Item "7."
+
+.IX Item "1."
+
+.IX Item "2."
+
+.IX Item "3."
+
+.IX Item "4."
+
+.IX Subsection "Symbolic references"
+
+.IX Subsection "Not-so-symbolic references"
+
+.IX Header "WARNING"
+
+.IX Header "SEE ALSO"
+

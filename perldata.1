@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDATA 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDATA 1"
+.TH PERLDATA 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perldata - Perl data types"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,9 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perldata \- Perl data types
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "Variable names"
-.IX Subsection "Variable names"
 Perl has three data structures: scalars, arrays of scalars, and
 associative arrays of scalars, known as \*(L"hashes\*(R".  Normal arrays are
 indexed by number, starting with 0.  (Negative subscripts count from
@@ -279,7 +274,6 @@ one character, e.g.,  \f(CW$%\fR or \f(CW$$\fR.  (Most of these one character na
 have a predefined significance to Perl.  For instance, \f(CW$$\fR is the
 current process id.)
 .Sh "Context"
-.IX Subsection "Context"
 The interpretation of operations and values in Perl sometimes depends
 on the requirements of the context around the operation or value.
 There are two major contexts: scalar and list.  Certain operations
@@ -322,7 +316,6 @@ called in a scalar or list context, but most subroutines do not
 need to care, because scalars are automatically interpolated into
 lists.  See the \f(CWwantarray\fR entry in the \fIperlfunc\fR manpage.
 .Sh "Scalar values"
-.IX Subsection "Scalar values"
 All data in Perl is a scalar or an array of scalars or a hash of scalars.
 Scalar variables may contain various kinds of singular data, such as
 numbers, strings, and references.  In general, conversion from one form to
@@ -426,7 +419,6 @@ scalar context reveals \*(L"1/16\*(R", which means only one out of sixteen bucke
 has been touched, and presumably contains all 10,000 of your items.  This
 isn't supposed to happen.)
 .Sh "Scalar value constructors"
-.IX Subsection "Scalar value constructors"
 Numeric literals are specified in any of the customary floating point or
 integer formats:
 .PP
@@ -596,7 +588,6 @@ try to do this:
 \&        + 20;
 .Ve
 .Sh "List value constructors"
-.IX Subsection "List value constructors"
 List values are denoted by separating individual values by commas
 (and enclosing the list in parentheses where precedence requires it):
 .PP
@@ -758,7 +749,6 @@ Note that just because a hash is initialized in that order doesn't
 mean that it comes out in that order.  See the \f(CWsort\fR entry in the \fIperlfunc\fR manpage for examples
 of how to arrange for an output ordering.
 .Sh "Typeglobs and Filehandles"
-.IX Subsection "Typeglobs and Filehandles"
 Perl uses an internal type called a \fItypeglob\fR to hold an entire
 symbol table entry.  The type prefix of a typeglob is a \f(CW*\fR, because
 it represents all types.  This used to be the preferred way to
@@ -797,3 +787,22 @@ See the \fIperlref\fR manpage, the \fIperlsub\fR manpage, and the section on \fI
 discussion on typeglobs.
 
 .rn }` ''
+.IX Title "PERLDATA 1"
+.IX Name "perldata - Perl data types"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Variable names"
+
+.IX Subsection "Context"
+
+.IX Subsection "Scalar values"
+
+.IX Subsection "Scalar value constructors"
+
+.IX Subsection "List value constructors"
+
+.IX Subsection "Typeglobs and Filehandles"
+

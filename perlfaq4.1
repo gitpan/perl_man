@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ4 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLFAQ4 1"
+.TH PERLFAQ4 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlfaq4 - Data Manipulation ($Revision: 1.19 $, $Date: 1997/04/24 22:43:57 $)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,17 +188,13 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlfaq4 \- Data Manipulation ($Revision: 1.19 $, \f(CW$Date:\fR 1997/04/24 22:43:57 $)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 The section of the FAQ answers question related to the manipulation
 of data as numbers, dates, strings, arrays, hashes, and miscellaneous
 data issues.
 .SH "Data: Numbers"
-.IX Header "Data: Numbers"
 .Sh "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?"
-.IX Subsection "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?"
 Internally, your computer represents floating-point numbers in binary.
 Floating-point numbers read in from a file, or appearing as literals
 in your program, are converted from their decimal floating-point
@@ -227,7 +221,6 @@ are consequently slower.
 To get rid of the superfluous digits, just use a format (eg,
 \f(CWprintf("%.2f", 19.95)\fR) to get the required precision.
 .Sh "Why isn't my octal data interpreted correctly?"
-.IX Subsection "Why isn't my octal data interpreted correctly?"
 Perl only understands octal and hex numbers as such when they occur
 as literals in your program.  If they are read in from somewhere and
 assigned, no automatic conversion takes place.  You must explicitly
@@ -244,7 +237,6 @@ This problem shows up most often when people try using \fIchmod()\fR, \fImkdir()
 \&    chmod(0644, $file); # right
 .Ve
 .Sh "Does perl have a round function?  What about \fIceil()\fR and \fIfloor()\fR? Trig functions?"
-.IX Subsection "Does perl have a round function?  What about \fIceil()\fR and \fIfloor()\fR? Trig functions?"
 For rounding to a certain number of digits, \fIsprintf()\fR or \fIprintf()\fR is
 usually the easiest route.
 .PP
@@ -265,7 +257,6 @@ cases, it probably pays not to trust whichever system rounding is
 being used by Perl, but to instead implement the rounding function you
 need yourself.
 .Sh "How do I convert bits into ints?"
-.IX Subsection "How do I convert bits into ints?"
 To turn a string of 1s and 0s like \*(L'10110110\*(R' into a scalar containing
 its binary value, use the \fIpack()\fR function (documented in
 the section on \fIpack\fR in the \fIperlfunc\fR manpage):
@@ -279,11 +270,9 @@ Here's an example of going the other way:
 \&    $binary_string = join('', unpack('B*', "\ex29"));
 .Ve
 .Sh "How do I multiply matrices?"
-.IX Subsection "How do I multiply matrices?"
 Use the Math::Matrix or Math::MatrixReal modules (available from \s-1CPAN\s0)
 or the \s-1PDL\s0 extension (also available from \s-1CPAN\s0).
 .Sh "How do I perform an operation on a series of integers?"
-.IX Subsection "How do I perform an operation on a series of integers?"
 To call a function on each element in an array, and collect the
 results, use:
 .PP
@@ -319,10 +308,8 @@ ranges.  Instead use:
 \&    }
 .Ve
 .Sh "How can I output Roman numerals?"
-.IX Subsection "How can I output Roman numerals?"
 Get the http://www.perl.com/\s-1CPAN/\s0modules/by-module/Roman module.
 .Sh "Why aren't my random numbers random?"
-.IX Subsection "Why aren't my random numbers random?"
 The short explanation is that you're getting pseudorandom numbers, not
 random ones, because that's how these things work.  A longer
 explanation is available on
@@ -331,9 +318,7 @@ Phoenix.
 .PP
 You should also check out the Math::TrulyRandom module from \s-1CPAN\s0.
 .SH "Data: Dates"
-.IX Header "Data: Dates"
 .Sh "How do I find the week-of-the-year/day-of-the-year?"
-.IX Subsection "How do I find the week-of-the-year/day-of-the-year?"
 The day of the year is in the array returned by \fIlocaltime()\fR (see
 the section on \fIlocaltime\fR in the \fIperlfunc\fR manpage):
 .PP
@@ -353,22 +338,18 @@ You can find the week of the year by dividing this by 7:
 .Ve
 Of course, this believes that weeks start at zero.
 .Sh "How can I compare two date strings?"
-.IX Subsection "How can I compare two date strings?"
 Use the Date::Manip or Date::DateCalc modules from \s-1CPAN\s0.
 .Sh "How can I take a string and turn it into epoch seconds?"
-.IX Subsection "How can I take a string and turn it into epoch seconds?"
 If it's a regular enough string that it always has the same format,
 you can split it up and pass the parts to timelocal in the standard
 Time::Local module.  Otherwise, you should look into one of the
 Date modules from \s-1CPAN\s0.
 .Sh "How can I find the Julian Day?"
-.IX Subsection "How can I find the Julian Day?"
 Neither Date::Manip nor Date::DateCalc deal with Julian days.
 Instead, there is an example of Julian date calculation in
 http://www.perl.com/\s-1CPAN/\s0authors/David_Muir_Sharnoff/modules/Time/JulianDay.pm.gz,
 which should help.
 .Sh "Does Perl have a year 2000 problem?"
-.IX Subsection "Does Perl have a year 2000 problem?"
 Not unless you use Perl to create one. The date and time functions
 supplied with perl (gmtime and localtime) supply adequate information
 to determine the year well beyond 2000 (2038 is when trouble strikes).
@@ -382,14 +363,11 @@ a timestamp string that contains a fully-expanded year.  For example,
 \f(CW$timestamp = gmtime(1005613200)\fR sets \f(CW$timestamp\fR to \*(L"Tue Nov 13 01:00:00
 2001\*(R".  There's no year 2000 problem here.
 .SH "Data: Strings"
-.IX Header "Data: Strings"
 .Sh "How do I validate input?"
-.IX Subsection "How do I validate input?"
 The answer to this question is usually a regular expression, perhaps
 with auxiliary logic.  See the more specific questions (numbers, email
 addresses, etc.) for details.
 .Sh "How do I unescape a string?"
-.IX Subsection "How do I unescape a string?"
 It depends just what you mean by \*(L"escape\*(R".  \s-1URL\s0 escapes are dealt with
 in the \fIperlfaq9\fR manpage.  Shell escapes with the backslash (\e)
 character are removed with:
@@ -399,14 +377,12 @@ character are removed with:
 .Ve
 Note that this won't expand \en or \et or any other special escapes.
 .Sh "How do I remove consecutive pairs of characters?"
-.IX Subsection "How do I remove consecutive pairs of characters?"
 To turn \*(L"abbcccd\*(R" into \*(L"abccd":
 .PP
 .Vb 1
 \&    s/(.)\e1/$1/g;
 .Ve
 .Sh "How do I expand function calls in a string?"
-.IX Subsection "How do I expand function calls in a string?"
 This is documented in the \fIperlref\fR manpage.  In general, this is fraught with
 quoting and readability problems, but it is possible.  To interpolate
 a subroutine call (in a list context) into a string:
@@ -423,7 +399,6 @@ arbitrary expressions:
 See also \*(L"How can I expand variables in text strings?\*(R" in this section
 of the \s-1FAQ\s0.
 .Sh "How do I find matching/nesting anything?"
-.IX Subsection "How do I find matching/nesting anything?"
 This isn't something that can be tackled in one regular expression, no
 matter how complicated.  To find something between two single characters,
 a pattern like \f(CW/x([^x]*)x/\fR will get the intervening bits in \f(CW$1\fR. For
@@ -431,7 +406,6 @@ multiple ones, then something more like \f(CW/alpha(.*?)omega/\fR would
 be needed.  But none of these deals with nested patterns, nor can they.
 For that you'll have to write a parser.
 .Sh "How do I reverse a string?"
-.IX Subsection "How do I reverse a string?"
 Use \fIreverse()\fR in a scalar context, as documented in
 the \f(CWreverse\fR entry in the \fIperlfunc\fR manpage.
 .PP
@@ -439,7 +413,6 @@ the \f(CWreverse\fR entry in the \fIperlfunc\fR manpage.
 \&    $reversed = reverse $string;
 .Ve
 .Sh "How do I expand tabs in a string?"
-.IX Subsection "How do I expand tabs in a string?"
 You can do it the old-fashioned way:
 .PP
 .Vb 1
@@ -453,7 +426,6 @@ distribution).
 \&    @expanded_lines = expand(@lines_with_tabs);
 .Ve
 .Sh "How do I reformat a paragraph?"
-.IX Subsection "How do I reformat a paragraph?"
 Use Text::Wrap (part of the standard perl distribution):
 .PP
 .Vb 2
@@ -463,7 +435,6 @@ Use Text::Wrap (part of the standard perl distribution):
 The paragraphs you give to Text::Wrap may not contain embedded
 newlines.  Text::Wrap doesn't justify the lines (flush-right).
 .Sh "How can I access/change the first N letters of a string?"
-.IX Subsection "How can I access/change the first N letters of a string?"
 There are many ways.  If you just want to grab a copy, use
 substr:
 .PP
@@ -482,7 +453,6 @@ Although those with a regexp kind of thought process will likely prefer
 \&    $a =~ s/^.../Tom/;
 .Ve
 .Sh "How do I change the Nth occurrence of something?"
-.IX Subsection "How do I change the Nth occurrence of something?"
 You have to keep track.  For example, let's say you want
 to change the fifth occurrence of \*(L"whoever\*(R" or \*(L"whomever\*(R"
 into \*(L"whosoever\*(R" or \*(L"whomsoever\*(R", case insensitively.
@@ -496,7 +466,6 @@ into \*(L"whosoever\*(R" or \*(L"whomsoever\*(R", case insensitively.
 \&    }igex;
 .Ve
 .Sh "How can I count the number of occurrences of a substring within a string?"
-.IX Subsection "How can I count the number of occurrences of a substring within a string?"
 There are a number of ways, with varying efficiency: If you want a
 count of a certain single character (X) within a string, you can use the
 \f(CWtr///\fR function like so:
@@ -518,7 +487,6 @@ integers:
 \&    print "There are $count negative numbers in the string";
 .Ve
 .Sh "How do I capitalize all the words on one line?"
-.IX Subsection "How do I capitalize all the words on one line?"
 To make the first letter of each word upper case:
 .PP
 .Vb 1
@@ -548,7 +516,6 @@ To force each word to be lower case, with the first letter upper case:
 \&        $line =~ s/(\ew+)/\eu\eL$1/g;
 .Ve
 .Sh "How can I split a [character] delimited string except when inside [character]? (Comma-separated files)"
-.IX Subsection "How can I split a [character] delimited string except when inside [character]? (Comma-separated files)"
 Take the example case of trying to split a string that is comma-separated
 into its different fields.  (We'll pretend you said comma-separated, not
 comma-delimited, which is different and almost never what you mean.) You
@@ -585,7 +552,6 @@ distribution) lets you say:
 \&    @new = quotewords(",", 0, $text);
 .Ve
 .Sh "How do I strip blank space from the beginning/end of a string?"
-.IX Subsection "How do I strip blank space from the beginning/end of a string?"
 The simplest approach, albeit not the fastest, is probably like this:
 .PP
 .Vb 1
@@ -606,13 +572,10 @@ Or more nicely written as:
 \&    }
 .Ve
 .Sh "How do I extract selected columns from a string?"
-.IX Subsection "How do I extract selected columns from a string?"
 Use \fIsubstr()\fR or \fIunpack()\fR, both documented in the \fIperlfunc\fR manpage.
 .Sh "How do I find the soundex value of a string?"
-.IX Subsection "How do I find the soundex value of a string?"
 Use the standard Text::Soundex module distributed with perl.
 .Sh "How can I expand variables in text strings?"
-.IX Subsection "How can I expand variables in text strings?"
 Let's assume that you have a string like:
 .PP
 .Vb 2
@@ -631,7 +594,6 @@ afterwards. :\-)
 See also \*(L"How do I expand function calls in a string?\*(R" in this section
 of the \s-1FAQ\s0.
 .Sh "What's wrong with always quoting \*(M"$vars\*(S"?"
-.IX Subsection "What's wrong with always quoting \*(M"$vars\*(S"?"
 The problem is that those double-quotes force stringification,
 coercing numbers and references into strings, even when you
 don't want them to be.
@@ -667,18 +629,12 @@ that actually do care about the difference between a string and a
 number, such as the magical \f(CW++\fR autoincrement operator or the
 \fIsyscall()\fR function.
 .Sh "Why don't my <<\s-1HERE\s0 documents work?"
-.IX Subsection "Why don't my <<\s-1HERE\s0 documents work?"
 Check for these three things:
 .Ip "1. There must be no space after the << part." 4
-.IX Item "1. There must be no space after the << part."
 .Ip "2. There (probably) should be a semicolon at the end." 4
-.IX Item "2. There (probably) should be a semicolon at the end."
 .Ip "3. You can't (easily) have any space in front of the tag." 4
-.IX Item "3. You can't (easily) have any space in front of the tag."
 .SH "Data: Arrays"
-.IX Header "Data: Arrays"
 .Sh "What is the difference between \f(CW$array\fR[1] and \f(CW@array\fR[1]?"
-.IX Subsection "What is the difference between \f(CW$array\fR[1] and \f(CW@array\fR[1]?"
 The former is a scalar value, the latter an array slice, which makes
 it a list with one (scalar) value.  You should use $ when you want a
 scalar value (most of the time) and @ when you want a list with one
@@ -697,11 +653,9 @@ with
 .Ve
 The \fB\-w\fR flag will warn you about these matters.
 .Sh "How can I extract just the unique elements of an array?"
-.IX Subsection "How can I extract just the unique elements of an array?"
 There are several possible ways, depending on whether the array is
 ordered and whether you wish to preserve the ordering.
 .Ip "a) If @in is sorted, and you want @out to be sorted:" 4
-.IX Item "a) If @in is sorted, and you want @out to be sorted:"
 .Sp
 .Vb 2
 \&    $prev = 'nonesuch';
@@ -711,20 +665,17 @@ This is nice in that it doesn't use much extra memory,
 simulating \fIuniq\fR\|(1)'s behavior of removing only adjacent
 duplicates.
 .Ip "b) If you don't know whether @in is sorted:" 4
-.IX Item "b) If you don't know whether @in is sorted:"
 .Sp
 .Vb 2
 \&    undef %saw;
 \&    @out = grep(!$saw{$_}++, @in);
 .Ve
 .Ip "c) Like (b), but @in contains only small integers:" 4
-.IX Item "c) Like (b), but @in contains only small integers:"
 .Sp
 .Vb 1
 \&    @out = grep(!$saw[$_]++, @in);
 .Ve
 .Ip "d) A way to do (b) without any loops or greps:" 4
-.IX Item "d) A way to do (b) without any loops or greps:"
 .Sp
 .Vb 3
 \&    undef %saw;
@@ -732,7 +683,6 @@ duplicates.
 \&    @out = sort keys %saw;  # remove sort if undesired
 .Ve
 .Ip "e) Like (d), but @in contains only small positive integers:" 4
-.IX Item "e) Like (d), but @in contains only small positive integers:"
 .Sp
 .Vb 3
 \&    undef @ary;
@@ -740,7 +690,6 @@ duplicates.
 \&    @out = @ary;
 .Ve
 .Sh "How can I tell whether an array contains a certain element?"
-.IX Subsection "How can I tell whether an array contains a certain element?"
 There are several ways to approach this.  If you are going to make
 this query many times and the values are arbitrary strings, the
 fastest way is probably to invert the original array and keep an
@@ -788,7 +737,6 @@ These are slow (checks every element even if the first matches),
 inefficient (same reason), and potentially buggy (what if there are
 regexp characters in \f(CW$whatever\fR?).
 .Sh "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?"
-.IX Subsection "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?"
 Use a hash.  Here's code to do both and more.  It assumes that
 each element is unique in a given array:
 .PP
@@ -802,7 +750,6 @@ each element is unique in a given array:
 \&    }
 .Ve
 .Sh "How do I find the first array element for which a condition is true?"
-.IX Subsection "How do I find the first array element for which a condition is true?"
 You can use this if you care about the index:
 .PP
 .Vb 6
@@ -815,7 +762,6 @@ You can use this if you care about the index:
 .Ve
 Now \f(CW$found_index\fR has what you want.
 .Sh "How do I handle linked lists?"
-.IX Subsection "How do I handle linked lists?"
 In general, you usually don't need a linked list in Perl, since with
 regular arrays, you can push and pop or shift and unshift at either end,
 or you can use splice to add and/or remove arbitrary number of elements
@@ -825,7 +771,6 @@ If you really, really wanted, you could use structures as described in
 the \fIperldsc\fR manpage or the \fIperltoot\fR manpage and do just what the algorithm book tells you
 to do.
 .Sh "How do I handle circular lists?"
-.IX Subsection "How do I handle circular lists?"
 Circular lists could be handled in the traditional fashion with linked
 lists, or you could just do something like this with an array:
 .PP
@@ -834,7 +779,6 @@ lists, or you could just do something like this with an array:
 \&    push(@array, shift(@array));   # and vice versa
 .Ve
 .Sh "How do I shuffle an array randomly?"
-.IX Subsection "How do I shuffle an array randomly?"
 Here's a shuffling algorithm which works its way through the list,
 randomly picking another element to swap the current element with:
 .PP
@@ -859,7 +803,6 @@ For large arrays, this avoids a lot of the reshuffling:
 \&    }
 .Ve
 .Sh "How do I process/modify each element of an array?"
-.IX Subsection "How do I process/modify each element of an array?"
 Use \f(CWfor\fR/\f(CWforeach\fR:
 .PP
 .Vb 4
@@ -877,7 +820,6 @@ Here's another; let's compute spherical volumes:
 \&    }
 .Ve
 .Sh "How do I select a random element from an array?"
-.IX Subsection "How do I select a random element from an array?"
 Use the \fIrand()\fR function (see the \f(CWrand\fR entry in the \fIperlfunc\fR manpage):
 .PP
 .Vb 3
@@ -886,7 +828,6 @@ Use the \fIrand()\fR function (see the \f(CWrand\fR entry in the \fIperlfunc\fR 
 \&    $element = $array[$index];
 .Ve
 .Sh "How do I permute N elements of a list?"
-.IX Subsection "How do I permute N elements of a list?"
 Here's a little program that generates all permutations
 of all the words on each line of input.  The algorithm embodied
 in the \fIpermut()\fR function should work on any list:
@@ -915,7 +856,6 @@ in the \fIpermut()\fR function should work on any list:
 \&    }
 .Ve
 .Sh "How do I sort an array by (anything)?"
-.IX Subsection "How do I sort an array by (anything)?"
 Supply a comparison function to \fIsort()\fR (described in the \f(CWsort\fR entry in the \fIperlfunc\fR manpage):
 .PP
 .Vb 1
@@ -964,7 +904,6 @@ this approach.
 .PP
 See also the question below on sorting hashes.
 .Sh "How do I manipulate arrays of bits?"
-.IX Subsection "How do I manipulate arrays of bits?"
 Use \fIpack()\fR and \fIunpack()\fR, or else \fIvec()\fR and the bitwise operations.
 .PP
 For example, this sets \f(CW$vec\fR to have bit N set if \f(CW$ints\fR[N] was set:
@@ -1009,12 +948,9 @@ get those bits into your \f(CW@ints\fR array:
 This method gets faster the more sparse the bit vector is.
 (Courtesy of Tim Bunce and Winfried Koenig.)
 .Sh "Why does \fIdefined()\fR return true on empty arrays and hashes?"
-.IX Subsection "Why does \fIdefined()\fR return true on empty arrays and hashes?"
 See the \f(CWdefined\fR entry in the \fIperlfunc\fR manpage in the 5.004 release or later of Perl.
 .SH "Data: Hashes (Associative Arrays)"
-.IX Header "Data: Hashes (Associative Arrays)"
 .Sh "How do I process an entire hash?"
-.IX Subsection "How do I process an entire hash?"
 Use the \fIeach()\fR function (see the \f(CWeach\fR entry in the \fIperlfunc\fR manpage) if you don't care
 whether it's sorted:
 .PP
@@ -1026,10 +962,8 @@ whether it's sorted:
 If you want it sorted, you'll have to use \fIforeach()\fR on the result of
 sorting the keys as shown in an earlier question.
 .Sh "What happens if I add or remove keys from a hash while iterating over it?"
-.IX Subsection "What happens if I add or remove keys from a hash while iterating over it?"
 Don't do that.
 .Sh "How do I look up a hash element by value?"
-.IX Subsection "How do I look up a hash element by value?"
 Create a reverse hash:
 .PP
 .Vb 2
@@ -1047,7 +981,6 @@ to use:
 If your hash could have repeated values, the methods above will only
 find one of the associated keys.   This may or may not worry you.
 .Sh "How can I know how many entries are in a hash?"
-.IX Subsection "How can I know how many entries are in a hash?"
 If you mean how many keys, then all you have to do is
 take the scalar sense of the \fIkeys()\fR function:
 .PP
@@ -1057,7 +990,6 @@ take the scalar sense of the \fIkeys()\fR function:
 In void context it just resets the iterator, which is faster
 for tied hashes.
 .Sh "How do I sort a hash (optionally by value instead of key)?"
-.IX Subsection "How do I sort a hash (optionally by value instead of key)?"
 Internally, hashes are stored in a way that prevents you from imposing
 an order on key-value pairs.  Instead, you have to sort a list of the
 keys or values:
@@ -1083,11 +1015,9 @@ the \fIperllocale\fR manpage).
 \&    } keys %hash;
 .Ve
 .Sh "How can I always keep my hash sorted?"
-.IX Subsection "How can I always keep my hash sorted?"
 You can look into using the DB_File module and \fItie()\fR using the
 \f(CW$DB_BTREE\fR hash bindings as documented in the section on \fIIn Memory Databases\fR in the \fIDB_File\fR manpage.
 .Sh "What's the difference between \*(M"delete\*(S" and \*(M"undef\*(S" with hashes?"
-.IX Subsection "What's the difference between \*(M"delete\*(S" and \*(M"undef\*(S" with hashes?"
 Hashes are pairs of scalars: the first is the key, the second is the
 value.  The key will be coerced to a string, although the value can be
 any kind of scalar: string, number, or reference.  If a key \f(CW$key\fR is
@@ -1172,7 +1102,6 @@ and these conditions now hold; changes in caps:
 .Ve
 See, the whole entry is gone!
 .Sh "Why don't my tied hashes make the defined/exists distinction?"
-.IX Subsection "Why don't my tied hashes make the defined/exists distinction?"
 They may or may not implement the \fI\s-1EXISTS\s0()\fR and \fI\s-1DEFINED\s0()\fR methods
 differently.  For example, there isn't the concept of undef with hashes
 that are tied to \s-1DBM\s0* files. This means the true/false tables above
@@ -1180,13 +1109,11 @@ will give different results when used on such a hash.  It also means
 that exists and defined do the same thing with a \s-1DBM\s0* file, and what
 they end up doing is not what they do with ordinary hashes.
 .Sh "How do I reset an \fIeach()\fR operation part-way through?"
-.IX Subsection "How do I reset an \fIeach()\fR operation part-way through?"
 Using \f(CWkeys %hash\fR in a scalar context returns the number of keys in
 the hash \fIand\fR resets the iterator associated with the hash.  You may
 need to do this if you use \f(CWlast\fR to exit a loop early so that when you
 re-enter it, the hash iterator has been reset.
 .Sh "How can I get the unique keys from two hashes?"
-.IX Subsection "How can I get the unique keys from two hashes?"
 First you extract the keys from the hashes into arrays, and then solve
 the uniquifying the array problem described above.  For example:
 .PP
@@ -1215,12 +1142,10 @@ Or if you really want to save space:
 \&    @uniq = keys %seen;
 .Ve
 .Sh "How can I store a multidimensional array in a \s-1DBM\s0 file?"
-.IX Subsection "How can I store a multidimensional array in a \s-1DBM\s0 file?"
 Either stringify the structure yourself (no fun), or else
 get the \s-1MLDBM\s0 (which uses Data::Dumper) module from \s-1CPAN\s0 and layer
 it on top of either DB_File or GDBM_File.
 .Sh "How can I make my hash remember the order I put elements into it?"
-.IX Subsection "How can I make my hash remember the order I put elements into it?"
 Use the Tie::IxHash from \s-1CPAN\s0.
 .PP
 .Vb 7
@@ -1233,7 +1158,6 @@ Use the Tie::IxHash from \s-1CPAN\s0.
 \&    # @keys = (0,1,2,3,...)
 .Ve
 .Sh "Why does passing a subroutine an undefined element in a hash create it?"
-.IX Subsection "Why does passing a subroutine an undefined element in a hash create it?"
 If you say something like:
 .PP
 .Vb 1
@@ -1250,18 +1174,14 @@ Normally, merely accessing a key's value for a nonexistent key does
 \fInot\fR cause that key to be forever there.  This is different than
 awk's behavior.
 .Sh "How can I make the Perl equivalent of a C structure/\*(C+ class/hash or array of hashes or arrays?"
-.IX Subsection "How can I make the Perl equivalent of a C structure/\*(C+ class/hash or array of hashes or arrays?"
 Use references (documented in the \fIperlref\fR manpage).  Examples of complex data
 structures are given in the \fIperldsc\fR manpage and the \fIperllol\fR manpage.  Examples of
 structures and object-oriented classes are in the \fIperltoot\fR manpage.
 .Sh "How can I use a reference as a hash key?"
-.IX Subsection "How can I use a reference as a hash key?"
 You can't do this directly, but you could use the standard Tie::Refhash
 module distributed with perl.
 .SH "Data: Misc"
-.IX Header "Data: Misc"
 .Sh "How do I handle binary data correctly?"
-.IX Subsection "How do I handle binary data correctly?"
 Perl is binary clean, so this shouldn't be a problem.  For example,
 this works fine (assuming the files are found):
 .PP
@@ -1278,7 +1198,6 @@ If you're concerned about 8-bit \s-1ASCII\s0 data, then see the \fIperllocale\fR
 If you want to deal with multibyte characters, however, there are
 some gotchas.  See the section on Regular Expressions.
 .Sh "How do I determine whether a scalar is a number/whole/integer/float?"
-.IX Subsection "How do I determine whether a scalar is a number/whole/integer/float?"
 Assuming that you don't care about \s-1IEEE\s0 notations like \*(L"NaN\*(R" or
 \*(L"Infinity\*(R", you probably just want to use a regular expression.
 .PP
@@ -1298,12 +1217,10 @@ instead.  The \s-1POSIX\s0 module (part of the standard Perl distribution)
 provides the \f(CWstrtol\fR and \f(CWstrtod\fR for converting strings to double
 and longs, respectively.
 .Sh "How do I keep persistent data across program calls?"
-.IX Subsection "How do I keep persistent data across program calls?"
 For some specific applications, you can use one of the \s-1DBM\s0 modules.
 See the \fIAnyDBM_File\fR manpage.  More generically, you should consult the
 FreezeThaw, Storable, or Class::Eroot modules from \s-1CPAN\s0.
 .Sh "How do I print out or copy a recursive data structure?"
-.IX Subsection "How do I print out or copy a recursive data structure?"
 The Data::Dumper module on \s-1CPAN\s0 is nice for printing out
 data structures, and FreezeThaw for copying them.  For example:
 .PP
@@ -1314,14 +1231,182 @@ data structures, and FreezeThaw for copying them.  For example:
 Where \f(CW$old\fR can be (a reference to) any kind of data structure you'd like.
 It will be deeply copied.
 .Sh "How do I define methods for every class/object?"
-.IX Subsection "How do I define methods for every class/object?"
 Use the \s-1UNIVERSAL\s0 class (see the \fI\s-1UNIVERSAL\s0\fR manpage).
 .Sh "How do I verify a credit card checksum?"
-.IX Subsection "How do I verify a credit card checksum?"
 Get the Business::CreditCard module from \s-1CPAN\s0.
 .SH "AUTHOR AND COPYRIGHT"
-.IX Header "AUTHOR AND COPYRIGHT"
 Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
 All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
 
 .rn }` ''
+.IX Title "PERLFAQ4 1"
+.IX Name "perlfaq4 - Data Manipulation ($Revision: 1.19 $, $Date: 1997/04/24 22:43:57 $)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "Data: Numbers"
+
+.IX Subsection "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?"
+
+.IX Subsection "Why isn't my octal data interpreted correctly?"
+
+.IX Subsection "Does perl have a round function?  What about \fIceil()\fR and \fIfloor()\fR? Trig functions?"
+
+.IX Subsection "How do I convert bits into ints?"
+
+.IX Subsection "How do I multiply matrices?"
+
+.IX Subsection "How do I perform an operation on a series of integers?"
+
+.IX Subsection "How can I output Roman numerals?"
+
+.IX Subsection "Why aren't my random numbers random?"
+
+.IX Header "Data: Dates"
+
+.IX Subsection "How do I find the week-of-the-year/day-of-the-year?"
+
+.IX Subsection "How can I compare two date strings?"
+
+.IX Subsection "How can I take a string and turn it into epoch seconds?"
+
+.IX Subsection "How can I find the Julian Day?"
+
+.IX Subsection "Does Perl have a year 2000 problem?"
+
+.IX Header "Data: Strings"
+
+.IX Subsection "How do I validate input?"
+
+.IX Subsection "How do I unescape a string?"
+
+.IX Subsection "How do I remove consecutive pairs of characters?"
+
+.IX Subsection "How do I expand function calls in a string?"
+
+.IX Subsection "How do I find matching/nesting anything?"
+
+.IX Subsection "How do I reverse a string?"
+
+.IX Subsection "How do I expand tabs in a string?"
+
+.IX Subsection "How do I reformat a paragraph?"
+
+.IX Subsection "How can I access/change the first N letters of a string?"
+
+.IX Subsection "How do I change the Nth occurrence of something?"
+
+.IX Subsection "How can I count the number of occurrences of a substring within a string?"
+
+.IX Subsection "How do I capitalize all the words on one line?"
+
+.IX Subsection "How can I split a [character] delimited string except when inside [character]? (Comma-separated files)"
+
+.IX Subsection "How do I strip blank space from the beginning/end of a string?"
+
+.IX Subsection "How do I extract selected columns from a string?"
+
+.IX Subsection "How do I find the soundex value of a string?"
+
+.IX Subsection "How can I expand variables in text strings?"
+
+.IX Subsection "What's wrong with always quoting \*(M"$vars\*(S"?"
+
+.IX Subsection "Why don't my <<\s-1HERE\s0 documents work?"
+
+.IX Item "1. There must be no space after the << part."
+
+.IX Item "2. There (probably) should be a semicolon at the end."
+
+.IX Item "3. You can't (easily) have any space in front of the tag."
+
+.IX Header "Data: Arrays"
+
+.IX Subsection "What is the difference between \f(CW$array\fR[1] and \f(CW@array\fR[1]?"
+
+.IX Subsection "How can I extract just the unique elements of an array?"
+
+.IX Item "a) If @in is sorted, and you want @out to be sorted:"
+
+.IX Item "b) If you don't know whether @in is sorted:"
+
+.IX Item "c) Like (b), but @in contains only small integers:"
+
+.IX Item "d) A way to do (b) without any loops or greps:"
+
+.IX Item "e) Like (d), but @in contains only small positive integers:"
+
+.IX Subsection "How can I tell whether an array contains a certain element?"
+
+.IX Subsection "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?"
+
+.IX Subsection "How do I find the first array element for which a condition is true?"
+
+.IX Subsection "How do I handle linked lists?"
+
+.IX Subsection "How do I handle circular lists?"
+
+.IX Subsection "How do I shuffle an array randomly?"
+
+.IX Subsection "How do I process/modify each element of an array?"
+
+.IX Subsection "How do I select a random element from an array?"
+
+.IX Subsection "How do I permute N elements of a list?"
+
+.IX Subsection "How do I sort an array by (anything)?"
+
+.IX Subsection "How do I manipulate arrays of bits?"
+
+.IX Subsection "Why does \fIdefined()\fR return true on empty arrays and hashes?"
+
+.IX Header "Data: Hashes (Associative Arrays)"
+
+.IX Subsection "How do I process an entire hash?"
+
+.IX Subsection "What happens if I add or remove keys from a hash while iterating over it?"
+
+.IX Subsection "How do I look up a hash element by value?"
+
+.IX Subsection "How can I know how many entries are in a hash?"
+
+.IX Subsection "How do I sort a hash (optionally by value instead of key)?"
+
+.IX Subsection "How can I always keep my hash sorted?"
+
+.IX Subsection "What's the difference between \*(M"delete\*(S" and \*(M"undef\*(S" with hashes?"
+
+.IX Subsection "Why don't my tied hashes make the defined/exists distinction?"
+
+.IX Subsection "How do I reset an \fIeach()\fR operation part-way through?"
+
+.IX Subsection "How can I get the unique keys from two hashes?"
+
+.IX Subsection "How can I store a multidimensional array in a \s-1DBM\s0 file?"
+
+.IX Subsection "How can I make my hash remember the order I put elements into it?"
+
+.IX Subsection "Why does passing a subroutine an undefined element in a hash create it?"
+
+.IX Subsection "How can I make the Perl equivalent of a C structure/\*(C+ class/hash or array of hashes or arrays?"
+
+.IX Subsection "How can I use a reference as a hash key?"
+
+.IX Header "Data: Misc"
+
+.IX Subsection "How do I handle binary data correctly?"
+
+.IX Subsection "How do I determine whether a scalar is a number/whole/integer/float?"
+
+.IX Subsection "How do I keep persistent data across program calls?"
+
+.IX Subsection "How do I print out or copy a recursive data structure?"
+
+.IX Subsection "How do I define methods for every class/object?"
+
+.IX Subsection "How do I verify a credit card checksum?"
+
+.IX Header "AUTHOR AND COPYRIGHT"
+

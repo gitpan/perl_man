@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLMOD 1 "perl 5.004, patch 01" "25/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLMOD 1"
+.TH PERLMOD 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perlmod - Perl modules (packages and symbol tables)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,12 +188,9 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perlmod \- Perl modules (packages and symbol tables)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 .Sh "Packages"
-.IX Subsection "Packages"
 Perl provides a mechanism for alternative namespaces to protect packages
 from stomping on each other's variables.  In fact, apart from certain
 magical variables, there's really no such thing as a global variable
@@ -259,7 +254,6 @@ The special symbol \f(CW__PACKAGE__\fR contains the current package, but cannot
 See the \fIperlsub\fR manpage for other scoping issues related to \fImy()\fR and \fIlocal()\fR,
 and the \fIperlref\fR manpage regarding closures.
 .Sh "Symbol Tables"
-.IX Subsection "Symbol Tables"
 The symbol table for a package happens to be stored in the hash of that
 name with two colons appended.  The main symbol table's name is thus
 \f(CW%main::\fR, or \f(CW%::\fR for short.  Likewise symbol table for the nested
@@ -384,7 +378,6 @@ This prints
 The *foo{\s-1THING\s0} notation can also be used to obtain references to the
 individual elements of *foo, see the \fIperlref\fR manpage.
 .Sh "Package Constructors and Destructors"
-.IX Subsection "Package Constructors and Destructors"
 There are two special subroutine definitions that function as package
 constructors and destructors.  These are the \f(CWBEGIN\fR and \f(CWEND\fR
 routines.  The \f(CWsub\fR is optional for these routines.
@@ -413,7 +406,6 @@ running something via \f(CWsystem\fR).
 Note that when you use the \fB\-n\fR and \fB\-p\fR switches to Perl, \f(CWBEGIN\fR
 and \f(CWEND\fR work just as they do in \fBawk\fR, as a degenerate case.
 .Sh "Perl Classes"
-.IX Subsection "Perl Classes"
 There is no special class syntax in Perl, but a package may function
 as a class if it provides subroutines that function as methods.  Such a
 package may also derive some of its methods from another class package
@@ -421,7 +413,6 @@ by listing the other package name in its \f(CW@ISA\fR array.
 .PP
 For more on this, see the \fIperltoot\fR manpage and the \fIperlobj\fR manpage.
 .Sh "Perl Modules"
-.IX Subsection "Perl Modules"
 A module is just a package that is defined in a library file of
 the same name, and is designed to be reusable.  It may do this by
 providing a mechanism for exporting some of its symbols into the symbol
@@ -588,7 +579,6 @@ say just \f(CWuse POSIX\fR to get it all.
 For more information on writing extension modules, see the \fIperlxstut\fR manpage
 and the \fIperlguts\fR manpage.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 See the \fIperlmodlib\fR manpage for general style issues related to building Perl
 modules and classes as well as descriptions of the standard library and
 CPAN, the \fIExporter\fR manpage for how Perl's standard import/export mechanism works,
@@ -597,3 +587,22 @@ for a hard-core reference document on objects, and the \fIperlsub\fR manpage for
 explanation of functions and scoping.
 
 .rn }` ''
+.IX Title "PERLMOD 1"
+.IX Name "perlmod - Perl modules (packages and symbol tables)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Subsection "Packages"
+
+.IX Subsection "Symbol Tables"
+
+.IX Subsection "Package Constructors and Destructors"
+
+.IX Subsection "Perl Classes"
+
+.IX Subsection "Perl Modules"
+
+.IX Header "SEE ALSO"
+

@@ -93,10 +93,8 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOCALE 1 "perl 5.004, patch 01" "4/Apr/97" "Perl Programmers Reference Guide"
-.IX Title "PERLLOCALE 1"
+.TH PERLLOCALE 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
 .UC
-.IX Name "perllocale - Perl locale handling (internationalization and localization)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -190,10 +188,8 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-.IX Header "NAME"
 perllocale \- Perl locale handling (internationalization and localization)
 .SH "DESCRIPTION"
-.IX Header "DESCRIPTION"
 Perl supports language-specific notions of data such as \*(L"is this a
 letter\*(R", \*(L"what is the uppercase equivalent of this letter\*(R", and \*(L"which
 of these letters comes first\*(R".  These are important issues, especially
@@ -216,17 +212,14 @@ application specifically requests it \- see the section on \fIBackward compatibi
 The one exception is that \fIwrite()\fR now \fBalways\fR uses the current locale
 \- see the section on \fINOTES\fR.
 .SH "PREPARING TO USE LOCALES"
-.IX Header "PREPARING TO USE LOCALES"
 If Perl applications are to be able to understand and present your data
 correctly according a locale of your choice, \fBall\fR of the following
 must be true:
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBYour operating system must support the locale system\fR.  If it does,
 you should find that the \fIsetlocale()\fR function is a documented part of
 its C library.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBDefinitions for the locales which you use must be installed\fR.  You, or
 your system administrator, must make sure that this is the case. The
 available locales, the location in which they are kept, and the manner
@@ -238,7 +231,6 @@ and add arbitrary locales.  (You may have to ask your supplier to
 provide canned locales which are not delivered with your operating
 system.)  Read your system documentation for further illumination.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBPerl must believe that the locale system is supported\fR.  If it does,
 \f(CWperl -V:d_setlocale\fR will say that the value for \f(CWd_setlocale\fR is
 \f(CWdefine\fR.
@@ -248,22 +240,17 @@ according to a particular locale, the application code should include
 the \f(CWuse locale\fR pragma (see the section on \fIThe use locale pragma\fR) where
 appropriate, and \fBat least one\fR of the following must be true:
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBThe locale-determining environment variables (see the section on \fI\s-1ENVIRONMENT\s0\fR)
 must be correctly set up\fR, either by yourself, or by the person who set
 up your system account, at the time the application is started.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBThe application must set its own locale\fR using the method described in
 the section on \fIThe setlocale function\fR.
 .SH "USING LOCALES"
-.IX Header "USING LOCALES"
 .Sh "The use locale pragma"
-.IX Subsection "The use locale pragma"
 By default, Perl ignores the current locale.  The \f(CWuse locale\fR
 pragma tells Perl to use the current locale for some operations:
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBThe comparison operators\fR (\f(CWlt\fR, \f(CWle\fR, \f(CWcmp\fR, \f(CWge\fR, and \f(CWgt\fR) and
 the \s-1POSIX\s0 string collation functions \fIstrcoll()\fR and \fIstrxfrm()\fR use
 \f(CWLC_COLLATE\fR.  \fIsort()\fR is also affected if it is used without an
@@ -279,15 +266,12 @@ two strings \- which \f(CWeq\fR and \f(CWcmp\fR may consider different \- are eq
 as far as collation in the locale is concerned, see the discussion in
 the section on \fICategory \s-1LC_COLLATE\s0: Collation\fR.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBRegular expressions and case-modification functions\fR (\fIuc()\fR, \fIlc()\fR,
 \fIucfirst()\fR, and \fIlcfirst()\fR) use \f(CWLC_CTYPE\fR
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBThe formatting functions\fR (\fIprintf()\fR, \fIsprintf()\fR and \fIwrite()\fR) use
 \f(CWLC_NUMERIC\fR
 .Ip "\(bu" 4
-.IX Item "\(bu"
 \fBThe \s-1POSIX\s0 date formatting function\fR (\fIstrftime()\fR) uses \f(CWLC_TIME\fR.
 .PP
 \f(CWLC_COLLATE\fR, \f(CWLC_CTYPE\fR, and so on, are discussed further in the section on \fI\s-1LOCALE\s0
@@ -300,7 +284,6 @@ Note that the string result of any operation that uses locale
 information is tainted, as it is possible for a locale to be
 untrustworthy.  See the section on \fI\s-1SECURITY\s0\fR.
 .Sh "The setlocale function"
-.IX Subsection "The setlocale function"
 You can switch locales as often as you wish at run time with the
 \fI\s-1POSIX::\s0setlocale()\fR function:
 .PP
@@ -408,7 +391,6 @@ is (American) English and its character codeset \s-1ASCII\s0.
 \s-1POSIX\s0\-conformant), so use \*(L"C\*(R" when you need explicitly to specify this
 default locale.
 .Sh "The localeconv function"
-.IX Subsection "The localeconv function"
 The \fI\s-1POSIX::\s0localeconv()\fR function allows you to get particulars of the
 locale-dependent numeric formatting information specified by the current
 \f(CWLC_NUMERIC\fR and \f(CWLC_MONETARY\fR locales.  (If you just want the name of
@@ -466,13 +448,11 @@ parameters as integers formatted correctly in the current locale:
 \&        print "\en";
 .Ve
 .SH "LOCALE CATEGORIES"
-.IX Header "LOCALE CATEGORIES"
 The subsections which follow describe basic locale categories.  As well
 as these, there are some combination categories which allow the
 manipulation of more than one basic category at a time.  See
 the section on \fIENVIRONMENT\fR for a discussion of these.
 .Sh "Category \s-1LC_COLLATE\s0: Collation"
-.IX Subsection "Category \s-1LC_COLLATE\s0: Collation"
 When in the scope of \f(CWuse locale\fR, Perl looks to the \f(CWLC_COLLATE\fR
 environment variable to determine the application's notions on the
 collation (ordering) of characters.  ('b\*(R' follows \*(L'a\*(R' in Latin
@@ -546,7 +526,6 @@ Note: \f(CWuse locale\fR isn't shown in some of these examples, as it isn't
 needed: \fIstrcoll()\fR and \fIstrxfrm()\fR exist only to generate locale-dependent
 results, and so always obey the current \f(CWLC_COLLATE\fR locale.
 .Sh "Category \s-1LC_CTYPE\s0: Character Types"
-.IX Subsection "Category \s-1LC_CTYPE\s0: Character Types"
 When in the scope of \f(CWuse locale\fR, Perl obeys the \f(CWLC_CTYPE\fR locale
 setting.  This controls the application's notion of which characters are
 alphabetic.  This affects Perl's \f(CW\ew\fR regular expression metanotation,
@@ -574,7 +553,6 @@ your application.  For strict matching of (unaccented) letters and
 digits \- for example, in command strings \- locale-aware applications
 should use \f(CW\ew\fR inside a \f(CWno locale\fR block.  See the section on \fI\s-1SECURITY\s0\fR.
 .Sh "Category \s-1LC_NUMERIC\s0: Numeric Formatting"
-.IX Subsection "Category \s-1LC_NUMERIC\s0: Numeric Formatting"
 When in the scope of \f(CWuse locale\fR, Perl obeys the \f(CWLC_NUMERIC\fR
 locale information, which controls application's idea of how numbers
 should be formatted for human readability by the \fIprintf()\fR, \fIsprintf()\fR,
@@ -612,7 +590,6 @@ between numeric and string formats:
 \&            if $n == (strtod("2,5"))[0]; # Locale-dependent conversion
 .Ve
 .Sh "Category \s-1LC_MONETARY\s0: Formatting of monetary amounts"
-.IX Subsection "Category \s-1LC_MONETARY\s0: Formatting of monetary amounts"
 The C standard defines the \f(CWLC_MONETARY\fR category, but no function that
 is affected by its contents.  (Those with experience of standards
 committees will recognize that the working group decided to punt on the
@@ -623,7 +600,6 @@ application's own formatting of currency amounts.  However, you may well
 find that the information, though voluminous and complex, does not quite
 meet your requirements: currency formatting is a hard nut to crack.
 .Sh "\s-1LC_TIME\s0"
-.IX Subsection "\s-1LC_TIME\s0"
 The output produced by \fI\s-1POSIX::\s0strftime()\fR, which builds a formatted
 human-readable date/time string, is affected by the current \f(CWLC_TIME\fR
 locale.  Thus, in a French locale, the output produced by the \f(CW%B\fR
@@ -642,13 +618,11 @@ Note: \f(CWuse locale\fR isn't needed in this example: as a function which
 exists only to generate locale-dependent results, \fIstrftime()\fR always
 obeys the current \f(CWLC_TIME\fR locale.
 .Sh "Other categories"
-.IX Subsection "Other categories"
 The remaining locale category, \f(CWLC_MESSAGES\fR (possibly supplemented by
 others in particular implementations) is not currently used by Perl \-
 except possibly to affect the behavior of library functions called by
 extensions which are not part of the standard Perl distribution.
 .SH "SECURITY"
-.IX Header "SECURITY"
 While the main discussion of Perl security issues can be found in
 the \fIperlsec\fR manpage, a discussion of Perl's locale handling would be incomplete
 if it did not draw your attention to locale-dependent security issues.
@@ -657,34 +631,28 @@ build their own locales \- are untrustworthy.  A malicious (or just plain
 broken) locale can make a locale-aware application give unexpected
 results.  Here are a few possibilities:
 .Ip "\(bu" 4
-.IX Item "\(bu"
 Regular expression checks for safe file names or mail addresses using
 \f(CW\ew\fR may be spoofed by an \f(CWLC_CTYPE\fR locale which claims that
 characters such as \*(L">\*(R" and \*(L"|\*(R" are alphanumeric.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 String interpolation with case-mapping, as in, say, \f(CW$dest =
 "C:\eU$name.$ext"\fR, may produce dangerous results if a bogus \s-1LC_CTYPE\s0
 case-mapping table is in effect.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 If the decimal point character in the \f(CWLC_NUMERIC\fR locale is
 surreptitiously changed from a dot to a comma, \f(CWsprintf("%g",
 0.123456e3)\fR produces a string result of \*(L"123,456\*(R". Many people would
 interpret this as one hundred and twenty-three thousand, four hundred
 and fifty-six.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 A sneaky \f(CWLC_COLLATE\fR locale could result in the names of students with
 \*(L"D\*(R" grades appearing ahead of those with \*(L"A"s.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 An application which takes the trouble to use the information in
 \f(CWLC_MONETARY\fR may format debits as if they were credits and vice versa
 if that locale has been subverted.  Or it make may make payments in \s-1US\s0
 dollars instead of Hong Kong dollars.
 .Ip "\(bu" 4
-.IX Item "\(bu"
 The date and day names in dates formatted by \fIstrftime()\fR could be
 manipulated to advantage by a malicious user able to subvert the
 \f(CWLC_DATE\fR locale.  ("Look \- it says I wasn't in the building on
@@ -704,14 +672,11 @@ which may be untrustworthy in consequence.  Here is a summary of the
 tainting behavior of operators and functions which may be affected by
 the locale:
 .Ip "\fBComparison operators\fR (\f(CWlt\fR, \f(CWle\fR, \f(CWge\fR, \f(CWgt\fR and \f(CWcmp\fR):" 4
-.IX Item "\fBComparison operators\fR (\f(CWlt\fR, \f(CWle\fR, \f(CWge\fR, \f(CWgt\fR and \f(CWcmp\fR):"
 Scalar true/false (or less/equal/greater) result is never tainted.
 .Ip "\fBCase-mapping interpolation\fR (with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or <\eU>)" 4
-.IX Item "\fBCase-mapping interpolation\fR (with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or <\eU>)"
 Result string containing interpolated material is tainted if
 \f(CWuse locale\fR is in effect.
 .Ip "\fBMatching operator\fR (\f(CWm//\fR):" 4
-.IX Item "\fBMatching operator\fR (\f(CWm//\fR):"
 Scalar true/false result never tainted.
 .Sp
 Subpatterns, either delivered as an array-context result, or as \f(CW$1\fR etc.
@@ -723,26 +688,20 @@ expression contains \f(CW\ew\fR (to match an alphanumeric character), \f(CW\eW\f
 \f(CWuse locale\fR is in effect and the regular expression contains \f(CW\ew\fR,
 \f(CW\eW\fR, \f(CW\es\fR, or \f(CW\eS\fR.
 .Ip "\fBSubstitution operator\fR (\f(CWs///\fR):" 4
-.IX Item "\fBSubstitution operator\fR (\f(CWs///\fR):"
 Has the same behavior as the match operator.  Also, the left
 operand of \f(CW=~\fR becomes tainted when \f(CWuse locale\fR in effect,
 if it is modified as a result of a substitution based on a regular
 expression match involving \f(CW\ew\fR, \f(CW\eW\fR, \f(CW\es\fR, or \f(CW\eS\fR; or of
 case-mapping with \f(CW\el\fR, \f(CW\eL\fR,\f(CW\eu\fR or <\eU>.
 .Ip "\fBIn-memory formatting function\fR (sprintf()):" 4
-.IX Item "\fBIn-memory formatting function\fR (sprintf()):"
 Result is tainted if \*(L"use locale\*(R" is in effect.
 .Ip "\fBOutput formatting functions\fR (printf() and write()):" 4
-.IX Item "\fBOutput formatting functions\fR (printf() and write()):"
 Success/failure result is never tainted.
 .Ip "\fBCase-mapping functions\fR (lc(), lcfirst(), uc(), ucfirst()):" 4
-.IX Item "\fBCase-mapping functions\fR (lc(), lcfirst(), uc(), ucfirst()):"
 Results are tainted if \f(CWuse locale\fR is in effect.
 .Ip "\fB\s-1POSIX\s0 locale-dependent functions\fR (localeconv(), strcoll(), strftime(), strxfrm()):" 4
-.IX Item "\fB\s-1POSIX\s0 locale-dependent functions\fR (localeconv(), strcoll(), strftime(), strxfrm()):"
 Results are never tainted.
 .Ip "\fB\s-1POSIX\s0 character class tests\fR (isalnum(), isalpha(), isdigit(), isgraph(), islower(), isprint(), ispunct(), isspace(), isupper(), isxdigit()):" 4
-.IX Item "\fB\s-1POSIX\s0 character class tests\fR (isalnum(), isalpha(), isdigit(), isgraph(), islower(), isprint(), ispunct(), isspace(), isupper(), isxdigit()):"
 True/false results are never tainted.
 .PP
 Three examples illustrate locale-dependent tainting.
@@ -797,9 +756,7 @@ Compare this with a very similar program which is locale-aware:
 This third program fails to run because $& is tainted: it is the result
 of a match involving \f(CW\ew\fR when \f(CWuse locale\fR is in effect.
 .SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
 .Ip "\s-1PERL_BADLANG\s0" 12
-.IX Item "\s-1PERL_BADLANG\s0"
 A string that can suppress Perl's warning about failed locale settings
 at startup.  Failure can occur if the locale support in the operating
 system is lacking (broken) is some way \- or if you mistyped the name of
@@ -815,43 +772,34 @@ The following environment variables are not specific to Perl: They are
 part of the standardized (\s-1ISO\s0 C, \s-1XPG4\s0, \s-1POSIX\s0 1.c) \fIsetlocale()\fR method
 for controlling an application's opinion on data.
 .Ip "\s-1LC_ALL\s0" 12
-.IX Item "\s-1LC_ALL\s0"
 \f(CWLC_ALL\fR is the \*(L"override-all\*(R" locale environment variable. If it is
 set, it overrides all the rest of the locale environment variables.
 .Ip "\s-1LC_CTYPE\s0" 12
-.IX Item "\s-1LC_CTYPE\s0"
 In the absence of \f(CWLC_ALL\fR, \f(CWLC_CTYPE\fR chooses the character type
 locale.  In the absence of both \f(CWLC_ALL\fR and \f(CWLC_CTYPE\fR, \f(CWLANG\fR
 chooses the character type locale.
 .Ip "\s-1LC_COLLATE\s0" 12
-.IX Item "\s-1LC_COLLATE\s0"
 In the absence of \f(CWLC_ALL\fR, \f(CWLC_COLLATE\fR chooses the collation
 (sorting) locale.  In the absence of both \f(CWLC_ALL\fR and \f(CWLC_COLLATE\fR,
 \f(CWLANG\fR chooses the collation locale.
 .Ip "\s-1LC_MONETARY\s0" 12
-.IX Item "\s-1LC_MONETARY\s0"
 In the absence of \f(CWLC_ALL\fR, \f(CWLC_MONETARY\fR chooses the monetary
 formatting locale.  In the absence of both \f(CWLC_ALL\fR and \f(CWLC_MONETARY\fR,
 \f(CWLANG\fR chooses the monetary formatting locale.
 .Ip "\s-1LC_NUMERIC\s0" 12
-.IX Item "\s-1LC_NUMERIC\s0"
 In the absence of \f(CWLC_ALL\fR, \f(CWLC_NUMERIC\fR chooses the numeric format
 locale.  In the absence of both \f(CWLC_ALL\fR and \f(CWLC_NUMERIC\fR, \f(CWLANG\fR
 chooses the numeric format.
 .Ip "\s-1LC_TIME\s0" 12
-.IX Item "\s-1LC_TIME\s0"
 In the absence of \f(CWLC_ALL\fR, \f(CWLC_TIME\fR chooses the date and time
 formatting locale.  In the absence of both \f(CWLC_ALL\fR and \f(CWLC_TIME\fR,
 \f(CWLANG\fR chooses the date and time formatting locale.
 .Ip "\s-1LANG\s0" 12
-.IX Item "\s-1LANG\s0"
 \f(CWLANG\fR is the \*(L"catch-all\*(R" locale environment variable. If it is set, it
 is used as the last resort after the overall \f(CWLC_ALL\fR and the
 category-specific \f(CWLC_...\fR.
 .SH "NOTES"
-.IX Header "NOTES"
 .Sh "Backward compatibility"
-.IX Subsection "Backward compatibility"
 Versions of Perl prior to 5.004 \fBmostly\fR ignored locale information,
 generally behaving as if something similar to the \f(CW"C"\fR locale (see
 the section on \fIThe setlocale function\fR) was always in force, even if the program
@@ -867,7 +815,6 @@ are the letters according to the locale environment variables.
 The problem was that the user had no control over the feature:
 if the C library supported locales, Perl used them.
 .Sh "I18N:Collate obsolete"
-.IX Subsection "I18N:Collate obsolete"
 In versions of Perl prior to 5.004 per-locale collation was possible
 using the \f(CWI18N::Collate\fR library module.  This module is now mildly
 obsolete and should be avoided in new applications.  The \f(CWLC_COLLATE\fR
@@ -876,7 +823,6 @@ use locale-specific scalar data completely normally with \f(CWuse locale\fR,
 so there is no longer any need to juggle with the scalar references of
 \f(CWI18N::Collate\fR.
 .Sh "Sort speed and memory use impacts"
-.IX Subsection "Sort speed and memory use impacts"
 Comparing and sorting by locale is usually slower than the default
 sorting; slow-downs of two to four times have been observed.  It will
 also consume more memory: once a Perl scalar variable has participated
@@ -886,7 +832,6 @@ exact multiplier depends on the string's contents, the operating system
 and the locale.) These downsides are dictated more by the operating
 system's implementation of the locale system than by Perl.
 .Sh "\fIwrite()\fR and \s-1LC_NUMERIC\s0"
-.IX Subsection "\fIwrite()\fR and \s-1LC_NUMERIC\s0"
 Formats are the only part of Perl which unconditionally use information
 from a program's locale; if a program's environment specifies an
 \s-1LC_NUMERIC\s0 locale, it is always used to specify the decimal point
@@ -895,7 +840,6 @@ character in formatted output.  Formatted output cannot be controlled by
 program, and, for historical reasons, formats exist outside that block
 structure.
 .Sh "Freely available locale definitions"
-.IX Subsection "Freely available locale definitions"
 There is a large collection of locale definitions at
 \f(CWftp://dkuug.dk/i18n/WG15-collection\fR.  You should be aware that it is
 unsupported, and is not claimed to be fit for any purpose.  If your
@@ -903,13 +847,11 @@ system allows the installation of arbitrary locales, you may find the
 definitions useful as they are, or as a basis for the development of
 your own locales.
 .Sh "I18n and l10n"
-.IX Subsection "I18n and l10n"
 \*(L"Internationalization\*(R" is often abbreviated as \fBi18n\fR because its first
 and last letters are separated by eighteen others.  (You may guess why
 the internalin ... internaliti ... i18n tends to get abbreviated.)  In
 the same way, \*(L"localization\*(R" is often abbreviated to \fBl10n\fR.
 .Sh "An imperfect standard"
-.IX Subsection "An imperfect standard"
 Internationalization, as defined in the C and \s-1POSIX\s0 standards, can be
 criticized as incomplete, ungainly, and having too large a granularity.
 (Locales apply to a whole process, when it would arguably be more useful
@@ -919,9 +861,7 @@ nations, when we all know that the world can equally well be divided
 into bankers, bikers, gamers, and so on.  But, for now, it's the only
 standard we've got.  This may be construed as a bug.
 .SH "BUGS"
-.IX Header "BUGS"
 .Sh "Broken systems"
-.IX Subsection "Broken systems"
 In certain system environments the operating system's locale support
 is broken and cannot be fixed or used by Perl.  Such deficiencies can
 and will result in mysterious hangs and/or Perl core dumps when the
@@ -931,7 +871,6 @@ complain to your vendor: maybe some bug fixes exist for these problems
 in your operating system.  Sometimes such bug fixes are called an
 operating system upgrade.
 .SH "SEE ALSO"
-.IX Header "SEE ALSO"
 the \f(CWisalnum\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWisalpha\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWisdigit\fR entry in the \fIPOSIX (3)\fR manpage,
 the \f(CWisgraph\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWislower\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWisprint\fR entry in the \fIPOSIX (3)\fR manpage,
 the \f(CWispunct\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWisspace\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWisupper\fR entry in the \fIPOSIX (3)\fR manpage,
@@ -939,10 +878,132 @@ the \f(CWisxdigit\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWlocaleconv\f
 the \f(CWstrcoll\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWstrftime\fR entry in the \fIPOSIX (3)\fR manpage, the \f(CWstrtod\fR entry in the \fIPOSIX (3)\fR manpage,
 the \f(CWstrxfrm\fR entry in the \fIPOSIX (3)\fR manpage
 .SH "HISTORY"
-.IX Header "HISTORY"
 Jarkko Hietaniemi's original \fIperli18n.pod\fR heavily hacked by Dominic
 Dunlop, assisted by the perl5-porters.
 .PP
 Last update: Wed Jan 22 11:04:58 EST 1997
 
 .rn }` ''
+.IX Title "PERLLOCALE 1"
+.IX Name "perllocale - Perl locale handling (internationalization and localization)"
+
+.IX Header "NAME"
+
+.IX Header "DESCRIPTION"
+
+.IX Header "PREPARING TO USE LOCALES"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Header "USING LOCALES"
+
+.IX Subsection "The use locale pragma"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Subsection "The setlocale function"
+
+.IX Subsection "The localeconv function"
+
+.IX Header "LOCALE CATEGORIES"
+
+.IX Subsection "Category \s-1LC_COLLATE\s0: Collation"
+
+.IX Subsection "Category \s-1LC_CTYPE\s0: Character Types"
+
+.IX Subsection "Category \s-1LC_NUMERIC\s0: Numeric Formatting"
+
+.IX Subsection "Category \s-1LC_MONETARY\s0: Formatting of monetary amounts"
+
+.IX Subsection "\s-1LC_TIME\s0"
+
+.IX Subsection "Other categories"
+
+.IX Header "SECURITY"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\(bu"
+
+.IX Item "\fBComparison operators\fR (\f(CWlt\fR, \f(CWle\fR, \f(CWge\fR, \f(CWgt\fR and \f(CWcmp\fR):"
+
+.IX Item "\fBCase-mapping interpolation\fR (with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or <\eU>)"
+
+.IX Item "\fBMatching operator\fR (\f(CWm//\fR):"
+
+.IX Item "\fBSubstitution operator\fR (\f(CWs///\fR):"
+
+.IX Item "\fBIn-memory formatting function\fR (sprintf()):"
+
+.IX Item "\fBOutput formatting functions\fR (printf() and write()):"
+
+.IX Item "\fBCase-mapping functions\fR (lc(), lcfirst(), uc(), ucfirst()):"
+
+.IX Item "\fB\s-1POSIX\s0 locale-dependent functions\fR (localeconv(), strcoll(), strftime(), strxfrm()):"
+
+.IX Item "\fB\s-1POSIX\s0 character class tests\fR (isalnum(), isalpha(), isdigit(), isgraph(), islower(), isprint(), ispunct(), isspace(), isupper(), isxdigit()):"
+
+.IX Header "ENVIRONMENT"
+
+.IX Item "\s-1PERL_BADLANG\s0"
+
+.IX Item "\s-1LC_ALL\s0"
+
+.IX Item "\s-1LC_CTYPE\s0"
+
+.IX Item "\s-1LC_COLLATE\s0"
+
+.IX Item "\s-1LC_MONETARY\s0"
+
+.IX Item "\s-1LC_NUMERIC\s0"
+
+.IX Item "\s-1LC_TIME\s0"
+
+.IX Item "\s-1LANG\s0"
+
+.IX Header "NOTES"
+
+.IX Subsection "Backward compatibility"
+
+.IX Subsection "I18N:Collate obsolete"
+
+.IX Subsection "Sort speed and memory use impacts"
+
+.IX Subsection "\fIwrite()\fR and \s-1LC_NUMERIC\s0"
+
+.IX Subsection "Freely available locale definitions"
+
+.IX Subsection "I18n and l10n"
+
+.IX Subsection "An imperfect standard"
+
+.IX Header "BUGS"
+
+.IX Subsection "Broken systems"
+
+.IX Header "SEE ALSO"
+
+.IX Header "HISTORY"
+
