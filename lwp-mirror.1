@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH LWP-MIRROR 1 "perl 5.003, patch 93" "6/Dec/96" "User Contributed Perl Documentation"
+.IX Title "LWP-MIRROR 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "lwp-mirror - Simple mirror utility for WWW"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,34 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+lwp-mirror \- Simple mirror utility for WWW
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+.PP
+.Vb 1
+\& lwp-mirror [-v] [-t timeout] <url> <local file>
+.Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+This program can be used to mirror a document from a WWW server.  The
+document is only transfered if the remote copy is newer than the local
+copy.  If the local copy is newer nothing happens.
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
-.SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
-S2p uses no environment variables.
-.SH "AUTHOR"
-.IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
-.SH "FILES"
-.IX Header "FILES"
+Use the \f(CW-v\fR option to print the version number of this program.
+.PP
+The timeout value specified with the \f(CW-t\fR option.  The timeout value
+is the time that the program will wait for response from the remote
+server before it fails.  The default unit for the timeout value is
+seconds.  You might append \*(L"m\*(R" or \*(L"h\*(R" to the timeout value to make it
+minutes or hours, repectively.
+.PP
+Because this program is implemented using the LWP library, it only
+supports the protocols that LWP supports.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-.PP
-.Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
-.Ve
-.SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
-.SH "BUGS"
-.IX Header "BUGS"
+the \fIlwp-request\fR manpage, the \fILWP\fR manpage
+.SH "AUTHOR"
+.IX Header "AUTHOR"
+Gisle Aas <aas@a.sn.no>
 
 .rn }` ''

@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERL 1 "perl 5.003, patch 05" "19/Aug/96" "Perl Programmers Reference Guide"
+.TH PERL 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERL 1"
 .UC
 .IX Name "perl - Practical Extraction and Report Language"
@@ -190,9 +190,9 @@ of sections:
 .PP
 .Vb 2
 \&    perl        Perl overview (this section)
-\&    perltoc     Perl documentation table of contents
+\&    perldelta   Perl changes since previous version
 .Ve
-.Vb 10
+.Vb 11
 \&    perldata    Perl data structures
 \&    perlsyn     Perl syntax
 \&    perlop      Perl operators and precedence
@@ -203,11 +203,13 @@ of sections:
 \&    perlsub     Perl subroutines
 \&    perlmod     Perl modules
 \&    perlform    Perl formats
+\&    perllocale  Perl locale support
 .Ve
-.Vb 7
+.Vb 8
 \&    perlref     Perl references 
 \&    perldsc     Perl data structures intro
 \&    perllol     Perl data structures: lists of lists
+\&    perltoot    Perl OO tutorial
 \&    perlobj     Perl objects
 \&    perltie     Perl objects hidden behind simple variables
 \&    perlbot     Perl OO tricks and examples
@@ -245,7 +247,7 @@ in the appropriate start-up files.  To find out where these are, type:
 \&    perl -V:man.dir
 .Ve
 If the directories were \fI/usr/local/man/man1\fR and \fI/usr/local/man/man3\fR,
-you would only need to add \fI/usr/local/man\fR to your MANPATH.  If 
+you would need to add only \fI/usr/local/man\fR to your MANPATH.  If 
 they are different, you'll have to add both stems.
 .PP
 If that doesn't work for some reason, you can still use the
@@ -257,33 +259,35 @@ sure where you should look for help, try the \fB\-w\fR switch first.  It
 will often point out exactly where the trouble is.
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-Perl is an interpreted language optimized for scanning arbitrary
+Perl is a language optimized for scanning arbitrary
 text files, extracting information from those text files, and printing
 reports based on that information.  It's also a good language for many
 system management tasks.  The language is intended to be practical
 (easy to use, efficient, complete) rather than beautiful (tiny,
 elegant, minimal).
 .PP
-Perl combines (in the author's opinion, anyway) some
-of the best features of C, \fBsed\fR, \fBawk\fR, and \fBsh\fR, so people
-familiar with those languages should have little difficulty with it.
-(Language historians will also note some vestiges of \fBcsh\fR, Pascal,
-and even BASIC\-PLUS.)  Expression syntax corresponds quite closely to C
+Perl combines (in the author's opinion, anyway) some of the best
+features of C, \fBsed\fR, \fBawk\fR, and \fBsh\fR, so people familiar with
+those languages should have little difficulty with it.  (Language
+historians will also note some vestiges of \fBcsh\fR, Pascal, and even
+BASIC\-PLUS.)  Expression syntax corresponds quite closely to C
 expression syntax.  Unlike most Unix utilities, Perl does not
 arbitrarily limit the size of your data\*(--if you've got the memory,
-Perl can slurp in your whole file as a single string.  Recursion is
-of unlimited depth.  And the hash tables used by associative arrays
-grow as necessary to prevent degraded performance.  Perl uses
-sophisticated pattern matching techniques to scan large amounts of data
-very quickly.  Although optimized for scanning text, Perl can also
-deal with binary data, and can make dbm files look like associative
-arrays.  Setuid Perl scripts are safer than
-C programs through a dataflow tracing mechanism which prevents many
-stupid security holes.  If you have a problem that would ordinarily use
-\fBsed\fR or \fBawk\fR or \fBsh\fR, but it exceeds their capabilities or must
-run a little faster, and you don't want to write the silly thing in C,
-then Perl may be for you.  There are also translators to turn your
-\fBsed\fR and \fBawk\fR scripts into Perl scripts.
+Perl can slurp in your whole file as a single string.  Recursion is of
+unlimited depth.  And the tables used by hashes (previously called
+\*(L"associative arrays") grow as necessary to prevent degraded
+performance.  Perl uses sophisticated pattern matching techniques to
+scan large amounts of data very quickly.  Although optimized for
+scanning text, Perl can also deal with binary data, and can make dbm
+files look like hashes.  Setuid Perl scripts are safer than C programs
+through a dataflow tracing mechanism which prevents many stupid
+security holes.
+.PP
+If you have a problem that would ordinarily use \fBsed\fR or \fBawk\fR or
+\fBsh\fR, but it exceeds their capabilities or must run a little faster,
+and you don't want to write the silly thing in C, then Perl may be for
+you.  There are also translators to turn your \fBsed\fR and \fBawk\fR
+scripts into Perl scripts.
 .PP
 But wait, there's more...
 .PP
@@ -308,7 +312,8 @@ will continue to work unchanged.
 .IX Item "\(bu Lexical scoping"
 Perl variables may now be declared within a lexical scope, like \*(L"auto\*(R"
 variables in C.  Not only is this more efficient, but it contributes
-to better privacy for \*(L"programming in the large\*(R".
+to better privacy for \*(L"programming in the large\*(R".  Anonymous 
+subroutines exhibit deep binding of lexical variables (closures).
 .Ip "\(bu Arbitrarily nested data structures" 5
 .IX Item "\(bu Arbitrarily nested data structures"
 Any scalar value, including any array element, may now contain a
@@ -332,7 +337,7 @@ Perl may now be embedded easily in your C or \*(C+ application, and can
 either call or be called by your routines through a documented
 interface.  The \s-1XS\s0 preprocessor is provided to make it easy to glue
 your C or \*(C+ routines into Perl.  Dynamic loading of modules is
-supported.
+supported, and Perl itself can be made into a dynamic library.
 .Ip "\(bu \s-1POSIX\s0 compliant" 5
 .IX Item "\(bu \s-1POSIX\s0 compliant"
 A major new module is the \s-1POSIX\s0 module, which provides access to all
@@ -353,7 +358,7 @@ to an object class which defines its access methods.
 .Ip "\(bu Subroutine definitions may now be autoloaded" 5
 .IX Item "\(bu Subroutine definitions may now be autoloaded"
 In fact, the \s-1AUTOLOAD\s0 mechanism also allows you to define any arbitrary
-semantics for undefined subroutine calls.  It's not just for autoloading.
+semantics for undefined subroutine calls.  It's not for just autoloading.
 .Ip "\(bu Regular expression enhancements" 5
 .IX Item "\(bu Regular expression enhancements"
 You can now specify non-greedy quantifiers.  You can now do grouping
@@ -361,65 +366,30 @@ without creating a backreference.  You can now write regular expressions
 with embedded whitespace and comments for readability.  A consistent
 extensibility mechanism has been added that is upwardly compatible with
 all old regular expressions.
+.Ip "\(bu Innumerable Unbundled Modules" 5
+.IX Item "\(bu Innumerable Unbundled Modules"
+The Comprehensive Perl Archive Network described in the \fIperlmod\fR manpage
+contains hundreds of plug-and-play modules full of reusable
+code.  See \fIhttp://www.perl.com/\s-1CPAN\s0\fR for a site near you.
+.Ip "\(bu Compilability" 5
+.IX Item "\(bu Compilability"
+While not yet in full production mode, a working perl-to-C compiler
+does exist.  It can generate portable bytecode, simple C, or
+optimized C code.
 .PP
 Ok, that's \fIdefinitely\fR enough hype.
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
-.Ip "\s-1HOME\s0" 12
-.IX Item "\s-1HOME\s0"
-Used if chdir has no argument.
-.Ip "\s-1LOGDIR\s0" 12
-.IX Item "\s-1LOGDIR\s0"
-Used if chdir has no argument and \s-1HOME\s0 is not set.
-.Ip "\s-1PATH\s0" 12
-.IX Item "\s-1PATH\s0"
-Used in executing subprocesses, and in finding the script if \fB\-S\fR is
-used.
-.Ip "\s-1PERL5LIB\s0" 12
-.IX Item "\s-1PERL5LIB\s0"
-A colon-separated list of directories in which to look for Perl library
-files before looking in the standard library and the current
-directory.  If \s-1PERL5LIB\s0 is not defined, \s-1PERLLIB\s0 is used.  When running
-taint checks (because the script was running setuid or setgid, or the
-\fB\-T\fR switch was used), neither variable is used.  The script should
-instead say
-.Sp
-.Vb 1
-\&    use lib "/my/directory";
-.Ve
-.Ip "\s-1PERL5DB\s0" 12
-.IX Item "\s-1PERL5DB\s0"
-The command used to get the debugger code.  If unset, uses
-.Sp
-.Vb 1
-\&        BEGIN { require 'perl5db.pl' }
-.Ve
-.Ip "\s-1PERLLIB\s0" 12
-.IX Item "\s-1PERLLIB\s0"
-A colon-separated list of directories in which to look for Perl library
-files before looking in the standard library and the current
-directory.  If \s-1PERL5LIB\s0 is defined, \s-1PERLLIB\s0 is not used.
-.PP
-Apart from these, Perl uses no other environment variables, except
-to make them available to the script being executed, and to child
-processes.  However, scripts running setuid would do well to execute
-the following lines before doing anything else, just to keep people
-honest:
-.PP
-.Vb 3
-\&    $ENV{'PATH'} = '/bin:/usr/bin';    # or whatever you need
-\&    $ENV{'SHELL'} = '/bin/sh' if defined $ENV{'SHELL'};
-\&    $ENV{'IFS'} = ''          if defined $ENV{'IFS'};
-.Ve
+See the \fIperlrun\fR manpage.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Larry Wall <\fIlwall@sems.com\fR>, with the help of oodles of other folks.
+Larry Wall <\fIlarry@wall.org\fR>, with the help of oodles of other folks.
 .SH "FILES"
 .IX Header "FILES"
 .PP
 .Vb 2
 \& "/tmp/perl-e$$"        temporary file for -e commands
-\& "@INC"                 locations of perl 5 libraries
+\& "@INC"                 locations of perl libraries
 .Ve
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
@@ -451,8 +421,8 @@ switch?
 The \fB\-w\fR switch is not mandatory.
 .PP
 Perl is at the mercy of your machine's definitions of various
-operations such as type casting, \fIatof()\fR and \fIsprintf()\fR.  The latter
-can even trigger a coredump when passed ludicrous input values.
+operations such as type casting, \fIatof()\fR, and \fIsprintf()\fR.  The latter
+can even trigger a core dump when passed ludicrous input values.
 .PP
 If your stdio requires a seek or eof between reads and writes on a
 particular stream, so does Perl.  (This doesn't apply to \fIsysread()\fR
@@ -464,10 +434,9 @@ given variable name may not be longer than 255 characters, and no
 component of your PATH may be longer than 255 if you use \fB\-S\fR.  A regular
 expression may not compile to more than 32767 bytes internally.
 .PP
-See the perl bugs database at \fI http://perl.com/perl/bugs/ \fR.  You may
-mail your bug reports (be sure to include full configuration information
-as output by the myconfig program in the perl source tree) to
-\fIperlbug@perl.com\fR.
+You may mail your bug reports (be sure to include full configuration
+information as output by the myconfig program in the perl source tree,
+or by \f(CWperl -V\fR) to <\fIperlbug@perl.com\fR>.
 If you've succeeded in compiling perl, the perlbug script in the utils/
 subdirectory can be used to help mail in a bug report.
 .PP

@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH LWP-DOWNLOAD 1 "perl 5.003, patch 93" "6/Dec/96" "User Contributed Perl Documentation"
+.IX Title "LWP-DOWNLOAD 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "lwp-download - fetch large files from the net"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,36 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+lwp-download \- fetch large files from the net
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+.PP
+.Vb 1
+\& lwp-download <url> [<local file>]
+.Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+The \fIlwp-download\fR program will down load the document specified by the URL
+given as the first command line argument to a local file.  The local
+filename used to save the document is guessed from the URL unless
+specified as the second command line argument.
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
-.SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
-S2p uses no environment variables.
-.SH "AUTHOR"
-.IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
-.SH "FILES"
-.IX Header "FILES"
-.SH "SEE ALSO"
-.IX Header "SEE ALSO"
+The \fIlwp-download\fR program is implemented using the \fIlibwww-perl\fR
+library.  It is better suited to down load big files than the
+\fIlwp-request\fR program because it does not store the file in memory.
+Another benefit is that it will keep you updated about it's progress
+and that you don't have any options to worry about.
+.SH "EXAMPLE"
+.IX Header "EXAMPLE"
+Fetch the newest and greatest perl version:
 .PP
 .Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
+\& $ lwp-download http://www.perl.com/CPAN/src/latest.tar.gz
+\& Saving to 'latest.tar.gz'...
+\& 1.47 MB received in 22 seconds (68.7 KB/sec)
 .Ve
-.SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
-.SH "BUGS"
-.IX Header "BUGS"
+.SH "AUTHOR"
+.IX Header "AUTHOR"
+Gisle Aas <gisle@aas.no>
 
 .rn }` ''

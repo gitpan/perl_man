@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH PERLDOC 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
+.IX Title "PERLDOC 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "perldoc - Look up Perl documentation in pod format."
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,70 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+perldoc \- Look up Perl documentation in pod format.
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+\fBperldoc\fR [\fB\-h\fR] [\fB\-v\fR] [\fB\-t\fR] [\fB\-u\fR] [\fB\-m\fR] [\fB\-l\fR] PageName|ModuleName|ProgramName
+.PP
+\fBperldoc\fR \fB\-f\fR BuiltinFunction
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+\fIperldoc\fR looks up a piece of documentation in .pod format that is embedded
+in the perl installation tree or in a perl script, and displays it via
+\f(CWpod2man | nroff -man | $PAGER\fR. (In addition, if running under HP\-UX,
+\f(CWcol -x\fR will be used.) This is primarily used for the documentation for
+the perl library modules.
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
+Your system may also have man pages installed for those modules, in
+which case you can probably just use the \fIman\fR\|(1) command.
+.SH "OPTIONS"
+.IX Header "OPTIONS"
+.Ip "\fB\-h\fR help" 5
+.IX Item "\fB\-h\fR help"
+Prints out a brief help message.
+.Ip "\fB\-v\fR verbose" 5
+.IX Item "\fB\-v\fR verbose"
+Describes search for the item in detail.
+.Ip "\fB\-t\fR text output" 5
+.IX Item "\fB\-t\fR text output"
+Display docs using plain text converter, instead of nroff. This may be faster,
+but it won't look as nice.
+.Ip "\fB\-u\fR unformatted" 5
+.IX Item "\fB\-u\fR unformatted"
+Find docs only; skip reformatting by pod2*
+.Ip "\fB\-m\fR module" 5
+.IX Item "\fB\-m\fR module"
+Display the entire module: both code and unformatted pod documentation.
+This may be useful if the docs don't explain a function in the detail
+you need, and you'd like to inspect the code directly; perldoc will find
+the file for you and simply hand it off for display.
+.Ip "\fB\-l\fR file name only" 5
+.IX Item "\fB\-l\fR file name only"
+Display the file name of the module found.
+.Ip "\fB\-f\fR perlfunc" 5
+.IX Item "\fB\-f\fR perlfunc"
+The \fB\-f\fR option followed by the name of a perl built in function will
+extract the documentation of this function from the \fIperlfunc\fR manpage.
+.Ip "\fBPageName|ModuleName|ProgramName\fR" 5
+.IX Item "\fBPageName|ModuleName|ProgramName\fR"
+The item you want to look up.  Nested modules (such as \f(CWFile::Basename\fR)
+are specified either as \f(CWFile::Basename\fR or \f(CWFile/Basename\fR.  You may also
+give a descriptive name of a page, such as \f(CWperlfunc\fR. You make also give a
+partial or wrong-case name, such as \*(L"basename\*(R" for \*(L"File::Basename\*(R", but
+this will be slower, if there is more then one page with the same partial
+name, you will only get the first one.
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
-S2p uses no environment variables.
+Any switches in the \f(CWPERLDOC\fR environment variable will be used before the 
+command line arguments.  \f(CWperldoc\fR also searches directories
+specified by the \f(CWPERL5LIB\fR (or \f(CWPERLLIB\fR if \f(CWPERL5LIB\fR is not
+defined) and \f(CWPATH\fR environment variables.
+(The latter is so that embedded pods for executables, such as
+\f(CWperldoc\fR itself, are available.)
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
-.SH "FILES"
-.IX Header "FILES"
-.SH "SEE ALSO"
-.IX Header "SEE ALSO"
+Kenneth Albanowski <kjahds@kjahds.com>
 .PP
-.Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
-.Ve
-.SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
-.SH "BUGS"
-.IX Header "BUGS"
+Minor updates by Andy Dougherty <doughera@lafcol.lafayette.edu>
 
 .rn }` ''

@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH XSUBPP 1 "perl 5.003, patch 93" "20/Feb/97" "Perl Programmers Reference Guide"
+.IX Title "XSUBPP 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "xsubpp - compiler to convert Perl XS code into C code"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,60 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+xsubpp \- compiler to convert Perl XS code into C code
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+\fBxsubpp\fR [\fB\-v\fR] [\fB\-\*(C+\fR] [\fB\-except\fR] [\fB\-s pattern\fR] [\fB\-prototypes\fR] [\fB\-noversioncheck\fR] [\fB\-typemap typemap\fR]... file.xs
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+\fIxsubpp\fR will compile XS code into C code by embedding the constructs
+necessary to let C functions manipulate Perl values and creates the glue
+necessary to let Perl access those functions.  The compiler uses typemaps to
+determine how to map C function parameters and variables to Perl values.
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
+The compiler will search for typemap files called \fItypemap\fR.  It will use
+the following search path to find default typemaps, with the rightmost
+typemap taking precedence.
+.PP
+.Vb 1
+\&        ../../../typemap:../../typemap:../typemap:typemap
+.Ve
+.SH "OPTIONS"
+.IX Header "OPTIONS"
+.Ip "\fB\-\*(C+\fR" 5
+.IX Item "\fB\-\*(C+\fR"
+Adds ``extern \*(L"C"'\*(R' to the C code.
+.Ip "\fB\-except\fR" 5
+.IX Item "\fB\-except\fR"
+Adds exception handling stubs to the C code.
+.Ip "\fB\-typemap typemap\fR" 5
+.IX Item "\fB\-typemap typemap\fR"
+Indicates that a user-supplied typemap should take precedence over the
+default typemaps.  This option may be used multiple times, with the last
+typemap having the highest precedence.
+.Ip "\fB\-v\fR" 5
+.IX Item "\fB\-v\fR"
+Prints the \fIxsubpp\fR version number to standard output, then exits.
+.Ip "\fB\-prototypes\fR" 5
+.IX Item "\fB\-prototypes\fR"
+By default \fIxsubpp\fR will not automatically generate prototype code for
+all xsubs. This flag will enable prototypes.
+.Ip "\fB\-noversioncheck\fR" 5
+.IX Item "\fB\-noversioncheck\fR"
+Disables the run time test that determines if the object file (derived
+from the \f(CW.xs\fR file) and the \f(CW.pm\fR files have the same version
+number.
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
-S2p uses no environment variables.
+No environment variables are used.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
-.SH "FILES"
-.IX Header "FILES"
+Larry Wall
+.SH "MODIFICATION HISTORY"
+.IX Header "MODIFICATION HISTORY"
+See the file \fIchanges.pod\fR.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-.PP
-.Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
-.Ve
-.SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
-.SH "BUGS"
-.IX Header "BUGS"
+\fIperl\fR\|(1), \fIperlxs\fR\|(1), \fIperlxstut\fR\|(1), \fIperlxs\fR\|(1)
 
 .rn }` ''

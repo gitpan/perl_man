@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLVAR 1 "perl 5.003, patch 05" "5/Oct/96" "Perl Programmers Reference Guide"
+.TH PERLVAR 1 "perl 5.003, patch 93" "21/Feb/97" "Perl Programmers Reference Guide"
 .IX Title "PERLVAR 1"
 .UC
 .IX Name "perlvar - Perl predefined variables"
@@ -177,7 +177,7 @@ perlvar \- Perl predefined variables
 .Sh "Predefined Names"
 .IX Subsection "Predefined Names"
 The following names have special meaning to Perl.  Most of the
-punctuational names have reasonable mnemonics, or analogues in one of
+punctuation names have reasonable mnemonics, or analogues in one of
 the shells.  Nevertheless, if you wish to use the long variable names,
 you just need to say
 .PP
@@ -223,7 +223,7 @@ The default input and pattern-searching space.  The following pairs are
 equivalent:
 .Sp
 .Vb 2
-\&    while (<>) {...}    # only equivalent in while!
+\&    while (<>) {...}    # equivalent in only while!
 \&    while ($_ = <>) {...}
 .Ve
 .Vb 2
@@ -268,7 +268,7 @@ test.  Note that outside of a \f(CWwhile\fR test, this will not happen.
 (Mnemonic: underline is understood in certain operations.)
 .Ip "$<\fIdigit\fR>" 8
 .IX Item "$<\fIdigit\fR>"
-Contains the subpattern from the corresponding set of parentheses in
+Contains the sub-pattern from the corresponding set of parentheses in
 the last pattern matched, not counting patterns matched in nested
 blocks that have been exited already.  (Mnemonic: like \edigit.)
 These variables are all read-only.
@@ -285,7 +285,7 @@ any matches hidden within a \s-1BLOCK\s0 or \fIeval()\fR enclosed by the current
 .IX Item "$`"
 The string preceding whatever was matched by the last successful
 pattern match (not counting any matches hidden within a \s-1BLOCK\s0 or eval
-enclosed by the current \s-1BLOCK\s0).  (Mnemonic: ` often precedes a quoted
+enclosed by the current \s-1BLOCK\s0).  (Mnemonic: \f(CW`\fR often precedes a quoted
 string.)  This variable is read-only.
 .Ip "$\s-1POSTMATCH\s0" 8
 .IX Item "$\s-1POSTMATCH\s0"
@@ -293,7 +293,7 @@ string.)  This variable is read-only.
 .IX Item "$\*(R'"
 The string following whatever was matched by the last successful
 pattern match (not counting any matches hidden within a \s-1BLOCK\s0 or \fIeval()\fR
-enclosed by the current \s-1BLOCK\s0).  (Mnemonic: \*(L' often follows a quoted
+enclosed by the current \s-1BLOCK\s0).  (Mnemonic: \f(CW'\fR often follows a quoted
 string.)  Example:
 .Sp
 .Vb 3
@@ -319,15 +319,15 @@ This variable is read-only.
 .IX Item "$\s-1MULTILINE_MATCHING\s0"
 .Ip "$*" 8
 .IX Item "$*"
-Set to 1 to do multiline matching within a string, 0 to tell Perl
+Set to 1 to do multi-line matching within a string, 0 to tell Perl
 that it can assume that strings contain a single line, for the purpose
 of optimizing pattern matches.  Pattern matches on strings containing
 multiple newlines can produce confusing results when \*(L"\f(CW$*\fR\*(R" is 0.  Default
 is 0.  (Mnemonic: * matches multiple things.)  Note that this variable
-only influences the interpretation of \*(L"\f(CW^\fR\*(R" and \*(L"\f(CW$\fR\*(R".  A literal newline can
+influences the interpretation of only \*(L"\f(CW^\fR\*(R" and \*(L"\f(CW$\fR\*(R".  A literal newline can
 be searched for even when \f(CW$* == 0\fR.
 .Sp
-Use of \*(L"\f(CW$*\fR\*(R" is deprecated in Perl 5.
+Use of \*(L"\f(CW$*\fR\*(R" is deprecated in modern perls.
 .Ip "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0" 8
 .IX Item "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1INPUT_LINE_NUMBER\s0" 8
@@ -337,8 +337,8 @@ Use of \*(L"\f(CW$*\fR\*(R" is deprecated in Perl 5.
 .Ip "$." 8
 .IX Item "$."
 The current input line number for the last file handle from
-which you read (or performed a \f(CWseek\fR or <tell> on).  An
-explicit close on a filehandle resets the line number.  Since
+which you read (or performed a \f(CWseek\fR or \f(CWtell\fR on).  An
+explicit close on a filehandle resets the line number.  Because
 \*(L"\f(CW<>\fR\*(R" never does an explicit close, line numbers increase
 across \s-1ARGV\s0 files (but see examples under \fIeof()\fR).  Localizing \f(CW$.\fR has
 the effect of also localizing Perl's notion of \*(L"the last read
@@ -354,7 +354,7 @@ number.)
 .IX Item "$/"
 The input record separator, newline by default.  Works like \fBawk\fR's \s-1RS\s0
 variable, including treating empty lines as delimiters if set to the
-null string.  (Note:  An empty line can not contain any spaces or
+null string.  (Note:  An empty line cannot contain any spaces or
 tabs.) You may set it to a multicharacter string to match a
 multi-character delimiter.  Note that setting it to \f(CW"\en\en"\fR means
 something slightly different than setting it to \f(CW""\fR, if the file
@@ -377,8 +377,8 @@ delimit line boundaries when quoting poetry.)
 .IX Item "$|"
 If set to nonzero, forces a flush after every write or print on the
 currently selected output channel.  Default is 0 (regardless of whether
-the channel is actually buffered by the system or not; \f(CW$|\fR only tells
-you whether you've asked Perl to explicitly flush after each write). 
+the channel is actually buffered by the system or not; \f(CW$|\fR tells you
+only whether you've asked Perl explicitly to flush after each write). 
 Note that \s-1STDOUT\s0 will typically be line buffered if output is to the
 terminal and block buffered otherwise.  Setting this variable is useful
 primarily when you are outputting to a pipe, such as when you are running
@@ -394,8 +394,8 @@ has no effect on input buffering.
 .Ip "$," 8
 .IX Item "$,"
 The output field separator for the print operator.  Ordinarily the
-print operator simply prints out the comma separated fields you
-specify.  In order to get behavior more like \fBawk\fR, set this variable
+print operator simply prints out the comma-separated fields you
+specify.  To get behavior more like \fBawk\fR, set this variable
 as you would set \fBawk\fR's \s-1OFS\s0 variable to specify what is printed
 between fields.  (Mnemonic: what is printed when there is a , in your
 print statement.)
@@ -408,12 +408,12 @@ print statement.)
 .Ip "$\e" 8
 .IX Item "$\e"
 The output record separator for the print operator.  Ordinarily the
-print operator simply prints out the comma separated fields you
-specify, with no trailing newline or record separator assumed.  In
-order to get behavior more like \fBawk\fR, set this variable as you would
+print operator simply prints out the comma-separated fields you
+specify, with no trailing newline or record separator assumed.
+To get behavior more like \fBawk\fR, set this variable as you would
 set \fBawk\fR's \s-1ORS\s0 variable to specify what is printed at the end of the
 print.  (Mnemonic: you set \*(L"\f(CW$\e\fR\*(R" instead of adding \en at the end of the
-print.  Also, it's just like /, but it's what you get \*(L"back\*(R" from
+print.  Also, it's just like \f(CW$/\fR, but it's what you get \*(L"back\*(R" from
 Perl.)
 .Ip "$\s-1LIST_SEPARATOR\s0" 8
 .IX Item "$\s-1LIST_SEPARATOR\s0"
@@ -455,7 +455,7 @@ keys contain binary data there might not be any safe value for \*(L"\f(CW$;\fR\*
 semi-semicolon.  Yeah, I know, it's pretty lame, but \*(L"\f(CW$,\fR\*(R" is already
 taken for something more important.)
 .Sp
-Consider using \*(L"real\*(R" multi-dimensional arrays in Perl 5.
+Consider using \*(L"real\*(R" multi-dimensional arrays.
 .Ip "$\s-1OFMT\s0" 8
 .IX Item "$\s-1OFMT\s0"
 .Ip "$#" 8
@@ -468,7 +468,7 @@ of the macro \s-1DBL_DIG\s0 from your system's \fIfloat.h\fR.  This is different
 \fBawk\fR's default \s-1OFMT\s0 setting of %.6g, so you need to set \*(L"\f(CW$#\fR\*(R"
 explicitly to get \fBawk\fR's value.  (Mnemonic: # is the number sign.)
 .Sp
-Use of \*(L"\f(CW$#\fR\*(R" is deprecated in Perl 5.
+Use of \*(L"\f(CW$#\fR\*(R" is deprecated.
 .Ip "format_page_number \s-1HANDLE\s0 \s-1EXPR\s0" 8
 .IX Item "format_page_number \s-1HANDLE\s0 \s-1EXPR\s0"
 .Ip "$\s-1FORMAT_PAGE_NUMBER\s0" 8
@@ -527,7 +527,7 @@ poetry is a part of a line.)
 .IX Item "$\s-1FORMAT_FORMFEED\s0"
 .Ip "$^L" 8
 .IX Item "$^L"
-What formats output to perform a formfeed.  Default is \ef.
+What formats output to perform a form feed.  Default is \ef.
 .Ip "$\s-1ACCUMULATOR\s0" 8
 .IX Item "$\s-1ACCUMULATOR\s0"
 .Ip "$^A" 8
@@ -542,12 +542,24 @@ the \f(CWformline()\fR entry in the \fIperlfunc\fR manpage.
 .IX Item "$\s-1CHILD_ERROR\s0"
 .Ip "$?" 8
 .IX Item "$?"
-The status returned by the last pipe close, backtick (\f(CW``\fR) command,
+The status returned by the last pipe close, back-tick (\f(CW``\fR) command,
 or \fIsystem()\fR operator.  Note that this is the status word returned by
-the \fIwait()\fR system call, so the exit value of the subprocess is actually
-(\f(CW$? >> 8\fR).  Thus on many systems, \f(CW$? & 255\fR gives which signal,
-if any, the process died from, and whether there was a core dump.
-(Mnemonic: similar to \fBsh\fR and \fBksh\fR.)
+the \fIwait()\fR system call (or else is made up to look like it).  Thus,
+the exit value of the subprocess is actually (\f(CW$? >> 8\fR), and
+\f(CW$? & 255\fR gives which signal, if any, the process died from, and
+whether there was a core dump.  (Mnemonic: similar to \fBsh\fR and
+\fBksh\fR.)
+.Sp
+Note that if you have installed a signal handler for \f(CWSIGCHLD\fR, the
+value of \f(CW$?\fR will usually be wrong outside that handler.
+.Sp
+Inside an \f(CWEND\fR subroutine \f(CW$?\fR contains the value that is going to be
+given to \f(CWexit()\fR.  You can modify \f(CW$?\fR in an \f(CWEND\fR subroutine to
+change the exit status of the script.
+.Sp
+Under \s-1VMS\s0, the pragma \f(CWuse vmsish 'status'\fR makes \f(CW$?\fR reflect the
+actual \s-1VMS\s0 exit status, instead of the default emulation of \s-1POSIX\s0
+status.
 .Ip "$\s-1OS_ERROR\s0" 8
 .IX Item "$\s-1OS_ERROR\s0"
 .Ip "$\s-1ERRNO\s0" 8
@@ -559,17 +571,16 @@ all the usual caveats.  (This means that you shouldn't depend on the
 value of \*(L"\f(CW$!\fR\*(R" to be anything in particular unless you've gotten a
 specific error return indicating a system error.)  If used in a string
 context, yields the corresponding system error string.  You can assign
-to \*(L"\f(CW$!\fR\*(R" in order to set \fIerrno\fR if, for instance, you want \*(L"\f(CW$!\fR\*(R" to return the
+to \*(L"\f(CW$!\fR\*(R" to set \fIerrno\fR if, for instance, you want \*(L"\f(CW$!\fR\*(R" to return the
 string for error \fIn\fR, or you want to set the exit value for the \fIdie()\fR
 operator.  (Mnemonic: What just went bang?)
 .Ip "$\s-1EXTENDED_OS_ERROR\s0" 8
 .IX Item "$\s-1EXTENDED_OS_ERROR\s0"
 .Ip "$^E" 8
 .IX Item "$^E"
-More specific information about the last system error than that
-provided by \f(CW$!\fR, if available.  (If not, it's just \f(CW$!\fR again, except
-\s-1OS/2\s0.)
-At the moment, this differs from \f(CW$!\fR only under \s-1VMS\s0 and \s-1OS/2\s0, where it
+More specific information about the last system error than that provided by
+\f(CW$!\fR, if available.  (If not, it's just \f(CW$!\fR again, except under \s-1OS/2\s0.)
+At the moment, this differs from \f(CW$!\fR under only \s-1VMS\s0 and \s-1OS/2\s0, where it
 provides the \s-1VMS\s0 status value from the last system error, and \s-1OS/2\s0 error
 code of the last call to \s-1OS/2\s0 \s-1API\s0 which was not directed via \s-1CRT\s0.  The
 caveats mentioned in the description of \f(CW$!\fR apply here, too.
@@ -587,7 +598,8 @@ invoked may have failed in the normal fashion).  (Mnemonic: Where was
 the syntax error \*(L"at\*(R"?)
 .Sp
 Note that warning messages are not collected in this variable.  You can,
-however, set up a routine to process warnings by setting \f(CW$SIG\fR{_\|_WARN_\|_} below.
+however, set up a routine to process warnings by setting \f(CW$SIG{__WARN__}\fR
+below.
 .Ip "$\s-1PROCESS_ID\s0" 8
 .IX Item "$\s-1PROCESS_ID\s0"
 .Ip "$\s-1PID\s0" 8
@@ -617,7 +629,7 @@ The effective uid of this process.  Example:
 \&    ($<,$>) = ($>,$<);  # swap real and effective uid
 .Ve
 (Mnemonic: it's the uid you went \fI\s-1TO\s0\fR, if you're running setuid.)  Note:
-\*(L"\f(CW$<\fR\*(R" and \*(L"\f(CW$>\fR\*(R" can only be swapped on machines supporting \fIsetreuid()\fR.
+\*(L"\f(CW$<\fR\*(R" and \*(L"\f(CW$>\fR\*(R" can be swapped on only machines supporting \fIsetreuid()\fR.
 .Ip "$\s-1REAL_GROUP_ID\s0" 8
 .IX Item "$\s-1REAL_GROUP_ID\s0"
 .Ip "$\s-1GID\s0" 8
@@ -644,10 +656,11 @@ which may be the same as the first number.  (Mnemonic: parentheses are
 used to \fI\s-1GROUP\s0\fR things.  The effective gid is the group that's \fI\s-1RIGHT\s0\fR for
 you, if you're running setgid.)
 .Sp
-Note: \*(L"\f(CW$<\fR\*(R", \*(L"\f(CW$>\fR\*(R", \*(L"\f(CW$(\fR\*(R" and \*(L"\f(CW$)\fR\*(R" can only be set on machines
-that support the corresponding \fIset[re][ug]id()\fR routine.  \*(L"\f(CW$(\fR\*(R" and \*(L"\f(CW$)\fR\*(R" 
-can only be swapped on machines supporting \fIsetregid()\fR.   Because Perl doesn't
-currently use \fIinitgroups()\fR, you can't set your group vector to multiple groups.
+Note: \*(L"\f(CW$<\fR\*(R", \*(L"\f(CW$>\fR\*(R", \*(L"\f(CW$(\fR\*(R" and \*(L"\f(CW$)\fR\*(R" can be set only on
+machines that support the corresponding \fIset[re][ug]id()\fR routine.  \*(L"\f(CW$(\fR\*(R"
+and \*(L"\f(CW$)\fR\*(R" can be swapped on only machines supporting \fIsetregid()\fR.  Because
+Perl doesn't currently use \fIinitgroups()\fR, you can't set your group vector to
+multiple groups.
 .Ip "$\s-1PROGRAM_NAME\s0" 8
 .IX Item "$\s-1PROGRAM_NAME\s0"
 .Ip "$0" 8
@@ -738,7 +751,7 @@ it.
 .Ip "$^T" 8
 .IX Item "$^T"
 The time at which the script began running, in seconds since the
-epoch (beginning of 1970).  The values returned by the \fB\-M\fR, \fB\-A\fR 
+epoch (beginning of 1970).  The values returned by the \fB\-M\fR, \fB\-A\fR,
 and \fB\-C\fR filetests are
 based on this value.
 .Ip "$\s-1WARNING\s0" 8
@@ -759,7 +772,7 @@ contains the name of the current file when reading from <>.
 .IX Item "@\s-1ARGV\s0"
 The array \f(CW@ARGV\fR contains the command line arguments intended for the
 script.  Note that \f(CW$#ARGV\fR is the generally number of arguments minus
-one, since \f(CW$ARGV[0]\fR is the first argument, \fI\s-1NOT\s0\fR the command name.  See
+one, because \f(CW$ARGV[0]\fR is the first argument, \fI\s-1NOT\s0\fR the command name.  See
 \*(L"\f(CW$0\fR\*(R" for the command name.
 .Ip "@\s-1INC\s0" 8
 .IX Item "@\s-1INC\s0"
@@ -768,8 +781,8 @@ be evaluated by the \f(CWdo EXPR\fR, \f(CWrequire\fR, or \f(CWuse\fR constructs.
 initially consists of the arguments to any \fB\-I\fR command line switches,
 followed by the default Perl library, probably \fI/usr/local/lib/perl\fR,
 followed by \*(L".\*(R", to represent the current directory.  If you need to
-modify this at runtime, you should use the \f(CWuse lib\fR pragma in order
-to also get the machine-dependent library properly loaded:
+modify this at runtime, you should use the \f(CWuse lib\fR pragma
+to get the machine-dependent library properly loaded also:
 .Sp
 .Vb 2
 \&    use lib '/mypath/libdir/';
@@ -806,7 +819,7 @@ signals.  Example:
 \&    $SIG{'INT'} = 'DEFAULT';    # restore default action
 \&    $SIG{'QUIT'} = 'IGNORE';    # ignore SIGQUIT
 .Ve
-The \f(CW%SIG\fR array only contains values for the signals actually set within
+The \f(CW%SIG\fR array contains values for only the signals actually set within
 the Perl script.  Here are some other examples:
 .Sp
 .Vb 4
@@ -818,10 +831,28 @@ the Perl script.  Here are some other examples:
 The one marked scary is problematic because it's a bareword, which means
 sometimes it's a string representing the function, and sometimes it's 
 going to call the subroutine call right then and there!  Best to be sure
-and quote it or take a reference to it.  *Plumber works too.  See the \fIperlsubs\fR manpage.
+and quote it or take a reference to it.  *Plumber works too.  See the \fIperlsub\fR manpage.
+.Sp
+If your system has the \fIsigaction()\fR function then signal handlers are
+installed using it.  This means you get reliable signal handling.  If
+your system has the \s-1SA_RESTART\s0 flag it is used when signals handlers are
+installed.  This means that system calls for which it is supported
+continue rather than returning when a signal arrives.  If you want your
+system calls to be interrupted by signal delivery then do something like
+this:
+.Sp
+.Vb 1
+\&    use POSIX ':signal_h';
+.Ve
+.Vb 3
+\&    my $alarm = 0;
+\&    sigaction SIGALRM, new POSIX::SigAction sub { $alarm = 1 }
+\&        or die "Error setting SIGALRM handler: $!\en";
+.Ve
+See the \fI\s-1POSIX\s0\fR manpage.
 .Sp
 Certain internal hooks can be also set using the \f(CW%SIG\fR hash.  The
-routine indicated by \f(CW$SIG\fR{_\|_WARN_\|_} is called when a warning message is
+routine indicated by \f(CW$SIG{__WARN__}\fR is called when a warning message is
 about to be printed.  The warning message is passed as the first
 argument.  The presence of a _\|_WARN_\|_ hook causes the ordinary printing
 of warnings to \s-1STDERR\s0 to be suppressed.  You can use this to save warnings
@@ -831,12 +862,13 @@ in a variable, or turn warnings into fatal errors, like this:
 \&    local $SIG{__WARN__} = sub { die $_[0] };
 \&    eval $proggie;
 .Ve
-The routine indicated by \f(CW$SIG\fR{_\|_DIE_\|_} is called when a fatal exception
+The routine indicated by \f(CW$SIG{__DIE__}\fR is called when a fatal exception
 is about to be thrown.  The error message is passed as the first
 argument.  When a _\|_DIE_\|_ hook routine returns, the exception
 processing continues as it would have in the absence of the hook,
 unless the hook routine itself exits via a \f(CWgoto\fR, a loop exit, or a \fIdie()\fR.
-The _\|_DIE_\|_ handler is explicitly disabled during the call, so that you
-can die from a _\|_DIE_\|_ handler.  Similarly for _\|_WARN_\|_.
+The \f(CW__DIE__\fR handler is explicitly disabled during the call, so that you
+can die from a \f(CW__DIE__\fR handler.  Similarly for \f(CW__WARN__\fR.  See
+the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the \f(CWwarn\fR entry in the \fIperlfunc\fR manpage and the \f(CWeval\fR entry in the \fIperlfunc\fR manpage.
 
 .rn }` ''

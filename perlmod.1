@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLMOD 1 "perl 5.003, patch 05" "25/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLMOD 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLMOD 1"
 .UC
 .IX Name "perlmod - Perl modules (packages)"
@@ -183,11 +183,11 @@ Perl.  The package statement declares the compilation unit as being in the
 given namespace.  The scope of the package declaration is from the
 declaration itself through the end of the enclosing block (the same scope
 as the \fIlocal()\fR operator).  All further unqualified dynamic identifiers
-will be in this namespace.  A package statement only affects dynamic
+will be in this namespace.  A package statement affects only dynamic
 variables\*(--including those you've used \fIlocal()\fR on\*(--but \fInot\fR lexical
 variables created with \fImy()\fR.  Typically it would be the first declaration
 in a file to be included by the \f(CWrequire\fR or \f(CWuse\fR operator.  You can
-switch into a package in more than one place; it merely influences which
+switch into a package in more than one place; it influences merely which
 symbol table is used by the compiler for the rest of that block.  You can
 refer to variables and filehandles in other packages by prefixing the
 identifier with the package name and a double colon:
@@ -209,10 +209,10 @@ It would treat package \f(CWINNER\fR as a totally separate global package.
 Only identifiers starting with letters (or underscore) are stored in a
 package's symbol table.  All other symbols are kept in package \f(CWmain\fR,
 including all of the punctuation variables like \f(CW$_\fR.  In addition, the
-identifiers \s-1STDIN\s0, \s-1STDOUT\s0, \s-1STDERR\s0, \s-1ARGV\s0, \s-1ARGVOUT\s0, \s-1ENV\s0, \s-1INC\s0 and \s-1SIG\s0 are
+identifiers \s-1STDIN\s0, \s-1STDOUT\s0, \s-1STDERR\s0, \s-1ARGV\s0, \s-1ARGVOUT\s0, \s-1ENV\s0, \s-1INC\s0, and \s-1SIG\s0 are
 forced to be in package \f(CWmain\fR, even when used for other purposes than
 their built-in one.  Note also that, if you have a package called \f(CWm\fR,
-\f(CWs\fR or \f(CWy\fR, then you can't use the qualified form of an identifier
+\f(CWs\fR, or \f(CWy\fR, then you can't use the qualified form of an identifier
 because it will be interpreted instead as a pattern match, a substitution,
 or a translation.
 .PP
@@ -232,19 +232,19 @@ temporarily switches back to the \f(CWmain\fR package to evaluate various
 expressions in the context of the \f(CWmain\fR package (or wherever you came
 from).  See the \fIperldebug\fR manpage.
 .PP
-See the \fIperlsub\fR manpage for other scoping issues related to \fImy()\fR and \fIlocal()\fR, 
+See the \fIperlsub\fR manpage for other scoping issues related to \fImy()\fR and \fIlocal()\fR,
 or the \fIperlref\fR manpage regarding closures.
 .Sh "Symbol Tables"
 .IX Subsection "Symbol Tables"
-The symbol table for a package happens to be stored in the associative
-array of that name appended with two colons.  The main symbol table's
-name is thus \f(CW%main::\fR, or \f(CW%::\fR for short.  Likewise symbol table for
-the nested package mentioned earlier is named \f(CW%OUTER::INNER::\fR.
+The symbol table for a package happens to be stored in the hash of that
+name with two colons appended.  The main symbol table's name is thus
+\f(CW%main::\fR, or \f(CW%::\fR for short.  Likewise symbol table for the nested
+package mentioned earlier is named \f(CW%OUTER::INNER::\fR.
 .PP
-The value in each entry of the associative array is what you are referring
-to when you use the \f(CW*name\fR typeglob notation.  In fact, the following
-have the same effect, though the first is more efficient because it does
-the symbol table lookups at compile time:
+The value in each entry of the hash is what you are referring to when you
+use the \f(CW*name\fR typeglob notation.  In fact, the following have the same
+effect, though the first is more efficient because it does the symbol
+table lookups at compile time:
 .PP
 .Vb 2
 \&    local(*main::foo) = *main::bar; local($main::{'foo'}) =
@@ -293,9 +293,9 @@ Assignment to a typeglob performs an aliasing operation, i.e.,
 .Vb 1
 \&    *dick = *richard;
 .Ve
-causes variables, subroutines and file handles accessible via the
+causes variables, subroutines, and file handles accessible via the
 identifier \f(CWrichard\fR to also be accessible via the identifier \f(CWdick\fR.  If
-you only want to alias a particular variable or subroutine, you can
+you want to alias only a particular variable or subroutine, you can
 assign a reference instead:
 .PP
 .Vb 1
@@ -316,12 +316,12 @@ thing.
 \&        # now use %hashsym normally, and you
 \&        # will affect the caller's %another_hash
 \&        my %nhash = (); # do what you want
-\&        return \e%nhash; 
+\&        return \e%nhash;
 \&    }
 .Ve
-On return, the reference wil overwrite the hash slot in the
+On return, the reference will overwrite the hash slot in the
 symbol table specified by the *some_hash typeglob.  This
-is a somewhat tricky way of passing around refernces cheaply
+is a somewhat tricky way of passing around references cheaply
 when you won't want to have to remember to dereference variables
 explicitly.
 .PP
@@ -331,6 +331,27 @@ Another use of symbol tables is for making \*(L"constant\*(R"  scalars.
 \&    *PI = \e3.14159265358979;
 .Ve
 Now you cannot alter \f(CW$PI\fR, which is probably a good thing all in all.
+.PP
+You can say \f(CW*foo{PACKAGE}\fR and \f(CW*foo{NAME}\fR to find out what name and
+package the *foo symbol table entry comes from.  This may be useful
+in a subroutine which is passed typeglobs as arguments
+.PP
+.Vb 6
+\&    sub identify_typeglob {
+\&        my $glob = shift;
+\&        print 'You gave me ', *{$glob}{PACKAGE}, '::', *{$glob}{NAME}, "\en";
+\&    }
+\&    identify_typeglob *foo;
+\&    identify_typeglob *bar::baz;
+.Ve
+This prints
+.PP
+.Vb 2
+\&    You gave me main::foo
+\&    You gave me bar::baz
+.Ve
+The *foo{\s-1THING\s0} notation can also be used to obtain references to the
+individual elements of *foo, see the \fIperlref\fR manpage.
 .Sh "Package Constructors and Destructors"
 .IX Subsection "Package Constructors and Destructors"
 There are two special subroutine definitions that function as package
@@ -352,6 +373,11 @@ signal\*(--you have to trap that yourself (if you can).)  You may have
 multiple \f(CWEND\fR blocks within a file\*(--they will execute in reverse
 order of definition; that is: last in, first out (\s-1LIFO\s0).
 .PP
+Inside an \f(CWEND\fR subroutine \f(CW$?\fR contains the value that the script is
+going to pass to \f(CWexit()\fR.  You can modify \f(CW$?\fR to change the exit
+value of the script.  Beware of changing \f(CW$?\fR by accident (e.g.,, by
+running something via \f(CWsystem\fR).
+.PP
 Note that when you use the \fB\-n\fR and \fB\-p\fR switches to Perl, \f(CWBEGIN\fR
 and \f(CWEND\fR work just as they do in \fBawk\fR, as a degenerate case.
 .Sh "Perl Classes"
@@ -359,7 +385,7 @@ and \f(CWEND\fR work just as they do in \fBawk\fR, as a degenerate case.
 There is no special class syntax in Perl, but a package may function
 as a class if it provides subroutines that function as methods.  Such a
 package may also derive some of its methods from another class package
-by listing the other package name in its \f(CW@ISA\fR array.  
+by listing the other package name in its \f(CW@ISA\fR array.
 .PP
 For more on this, see the \fIperlobj\fR manpage.
 .Sh "Perl Modules"
@@ -372,19 +398,85 @@ definition and make its semantics available implicitly through method
 calls on the class and its objects, without explicit exportation of any
 symbols.  Or it can do a little of both.
 .PP
-For example, to start a normal module called Fred, create
-a file called Fred.pm and put this at the start of it:
+For example, to start a normal module called Some::Module, create
+a file called Some/Module.pm and start with this template:
 .PP
+.Vb 1
+\&    package Some::Module;  # assumes Some/Module.pm
+.Ve
+.Vb 1
+\&    use strict;
+.Ve
+.Vb 3
+\&    BEGIN {
+\&        use Exporter   ();
+\&        use vars       qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+.Ve
+.Vb 4
+\&        # set the version for version checking
+\&        $VERSION     = 1.00;
+\&        # if using RCS/CVS, this may be preferred
+\&        $VERSION = do { my @r = (q$Revision: 2.21 $ =~ /\ed+/g); sprintf "%d."."%02d" x $#r, @r }; # must be all one line, for MakeMaker
+.Ve
+.Vb 3
+\&        @ISA         = qw(Exporter);
+\&        @EXPORT      = qw(&func1 &func2 &func4);
+\&        %EXPORT_TAGS = ( );     # eg: TAG => [ qw!name1 name2! ],
+.Ve
 .Vb 5
-\&    package Fred;
-\&    use Exporter ();
-\&    @ISA       = qw(Exporter);
-\&    @EXPORT    = qw(func1 func2);
-\&    @EXPORT_OK = qw($sally @listabob %harry func3);
+\&        # your exported package globals go here,
+\&        # as well as any optionally exported functions
+\&        @EXPORT_OK   = qw($Var1 %Hashit &func3);
+\&    }
+\&    use vars      @EXPORT_OK;
+.Ve
+.Vb 2
+\&    # non-exported package globals go here
+\&    use vars      qw(@more $stuff);
+.Ve
+.Vb 3
+\&    # initalize package globals, first exported ones
+\&    $Var1   = '';
+\&    %Hashit = ();
+.Ve
+.Vb 3
+\&    # then the others (which are still accessible as $Some::Module::stuff)
+\&    $stuff  = '';
+\&    @more   = ();
+.Ve
+.Vb 2
+\&    # all file-scoped lexicals must be created before
+\&    # the functions below that use them.
+.Ve
+.Vb 3
+\&    # file-private lexicals go here
+\&    my $priv_var    = '';
+\&    my %secret_hash = ();
+.Ve
+.Vb 5
+\&    # here's a file-private function as a closure,
+\&    # callable as &$priv_func;  it cannot be prototyped.
+\&    my $priv_func = sub {
+\&        # stuff goes here.
+\&    };
+.Ve
+.Vb 5
+\&    # make all your functions, whether exported or not;
+\&    # remember to put something interesting in the {} stubs
+\&    sub func1      {}    # no prototype
+\&    sub func2()    {}    # proto'd void
+\&    sub func3($$)  {}    # proto'd to 2 scalars
+.Ve
+.Vb 2
+\&    # this one isn't exported, but could be called!
+\&    sub func4(\e%)  {}    # proto'd to 1 hash ref
+.Ve
+.Vb 1
+\&    END { }       # module clean-up code here (global destructor)
 .Ve
 Then go on to declare and use your variables in functions
 without any qualifications.
-See the \fIExporter\fR manpage and the \fIPerl Modules File\fR for details on 
+See the \fIExporter\fR manpage and the \fIPerl Modules File\fR for details on
 mechanics and style issues in module creation.
 .PP
 Perl modules are included into your program by saying
@@ -437,7 +529,7 @@ instead of \f(CWuse\fR.  With require you can get into this problem:
 \&    $here = Cwd::getcwd();      
 .Ve
 .Vb 2
-\&    use Cwd;                    # import names from Cwd:: 
+\&    use Cwd;                    # import names from Cwd::
 \&    $here = getcwd();
 .Ve
 .Vb 2
@@ -459,7 +551,7 @@ the module.  If so, these will be entirely transparent to the user of
 the module.  It is the responsibility of the \fI.pm\fR file to load (or
 arrange to autoload) any additional functionality.  The \s-1POSIX\s0 module
 happens to do both dynamic loading and autoloading, but the user can
-just say \f(CWuse POSIX\fR to get it all.
+say just \f(CWuse POSIX\fR to get it all.
 .PP
 For more information on writing extension modules, see the \fIperlxs\fR manpage
 and the \fIperlguts\fR manpage.
@@ -474,26 +566,27 @@ because it has a shotgun.
 The module and its user have a contract, part of which is common law,
 and part of which is \*(L"written\*(R".  Part of the common law contract is
 that a module doesn't pollute any namespace it wasn't asked to.  The
-written contract for the module (AKA documentation) may make other
+written contract for the module (A.K.A. documentation) may make other
 provisions.  But then you know when you \f(CWuse RedefineTheWorld\fR that
 you're redefining the world and willing to take the consequences.
 .SH "THE PERL MODULE LIBRARY"
 .IX Header "THE PERL MODULE LIBRARY"
-A number of modules are included the the Perl distribution.  These are
-described below, and all end in \fI.pm\fR.  You may also discover files in 
+A number of modules are included the Perl distribution.  These are
+described below, and all end in \fI.pm\fR.  You may also discover files in
 the library directory that end in either \fI.pl\fR or \fI.ph\fR.  These are old
 libraries supplied so that old programs that use them still run.  The
 \fI.pl\fR files will all eventually be converted into standard modules, and
 the \fI.ph\fR files made by \fBh2ph\fR will probably end up as extension modules
 made by \fBh2xs\fR.  (Some \fI.ph\fR values may already be available through the
 POSIX module.)  The \fBpl2pm\fR file in the distribution may help in your
-conversion, but it's just a mechanical process, so is far from bulletproof.
+conversion, but it's just a mechanical process and therefore far from 
+bulletproof.
 .Sh "Pragmatic Modules"
 .IX Subsection "Pragmatic Modules"
 They work somewhat like pragmas in that they tend to affect the compilation of
-your program, and thus will usually only work well when used within a
-\f(CWuse\fR, or \f(CWno\fR.  These are locally scoped, so an inner \s-1BLOCK\s0
-may countermand any of these by saying
+your program, and thus will usually work well only when used within a
+\f(CWuse\fR, or \f(CWno\fR.  Most of these are locally scoped, so an inner \s-1BLOCK\s0
+may countermand any of these by saying:
 .PP
 .Vb 2
 \&    no integer;
@@ -501,34 +594,54 @@ may countermand any of these by saying
 .Ve
 which lasts until the end of that \s-1BLOCK\s0.
 .PP
-The following programs are defined (and have their own documentation).
+Unlike the pragmas that effect the \f(CW$^H\fR hints variable, the \f(CWuse
+vars\fR and \f(CWuse subs\fR declarations are not \s-1BLOCK\s0\-scoped.  They allow
+you to pre-declare a variables or subroutines within a particular
+\fIfile\fR rather than just a block.  Such declarations are effective
+for the entire file for which they were declared.  You cannot rescind
+them with \f(CWno vars\fR or \f(CWno subs\fR.
+.PP
+The following pragmas are defined (and have their own documentation).
+.Ip "blib" 12
+.IX Item "blib"
+manipulate \f(CW@INC\fR at compile time to use MakeMaker's uninstalled version
+of a package
 .Ip "diagnostics" 12
 .IX Item "diagnostics"
-Pragma to produce enhanced diagnostics
+force verbose warning diagnostics
 .Ip "integer" 12
 .IX Item "integer"
-Pragma to compute arithmetic in integer instead of double
+compute arithmetic in integer instead of double
 .Ip "less" 12
 .IX Item "less"
-Pragma to request less of something from the compiler
+request less of something from the compiler
+.Ip "lib" 12
+.IX Item "lib"
+manipulate \f(CW@INC\fR at compile time
+.Ip "locale" 12
+.IX Item "locale"
+use or ignore current locale for built-in operations (see the \fIperllocale\fR manpage)
 .Ip "ops" 12
 .IX Item "ops"
-Pragma to restrict use of unsafe opcodes
+restrict named opcodes when compiling or running Perl code
 .Ip "overload" 12
 .IX Item "overload"
-Pragma for overloading operators 
+overload basic Perl operations
 .Ip "sigtrap" 12
 .IX Item "sigtrap"
-Pragma to enable stack backtrace on unexpected signals
+enable simple signal handling
 .Ip "strict" 12
 .IX Item "strict"
-Pragma to restrict unsafe constructs
+restrict unsafe constructs
 .Ip "subs" 12
 .IX Item "subs"
-Pragma to predeclare sub names
+pre-declare sub names
+.Ip "vmsish" 12
+.IX Item "vmsish"
+adopt certain \s-1VMS\s0\-specific behaviors
 .Ip "vars" 12
 .IX Item "vars"
-Pragma to predeclare global symbols
+pre-declare global variable names
 .Sh "Standard Modules"
 .IX Subsection "Standard Modules"
 Standard, bundled modules are all expected to behave in a well-defined
@@ -546,36 +659,66 @@ split a package for autoloading
 .Ip "Benchmark" 12
 .IX Item "Benchmark"
 benchmark running times of code
+.Ip "\s-1CPAN\s0" 12
+.IX Item "\s-1CPAN\s0"
+interface to Comprehensive Perl Archive Network
+.Ip "\s-1CPAN::\s0FirstTime" 12
+.IX Item "\s-1CPAN::\s0FirstTime"
+create a \s-1CPAN\s0 configuration file
+.Ip "\s-1CPAN::\s0Nox" 12
+.IX Item "\s-1CPAN::\s0Nox"
+run \s-1CPAN\s0 while avoiding compiled extensions
 .Ip "Carp" 12
 .IX Item "Carp"
 warn of errors (from perspective of caller)
+.Ip "Class::Template" 12
+.IX Item "Class::Template"
+struct/member template builder
 .Ip "Config" 12
 .IX Item "Config"
-access Perl configuration option
+access Perl configuration information
 .Ip "Cwd" 12
 .IX Item "Cwd"
 get pathname of current working directory
 .Ip "DB_File" 12
 .IX Item "DB_File"
-Perl access to Berkeley \s-1DB\s0
+access to Berkeley \s-1DB\s0
 .Ip "Devel::SelfStubber" 12
 .IX Item "Devel::SelfStubber"
 generate stubs for a SelfLoading module
+.Ip "DirHandle" 12
+.IX Item "DirHandle"
+supply object methods for directory handles
 .Ip "DynaLoader" 12
 .IX Item "DynaLoader"
-Dynamically load C libraries into Perl code
+dynamically load C libraries into Perl code
 .Ip "English" 12
 .IX Item "English"
 use nice English (or awk) names for ugly punctuation variables
 .Ip "Env" 12
 .IX Item "Env"
-perl module that imports environment variables
+import environment variables
 .Ip "Exporter" 12
 .IX Item "Exporter"
-provide inport/export controls for Perl modules
+implements default import method for modules
+.Ip "ExtUtils::Embed" 12
+.IX Item "ExtUtils::Embed"
+utilities for embedding Perl in C/\*(C+ applications
+.Ip "ExtUtils::Install" 12
+.IX Item "ExtUtils::Install"
+install files from here to there
 .Ip "ExtUtils::Liblist" 12
 .IX Item "ExtUtils::Liblist"
 determine libraries to use and how to use them
+.Ip "ExtUtils::\s-1MM_OS2\s0" 12
+.IX Item "ExtUtils::\s-1MM_OS2\s0"
+methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker
+.Ip "ExtUtils::MM_Unix" 12
+.IX Item "ExtUtils::MM_Unix"
+methods used by ExtUtils::MakeMaker
+.Ip "ExtUtils::\s-1MM_VMS\s0" 12
+.IX Item "ExtUtils::\s-1MM_VMS\s0"
+methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker
 .Ip "ExtUtils::MakeMaker" 12
 .IX Item "ExtUtils::MakeMaker"
 create an extension Makefile
@@ -585,63 +728,210 @@ utilities to write and check a \s-1MANIFEST\s0 file
 .Ip "ExtUtils::Mkbootstrap" 12
 .IX Item "ExtUtils::Mkbootstrap"
 make a bootstrap file for use by DynaLoader
-.Ip "ExtUtils::Miniperl" 12
-.IX Item "ExtUtils::Miniperl"
-!!!\s-1GOOD\s0 \s-1QUESTION\s0!!!
+.Ip "ExtUtils::Mksymlists" 12
+.IX Item "ExtUtils::Mksymlists"
+write linker options files for dynamic extension
+.Ip "ExtUtils::testlib" 12
+.IX Item "ExtUtils::testlib"
+add blib/* directories to \f(CW@INC\fR
 .Ip "Fcntl" 12
 .IX Item "Fcntl"
 load the C Fcntl.h defines
 .Ip "File::Basename" 12
 .IX Item "File::Basename"
-parse file specifications
+split a pathname into pieces
 .Ip "File::CheckTree" 12
 .IX Item "File::CheckTree"
 run many filetest checks on a tree
+.Ip "File::Compare" 12
+.IX Item "File::Compare"
+compare files or filehandles
+.Ip "File::Copy" 12
+.IX Item "File::Copy"
+copy files or filehandles
 .Ip "File::Find" 12
 .IX Item "File::Find"
 traverse a file tree
-.Ip "FileHandle" 12
-.IX Item "FileHandle"
-supply object methods for filehandles
 .Ip "File::Path" 12
 .IX Item "File::Path"
 create or remove a series of directories
+.Ip "File::stat" 12
+.IX Item "File::stat"
+by-name interface to Perl's built-in \fIstat()\fR functions
+.Ip "FileCache" 12
+.IX Item "FileCache"
+keep more files open than the system permits
+.Ip "FileHandle" 12
+.IX Item "FileHandle"
+supply object methods for filehandles
+.Ip "FindBin" 12
+.IX Item "FindBin"
+locate directory of original perl script
+.Ip "GDBM_File" 12
+.IX Item "GDBM_File"
+access to the gdbm library
 .Ip "Getopt::Long" 12
 .IX Item "Getopt::Long"
-extended getopt processing
+extended processing of command line options
 .Ip "Getopt::Std" 12
 .IX Item "Getopt::Std"
-Process single-character switches with switch clustering
+process single-character switches with switch clustering
 .Ip "I18N::Collate" 12
 .IX Item "I18N::Collate"
 compare 8-bit scalar data according to the current locale
+.Ip "\s-1IO\s0" 12
+.IX Item "\s-1IO\s0"
+load various \s-1IO\s0 modules
+.Ip "\s-1IO::\s0File" 12
+.IX Item "\s-1IO::\s0File"
+supply object methods for filehandles
+.Ip "\s-1IO::\s0Handle" 12
+.IX Item "\s-1IO::\s0Handle"
+supply object methods for I/O handles
+.Ip "\s-1IO::\s0Pipe" 12
+.IX Item "\s-1IO::\s0Pipe"
+supply object methods for pipes
+.Ip "\s-1IO::\s0Seekable" 12
+.IX Item "\s-1IO::\s0Seekable"
+supply seek based methods for I/O objects
+.Ip "\s-1IO::\s0Select" 12
+.IX Item "\s-1IO::\s0Select"
+\s-1OO\s0 interface to the select system call
+.Ip "\s-1IO::\s0Socket" 12
+.IX Item "\s-1IO::\s0Socket"
+object interface to socket communications
 .Ip "\s-1IPC::\s0Open2" 12
 .IX Item "\s-1IPC::\s0Open2"
-a process for both reading and writing
+open a process for both reading and writing
 .Ip "\s-1IPC::\s0Open3" 12
 .IX Item "\s-1IPC::\s0Open3"
 open a process for reading, writing, and error handling
+.Ip "Math::BigFloat" 12
+.IX Item "Math::BigFloat"
+arbitrary length float math package
+.Ip "Math::BigInt" 12
+.IX Item "Math::BigInt"
+arbitrary size integer math package
+.Ip "Math::Complex" 12
+.IX Item "Math::Complex"
+complex numbers and associated mathematical functions
+.Ip "NDBM_File" 12
+.IX Item "NDBM_File"
+tied access to ndbm files
 .Ip "Net::Ping" 12
 .IX Item "Net::Ping"
-check a host for upness
+Hello, anybody home?
+.Ip "Net::hostent" 12
+.IX Item "Net::hostent"
+by-name interface to Perl's built-in gethost*() functions
+.Ip "Net::netent" 12
+.IX Item "Net::netent"
+by-name interface to Perl's built-in getnet*() functions
+.Ip "Net::protoent" 12
+.IX Item "Net::protoent"
+by-name interface to Perl's built-in getproto*() functions
+.Ip "Net::servent" 12
+.IX Item "Net::servent"
+by-name interface to Perl's built-in getserv*() functions
+.Ip "Opcode" 12
+.IX Item "Opcode"
+disable named opcodes when compiling or running perl code
+.Ip "Pod::Text" 12
+.IX Item "Pod::Text"
+convert \s-1POD\s0 data to formatted \s-1ASCII\s0 text
 .Ip "\s-1POSIX\s0" 12
 .IX Item "\s-1POSIX\s0"
-Perl interface to \s-1IEEE\s0 Std 1003.1
+interface to \s-1IEEE\s0 Standard 1003.1
+.Ip "SDBM_File" 12
+.IX Item "SDBM_File"
+tied access to sdbm files
+.Ip "Safe" 12
+.IX Item "Safe"
+compile and execute code in restricted compartments
+.Ip "Search::Dict" 12
+.IX Item "Search::Dict"
+search for key in dictionary file
+.Ip "SelectSaver" 12
+.IX Item "SelectSaver"
+save and restore selected file handle
 .Ip "SelfLoader" 12
 .IX Item "SelfLoader"
 load functions only on demand
-.Ip "Safe" 12
-.IX Item "Safe"
-Creation controlled compartments in which perl code can be evaluated.
+.Ip "Shell" 12
+.IX Item "Shell"
+run shell commands transparently within perl
 .Ip "Socket" 12
 .IX Item "Socket"
 load the C socket.h defines and structure manipulators
+.Ip "Symbol" 12
+.IX Item "Symbol"
+manipulate Perl symbols and their names
+.Ip "Sys::Hostname" 12
+.IX Item "Sys::Hostname"
+try every conceivable way to get hostname
+.Ip "Sys::Syslog" 12
+.IX Item "Sys::Syslog"
+interface to the \s-1UNIX\s0 \fIsyslog\fR\|(3) calls
+.Ip "Term::Cap" 12
+.IX Item "Term::Cap"
+termcap interface
+.Ip "Term::Complete" 12
+.IX Item "Term::Complete"
+word completion module
+.Ip "Term::ReadLine" 12
+.IX Item "Term::ReadLine"
+interface to various \f(CWreadline\fR packages
 .Ip "Test::Harness" 12
 .IX Item "Test::Harness"
 run perl standard test scripts with statistics
 .Ip "Text::Abbrev" 12
 .IX Item "Text::Abbrev"
-rceate an abbreviation table from a list
+create an abbreviation table from a list
+.Ip "Text::ParseWords" 12
+.IX Item "Text::ParseWords"
+parse text into an array of tokens
+.Ip "Text::Soundex" 12
+.IX Item "Text::Soundex"
+implementation of the Soundex Algorithm as described by Knuth
+.Ip "Text::Tabs" 12
+.IX Item "Text::Tabs"
+expand and unexpand tabs per the unix \fIexpand\fR\|(1) and \fIunexpand\fR\|(1)
+.Ip "Text::Wrap" 12
+.IX Item "Text::Wrap"
+line wrapping to form simple paragraphs
+.Ip "Tie::Hash" 12
+.IX Item "Tie::Hash"
+base class definitions for tied hashes
+.Ip "Tie::RefHash" 12
+.IX Item "Tie::RefHash"
+base class definitions for tied hashes with references as keys
+.Ip "Tie::Scalar" 12
+.IX Item "Tie::Scalar"
+base class definitions for tied scalars
+.Ip "Tie::SubstrHash" 12
+.IX Item "Tie::SubstrHash"
+fixed-table-size, fixed-key-length hashing
+.Ip "Time::Local" 12
+.IX Item "Time::Local"
+efficiently compute time from local and \s-1GMT\s0 time
+.Ip "Time::gmtime" 12
+.IX Item "Time::gmtime"
+by-name interface to Perl's built-in \fIgmtime()\fR function
+.Ip "Time::localtime" 12
+.IX Item "Time::localtime"
+by-name interface to Perl's built-in \fIlocaltime()\fR function
+.Ip "Time::tm" 12
+.IX Item "Time::tm"
+internal object used by Time::gmtime and Time::localtime
+.Ip "\s-1UNIVERSAL\s0" 12
+.IX Item "\s-1UNIVERSAL\s0"
+base class for \s-1ALL\s0 classes (blessed references)
+.Ip "User::grent" 12
+.IX Item "User::grent"
+by-name interface to Perl's built-in getgr*() functions
+.Ip "User::pwent" 12
+.IX Item "User::pwent"
+by-name interface to Perl's built-in getpw*() functions
 .PP
 To find out \fIall\fR the modules installed on your system, including
 those without documentation or outside the standard release, do this:
@@ -658,7 +948,7 @@ dynamically loaded into Perl if and when you need them.  Supported
 extension modules include the Socket, Fcntl, and \s-1POSIX\s0 modules.
 .PP
 Many popular C extension modules do not come bundled (at least, not
-completely) due to their size, volatility, or simply lack of time for
+completely) due to their sizes, volatility, or simply lack of time for
 adequate testing and configuration across the multitude of platforms on
 which Perl was beta-tested.  You are encouraged to look for them in
 \fIarchie\fR\|(1L), the Perl \s-1FAQ\s0 or Meta-\s-1FAQ\s0, the \s-1WWW\s0 page, and even with their
@@ -667,10 +957,10 @@ disposition.
 .SH "CPAN"
 .IX Header "CPAN"
 CPAN stands for the Comprehensive Perl Archive Network.  This is a globally
-replicated collection of all known Perl materials, including hundreds 
-of unbunded modules.  Here are the major categories of modules:
-.Ip "\(bu Language Extensions and Documentation Tools " 5
-.IX Item "\(bu Language Extensions and Documentation Tools "
+replicated collection of all known Perl materials, including hundreds
+of unbundled modules.  Here are the major categories of modules:
+.Ip "\(bu Language Extensions and Documentation Tools" 5
+.IX Item "\(bu Language Extensions and Documentation Tools"
 .Ip "\(bu Development Support" 5
 .IX Item "\(bu Development Support"
 .Ip "\(bu Operating System Interfaces" 5
@@ -687,22 +977,22 @@ of unbunded modules.  Here are the major categories of modules:
 .IX Item "\(bu Interfaces to / Emulations of Other Programming Languages"
 .Ip "\(bu File Names, File Systems and File Locking (see also File Handles)" 5
 .IX Item "\(bu File Names, File Systems and File Locking (see also File Handles)"
-.Ip "\(bu String Processing, Language Text Processing, Parsing and Searching" 5
-.IX Item "\(bu String Processing, Language Text Processing, Parsing and Searching"
-.Ip "\(bu Option, Argument, Parameter and Configuration File Processing" 5
-.IX Item "\(bu Option, Argument, Parameter and Configuration File Processing"
+.Ip "\(bu String Processing, Language Text Processing, Parsing, and Searching" 5
+.IX Item "\(bu String Processing, Language Text Processing, Parsing, and Searching"
+.Ip "\(bu Option, Argument, Parameter, and Configuration File Processing" 5
+.IX Item "\(bu Option, Argument, Parameter, and Configuration File Processing"
 .Ip "\(bu Internationalization and Locale" 5
 .IX Item "\(bu Internationalization and Locale"
-.Ip "\(bu Authentication, Security and Encryption" 5
-.IX Item "\(bu Authentication, Security and Encryption"
+.Ip "\(bu Authentication, Security, and Encryption" 5
+.IX Item "\(bu Authentication, Security, and Encryption"
 .Ip "\(bu World Wide Web, \s-1HTML\s0, \s-1HTTP\s0, \s-1CGI\s0, \s-1MIME\s0" 5
 .IX Item "\(bu World Wide Web, \s-1HTML\s0, \s-1HTTP\s0, \s-1CGI\s0, \s-1MIME\s0"
 .Ip "\(bu Server and Daemon Utilities" 5
 .IX Item "\(bu Server and Daemon Utilities"
 .Ip "\(bu Archiving and Compression" 5
 .IX Item "\(bu Archiving and Compression"
-.Ip "\(bu Images, Pixmap and Bitmap Manipulation, Drawing and Graphing" 5
-.IX Item "\(bu Images, Pixmap and Bitmap Manipulation, Drawing and Graphing"
+.Ip "\(bu Images, Pixmap and Bitmap Manipulation, Drawing, and Graphing" 5
+.IX Item "\(bu Images, Pixmap and Bitmap Manipulation, Drawing, and Graphing"
 .Ip "\(bu Mail and Usenet News" 5
 .IX Item "\(bu Mail and Usenet News"
 .Ip "\(bu Control Flow Utilities (callbacks and exceptions etc)" 5
@@ -714,59 +1004,104 @@ of unbunded modules.  Here are the major categories of modules:
 .PP
 The registered \s-1CPAN\s0 sites as of this writing include the following.
 You should try to choose one close to you:
-.Ip "\(bu ftp://ftp.sterling.com/programming/languages/perl/" 5
-.IX Item "\(bu ftp://ftp.sterling.com/programming/languages/perl/"
-.Ip "\(bu ftp://ftp.sedl.org/pub/mirrors/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.sedl.org/pub/mirrors/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.uoknor.edu/mirrors/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.uoknor.edu/mirrors/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.delphi.com/pub/mirrors/packages/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.delphi.com/pub/mirrors/packages/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://uiarchive.cso.uiuc.edu/pub/lang/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://uiarchive.cso.uiuc.edu/pub/lang/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.cis.ufl.edu/pub/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.cis.ufl.edu/pub/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.switch.ch/mirror/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.switch.ch/mirror/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.sunet.se/pub/lang/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.sunet.se/pub/lang/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.ci.uminho.pt/pub/lang/perl/" 5
-.IX Item "\(bu ftp://ftp.ci.uminho.pt/pub/lang/perl/"
-.Ip "\(bu ftp://ftp.cs.ruu.nl/pub/\s-1PERL/CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.cs.ruu.nl/pub/\s-1PERL/CPAN\s0/"
-.Ip "\(bu ftp://ftp.demon.co.uk/pub/mirrors/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.demon.co.uk/pub/mirrors/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.rz.ruhr-uni-bochum.de/pub/programming/languages/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.rz.ruhr-uni-bochum.de/pub/programming/languages/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.leo.org/pub/comp/programming/languages/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.leo.org/pub/comp/programming/languages/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.pasteur.fr/pub/computing/unix/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.pasteur.fr/pub/computing/unix/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.ibp.fr/pub/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.ibp.fr/pub/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.funet.fi/pub/languages/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.funet.fi/pub/languages/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.tekotago.ac.nz/pub/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.tekotago.ac.nz/pub/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.mame.mu.oz.au/pub/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.mame.mu.oz.au/pub/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://coombs.anu.edu.au/pub/perl/" 5
-.IX Item "\(bu ftp://coombs.anu.edu.au/pub/perl/"
-.Ip "\(bu ftp://dongpo.math.ncu.edu.tw/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://dongpo.math.ncu.edu.tw/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.lab.kdd.co.jp/lang/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.lab.kdd.co.jp/lang/perl/\s-1CPAN\s0/"
-.Ip "\(bu ftp://ftp.is.co.za/programming/perl/\s-1CPAN\s0/" 5
-.IX Item "\(bu ftp://ftp.is.co.za/programming/perl/\s-1CPAN\s0/"
+.Ip "\(bu Africa" 5
+.IX Item "\(bu Africa"
+.Sp
+.Vb 1
+\&    South Africa    ftp://ftp.is.co.za/programming/perl/CPAN/
+.Ve
+.Ip "\(bu Asia" 5
+.IX Item "\(bu Asia"
+.Sp
+.Vb 6
+\&    Hong Kong       ftp://ftp.hkstar.com/pub/CPAN/
+\&    Japan           ftp://ftp.jaist.ac.jp/pub/lang/perl/CPAN/
+\&                    ftp://ftp.lab.kdd.co.jp/lang/perl/CPAN/
+\&    South Korea     ftp://ftp.nuri.net/pub/CPAN/
+\&    Taiwan          ftp://dongpo.math.ncu.edu.tw/perl/CPAN/
+\&                    ftp://ftp.wownet.net/pub2/PERL/
+.Ve
+.Ip "\(bu Australasia" 5
+.IX Item "\(bu Australasia"
+.Sp
+.Vb 2
+\&    Australia       ftp://ftp.netinfo.com.au/pub/perl/CPAN/
+\&    New Zealand     ftp://ftp.tekotago.ac.nz/pub/perl/CPAN/
+.Ve
+.Ip "\(bu Europe" 5
+.IX Item "\(bu Europe"
+.Sp
+.Vb 32
+\&    Austria         ftp://ftp.tuwien.ac.at/pub/languages/perl/CPAN/
+\&    Belgium         ftp://ftp.kulnet.kuleuven.ac.be/pub/mirror/CPAN/
+\&    Czech Republic  ftp://sunsite.mff.cuni.cz/Languages/Perl/CPAN/
+\&    Denmark         ftp://sunsite.auc.dk/pub/languages/perl/CPAN/
+\&    Finland         ftp://ftp.funet.fi/pub/languages/perl/CPAN/
+\&    France          ftp://ftp.ibp.fr/pub/perl/CPAN/
+\&                    ftp://ftp.pasteur.fr/pub/computing/unix/perl/CPAN/
+\&    Germany         ftp://ftp.gmd.de/packages/CPAN/
+\&                    ftp://ftp.leo.org/pub/comp/programming/languages/perl/CPAN/
+\&                    ftp://ftp.mpi-sb.mpg.de/pub/perl/CPAN/
+\&                    ftp://ftp.rz.ruhr-uni-bochum.de/pub/CPAN/
+\&                    ftp://ftp.uni-erlangen.de/pub/source/Perl/CPAN/
+\&                    ftp://ftp.uni-hamburg.de/pub/soft/lang/perl/CPAN/
+\&    Greece          ftp://ftp.ntua.gr/pub/lang/perl/
+\&    Hungary         ftp://ftp.kfki.hu/pub/packages/perl/CPAN/
+\&    Italy           ftp://cis.utovrm.it/CPAN/
+\&    the Netherlands ftp://ftp.cs.ruu.nl/pub/PERL/CPAN/
+\&                    ftp://ftp.EU.net/packages/cpan/
+\&    Norway          ftp://ftp.uit.no/pub/languages/perl/cpan/
+\&    Poland          ftp://ftp.pk.edu.pl/pub/lang/perl/CPAN/
+\&                    ftp://sunsite.icm.edu.pl/pub/CPAN/
+\&    Portugal        ftp://ftp.ci.uminho.pt/pub/lang/perl/
+\&                    ftp://ftp.telepac.pt/pub/CPAN/
+\&    Russia          ftp://ftp.sai.msu.su/pub/lang/perl/CPAN/
+\&    Slovenia        ftp://ftp.arnes.si/software/perl/CPAN/
+\&    Spain           ftp://ftp.etse.urv.es/pub/mirror/perl/
+\&                    ftp://ftp.rediris.es/mirror/CPAN/
+\&    Sweden          ftp://ftp.sunet.se/pub/lang/perl/CPAN/
+\&    Switzerland     ftp://sunsite.cnlab-switch.ch/mirror/CPAN/
+\&    UK              ftp://ftp.demon.co.uk/pub/mirrors/perl/CPAN/
+\&                    ftp://sunsite.doc.ic.ac.uk/packages/CPAN/
+\&                    ftp://unix.hensa.ac.uk/mirrors/perl-CPAN/
+.Ve
+.Ip "\(bu North America" 5
+.IX Item "\(bu North America"
+.Sp
+.Vb 17
+\&    Ontario         ftp://ftp.utilis.com/public/CPAN/
+\&                    ftp://enterprise.ic.gc.ca/pub/perl/CPAN/
+\&    Manitoba        ftp://theory.uwinnipeg.ca/pub/CPAN/
+\&    California      ftp://ftp.digital.com/pub/plan/perl/CPAN/
+\&                    ftp://ftp.cdrom.com/pub/perl/
+\&    Colorado        ftp://ftp.cs.colorado.edu/pub/perl/CPAN/
+\&    Florida         ftp://ftp.cis.ufl.edu/pub/perl/CPAN/
+\&    Illinois        ftp://uiarchive.uiuc.edu/pub/lang/perl/CPAN/
+\&    Massachusetts   ftp://ftp.iguide.com/pub/mirrors/packages/perl/CPAN/
+\&    New York        ftp://ftp.rge.com/pub/languages/perl/
+\&    North Carolina  ftp://ftp.duke.edu/pub/perl/
+\&    Oklahoma        ftp://ftp.ou.edu/mirrors/CPAN/
+\&    Oregon          ftp://ftp.orst.edu/pub/packages/CPAN/
+\&    Pennsylvania    ftp://ftp.epix.net/pub/languages/perl/
+\&    Texas           ftp://ftp.sedl.org/pub/mirrors/CPAN/
+\&                    ftp://ftp.metronet.com/pub/perl/
+\&    Washington      ftp://ftp.spu.edu/pub/CPAN/
+.Ve
+.Ip "\(bu South America" 5
+.IX Item "\(bu South America"
+.Sp
+.Vb 1
+\&    Chile           ftp://sunsite.dcc.uchile.cl/pub/Lang/perl/CPAN/
+.Ve
 .PP
-For an up-to-date listing of \s-1CPAN\s0 sites, 
+For an up-to-date listing of \s-1CPAN\s0 sites,
 see \fIhttp://www.perl.com/perl/\s-1CPAN\s0\fR or \fIftp://ftp.perl.com/perl/\fR.
-.SH "Modules: Creation, Use and Abuse"
-.IX Header "Modules: Creation, Use and Abuse"
+.SH "Modules: Creation, Use, and Abuse"
+.IX Header "Modules: Creation, Use, and Abuse"
 (The following section is borrowed directly from Tim Bunce's modules
 file, available at your nearest CPAN site.)
 .PP
-Perl 5 implements a class using a package, but the presence of a
+Perl implements a class using a package, but the presence of a
 package doesn't imply the presence of a class.  A package is just a
 namespace.  A class is a package that provides subroutines that can be
 used as methods.  A method is just a subroutine that expects, as its
@@ -800,10 +1135,10 @@ scheme as the original author.
 .IX Item "Try to design the new module to be easy to extend and reuse."
 Use blessed references.  Use the two argument form of bless to bless
 into the class name given as the first parameter of the constructor,
-e.g.:
+e.g.,:
 .Sp
 .Vb 4
-\& sub new { 
+\& sub new {
 \&        my $class = shift;
 \&        return bless {}, $class;
 \& }
@@ -812,7 +1147,7 @@ or even this if you'd like it to be used as either a static
 or a virtual method.
 .Sp
 .Vb 5
-\& sub new { 
+\& sub new {
 \&        my $self  = shift;
 \&        my $class = ref($self) || $self;
 \&        return bless {}, $class;
@@ -823,13 +1158,13 @@ Pass arrays as references so more parameters can be added later
 appropriate.  Split large methods into smaller more flexible ones.
 Inherit methods from other modules if appropriate.
 .Sp
-Avoid class name tests like: die \*(L"Invalid\*(R" unless ref \f(CW$ref\fR eq \*(L'\s-1FOO\s0\*(R'.
-Generally you can delete the \*(L"eq \*(L'\s-1FOO\s0'\*(R" part with no harm at all.
+Avoid class name tests like: \f(CWdie "Invalid" unless ref $ref eq 'FOO'\fR.
+Generally you can delete the \*(L"\f(CWeq 'FOO'\fR\*(R" part with no harm at all.
 Let the objects look after themselves! Generally, avoid hardwired
 class names as far as possible.
 .Sp
-Avoid \f(CW$r\fR\->\fIClass::func()\fR where using \f(CW@ISA\fR=qw(... Class ...) and
-\f(CW$r\fR\->\fIfunc()\fR would work (see perlbot man page for more details).
+Avoid \f(CW$r->\fIClass::func()\fR\fR where using \f(CW@ISA=qw(... Class ...)\fR and
+\f(CW$r->\fIfunc()\fR\fR would work (see the \fIperlbot\fR manpage for more details).
 .Sp
 Use autosplit so little used or newly added functions won't be a
 burden to programs which don't use them. Add test functions to
@@ -839,18 +1174,18 @@ the module after _\|_END_\|_ either using AutoSplit or by saying:
 \& eval join('',<main::DATA>) || die $@ unless caller();
 .Ve
 Does your module pass the \*(L'empty sub-class\*(R' test? If you say
-\*(L"@\s-1SUBCLASS::ISA\s0 = \fIqw\fR\|(\s-1YOURCLASS\s0);\*(R" your applications should be able
+\*(L"\f(CW@SUBCLASS::ISA = qw(YOURCLASS);\fR\*(R" your applications should be able
 to use \s-1SUBCLASS\s0 in exactly the same way as \s-1YOURCLASS\s0.  For example,
-does your application still work if you change:  \f(CW$obj\fR = new \s-1YOURCLASS\s0;
-into: \f(CW$obj\fR = new \s-1SUBCLASS\s0; ?
+does your application still work if you change:  \f(CW$obj = new YOURCLASS;\fR
+into: \f(CW$obj = new SUBCLASS;\fR ?
 .Sp
 Avoid keeping any state information in your packages. It makes it
 difficult for multiple other packages to use yours. Keep state
 information in objects.
 .Sp
-Always use \f(CW-w\fR. Try to \f(CWuse strict;\fR (or \f(CWuse strict qw(...);\fR).
+Always use \fB\-w\fR. Try to \f(CWuse strict;\fR (or \f(CWuse strict qw(...);\fR).
 Remember that you can add \f(CWno strict qw(...);\fR to individual blocks
-of code which need less strictness. Always use \f(CW-w\fR. Always use \f(CW-w\fR!
+of code which need less strictness. Always use \fB\-w\fR. Always use \fB\-w\fR!
 Follow the guidelines in the \fIperlstyle\fR\|(1) manual.
 .Ip "Some simple style guidelines" 4
 .IX Item "Some simple style guidelines"
@@ -880,7 +1215,7 @@ or nature of a variable. For example:
 \& $no_caps_here    function scope my() or local() variables
 .Ve
 Function and method names seem to work best as all lowercase.
-E.g., \f(CW$obj\fR\->\fIas_string()\fR.
+e.g.,, \f(CW$obj->\fIas_string()\fR\fR.
 .Sp
 You can use a leading underscore to indicate that a variable or
 function should not be used outside the package that defined it.
@@ -895,13 +1230,13 @@ export try to use \f(CW@EXPORT_OK\fR in preference to \f(CW@EXPORT\fR and avoid
 short or common names to reduce the risk of name clashes.
 .Sp
 Generally anything not exported is still accessible from outside the
-module using the ModuleName::item_name (or \f(CW$blessed_ref\fR\->method)
+module using the ModuleName::item_name (or \f(CW$blessed_ref->method\fR)
 syntax.  By convention you can use a leading underscore on names to
-informally indicate that they are \*(L'internal\*(R' and not for public use.
+indicate informally that they are \*(L'internal\*(R' and not for public use.
 .Sp
 (It is actually possible to get private functions by saying:
-my \f(CW$subref\fR = sub { ... };  &$subref; But there's no way to call that
-directly as a method, since a method must have a name in the symbol
+\f(CWmy $subref = sub { ... };  &$subref;\fR.  But there's no way to call that
+directly as a method, because a method must have a name in the symbol
 table.)
 .Sp
 As a general rule, if the module is trying to be object oriented
@@ -909,12 +1244,12 @@ then export nothing. If it's just a collection of functions then
 \f(CW@EXPORT_OK\fR anything but use \f(CW@EXPORT\fR with caution.
 .Ip "Select a name for the module." 4
 .IX Item "Select a name for the module."
-This name should be as descriptive, accurate and complete as
+This name should be as descriptive, accurate, and complete as
 possible.  Avoid any risk of ambiguity. Always try to use two or
 more whole words.  Generally the name should reflect what is special
 about what the module does rather than how it does it.  Please use
-nested module names to informally group or categorise a module.
-A module should have a very good reason not to have a nested name.
+nested module names to group informally or categorize a module.
+There should be a very good reason for a module not to have a nested name.
 Module names should begin with a capital letter.
 .Sp
 Having 57 modules all called Sort will not make life easy for anyone
@@ -978,16 +1313,16 @@ split out some of the sections into separate files: \s-1INSTALL\s0,
 Copying, ToDo etc.
 .Ip "Adding a Copyright Notice." 8
 .IX Item "Adding a Copyright Notice."
-How you choose to licence your work is a personal decision.
+How you choose to license your work is a personal decision.
 The general mechanism is to assert your Copyright and then make
 a declaration of how others may copy/use/modify your work.
 .Sp
-Perl, for example, is supplied with two types of licence: The \s-1GNU\s0
-\s-1GPL\s0 and The Artistic License (see the files \s-1README\s0, Copying and
+Perl, for example, is supplied with two types of license: The \s-1GNU\s0
+\s-1GPL\s0 and The Artistic License (see the files \s-1README\s0, Copying, and
 Artistic).  Larry has good reasons for \s-1NOT\s0 just using the \s-1GNU\s0 \s-1GPL\s0.
 .Sp
-My personal recommendation, out of respect for Larry, Perl and the
-perl community at large is to simply state something like:
+My personal recommendation, out of respect for Larry, Perl, and the
+perl community at large is to state something simply like:
 .Sp
 .Vb 3
 \& Copyright (c) 1995 Your Name. All rights reserved.
@@ -1001,9 +1336,9 @@ Remember to include the other words in addition to the Copyright.
 .IX Item "Give the module a version/issue/release number."
 To be fully compatible with the Exporter and MakeMaker modules you
 should store your module's version number in a non-my package
-variable called \f(CW$VERSION\fR.  This should be a valid floating point 
-number with at least two digits after the decimal (ie hundredths,
-e.g, \f(CW$VERSION\fR = \*(L"0.01").  Don't use a \*(L"1.3.2\*(R" style version.
+variable called \f(CW$VERSION\fR.  This should be a floating point
+number with at least two digits after the decimal (i.e., hundredths,
+e.g, \f(CW$VERSION = "0.01"\fR).  Don't use a \*(L"1.3.2\*(R" style version.
 See Exporter.pm in Perl5.001m or later for details.
 .Sp
 It may be handy to add a function or method to retrieve the number.
@@ -1018,7 +1353,7 @@ Usenet newsgroup.  This will at least ensure very wide once-off
 distribution.
 .Sp
 If possible you should place the module into a major ftp archive and
-include details of it's location in your announcement.
+include details of its location in your announcement.
 .Sp
 Some notes about ftp archives: Please use a long descriptive file
 name which includes the version number. Most incoming directories
@@ -1036,13 +1371,13 @@ Follow the instructions and links on
 .Vb 1
 \&   http://franz.ww.tu-berlin.de/modulelist
 .Ve
-or upload to one of these sites: 
+or upload to one of these sites:
 .Sp
 .Vb 2
 \&   ftp://franz.ww.tu-berlin.de/incoming
-\&   ftp://ftp.cis.ufl.edu/incoming  
+\&   ftp://ftp.cis.ufl.edu/incoming
 .Ve
-and notify upload@franz.ww.tu-berlin.de.
+and notify <\fIupload@franz.ww.tu-berlin.de\fR>.
 .Sp
 By using the \s-1WWW\s0 interface you can ask the Upload Server to mirror
 your modules from your ftp or \s-1WWW\s0 site into your own directory on
@@ -1107,7 +1442,7 @@ the application could invoked as:
 .Sp
 .Vb 3
 \&     perl -e 'use Module::Name; method(@ARGV)' ...
-\&or   
+\&or
 \&     perl -mModule::Name ...    (in perl5.002)
 .Ve
 

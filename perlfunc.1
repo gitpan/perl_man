@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFUNC 1 "perl 5.003, patch 05" "12/Sep/96" "Perl Programmers Reference Guide"
+.TH PERLFUNC 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLFUNC 1"
 .UC
 .IX Name "perlfunc - Perl builtin functions"
@@ -184,8 +184,8 @@ a unary operator, but merely separates the arguments of a list
 operator.  A unary operator generally provides a scalar context to its
 argument, while a list operator may provide either scalar and list
 contexts for its arguments.  If it does both, the scalar arguments will
-be first, and the list argument will follow.  (Note that there can only
-ever be one list argument.)  For instance, \fIsplice()\fR has three scalar
+be first, and the list argument will follow.  (Note that there can ever
+be only one list argument.)  For instance, \fIsplice()\fR has three scalar
 arguments followed by a list.
 .PP
 In the syntax descriptions that follow, list operators that expect a
@@ -198,7 +198,7 @@ Elements of the LIST should be separated by commas.
 .PP
 Any function in the list below may be used either with or without
 parentheses around its arguments.  (The syntax descriptions omit the
-parens.)  If you use the parens, the simple (but occasionally
+parentheses.)  If you use the parentheses, the simple (but occasionally
 surprising) rule is this: It \fILOOKS\fR like a function, therefore it \fIIS\fR a
 function, and precedence doesn't matter.  Otherwise it's a list
 operator or unary operator, and precedence does matter.  And whitespace
@@ -225,9 +225,8 @@ returning the undefined value, and in a list context by returning the
 null list.
 .PP
 Remember the following rule:
-.Ip "" 8
-.IX Item ""
-\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR
+.Ip "\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR" 8
+.IX Item "\fI\s-1THERE\s0 \s-1IS\s0 \s-1NO\s0 \s-1GENERAL\s0 \s-1RULE\s0 \s-1FOR\s0 \s-1CONVERTING\s0 A \s-1LIST\s0 \s-1INTO\s0 A \s-1SCALAR\s0!\fR"
 .PP
 Each operator and function decides which sort of value it would be most
 appropriate to return in a scalar context.  Some operators return the
@@ -394,12 +393,12 @@ operator may be any of:
 \&    -C  Same for inode change time.
 .Ve
 The interpretation of the file permission operators \f(CW-r\fR, \f(CW-R\fR, \f(CW-w\fR,
-\f(CW-W\fR, \f(CW-x\fR and \f(CW-X\fR is based solely on the mode of the file and the
+\f(CW-W\fR, \f(CW-x\fR, and \f(CW-X\fR is based solely on the mode of the file and the
 uids and gids of the user.  There may be other reasons you can't actually
 read, write or execute the file.  Also note that, for the superuser,
-\f(CW-r\fR, \f(CW-R\fR, \f(CW-w\fR and \f(CW-W\fR always return 1, and \f(CW-x\fR and \f(CW-X\fR return
+\f(CW-r\fR, \f(CW-R\fR, \f(CW-w\fR, and \f(CW-W\fR always return 1, and \f(CW-x\fR and \f(CW-X\fR return
 1 if any execute bit is set in the mode.  Scripts run by the superuser may
-thus need to do a \fIstat()\fR in order to determine the actual mode of the
+thus need to do a \fIstat()\fR to determine the actual mode of the
 file, or temporarily set the uid to something else.
 .Sp
 Example:
@@ -426,8 +425,8 @@ file, or a file at \s-1EOF\s0 when testing a filehandle.  Because you have to
 read a file to do the \f(CW-T\fR test, on most occasions you want to use a \f(CW-f\fR
 against the file first, as in \f(CWnext unless -f $file && -T $file\fR.
 .Sp
-If any of the file tests (or either the \fIstat()\fR or \fIlstat()\fR operators) are given the
-special filehandle consisting of a solitary underline, then the stat
+If any of the file tests (or either the \fIstat()\fR or \fIlstat()\fR operators) are given
+the special filehandle consisting of a solitary underline, then the stat
 structure of the previous file test (or stat operator) is used, saving
 a system call.  (This doesn't work with \f(CW-t\fR, and you need to remember
 that \fIlstat()\fR and \f(CW-l\fR will leave values in the stat structure for the
@@ -449,7 +448,10 @@ symbolic link, not the real file.)  Example:
 .Ve
 .Ip "abs \s-1VALUE\s0" 8
 .IX Item "abs \s-1VALUE\s0"
+.Ip "abs " 8
+.IX Item "abs "
 Returns the absolute value of its argument.
+If \s-1VALUE\s0 is omitted, uses \f(CW$_\fR.
 .Ip "accept \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0" 8
 .IX Item "accept \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0"
 Accepts an incoming socket connect, just as the \fIaccept\fR\|(2) system call
@@ -457,8 +459,11 @@ does.  Returns the packed address if it succeeded, \s-1FALSE\s0 otherwise.
 See example in the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "alarm \s-1SECONDS\s0" 8
 .IX Item "alarm \s-1SECONDS\s0"
+.Ip "alarm " 8
+.IX Item "alarm "
 Arranges to have a \s-1SIGALRM\s0 delivered to this process after the
-specified number of seconds have elapsed.  (On some machines,
+specified number of seconds have elapsed.  If \s-1SECONDS\s0 is not specified,
+the value stored in \f(CW$_\fR is used. (On some machines,
 unfortunately, the elapsed time may be up to one second less than you
 specified because of how seconds are counted.)  Only one timer may be
 counting at once.  Each call disables the previous timer, and an
@@ -468,11 +473,39 @@ on the previous timer.
 .Sp
 For delays of finer granularity than one second, you may use Perl's
 \fIsyscall()\fR interface to access \fIsetitimer\fR\|(2) if your system supports it, 
-or else see the \f(CWselect()\fR entry elsewhere in this documentbelow.  It is not advised to intermix \fIalarm()\fR 
+or else see the \f(CWselect()\fR entry elsewhere in this document below.  It is not advised to intermix \fIalarm()\fR 
 and \fIsleep()\fR calls.
+.Sp
+If you want to use \fIalarm()\fR to time out a system call you need to use an
+eval/die pair.  You can't rely on the alarm causing the system call to
+fail with $! set to \s-1EINTR\s0 because Perl sets up signal handlers to
+restart system calls on some systems.  Using eval/die always works.
+.Sp
+.Vb 13
+\&    eval {
+\&        local $SIG{ALRM} = sub { die "alarm\en" };       # NB \en required
+\&        alarm $timeout;
+\&        $nread = sysread SOCKET, $buffer, $size;
+\&        alarm 0;
+\&    };
+\&    die if $@ && $@ ne "alarm\en";       # propagate errors
+\&    if ($@) {
+\&        # timed out
+\&    }
+\&    else {
+\&        # didn't
+\&    }
+.Ve
 .Ip "atan2 Y,X" 8
 .IX Item "atan2 Y,X"
 Returns the arctangent of Y/X in the range \-\*(PI to \*(PI.
+.Sp
+For the tangent operation, you may use the \fI\s-1POSIX::\s0tan()\fR
+function, or use the familiar relation:
+.Sp
+.Vb 1
+\&    sub tan { sin($_[0]) / cos($_[0])  }
+.Ve
 .Ip "bind \s-1SOCKET\s0,\s-1NAME\s0" 8
 .IX Item "bind \s-1SOCKET\s0,\s-1NAME\s0"
 Binds a network address to a socket, just as the bind system call
@@ -496,10 +529,10 @@ is taken as the name of the filehandle.
 .IX Item "bless \s-1REF\s0,\s-1CLASSNAME\s0"
 .Ip "bless \s-1REF\s0" 8
 .IX Item "bless \s-1REF\s0"
-This function tells the referenced object (passed as \s-1REF\s0) that it is now
+This function tells the thingy referenced by \s-1REF\s0 that it is now
 an object in the \s-1CLASSNAME\s0 package\*(--or the current package if no \s-1CLASSNAME\s0
 is specified, which is often the case.  It returns the reference for
-convenience, since a \fIbless()\fR is often the last thing in a constructor.
+convenience, because a \fIbless()\fR is often the last thing in a constructor.
 Always use the two-argument version if the function doing the blessing
 might be inherited by a derived class.  See the \fIperlobj\fR manpage for more about the
 blessing (and blessings) of objects.
@@ -508,8 +541,9 @@ blessing (and blessings) of objects.
 .Ip "caller" 8
 .IX Item "caller"
 Returns the context of the current subroutine call.  In a scalar context,
-returns \s-1TRUE\s0 if there is a caller, that is, if we're in a subroutine or
-\fIeval()\fR or \fIrequire()\fR, and \s-1FALSE\s0 otherwise.  In a list context, returns
+returns the caller's package name if there is a caller, that is, if
+we're in a subroutine or \fIeval()\fR or \fIrequire()\fR, and the undefined value
+otherwise.  In a list context, returns
 .Sp
 .Vb 1
 \&    ($package, $filename, $line) = caller;
@@ -519,9 +553,18 @@ print a stack trace.  The value of \s-1EXPR\s0 indicates how many call frames
 to go back before the current one.
 .Sp
 .Vb 2
-\&    ($package, $filename, $line,
-\&     $subroutine, $hasargs, $wantargs) = caller($i);
+\&    ($package, $filename, $line, $subroutine, 
+\&     $hasargs, $wantarray, $evaltext, $is_require) = caller($i);
 .Ve
+Here \f(CW$subroutine\fR may be \f(CW"(eval)"\fR if the frame is not a subroutine
+call, but \f(CWthe \fIeval\fR\fR manpage.  In such a case additional elements \f(CW$evaltext\fR and
+\f(CW$is_require\fR are set: \f(CW$is_require\fR is true if the frame is created by
+\f(CWthe \fIrequire\fR\fR manpage or \f(CWthe \fIuse\fR\fR manpage statement, \f(CW$evaltext\fR contains the text of
+\f(CWthe section on \fIeval EXPR\fR\fR statement.  In particular, for \f(CWthe section on \fIeval BLOCK\fR\fR
+statement \f(CW$filename\fR is \f(CW"(eval)"\fR, but \f(CW$evaltext\fR is undefined. (Note
+also that \f(CWthe \fIuse\fR\fR manpage statement creates a \f(CWthe \fIrequire\fR\fR manpage frame inside
+an \f(CWthe section on \fIeval EXPR\fR\fR) frame.
+.Sp
 Furthermore, when called from within the \s-1DB\s0 package, caller returns more
 detailed information: it sets the list variable \f(CW@DB::args\fR to be the
 arguments with which that subroutine was invoked.
@@ -534,11 +577,16 @@ otherwise.  See example under \fIdie()\fR.
 .IX Item "chmod \s-1LIST\s0"
 Changes the permissions of a list of files.  The first element of the
 list must be the numerical mode, which should probably be an octal
-number.  Returns the number of files successfully changed.
+number, and which definitely should \fInot\fR a string of octal digits:
+\f(CW0644\fR is okay, \f(CW'0644'\fR is not.  Returns the number of files
+successfully changed.  See also the \fIoct\fR manpage, if all you have is a string.
 .Sp
-.Vb 2
+.Vb 5
 \&    $cnt = chmod 0755, 'foo', 'bar';
 \&    chmod 0755, @executables;
+\&    $mode = '0644'; chmod $mode, 'foo';      # !!! sets mode to --w----r-T
+\&    $mode = '0644'; chmod oct($mode), 'foo'; # this is better
+\&    $mode = 0644;   chmod $mode, 'foo';      # this is best
 .Ve
 .Ip "chomp \s-1VARIABLE\s0" 8
 .IX Item "chomp \s-1VARIABLE\s0"
@@ -548,12 +596,12 @@ number.  Returns the number of files successfully changed.
 .IX Item "chomp"
 This is a slightly safer version of chop (see below).  It removes any
 line ending that corresponds to the current value of \f(CW$/\fR (also known as
-\f(CW$INPUT_RECORD_SEPARATOR\fR in the \f(CWEnglish\fR module).  It returns the number
-of characters removed.  It's often used to remove the newline from the
-end of an input record when you're worried that the final record may be
-missing its newline.  When in paragraph mode (\f(CW$/ = ""\fR), it removes all
-trailing newlines from the string.  If \s-1VARIABLE\s0 is omitted, it chomps
-\f(CW$_\fR.  Example:
+\f(CW$INPUT_RECORD_SEPARATOR\fR in the \f(CWEnglish\fR module).  It returns the total
+number of characters removed from all its arguments.  It's often used to
+remove the newline from the end of an input record when you're worried
+that the final record may be missing its newline.  When in paragraph mode
+(\f(CW$/ = ""\fR), it removes all trailing newlines from the string.  If
+\s-1VARIABLE\s0 is omitted, it chomps \f(CW$_\fR.  Example:
 .Sp
 .Vb 5
 \&    while (<>) {
@@ -632,14 +680,20 @@ the group to any of your secondary groups.  On insecure systems, these
 restrictions may be relaxed, but this is not a portable assumption.
 .Ip "chr \s-1NUMBER\s0" 8
 .IX Item "chr \s-1NUMBER\s0"
+.Ip "chr " 8
+.IX Item "chr "
 Returns the character represented by that \s-1NUMBER\s0 in the character set.
-For example, \f(CWchr(65)\fR is \*(L"A\*(R" in \s-1ASCII\s0.
+For example, \f(CWchr(65)\fR is \*(L"A\*(R" in \s-1ASCII\s0.  For the reverse, use the \fIord\fR manpage.
+.Sp
+If \s-1NUMBER\s0 is omitted, uses \f(CW$_\fR.
 .Ip "chroot \s-1FILENAME\s0" 8
 .IX Item "chroot \s-1FILENAME\s0"
+.Ip "chroot " 8
+.IX Item "chroot "
 This function works as the system call by the same name: it makes the
 named directory the new root directory for all further pathnames that
 begin with a \*(L"/\*(R" by your process and all of its children.  (It doesn't
-change your current working directory is unaffected.)  For security
+change your current working directory, which is unaffected.)  For security
 reasons, this call is restricted to the superuser.  If \s-1FILENAME\s0 is
 omitted, does chroot to \f(CW$_\fR.
 .Ip "close \s-1FILEHANDLE\s0" 8
@@ -647,7 +701,7 @@ omitted, does chroot to \f(CW$_\fR.
 Closes the file or pipe associated with the file handle, returning \s-1TRUE\s0
 only if stdio successfully flushes buffers and closes the system file
 descriptor.  You don't have to close \s-1FILEHANDLE\s0 if you are immediately
-going to do another \fIopen()\fR on it, since \fIopen()\fR will close it for you.  (See
+going to do another \fIopen()\fR on it, because \fIopen()\fR will close it for you.  (See
 \fIopen()\fR.)  However, an explicit close on an input file resets the line
 counter ($.), while the implicit close done by \fIopen()\fR does not.  Also,
 closing a pipe will wait for the process executing on the pipe to
@@ -684,6 +738,13 @@ statement).
 .IX Item "cos \s-1EXPR\s0"
 Returns the cosine of \s-1EXPR\s0 (expressed in radians).  If \s-1EXPR\s0 is omitted
 takes cosine of \f(CW$_\fR.
+.Sp
+For the inverse cosine operation, you may use the \fI\s-1POSIX::\s0acos()\fR
+function, or use this relation:
+.Sp
+.Vb 1
+\&    sub acos { atan2( sqrt(1 - $_[0] * $_[0]), $_[0] ) }
+.Ve
 .Ip "crypt \s-1PLAINTEXT\s0,\s-1SALT\s0" 8
 .IX Item "crypt \s-1PLAINTEXT\s0,\s-1SALT\s0"
 Encrypts a string exactly like the \fIcrypt\fR\|(3) function in the C library
@@ -691,6 +752,11 @@ Encrypts a string exactly like the \fIcrypt\fR\|(3) function in the C library
 extirpated as a potential munition).  This can prove useful for checking
 the password file for lousy passwords, amongst other things.  Only the
 guys wearing white hats should do this.
+.Sp
+Note that crypt is intended to be a one-way function, much like breaking
+eggs to make an omelette.  There is no (known) corresponding decrypt
+function.  As a result, this function isn't all that useful for
+cryptography.  (For that, see your nearby \s-1CPAN\s0 mirror.)
 .Sp
 Here's an example that makes sure that whoever runs this program knows
 their own password:
@@ -713,32 +779,32 @@ their own password:
 \&        print "ok\en";
 \&    } 
 .Ve
-Of course, typing in your own password to whoever asks you 
+Of course, typing in your own password to whomever asks you 
 for it is unwise.
-.Ip "dbmclose \s-1ASSOC_ARRAY\s0" 8
-.IX Item "dbmclose \s-1ASSOC_ARRAY\s0"
+.Ip "dbmclose \s-1HASH\s0" 8
+.IX Item "dbmclose \s-1HASH\s0"
 [This function has been superseded by the \fIuntie()\fR function.]
 .Sp
-Breaks the binding between a \s-1DBM\s0 file and an associative array.
-.Ip "dbmopen \s-1ASSOC\s0,\s-1DBNAME\s0,\s-1MODE\s0" 8
-.IX Item "dbmopen \s-1ASSOC\s0,\s-1DBNAME\s0,\s-1MODE\s0"
+Breaks the binding between a \s-1DBM\s0 file and a hash.
+.Ip "dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0" 8
+.IX Item "dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0"
 [This function has been superseded by the \fItie()\fR function.]
 .Sp
-This binds a \fIdbm\fR\|(3), \fIndbm\fR\|(3), \fIsdbm\fR\|(3), \fIgdbm()\fR, or Berkeley \s-1DB\s0 file to an
-associative array.  \s-1ASSOC\s0 is the name of the associative array.  (Unlike
-normal open, the first argument is \fI\s-1NOT\s0\fR a filehandle, even though it
-looks like one).  \s-1DBNAME\s0 is the name of the database (without the \fI.dir\fR
-or \fI.pag\fR extension if any).  If the database does not exist, it is
-created with protection specified by \s-1MODE\s0 (as modified by the \fIumask()\fR).
-If your system only supports the older \s-1DBM\s0 functions, you may perform only
-one \fIdbmopen()\fR in your program.  In older versions of Perl, if your system
-had neither \s-1DBM\s0 nor ndbm, calling \fIdbmopen()\fR produced a fatal error; it now
-falls back to \fIsdbm\fR\|(3).
+This binds a \fIdbm\fR\|(3), \fIndbm\fR\|(3), \fIsdbm\fR\|(3), \fIgdbm()\fR, or Berkeley \s-1DB\s0 file to a
+hash.  \s-1HASH\s0 is the name of the hash.  (Unlike normal open, the first
+argument is \fI\s-1NOT\s0\fR a filehandle, even though it looks like one).  \s-1DBNAME\s0
+is the name of the database (without the \fI.dir\fR or \fI.pag\fR extension if
+any).  If the database does not exist, it is created with protection
+specified by \s-1MODE\s0 (as modified by the \fIumask()\fR).  If your system supports
+only the older \s-1DBM\s0 functions, you may perform only one \fIdbmopen()\fR in your
+program.  In older versions of Perl, if your system had neither \s-1DBM\s0 nor
+ndbm, calling \fIdbmopen()\fR produced a fatal error; it now falls back to
+\fIsdbm\fR\|(3).
 .Sp
-If you don't have write access to the \s-1DBM\s0 file, you can only read
-associative array variables, not set them.  If you want to test whether
-you can write, either use file tests or try setting a dummy array entry
-inside an \fIeval()\fR, which will trap the error.
+If you don't have write access to the \s-1DBM\s0 file, you can only read hash
+variables, not set them.  If you want to test whether you can write,
+either use file tests or try setting a dummy hash entry inside an \fIeval()\fR,
+which will trap the error.
 .Sp
 Note that functions such as \fIkeys()\fR and \fIvalues()\fR may return huge array
 values when used on large \s-1DBM\s0 files.  You may prefer to use the \fIeach()\fR
@@ -753,38 +819,48 @@ function to iterate over large \s-1DBM\s0 files.  Example:
 \&    dbmclose(%HIST);
 .Ve
 See also the \fIAnyDBM_File\fR manpage for a more general description of the pros and
-cons of the various dbm apparoches, as well as the \fIDB_File\fR manpage for a particularly
+cons of the various dbm approaches, as well as the \fIDB_File\fR manpage for a particularly
 rich implementation.
 .Ip "defined \s-1EXPR\s0" 8
 .IX Item "defined \s-1EXPR\s0"
-Returns a boolean value saying whether \s-1EXPR\s0 has a real value
-or not.  Many operations return the undefined value under exceptional
-conditions, such as end of file, uninitialized variable, system error
-and such.  This function allows you to distinguish between an undefined
-null scalar and a defined null scalar with operations that might return
-a real null string, such as referencing elements of an array.  You may
-also check to see if arrays or subroutines exist.  Use of defined on
-predefined variables is not guaranteed to produce intuitive results.
+.Ip "defined " 8
+.IX Item "defined "
+Returns a Boolean value telling whether \s-1EXPR\s0 has a value other than
+the undefined value \f(CWundef\fR.  If \s-1EXPR\s0 is not present, \f(CW$_\fR will be
+checked.
 .Sp
-When used on a hash array element, it tells you whether the value
-is defined, not whether the key exists in the hash.  Use \fIexists()\fR for that.
+Many operations return \f(CWundef\fR to indicate failure, end of file,
+system error, uninitialized variable, and other exceptional
+conditions.  This function allows you to distinguish \f(CWundef\fR from
+other values.  (A simple Boolean test will not distinguish among
+\f(CWundef\fR, zero, the empty string, and \*(L"0\*(R", which are all equally
+false.)  Note that since \f(CWundef\fR is a valid scalar, its presence
+doesn't \fInecessarily\fR indicate an exceptional condition: \fIpop()\fR
+returns \f(CWundef\fR when its argument is an empty array, \fIor\fR when the
+element to return happens to be \f(CWundef\fR.
+.Sp
+You may also use \fIdefined()\fR to check whether a subroutine exists.  On
+the other hand, use of \fIdefined()\fR upon aggregates (hashes and arrays)
+is not guaranteed to produce intuitive results, and should probably be
+avoided.
+.Sp
+When used on a hash element, it tells you whether the value is defined,
+not whether the key exists in the hash.  Use the \fIexists\fR manpage for the latter
+purpose.
 .Sp
 Examples:
 .Sp
-.Vb 7
+.Vb 6
 \&    print if defined $switch{'D'};
 \&    print "$val\en" while defined($val = pop(@ary));
 \&    die "Can't readlink $sym: $!"
 \&        unless defined($value = readlink $sym);
-\&    eval '@foo = ()' if defined(@foo);
-\&    die "No XYZ package defined" unless defined %_XYZ;
 \&    sub foo { defined &$bar ? &$bar(@_) : die "No bar"; }
+\&    $debugging = 0 unless defined $debugging;
 .Ve
-See also \fIundef()\fR.
-.Sp
-Note: many folks tend to overuse \fIdefined()\fR, and then are surprised to
-discover that the number 0 and the null string are, in fact, defined
-concepts.  For example, if you say
+Note:  Many folks tend to overuse \fIdefined()\fR, and then are surprised to
+discover that the number 0 and "" (the zero-length string) are, in fact,
+defined values.  For example, if you say
 .Sp
 .Vb 1
 \&    "ab" =~ /a(.*)b/;
@@ -793,40 +869,67 @@ the pattern match succeeds, and \f(CW$1\fR is defined, despite the fact that it
 matched "nothing".  But it didn't really match nothing\*(--rather, it
 matched something that happened to be 0 characters long.  This is all
 very above-board and honest.  When a function returns an undefined value,
-it's an admission that it couldn't give you an honest answer.  So
-you should only use \fIdefined()\fR when you're questioning the integrity
-of what you're trying to do.  At other times, a simple comparison to
-0 or "" is what you want.
+it's an admission that it couldn't give you an honest answer.  So you
+should use \fIdefined()\fR only when you're questioning the integrity of what
+you're trying to do.  At other times, a simple comparison to 0 or "" is
+what you want.
+.Sp
+Currently, using \fIdefined()\fR on an entire array or hash reports whether
+memory for that aggregate has ever been allocated.  So an array you set
+to the empty list appears undefined initially, and one that once was full
+and that you then set to the empty list still appears defined.  You
+should instead use a simple test for size:
+.Sp
+.Vb 2
+\&    if (@an_array) { print "has array elements\en" }
+\&    if (%a_hash)   { print "has hash members\en"   }
+.Ve
+Using \fIundef()\fR on these, however, does clear their memory and then report
+them as not defined anymore, but you shoudln't do that unless you don't
+plan to use them again, because it saves time when you load them up
+again to have memory already ready to be filled.
+.Sp
+This counter-intuitive behaviour of \fIdefined()\fR on aggregates may be
+changed, fixed, or broken in a future release of Perl.
+.Sp
+See also the \fIundef\fR manpage, the \fIexists\fR manpage, the \fIref\fR manpage.
 .Ip "delete \s-1EXPR\s0" 8
 .IX Item "delete \s-1EXPR\s0"
-Deletes the specified value from its hash array.  Returns the deleted
-value, or the undefined value if nothing was deleted.  Deleting from
-\f(CW$ENV{}\fR modifies the environment.  Deleting from an array tied to a \s-1DBM\s0
-file deletes the entry from the \s-1DBM\s0 file.  (But deleting from a \fItie()\fRd
-hash doesn't necessarily return anything.)
+Deletes the specified \fIkey\fR\|(s) and their associated values from a hash.
+For each key, returns the deleted value associated with that key, or
+the undefined value if there was no such key.  Deleting from \f(CW$ENV{}\fR
+modifies the environment.  Deleting from a hash tied to a \s-1DBM\s0 file
+deletes the entry from the \s-1DBM\s0 file.  (But deleting from a \fItie()\fRd hash
+doesn't necessarily return anything.)
 .Sp
-The following deletes all the values of an associative array:
+The following deletes all the values of a hash:
 .Sp
 .Vb 3
-\&    foreach $key (keys %ARRAY) {
-\&        delete $ARRAY{$key};
+\&    foreach $key (keys %HASH) {
+\&        delete $HASH{$key};
 \&    }
 .Ve
-(But it would be faster to use the \fIundef()\fR command.)  Note that the
-\s-1EXPR\s0 can be arbitrarily complicated as long as the final operation is
-a hash key lookup:
+And so does this:
 .Sp
 .Vb 1
+\&    delete @HASH{keys %HASH}
+.Ve
+(But both of these are slower than the \fIundef()\fR command.)  Note that the
+\s-1EXPR\s0 can be arbitrarily complicated as long as the final operation is a
+hash element lookup or hash slice:
+.Sp
+.Vb 2
 \&    delete $ref->[$x][$y]{$key};
+\&    delete @{$ref->[$x][$y]}{$key1, $key2, @morekeys};
 .Ve
 .Ip "die \s-1LIST\s0" 8
 .IX Item "die \s-1LIST\s0"
 Outside of an \fIeval()\fR, prints the value of \s-1LIST\s0 to \f(CWSTDERR\fR and exits with
-the current value of $! (errno).  If $! is 0, exits with the value of
-\f(CW($? >> 8)\fR (backtick `command` status).  If \f(CW($? >> 8)\fR is 0,
-exits with 255.  Inside an \fIeval()\fR, the error message is stuffed into \f(CW$@\fR,
-and the \fIeval()\fR is terminated with the undefined value; this makes \fIdie()\fR
-the way to raise an exception.
+the current value of \f(CW$!\fR (errno).  If \f(CW$!\fR is 0, exits with the value of
+\f(CW($? >> 8)\fR (back-tick `command` status).  If \f(CW($? >> 8)\fR
+is 0, exits with 255.  Inside an \fIeval()\fR, the error message is stuffed into
+\f(CW$@\fR, and the \fIeval()\fR is terminated with the undefined value; this makes
+\fIdie()\fR the way to raise an exception.
 .Sp
 Equivalent examples:
 .Sp
@@ -851,6 +954,12 @@ produce, respectively
 \&    /etc/games is no good, stopped at canasta line 123.
 .Ve
 See also \fIexit()\fR and \fIwarn()\fR.
+.Sp
+You can arrange for a callback to be called just before the \fIdie()\fR does
+its deed, by setting the \f(CW$SIG{__DIE__}\fR hook.  The associated handler
+will be called with the error text and can change the error message, if
+it sees fit, by calling \fIdie()\fR again.  See the \fIperlvar\fR manpage for details on
+setting \f(CW%SIG\fR entries, and \fIeval()\fR for some examples.
 .Ip "do \s-1BLOCK\s0" 8
 .IX Item "do \s-1BLOCK\s0"
 Not really a function.  Returns the value of the last command in the
@@ -878,7 +987,7 @@ except that it's more efficient, more concise, keeps track of the
 current filename for error messages, and searches all the \fB\-I\fR
 libraries if the file isn't in the current directory (see also the \f(CW@INC\fR
 array in the section on \fIPredefined Names\fR in the \fIperlvar\fR manpage).  It's the same, however, in that it does
-reparse the file every time you call it, so you probably don't want to
+re-parse the file every time you call it, so you probably don't want to
 do this inside a loop.
 .Sp
 Note that inclusion of library modules is better done with the
@@ -920,22 +1029,27 @@ Example:
 \&    QUICKSTART:
 \&    Getopt('f');
 .Ve
-.Ip "each \s-1ASSOC_ARRAY\s0" 8
-.IX Item "each \s-1ASSOC_ARRAY\s0"
-When called in a list context, returns a 2-element array consisting
-of the key and value for the next element of an associative array,
-so that you can iterate over it.  When called in a scalar context,
-returns the key only for the next element in the associative array.
-Entries are returned in an apparently random order.  When the array is
+.Ip "each \s-1HASH\s0" 8
+.IX Item "each \s-1HASH\s0"
+When called in a list context, returns a 2-element array consisting of the
+key and value for the next element of a hash, so that you can iterate over
+it.  When called in a scalar context, returns the key for only the next
+element in the hash.  (Note: Keys may be "0" or "", which are logically
+false; you may wish to avoid constructs like \f(CWwhile ($k = each %foo) {}\fR
+for this reason.)
+.Sp
+Entries are returned in an apparently random order.  When the hash is
 entirely read, a null array is returned in list context (which when
 assigned produces a \s-1FALSE\s0 (0) value), and \f(CWundef\fR is returned in a
-scalar context.  The next call to \fIeach()\fR after that will start
-iterating again.  The iterator can be reset only by reading all the
-elements from the array.  You should not add elements to an array while
-you're iterating over it.  There is a single iterator for each
-associative array, shared by all \fIeach()\fR, \fIkeys()\fR and \fIvalues()\fR function
-calls in the program.  The following prints out your environment like
-the \fIprintenv\fR\|(1) program, only in a different order:
+scalar context.  The next call to \fIeach()\fR after that will start iterating
+again.  There is a single iterator for each hash, shared by all \fIeach()\fR,
+\fIkeys()\fR, and \fIvalues()\fR function calls in the program; it can be reset by
+reading all the elements from the hash, or by evaluating \f(CWkeys HASH\fR or
+\f(CWvalues HASH\fR.  If you add or delete elements of a hash while you're
+iterating over it, you may get entries skipped or duplicated, so don't.
+.Sp
+The following prints out your environment like the \fIprintenv\fR\|(1) program,
+only in a different order:
 .Sp
 .Vb 3
 \&    while (($key,$value) = each %ENV) {
@@ -958,11 +1072,11 @@ interactive context.)  Do not read from a terminal file (or call
 as terminals may lose the end-of-file condition if you do.
 .Sp
 An \f(CWeof\fR without an argument uses the last file read as argument.
-Empty parentheses () may be used to indicate
-the pseudofile formed of the files listed on the command line, i.e.
-\f(CWeof()\fR is reasonable to use inside a while (<>) loop to detect the end
-of only the last file.  Use \f(CWeof(ARGV)\fR or eof without the parentheses to
-test \fI\s-1EACH\s0\fR file in a while (<>) loop.  Examples:
+Empty parentheses () may be used to indicate the pseudo file formed of
+the files listed on the command line, i.e., \f(CWeof()\fR is reasonable to
+use inside a \f(CWwhile (<>)\fR loop to detect the end of only the
+last file.  Use \f(CWeof(ARGV)\fR or eof without the parentheses to test
+\fI\s-1EACH\s0\fR file in a while (<>) loop.  Examples:
 .Sp
 .Vb 5
 \&    # reset line numbering on each input file
@@ -990,17 +1104,22 @@ input operators return undef when they run out of data.
 .IX Item "eval \s-1BLOCK\s0"
 \s-1EXPR\s0 is parsed and executed as if it were a little Perl program.  It
 is executed in the context of the current Perl program, so that any
-variable settings, subroutine or format definitions remain afterwards.
+variable settings or subroutine and format definitions remain afterwards.
 The value returned is the value of the last expression evaluated, or a
-return statement may be used, just as with subroutines.
+return statement may be used, just as with subroutines.  The last
+expression is evaluated in scalar or array context, depending on the
+context of the eval.
 .Sp
 If there is a syntax error or runtime error, or a \fIdie()\fR statement is
 executed, an undefined value is returned by \fIeval()\fR, and \f(CW$@\fR is set to the
 error message.  If there was no error, \f(CW$@\fR is guaranteed to be a null
 string.  If \s-1EXPR\s0 is omitted, evaluates \f(CW$_\fR.  The final semicolon, if
-any, may be omitted from the expression.
+any, may be omitted from the expression.  Beware that using \fIeval()\fR
+neither silences perl from printing warnings to \s-1STDERR\s0, nor does it
+stuff the text of warning messages into \f(CW$@\fR.  To do either of those,
+you have to use the \f(CW$SIG{__WARN__}\fR facility.  See \fIwarn()\fR and the \fIperlvar\fR manpage.
 .Sp
-Note that, since \fIeval()\fR traps otherwise-fatal errors, it is useful for
+Note that, because \fIeval()\fR traps otherwise-fatal errors, it is useful for
 determining whether a particular feature (such as \fIsocket()\fR or \fIsymlink()\fR)
 is implemented.  It is also Perl's exception trapping mechanism, where
 the die operator is used to raise exceptions.
@@ -1026,6 +1145,26 @@ Examples:
 \&    # a run-time error
 \&    eval '$answer =';   # sets $@
 .Ve
+When using the eval{} form as an exception trap in libraries, you may
+wish not to trigger any \f(CW__DIE__\fR hooks that user code may have
+installed.  You can use the \f(CWlocal $SIG{__DIE__}\fR construct for this
+purpose, as shown in this example:
+.Sp
+.Vb 2
+\&    # a very private exception trap for divide-by-zero
+\&    eval { local $SIG{'__DIE__'}; $answer = $a / $b; }; warn $@ if $@;
+.Ve
+This is especially significant, given that \f(CW__DIE__\fR hooks can call
+\fIdie()\fR again, which has the effect of changing their error messages:
+.Sp
+.Vb 6
+\&    # __DIE__ hooks may modify error messages
+\&    {
+\&       local $SIG{'__DIE__'} = sub { (my $x = $_[0]) =~ s/foo/bar/g; die $x };
+\&       eval { die "foo foofs here" };
+\&       print $@ if $@;                # prints "bar barfs here"
+\&    }
+.Ve
 With an \fIeval()\fR, you should be especially careful to remember what's 
 being looked at when:
 .Sp
@@ -1041,18 +1180,22 @@ being looked at when:
 \&    eval "\e$$x++"       # CASE 5
 \&    $$x++;              # CASE 6
 .Ve
-Cases 1 and 2 above behave identically: they run the code contained in the
-variable \f(CW$x\fR.  (Although case 2 has misleading double quotes making the
-reader wonder what else might be happening (nothing is).) Cases 3 and 4
-likewise behave in the same way: they run the code <$x>, which does
-nothing at all.  (Case 4 is preferred for purely visual reasons.) Case 5
-is a place where normally you \fI\s-1WOULD\s0\fR like to use double quotes, except
-that in that particular situation, you can just use symbolic references
-instead, as in case 6.
+Cases 1 and 2 above behave identically: they run the code contained in
+the variable \f(CW$x\fR.  (Although case 2 has misleading double quotes making
+the reader wonder what else might be happening (nothing is).)  Cases 3
+and 4 likewise behave in the same way: they run the code \*(L'$x\*(R', which
+does nothing but return the value of \f(CW$x\fR.  (Case 4 is preferred for
+purely visual reasons, but it also has the advantage of compiling at
+compile-time instead of at run-time.)  Case 5 is a place where
+normally you \fI\s-1WOULD\s0\fR like to use double quotes, except that in that
+particular situation, you can just use symbolic references instead, as
+in case 6.
 .Ip "exec \s-1LIST\s0" 8
 .IX Item "exec \s-1LIST\s0"
-The \fIexec()\fR function executes a system command \fI\s-1AND\s0 \s-1NEVER\s0 \s-1RETURNS\s0\fR.  Use
-the \fIsystem()\fR function if you want it to return.
+The \fIexec()\fR function executes a system command \fI\s-1AND\s0 \s-1NEVER\s0 \s-1RETURNS\s0\fR,
+unless the command does not exist and is executed directly instead of
+via \f(CW/bin/sh -c\fR (see below).  Use \fIsystem()\fR instead of \fIexec()\fR if you
+want it to return.
 .Sp
 If there is more than one argument in \s-1LIST\s0, or if \s-1LIST\s0 is an array with
 more than one value, calls \fIexecvp\fR\|(3) with the arguments in \s-1LIST\s0.  If
@@ -1093,7 +1236,7 @@ if the corresponding value is undefined.
 \&    print "Defined\en" if defined $array{$key};
 \&    print "True\en" if $array{$key};
 .Ve
-A hash element can only be \s-1TRUE\s0 if it's defined, and defined if
+A hash element can be \s-1TRUE\s0 only if it's defined, and defined if
 it exists, but the reverse doesn't necessarily hold true.
 .Sp
 Note that the \s-1EXPR\s0 can be arbitrarily complicated as long as the final
@@ -1113,9 +1256,18 @@ are called before exit.)  Example:
 \&    $ans = <STDIN>;
 \&    exit 0 if $ans =~ /^[Xx]/;
 .Ve
-See also \fIdie()\fR.  If \s-1EXPR\s0 is omitted, exits with 0 status.
+See also \fIdie()\fR.  If \s-1EXPR\s0 is omitted, exits with 0 status.  The only
+univerally portable values for \s-1EXPR\s0 are 0 for success and 1 for error;
+all other values are subject to unpredictable interpretation depending
+on the environment in which the Perl program is running.
+.Sp
+You shouldn't use \fIexit()\fR to abort a subroutine if there's any chance that
+someone might want to trap whatever error happened.  Use \fIdie()\fR instead,
+which can be trapped by an \fIeval()\fR.
 .Ip "exp \s-1EXPR\s0" 8
 .IX Item "exp \s-1EXPR\s0"
+.Ip "exp " 8
+.IX Item "exp "
 Returns \fIe\fR (the natural logarithm base) to the power of \s-1EXPR\s0.  
 If \s-1EXPR\s0 is omitted, gives \f(CWexp($_)\fR.
 .Ip "fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0" 8
@@ -1141,26 +1293,44 @@ constructing bitmaps for \fIselect()\fR.  If \s-1FILEHANDLE\s0 is an expression,
 value is taken as the name of the filehandle.
 .Ip "flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0" 8
 .IX Item "flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0"
-Calls \fIflock\fR\|(2) on \s-1FILEHANDLE\s0.  See the \fIflock(2)\fR manpage for definition of
-\s-1OPERATION\s0.  Returns \s-1TRUE\s0 for success, \s-1FALSE\s0 on failure.  Will produce a
-fatal error if used on a machine that doesn't implement either \fIflock\fR\|(2) or
-\fIfcntl\fR\|(2). The \fIfcntl\fR\|(2) system call will be automatically used if \fIflock\fR\|(2)
-is missing from your system.  This makes \fIflock()\fR the portable file locking
-strategy, although it will only lock entire files, not records.  Note also
-that some versions of \fIflock()\fR cannot lock things over the network; you
-would need to use the more system-specific \fIfcntl()\fR for that.
+Calls \fIflock\fR\|(2), or an emulation of it, on \s-1FILEHANDLE\s0.  Returns \s-1TRUE\s0 for
+success, \s-1FALSE\s0 on failure.  Will produce a fatal error if used on a
+machine that doesn't implement \fIflock\fR\|(2), \fIfcntl\fR\|(2) locking, or \fIlockf\fR\|(3).
+\fIflock()\fR is Perl's portable file locking interface, although it will lock
+only entire files, not records.
+.Sp
+\s-1OPERATION\s0 is one of \s-1LOCK_SH\s0, \s-1LOCK_EX\s0, or \s-1LOCK_UN\s0, possibly combined with
+\s-1LOCK_NB\s0.  These constants are traditionally valued 1, 2, 8 and 4, but
+you can use the symbolic names if you pull them in with an explicit
+request to the Fcntl module.  The names can be requested as a group with
+the :flock tag (or they can be requested individually, of course).
+\s-1LOCK_SH\s0 requests a shared lock, \s-1LOCK_EX\s0 requests an exclusive lock, and
+\s-1LOCK_UN\s0 releases a previously requested lock.  If \s-1LOCK_NB\s0 is added to
+\s-1LOCK_SH\s0 or \s-1LOCK_EX\s0 then \fIflock()\fR will return immediately rather than
+blocking waiting for the lock (check the return status to see if you got
+it).
+.Sp
+Note that the emulation built with \fIlockf\fR\|(3) doesn't provide shared
+locks, and it requires that \s-1FILEHANDLE\s0 be open with write intent.  These
+are the semantics that \fIlockf\fR\|(3) implements.  Most (all?) systems
+implement \fIlockf\fR\|(3) in terms of \fIfcntl\fR\|(2) locking, though, so the
+differing semantics shouldn't bite too many people.
+.Sp
+Note also that some versions of \fIflock()\fR cannot lock things over the
+network; you would need to use the more system-specific \fIfcntl()\fR for
+that.  If you like you can force Perl to ignore your system's \fIflock\fR\|(2)
+function, and so provide its own \fIfcntl\fR\|(2)\-based emulation, by passing
+the switch \f(CW-Ud_flock\fR to the \fIConfigure\fR program when you configure
+perl.
 .Sp
 Here's a mailbox appender for \s-1BSD\s0 systems.
 .Sp
-.Vb 4
-\&    $LOCK_SH = 1;
-\&    $LOCK_EX = 2;
-\&    $LOCK_NB = 4;
-\&    $LOCK_UN = 8;
+.Vb 1
+\&    use Fcntl ':flock'; # import LOCK_* constants
 .Ve
 .Vb 6
 \&    sub lock {
-\&        flock(MBOX,$LOCK_EX);
+\&        flock(MBOX,LOCK_EX);
 \&        # and, in case someone appended
 \&        # while we were waiting...
 \&        seek(MBOX, 0, 2);
@@ -1168,7 +1338,7 @@ Here's a mailbox appender for \s-1BSD\s0 systems.
 .Ve
 .Vb 3
 \&    sub unlock {
-\&        flock(MBOX,$LOCK_UN);
+\&        flock(MBOX,LOCK_UN);
 \&    }
 .Ve
 .Vb 2
@@ -1186,8 +1356,8 @@ See also the \fIDB_File\fR manpage for other \fIflock()\fR examples.
 Does a \fIfork\fR\|(2) system call.  Returns the child pid to the parent process
 and 0 to the child process, or \f(CWundef\fR if the fork is unsuccessful.
 Note: unflushed buffers remain unflushed in both processes, which means
-you may need to set \f(CW$|\fR ($\s-1AUTOFLUSH\s0 in English) or call the 
-\fIautoflush()\fR FileHandle method to avoid duplicate output.
+you may need to set \f(CW$|\fR ($\s-1AUTOFLUSH\s0 in English) or call the \fIautoflush()\fR
+method of \s-1IO::\s0Handle to avoid duplicate output.
 .Sp
 If you \fIfork()\fR without ever waiting on your children, you will accumulate
 zombies:
@@ -1213,6 +1383,11 @@ There's also the double-fork trick (error checking on
 .Ve
 See also the \fIperlipc\fR manpage for more examples of forking and reaping
 moribund children.
+.Sp
+Note that if your forked child inherits system file descriptors like
+\s-1STDIN\s0 and \s-1STDOUT\s0 that are actually connected by a pipe or socket, even
+if you exit, the remote server (such as, say, httpd or rsh) won't think
+you're done.  You should reopen those to /dev/null if it's any issue.
 .Ip "format" 8
 .IX Item "format"
 Declare a picture format with use by the \fIwrite()\fR function.  For
@@ -1226,7 +1401,7 @@ example:
 .Ve
 .Vb 4
 \&    $str = "widget";
-\&    $num = $cost/$quantiy;
+\&    $num = $cost/$quantity;
 \&    $~ = 'Something';
 \&    write;
 .Ve
@@ -1246,7 +1421,7 @@ that the \f(CW~\fR and \f(CW~~\fR tokens will treat the entire \s-1PICTURE\s0 as
 You may therefore need to use multiple formlines to implement a single
 record format, just like the format compiler.
 .Sp
-Be careful if you put double quotes around the picture, since an \*(L"\f(CW@\fR\*(R"
+Be careful if you put double quotes around the picture, because an \*(L"\f(CW@\fR\*(R"
 character may be taken to mean the beginning of an array name.
 \fIformline()\fR always returns \s-1TRUE\s0.  See the \fIperlform\fR manpage for other examples.
 .Ip "getc \s-1FILEHANDLE\s0" 8
@@ -1274,22 +1449,24 @@ single-characters, however.  For that, try something more like:
 \&        system "stty -cbreak </dev/tty >/dev/tty 2>&1";
 \&    }
 \&    else {
-\&        system "stty", 'icanon', 'eol', '^@'; # ascii null
+\&        system "stty", 'icanon', 'eol', '^@'; # ASCII null
 \&    }
 \&    print "\en";
 .Ve
-Determination of whether to whether \f(CW$BSD_STYLE\fR should be set 
+Determination of whether \f(CW$BSD_STYLE\fR should be set 
 is left as an exercise to the reader.  
 .Sp
+The \fI\s-1POSIX::\s0getattr()\fR function can do this more portably on systems
+alleging \s-1POSIX\s0 compliance.
 See also the \f(CWTerm::ReadKey\fR module from your nearest \s-1CPAN\s0 site;
-details on \s-1CPAN\s0 can be found on the \f(CWCPAN\fR entry in the \fIperlmod\fR manpage 
+details on \s-1CPAN\s0 can be found on the \f(CWCPAN\fR entry in the \fIperlmod\fR manpage.  
 .Ip "getlogin" 8
 .IX Item "getlogin"
 Returns the current login from \fI/etc/utmp\fR, if any.  If null, use
 \fIgetpwuid()\fR.  
 .Sp
 .Vb 1
-\&    $login = getlogin || (getpwuid($<))[0] || "Kilroy";
+\&    $login = getlogin || getpwuid($<) || "Kilroy";
 .Ve
 Do not consider \fIgetlogin()\fR for authentication: it is not as
 secure as \fIgetpwuid()\fR.
@@ -1435,13 +1612,15 @@ Returns the packed sockaddr address of this end of the \s-1SOCKET\s0 connection.
 Returns the socket option requested, or undefined if there is an error.
 .Ip "glob \s-1EXPR\s0" 8
 .IX Item "glob \s-1EXPR\s0"
+.Ip "glob" 8
+.IX Item "glob"
 Returns the value of \s-1EXPR\s0 with filename expansions such as a shell
-would do.  This is the internal function implementing the <*.*>
-operator, except it's easier to use.
+would do.  This is the internal function implementing the <*.c>
+operator, except it's easier to use.  If \s-1EXPR\s0 is omitted, \f(CW$_\fR is used.
 .Ip "gmtime \s-1EXPR\s0" 8
 .IX Item "gmtime \s-1EXPR\s0"
 Converts a time as returned by the time function to a 9-element array
-with the time localized for the standard Greenwich timezone.  
+with the time localized for the standard Greenwich time zone.  
 Typically used as follows:
 .Sp
 .Vb 2
@@ -1450,7 +1629,18 @@ Typically used as follows:
 .Ve
 All array elements are numeric, and come straight out of a struct tm.
 In particular this means that \f(CW$mon\fR has the range 0..11 and \f(CW$wday\fR has
-the range 0..6.  If \s-1EXPR\s0 is omitted, does \f(CWgmtime(time())\fR.
+the range 0..6.  Also, \f(CW$year\fR is the number of years since 1900, \fInot\fR
+simply the last two digits of the year.
+.Sp
+If \s-1EXPR\s0 is omitted, does \f(CWgmtime(time())\fR.
+.Sp
+In a scalar context, prints out the \fIctime\fR\|(3) value:
+.Sp
+.Vb 1
+\&    $now_string = gmtime;  # e.g., "Thu Oct 13 04:54:34 1994"
+.Ve
+Also see the \fItimegm.pl\fR library, and the \fIstrftime\fR\|(3) function available
+via the \s-1POSIX\s0 module.
 .Ip "goto \s-1LABEL\s0" 8
 .IX Item "goto \s-1LABEL\s0"
 .Ip "goto \s-1EXPR\s0" 8
@@ -1460,8 +1650,9 @@ the range 0..6.  If \s-1EXPR\s0 is omitted, does \f(CWgmtime(time())\fR.
 The goto-\s-1LABEL\s0 form finds the statement labeled with \s-1LABEL\s0 and resumes
 execution there.  It may not be used to go into any construct that
 requires initialization, such as a subroutine or a foreach loop.  It
-also can't be used to go into a construct that is optimized away.  It
-can be used to go almost anywhere else within the dynamic scope,
+also can't be used to go into a construct that is optimized away,
+or to get out of a block or subroutine given to \fIsort()\fR.
+It can be used to go almost anywhere else within the dynamic scope,
 including out of subroutines, but it's usually better to use some other
 construct such as last or die.  The author of Perl has never felt the
 need to use this form of goto (in Perl, that is\*(--C is another matter).
@@ -1484,6 +1675,10 @@ will be able to tell that this routine was called first.
 .IX Item "grep \s-1BLOCK\s0 \s-1LIST\s0"
 .Ip "grep \s-1EXPR\s0,\s-1LIST\s0" 8
 .IX Item "grep \s-1EXPR\s0,\s-1LIST\s0"
+This is similar in spirit to, but not the same as, the \fIgrep(1)\fR manpage
+and its relatives.  In particular, it is not limited to using
+regular expressions.
+.Sp
 Evaluates the \s-1BLOCK\s0 or \s-1EXPR\s0 for each element of \s-1LIST\s0 (locally setting
 \f(CW$_\fR to each element) and returns the list value consisting of those
 elements for which the expression evaluated to \s-1TRUE\s0.  In a scalar
@@ -1497,32 +1692,44 @@ or equivalently,
 .Vb 1
 \&    @foo = grep {!/^#/} @bar;    # weed out comments
 .Ve
-Note that, since \f(CW$_\fR is a reference into the list value, it can be used
+Note that, because \f(CW$_\fR is a reference into the list value, it can be used
 to modify the elements of the array.  While this is useful and
 supported, it can cause bizarre results if the \s-1LIST\s0 is not a named
-array.
+array.  Similarly, grep returns aliases into the original list,
+much like the way that the section on \fIForeach Loops\fR's index variable aliases the list
+elements.  That is, modifying an element of a list returned by grep
+actually modifies the element in the original list.
 .Ip "hex \s-1EXPR\s0" 8
 .IX Item "hex \s-1EXPR\s0"
-Interprets \s-1EXPR\s0 as a hex string and returns the corresponding decimal
-value.  (To convert strings that might start with 0 or 0x see
-\fIoct()\fR.)  If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
+.Ip "hex " 8
+.IX Item "hex "
+Interprets \s-1EXPR\s0 as a hex string and returns the corresponding 
+value.  (To convert strings that might start with either 0 or 0x
+see the \fIoct\fR manpage.)  If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
+.Sp
+.Vb 2
+\&    print hex '0xAf'; # prints '175'
+\&    print hex 'aF';   # same
+.Ve
 .Ip "import" 8
 .IX Item "import"
 There is no built-in \fIimport()\fR function.  It is merely an ordinary
 method (subroutine) defined (or inherited) by modules that wish to export
 names to another module.  The \fIuse()\fR function calls the \fIimport()\fR method
-for the package used.  See also the \f(CWuse\fR entry elsewhere in this documentthe \fIperlmod\fR manpage, and the \fIExporter\fR manpage.
+for the package used.  See also the \f(CWuse\fR entry elsewhere in this document the \fIperlmod\fR manpage, and the \fIExporter\fR manpage.
 .Ip "index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0" 8
 .IX Item "index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0"
 .Ip "index \s-1STR\s0,\s-1SUBSTR\s0" 8
 .IX Item "index \s-1STR\s0,\s-1SUBSTR\s0"
 Returns the position of the first occurrence of \s-1SUBSTR\s0 in \s-1STR\s0 at or after
 \s-1POSITION\s0.  If \s-1POSITION\s0 is omitted, starts searching from the beginning of
-the string.  The return value is based at 0 (or whatever you've set the $[
+the string.  The return value is based at 0 (or whatever you've set the \f(CW$[\fR
 variable to\*(--but don't do that).  If the substring is not found, returns
 one less than the base, ordinarily \-1.
 .Ip "int \s-1EXPR\s0" 8
 .IX Item "int \s-1EXPR\s0"
+.Ip "int " 8
+.IX Item "int "
 Returns the integer portion of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0" 8
 .IX Item "ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0"
@@ -1583,14 +1790,15 @@ Example:
 \&    $_ = join(':', $login,$passwd,$uid,$gid,$gcos,$home,$shell);
 .Ve
 See the \f(CWsplit\fR entry in the \fIperlfunc\fR manpage.
-.Ip "keys \s-1ASSOC_ARRAY\s0" 8
-.IX Item "keys \s-1ASSOC_ARRAY\s0"
-Returns a normal array consisting of all the keys of the named
-associative array.  (In a scalar context, returns the number of keys.)
-The keys are returned in an apparently random order, but it is the same
-order as either the \fIvalues()\fR or \fIeach()\fR function produces (given that
-the associative array has not been modified).  Here is yet another way
-to print your environment:
+.Ip "keys \s-1HASH\s0" 8
+.IX Item "keys \s-1HASH\s0"
+Returns a normal array consisting of all the keys of the named hash.  (In
+a scalar context, returns the number of keys.)  The keys are returned in
+an apparently random order, but it is the same order as either the
+\fIvalues()\fR or \fIeach()\fR function produces (given that the hash has not been
+modified).  As a side effect, it resets \s-1HASH\s0's iterator.
+.Sp
+Here is yet another way to print your environment:
 .Sp
 .Vb 5
 \&    @keys = keys %ENV;
@@ -1606,14 +1814,28 @@ or how about sorted by key:
 \&        print $key, '=', $ENV{$key}, "\en";
 \&    }
 .Ve
-To sort an array by value, you'll need to use a \f(CWsort{}\fR
-function.  Here's a descending numeric sort of a hash by its values:
+To sort an array by value, you'll need to use a \f(CWsort{}\fR function.
+Here's a descending numeric sort of a hash by its values:
 .Sp
 .Vb 3
 \&    foreach $key (sort { $hash{$b} <=> $hash{$a} } keys %hash)) {
 \&        printf "%4d %s\en", $hash{$key}, $key;
 \&    }
 .Ve
+As an lvalue \f(CWkeys\fR allows you to increase the number of hash buckets
+allocated for the given hash.  This can gain you a measure of efficiency if
+you know the hash is going to get big.  (This is similar to pre-extending
+an array by assigning a larger number to $#array.)  If you say
+.Sp
+.Vb 1
+\&    keys %hash = 200;
+.Ve
+then \f(CW%hash\fR will have at least 200 buckets allocated for it.  These
+buckets will be retained even if you do \f(CW%hash = ()\fR, use \f(CWundef
+%hash\fR if you want to free the storage while \f(CW%hash\fR is still in scope.
+You can't shrink the number of buckets allocated for the hash using
+\f(CWkeys\fR in this way (but you needn't worry about doing this by accident,
+as trying has no effect).
 .Ip "kill \s-1LIST\s0" 8
 .IX Item "kill \s-1LIST\s0"
 Sends a signal to a list of processes.  The first element of 
@@ -1646,16 +1868,26 @@ omitted, the command refers to the innermost enclosing loop.  The
 .Ve
 .Ip "lc \s-1EXPR\s0" 8
 .IX Item "lc \s-1EXPR\s0"
+.Ip "lc " 8
+.IX Item "lc "
 Returns an lowercased version of \s-1EXPR\s0.  This is the internal function
 implementing the \eL escape in double-quoted strings.  
-Should respect any \s-1POSIX\s0 \fIsetlocale()\fR settings.
+Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
+.Sp
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "lcfirst \s-1EXPR\s0" 8
 .IX Item "lcfirst \s-1EXPR\s0"
+.Ip "lcfirst " 8
+.IX Item "lcfirst "
 Returns the value of \s-1EXPR\s0 with the first character lowercased.  This is
 the internal function implementing the \el escape in double-quoted strings.
-Should respect any \s-1POSIX\s0 \fIsetlocale()\fR settings.
+Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
+.Sp
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "length \s-1EXPR\s0" 8
 .IX Item "length \s-1EXPR\s0"
+.Ip "length " 8
+.IX Item "length "
 Returns the length in characters of the value of \s-1EXPR\s0.  If \s-1EXPR\s0 is
 omitted, returns length of \f(CW$_\fR.
 .Ip "link \s-1OLDFILE\s0,\s-1NEWFILE\s0" 8
@@ -1669,17 +1901,17 @@ it succeeded, \s-1FALSE\s0 otherwise.  See example in the section on \fISockets:
 .Ip "local \s-1EXPR\s0" 8
 .IX Item "local \s-1EXPR\s0"
 A local modifies the listed variables to be local to the enclosing block,
-subroutine, \f(CWeval{}\fR or \f(CWdo\fR.  If more than one value is listed, the
-list must be placed in parens.  See L<perlsub/"Temporary Values via
-local()"> for details.
+subroutine, \f(CWeval{}\fR, or \f(CWdo\fR.  If more than one value is listed, the
+list must be placed in parentheses.  See the section on \fITemporary Values via
+local()\fR in the \fIperlsub\fR manpage for details.
 .Sp
 But you really probably want to be using \fImy()\fR instead, because \fIlocal()\fR isn't
-what most people think of as \*(L"local").  See L<perlsub/"Private Variables
-via my()"> for details.
+what most people think of as \*(L"local").  See the section on \fIPrivate Variables
+via my()\fR in the \fIperlsub\fR manpage for details.
 .Ip "localtime \s-1EXPR\s0" 8
 .IX Item "localtime \s-1EXPR\s0"
 Converts a time as returned by the time function to a 9-element array
-with the time analyzed for the local timezone.  Typically used as
+with the time analyzed for the local time zone.  Typically used as
 follows:
 .Sp
 .Vb 2
@@ -1688,26 +1920,33 @@ follows:
 .Ve
 All array elements are numeric, and come straight out of a struct tm.
 In particular this means that \f(CW$mon\fR has the range 0..11 and \f(CW$wday\fR has
-the range 0..6.  If \s-1EXPR\s0 is omitted, does \fIlocaltime\fR\|(time).
+the range 0..6 and \f(CW$year\fR is year-1900, that is, \f(CW$year\fR is 123 in year
+2023.  If \s-1EXPR\s0 is omitted, uses the current time (\*(R"\fIlocaltime\fR\|(time)").
 .Sp
-In a scalar context, prints out the \fIctime\fR\|(3) value:
+In a scalar context, returns the \fIctime\fR\|(3) value:
 .Sp
 .Vb 1
-\&    $now_string = localtime;  # e.g. "Thu Oct 13 04:54:34 1994"
+\&    $now_string = localtime;  # e.g., "Thu Oct 13 04:54:34 1994"
 .Ve
-Also see the \fItimelocal.pl\fR library, and the \fIstrftime\fR\|(3) function available
+Also see the Time::Local module, and the \fIstrftime\fR\|(3) function available
 via the \s-1POSIX\s0 module.
 .Ip "log \s-1EXPR\s0" 8
 .IX Item "log \s-1EXPR\s0"
+.Ip "log " 8
+.IX Item "log "
 Returns logarithm (base \fIe\fR) of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, returns log
 of \f(CW$_\fR.
 .Ip "lstat \s-1FILEHANDLE\s0" 8
 .IX Item "lstat \s-1FILEHANDLE\s0"
 .Ip "lstat \s-1EXPR\s0" 8
 .IX Item "lstat \s-1EXPR\s0"
+.Ip "lstat " 8
+.IX Item "lstat "
 Does the same thing as the \fIstat()\fR function, but stats a symbolic link
 instead of the file the symbolic link points to.  If symbolic links are
 unimplemented on your system, a normal \fIstat()\fR is done.
+.Sp
+If \s-1EXPR\s0 is omitted, stats \f(CW$_\fR.
 .Ip "m//" 8
 .IX Item "m//"
 The match operator.  See the \fIperlop\fR manpage.
@@ -1740,7 +1979,7 @@ is just a funny way to write
 .IX Item "mkdir \s-1FILENAME\s0,\s-1MODE\s0"
 Creates the directory specified by \s-1FILENAME\s0, with permissions specified
 by \s-1MODE\s0 (as modified by umask).  If it succeeds it returns 1, otherwise
-it returns 0 and sets $! (errno).
+it returns 0 and sets \f(CW$!\fR (errno).
 .Ip "msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0" 8
 .IX Item "msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
 Calls the System V \s-1IPC\s0 function \fImsgctl\fR\|(2).  If \s-1CMD\s0 is &\s-1IPC_STAT\s0, then \s-1ARG\s0
@@ -1769,7 +2008,7 @@ an error.
 .IX Item "my \s-1EXPR\s0"
 A \*(L"my\*(R" declares the listed variables to be local (lexically) to the
 enclosing block, subroutine, \f(CWeval\fR, or \f(CWdo/require/use\fR'd file.  If
-more than one value is listed, the list must be placed in parens.  See
+more than one value is listed, the list must be placed in parentheses.  See
 the section on \fIPrivate Variables via my()\fR in the \fIperlsub\fR manpage for details.
 .Ip "next \s-1LABEL\s0" 8
 .IX Item "next \s-1LABEL\s0"
@@ -1792,37 +2031,49 @@ refers to the innermost enclosing loop.
 See the \*(L"use\*(R" function, which \*(L"no\*(R" is the opposite of.
 .Ip "oct \s-1EXPR\s0" 8
 .IX Item "oct \s-1EXPR\s0"
+.Ip "oct " 8
+.IX Item "oct "
 Interprets \s-1EXPR\s0 as an octal string and returns the corresponding
-decimal value.  (If \s-1EXPR\s0 happens to start off with 0x, interprets it as
+value.  (If \s-1EXPR\s0 happens to start off with 0x, interprets it as
 a hex string instead.)  The following will handle decimal, octal, and
 hex in the standard Perl or C notation:
 .Sp
 .Vb 1
 \&    $val = oct($val) if $val =~ /^0/;
 .Ve
-If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.  This function is commonly used when
+a string such as \*(L"644\*(R" needs to be converted into a file mode, for
+example. (Although perl will automatically convert strings into
+numbers as needed, this automatic conversion assumes base 10.)
 .Ip "open \s-1FILEHANDLE\s0,\s-1EXPR\s0" 8
 .IX Item "open \s-1FILEHANDLE\s0,\s-1EXPR\s0"
 .Ip "open \s-1FILEHANDLE\s0" 8
 .IX Item "open \s-1FILEHANDLE\s0"
 Opens the file whose filename is given by \s-1EXPR\s0, and associates it with
-\s-1FILEHANDLE\s0.  If \s-1FILEHANDLE\s0 is an expression, its value is used as the name
-of the real filehandle wanted.  If \s-1EXPR\s0 is omitted, the scalar variable of
-the same name as the \s-1FILEHANDLE\s0 contains the filename.  If the filename
-begins with \*(L"<\*(R" or nothing, the file is opened for input.  If the filename
-begins with \*(L">\*(R", the file is opened for output.  If the filename begins
-with \*(L">>\*(R", the file is opened for appending.  You can put a \*(L'+\*(R' in front
-of the \*(L'>\*(R' or \*(L'<\*(R' to indicate that you want both read and write access to
-the file; thus \*(L'+<\*(R' is usually preferred for read/write updates\*(--the \*(L'+>\*(R'
-mode would clobber the file first.  These correspond to the \fIfopen\fR\|(3) modes
-of \*(L'r\*(R', \*(L'r+\*(R', \*(L'w\*(R', \*(L'w+\*(R', \*(L'a\*(R', and \*(L'a+\*(R'.
+\s-1FILEHANDLE\s0.  If \s-1FILEHANDLE\s0 is an expression, its value is used as the
+name of the real filehandle wanted.  If \s-1EXPR\s0 is omitted, the scalar
+variable of the same name as the \s-1FILEHANDLE\s0 contains the filename.
+(Note that lexical variables\*(--those declared with \f(CWmy\fR--will not work
+for this purpose; so if you're using \f(CWmy\fR, specify \s-1EXPR\s0 in your call
+to open.)
 .Sp
-If the filename begins with \*(L"|\*(R", the filename is interpreted
-as a command to which output is to be piped, and if the filename ends with
-a \*(L"|\*(R", the filename is interpreted See the section on \fIUsing open() for \s-1IPC\s0\fR in the \fIperlipc\fR manpage
-for more examples of this.  as command which pipes input to us.  (You may
-not have a raw \fIopen()\fR to a command that pipes both in \fIand\fR out, but see the \fIopen2\fR manpage,
-the \fIopen3\fR manpage, and the section on \fIBidirectional Communication\fR in the \fIperlipc\fR manpage for alternatives.)
+If the filename begins with \*(L'<\*(R' or nothing, the file is opened for input.
+If the filename begins with \*(L'>\*(R', the file is truncated and opened for
+output.  If the filename begins with \*(L'>>\*(R', the file is opened for
+appending.  You can put a \*(L'+\*(R' in front of the \*(L'>\*(R' or \*(L'<\*(R' to indicate that
+you want both read and write access to the file; thus \*(L'+<\*(R' is almost
+always preferred for read/write updates\*(--the \*(L'+>\*(R' mode would clobber the
+file first.  The prefix and the filename may be separated with spaces.
+These various prefixes correspond to the \fIfopen\fR\|(3) modes of \*(L'r\*(R', \*(L'r+\*(R', \*(L'w\*(R',
+\*(L'w+\*(R', \*(L'a\*(R', and \*(L'a+\*(R'.
+.Sp
+If the filename begins with \*(L"|\*(R", the filename is interpreted as a command
+to which output is to be piped, and if the filename ends with a \*(L"|\*(R", the
+filename is interpreted See the section on \fIUsing open() for \s-1IPC\s0\fR in the \fIperlipc\fR manpage for more
+examples of this.  as command which pipes input to us.  (You may not have
+a raw \fIopen()\fR to a command that pipes both in \fIand\fR out, but see
+the \fI\s-1IPC::\s0Open2\fR manpage, the \fI\s-1IPC::\s0Open3\fR manpage, and the section on \fIBidirectional Communication\fR in the \fIperlipc\fR manpage
+for alternatives.)
 .Sp
 Opening \*(L'\-\*(R' opens \s-1STDIN\s0 and opening \*(L'>\-\*(R' opens \s-1STDOUT\s0.  Open returns
 non-zero upon success, the undefined value otherwise.  If the open
@@ -1831,7 +2082,7 @@ subprocess.
 .Sp
 If you're unfortunate enough to be running Perl on a system that
 distinguishes between text files and binary files (modern operating
-systems don't care), then you should check out the \f(CWbinmode\fR entry elsewhere in this documentfor tips for
+systems don't care), then you should check out the \f(CWbinmode\fR entry elsewhere in this document for tips for
 dealing with this.  The key distinction between systems that need binmode
 and those that don't is their text file formats.  Systems like Unix and
 Plan9 that delimit lines with a single character, and that encode that
@@ -1886,9 +2137,10 @@ Examples:
 You may also, in the Bourne shell tradition, specify an \s-1EXPR\s0 beginning
 with \*(L">&\*(R", in which case the rest of the string is interpreted as the
 name of a filehandle (or file descriptor, if numeric) which is to be
-duped and opened.  You may use & after >, >>, <, +>, +>> and +<.  The
+duped and opened.  You may use & after >, >>, <, +>,
++>>, and +<.  The
 mode you specify should match the mode of the original filehandle.
-(Duping a filehandle does not take into acount any existing contents of
+(Duping a filehandle does not take into account any existing contents of
 stdio buffers.)
 Here is a script that saves, redirects, and restores \s-1STDOUT\s0 and
 \s-1STDERR\s0:
@@ -1929,10 +2181,10 @@ parsimonious of file descriptors.  For example:
 .Vb 1
 \&    open(FILEHANDLE, "<&=$fd")
 .Ve
-If you open a pipe on the command \*(L"\-\*(R", i.e. either \*(L"|\-\*(R" or \*(L"\-|\*(R", then
+If you open a pipe on the command \*(L"\-\*(R", i.e., either \*(L"|\-\*(R" or \*(L"\-|\*(R", then
 there is an implicit fork done, and the return value of open is the pid
 of the child within the parent process, and 0 within the child
-process.  (Use \fIdefined\fR\|($pid) to determine whether the open was successful.)
+process.  (Use \f(CWdefined($pid)\fR to determine whether the open was successful.)
 The filehandle behaves normally for the parent, but i/o to that
 filehandle is piped from/to the \s-1STDOUT/STDIN\s0 of the child process.
 In the child process the filehandle isn't opened\*(--i/o happens from/to
@@ -1953,22 +2205,23 @@ The following pairs are more or less equivalent:
 See the section on \fISafe Pipe Opens\fR in the \fIperlipc\fR manpage for more examples of this.
 .Sp
 Explicitly closing any piped filehandle causes the parent process to
-wait for the child to finish, and returns the status value in $?.
+wait for the child to finish, and returns the status value in \f(CW$?\fR.
 Note: on any operation which may do a fork, unflushed buffers remain
-unflushed in both processes, which means you may need to set $| to
+unflushed in both processes, which means you may need to set \f(CW$|\fR to
 avoid duplicate output.
 .Sp
-Using the FileHandle constructor from the FileHandle package,
+Using the constructor from the \s-1IO::\s0Handle package (or one of its
+subclasses, such as \s-1IO::\s0File or \s-1IO::\s0Socket),
 you can generate anonymous filehandles which have the scope of whatever
 variables hold references to them, and automatically close whenever
 and however you leave that scope:
 .Sp
 .Vb 12
-\&    use FileHandle;
+\&    use IO::File;
 \&    ...
 \&    sub read_myfile_munged {
 \&        my $ALL = shift;
-\&        my $handle = new FileHandle;
+\&        my $handle = new IO::File;
 \&        open($handle, "myfile") or die "myfile: $!";
 \&        $first = <$handle>
 \&            or return ();     # Automatically closed here.
@@ -1978,7 +2231,7 @@ and however you leave that scope:
 \&    }
 .Ve
 The filename that is passed to open will have leading and trailing
-whitespace deleted.  In order to open a file with arbitrary weird
+whitespace deleted.  To open a file with arbitrary weird
 characters in it, it's necessary to protect any leading and trailing
 whitespace thusly:
 .Sp
@@ -1991,7 +2244,7 @@ you should use the \fIsysopen()\fR function.  This is another way to
 protect your filenames from interpretation.  For example:
 .Sp
 .Vb 7
-\&    use FileHandle;
+\&    use IO::Handle;
 \&    sysopen(HANDLE, $path, O_RDWR|O_CREAT|O_EXCL, 0700)
 \&        or die "sysopen $path: $!";
 \&    HANDLE->autoflush(1);
@@ -1999,16 +2252,18 @@ protect your filenames from interpretation.  For example:
 \&    seek(HANDLE, 0, 0);
 \&    print "File contains: ", <HANDLE>;
 .Ve
-See the \f(CWseek()\fR entry elsewhere in this documentfor some details about mixing reading and writing.
+See the \f(CWseek()\fR entry elsewhere in this document for some details about mixing reading and writing.
 .Ip "opendir \s-1DIRHANDLE\s0,\s-1EXPR\s0" 8
 .IX Item "opendir \s-1DIRHANDLE\s0,\s-1EXPR\s0"
 Opens a directory named \s-1EXPR\s0 for processing by \fIreaddir()\fR, \fItelldir()\fR,
-\fIseekdir()\fR, \fIrewinddir()\fR and \fIclosedir()\fR.  Returns \s-1TRUE\s0 if successful.
+\fIseekdir()\fR, \fIrewinddir()\fR, and \fIclosedir()\fR.  Returns \s-1TRUE\s0 if successful.
 DIRHANDLEs have their own namespace separate from FILEHANDLEs.
 .Ip "ord \s-1EXPR\s0" 8
 .IX Item "ord \s-1EXPR\s0"
+.Ip "ord " 8
+.IX Item "ord "
 Returns the numeric ascii value of the first character of \s-1EXPR\s0.  If
-\s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
+\s-1EXPR\s0 is omitted, uses \f(CW$_\fR.  For the reverse, see the \fIchr\fR manpage.
 .Ip "pack \s-1TEMPLATE\s0,\s-1LIST\s0" 8
 .IX Item "pack \s-1TEMPLATE\s0,\s-1LIST\s0"
 Takes an array or list of values and packs it into a binary structure,
@@ -2051,13 +2306,19 @@ follows:
 .Vb 1
 \&    u   A uuencoded string.
 .Ve
+.Vb 4
+\&    w A BER compressed integer.  Bytes give an unsigned integer base
+\&      128, most significant digit first, with as few digits as
+\&      possible, and with the bit 8 of each byte except the last set
+\&      to "1."
+.Ve
 .Vb 3
 \&    x   A null byte.
 \&    X   Back up a byte.
 \&    @   Null fill to absolute position.
 .Ve
 Each letter may optionally be followed by a number which gives a repeat
-count.  With all types except \*(L"a\*(R", \*(L"A\*(R", \*(L"b\*(R", \*(L"B\*(R", \*(L"h\*(R" and \*(L"H\*(R", and \*(L"P\*(R" the
+count.  With all types except \*(L"a\*(R", \*(L"A\*(R", \*(L"b\*(R", \*(L"B\*(R", \*(L"h\*(R", \*(L"H\*(R", and \*(L"P\*(R" the
 pack function will gobble up that many values from the \s-1LIST\s0.  A * for the
 repeat count means to use however many items are left.  The \*(L"a\*(R" and \*(L"A\*(R"
 types gobble just one value, but pack it as a string of length count,
@@ -2073,7 +2334,7 @@ point data written on one machine may not be readable on another \- even if
 both use \s-1IEEE\s0 floating point arithmetic (as the endian-ness of the memory
 representation is not part of the \s-1IEEE\s0 spec).  Note that Perl uses doubles
 internally for all numeric calculation, and converting from double into
-float and thence back to double again will lose precision (i.e.
+float and thence back to double again will lose precision (i.e.,
 \f(CWunpack("f", pack("f", $foo)\fR) will not in general equal \f(CW$foo\fR).
 .Sp
 Examples:
@@ -2121,11 +2382,11 @@ Declares the compilation unit as being in the given namespace.  The scope
 of the package declaration is from the declaration itself through the end of
 the enclosing block (the same scope as the \fIlocal()\fR operator).  All further
 unqualified dynamic identifiers will be in this namespace.  A package
-statement only affects dynamic variables\*(--including those you've used
+statement affects only dynamic variables\*(--including those you've used
 \fIlocal()\fR on\*(--but \fInot\fR lexical variables created with \fImy()\fR.  Typically it
 would be the first declaration in a file to be included by the \f(CWrequire\fR
 or \f(CWuse\fR operator.  You can switch into a package in more than one place;
-it merely influences which symbol table is used by the compiler for the
+it influences merely which symbol table is used by the compiler for the
 rest of that block.  You can refer to variables and filehandles in other
 packages by prefixing the identifier with the package name and a double
 colon:  \f(CW$Package::Variable\fR.  If the package name is null, the \f(CWmain\fR
@@ -2138,13 +2399,15 @@ and classes.  See the \fIperlsub\fR manpage for other scoping issues.
 Opens a pair of connected pipes like the corresponding system call.
 Note that if you set up a loop of piped processes, deadlock can occur
 unless you are very careful.  In addition, note that Perl's pipes use
-stdio buffering, so you may need to set $| to flush your \s-1WRITEHANDLE\s0
+stdio buffering, so you may need to set \f(CW$|\fR to flush your \s-1WRITEHANDLE\s0
 after each command, depending on the application.
 .Sp
-See the \fIopen2\fR manpage, the \fIopen3\fR manpage, and the section on \fIBidirectional Communication\fR in the \fIperlipc\fR manpage
+See the \fI\s-1IPC::\s0Open2\fR manpage, the \fI\s-1IPC::\s0Open3\fR manpage, and the section on \fIBidirectional Communication\fR in the \fIperlipc\fR manpage
 for examples of such things.
 .Ip "pop \s-1ARRAY\s0" 8
 .IX Item "pop \s-1ARRAY\s0"
+.Ip "pop " 8
+.IX Item "pop "
 Pops and returns the last value of the array, shortening the array by
 1.  Has a similar effect to
 .Sp
@@ -2157,8 +2420,13 @@ If \s-1ARRAY\s0 is omitted, pops the
 like \fIshift()\fR.
 .Ip "pos \s-1SCALAR\s0" 8
 .IX Item "pos \s-1SCALAR\s0"
+.Ip "pos " 8
+.IX Item "pos "
 Returns the offset of where the last \f(CWm//g\fR search left off for the variable
-in question.  May be modified to change that offset.
+is in question ($_ is used when the variable is not specified).  May be
+modified to change that offset.  Such modification will also influence
+the \f(CW\eG\fR zero-width assertion in regular expressions.  See the \fIperlre\fR manpage and
+the \fIperlop\fR manpage.
 .Ip "print \s-1FILEHANDLE\s0 \s-1LIST\s0" 8
 .IX Item "print \s-1FILEHANDLE\s0 \s-1LIST\s0"
 .Ip "print \s-1LIST\s0" 8
@@ -2170,9 +2438,9 @@ if successful.  \s-1FILEHANDLE\s0 may be a scalar variable name, in which case
 the variable contains the name of or a reference to the filehandle, thus introducing one
 level of indirection.  (\s-1NOTE\s0: If \s-1FILEHANDLE\s0 is a variable and the next
 token is a term, it may be misinterpreted as an operator unless you
-interpose a + or put parens around the arguments.)  If \s-1FILEHANDLE\s0 is
+interpose a + or put parentheses around the arguments.)  If \s-1FILEHANDLE\s0 is
 omitted, prints by default to standard output (or to the last selected
-output channel\*(--see the \f(CWselect\fR entry elsewhere in this document).  If \s-1LIST\s0 is also omitted, prints \f(CW$_\fR to
+output channel\*(--see the \f(CWselect\fR entry elsewhere in this document ).  If \s-1LIST\s0 is also omitted, prints \f(CW$_\fR to
 \s-1STDOUT\s0.  To set the default output channel to something other than
 \s-1STDOUT\s0 use the select operation.  Note that, because print takes a
 \s-1LIST\s0, anything in the \s-1LIST\s0 is evaluated in a list context, and any
@@ -2180,7 +2448,7 @@ subroutine that you call will have one or more of its expressions
 evaluated in a list context.  Also be careful not to follow the print
 keyword with a left parenthesis unless you want the corresponding right
 parenthesis to terminate the arguments to the print\*(--interpose a + or
-put parens around all the arguments.
+put parentheses around all the arguments.
 .Sp
 Note that if you're storing \s-1FILEHANDLES\s0 in an array or other expression,
 you will have to use a block returning its value instead:
@@ -2189,17 +2457,23 @@ you will have to use a block returning its value instead:
 \&    print { $files[$i] } "stuff\en";
 \&    print { $OK ? STDOUT : STDERR } "stuff\en";
 .Ve
-.Ip "printf \s-1FILEHANDLE\s0 \s-1LIST\s0" 8
-.IX Item "printf \s-1FILEHANDLE\s0 \s-1LIST\s0"
-.Ip "printf \s-1LIST\s0" 8
-.IX Item "printf \s-1LIST\s0"
-Equivalent to a \*(L"print \s-1FILEHANDLE\s0 \fIsprintf\fR\|(\s-1LIST\s0)\*(R".  The first argument
-of the list will be interpreted as the printf format.
+.Ip "printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0" 8
+.IX Item "printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0"
+.Ip "printf \s-1FORMAT\s0, \s-1LIST\s0" 8
+.IX Item "printf \s-1FORMAT\s0, \s-1LIST\s0"
+Equivalent to \f(CWprint FILEHANDLE sprintf(FORMAT, LIST)\fR.  The first argument
+of the list will be interpreted as the printf format.  If \f(CWuse locale\fR is
+in effect, the character used for the decimal point in formatted real numbers
+is affected by the \s-1LC_NUMERIC\s0 locale.  See the \fIperllocale\fR manpage.
+.Sp
+Don't fall into the trap of using a \fIprintf()\fR when a simple
+\fIprint()\fR would do.  The \fIprint()\fR is more efficient, and less
+error prone.
 .Ip "prototype \s-1FUNCTION\s0" 8
 .IX Item "prototype \s-1FUNCTION\s0"
 Returns the prototype of a function as a string (or \f(CWundef\fR if the
-function has no prototype).  \s-1FUNCTION\s0 is a reference to the the
-function whose prototype you want to retrieve.
+function has no prototype).  \s-1FUNCTION\s0 is a reference to, or the name of,
+the function whose prototype you want to retrieve.
 .Ip "push \s-1ARRAY\s0,\s-1LIST\s0" 8
 .IX Item "push \s-1ARRAY\s0,\s-1LIST\s0"
 Treats \s-1ARRAY\s0 as a stack, and pushes the values of \s-1LIST\s0
@@ -2223,24 +2497,28 @@ but is more efficient.  Returns the new number of elements in the array.
 Generalized quotes.  See the \fIperlop\fR manpage.
 .Ip "quotemeta \s-1EXPR\s0" 8
 .IX Item "quotemeta \s-1EXPR\s0"
-Returns the value of \s-1EXPR\s0 with with all regular expression
-metacharacters backslashed.  This is the internal function implementing
+.Ip "quotemeta " 8
+.IX Item "quotemeta "
+Returns the value of \s-1EXPR\s0 with with all non-alphanumeric
+characters backslashed.  (That is, all characters not matching
+\f(CW/[A-Za-z_0-9]/\fR will be preceded by a backslash in the
+returned string, regardless of any locale settings.)
+This is the internal function implementing
 the \eQ escape in double-quoted strings.
+.Sp
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "rand \s-1EXPR\s0" 8
 .IX Item "rand \s-1EXPR\s0"
 .Ip "rand" 8
 .IX Item "rand"
 Returns a random fractional number between 0 and the value of \s-1EXPR\s0.
 (\s-1EXPR\s0 should be positive.)  If \s-1EXPR\s0 is omitted, returns a value between 
-0 and 1.  This function produces repeatable sequences unless \fIsrand()\fR 
-is invoked.  See also \fIsrand()\fR.
+0 and 1.  Automatically calls \fIsrand()\fR unless \fIsrand()\fR has already been
+called.  See also \fIsrand()\fR.
 .Sp
-(Note: if your rand function consistently returns numbers that are too
+(Note: If your rand function consistently returns numbers that are too
 large or too small, then your version of Perl was probably compiled
-with the wrong number of \s-1RANDBITS\s0.  As a workaround, you can usually
-multiply \s-1EXPR\s0 by the correct power of 2 to get the range you want.
-This will make your script unportable, however.  It's better to recompile
-if you can.)
+with the wrong number of \s-1RANDBITS\s0.)
 .Ip "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
 .IX Item "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
@@ -2260,7 +2538,7 @@ directory.  If there are no more entries, returns an undefined value in
 a scalar context or a null list in a list context.
 .Sp
 If you're planning to filetest the return values out of a \fIreaddir()\fR, you'd
-better prepend the directory in question.  Otherwise, since we didn't
+better prepend the directory in question.  Otherwise, because we didn't
 \fIchdir()\fR there, it would have been testing the wrong file.
 .Sp
 .Vb 3
@@ -2270,9 +2548,11 @@ better prepend the directory in question.  Otherwise, since we didn't
 .Ve
 .Ip "readlink \s-1EXPR\s0" 8
 .IX Item "readlink \s-1EXPR\s0"
+.Ip "readlink " 8
+.IX Item "readlink "
 Returns the value of a symbolic link, if symbolic links are
 implemented.  If not, gives a fatal error.  If there is some system
-error, returns the undefined value and sets $! (errno).  If \s-1EXPR\s0 is
+error, returns the undefined value and sets \f(CW$!\fR (errno).  If \s-1EXPR\s0 is
 omitted, uses \f(CW$_\fR.
 .Ip "recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0" 8
 .IX Item "recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0"
@@ -2313,8 +2593,11 @@ themselves about what was just input:
 .Ve
 .Ip "ref \s-1EXPR\s0" 8
 .IX Item "ref \s-1EXPR\s0"
-Returns a \s-1TRUE\s0 value if \s-1EXPR\s0 is a reference, \s-1FALSE\s0 otherwise.  The value
-returned depends on the type of thing the reference is a reference to.
+.Ip "ref " 8
+.IX Item "ref "
+Returns a \s-1TRUE\s0 value if \s-1EXPR\s0 is a reference, \s-1FALSE\s0 otherwise.  If \s-1EXPR\s0
+is not specified, \f(CW$_\fR will be used.  The value returned depends on the
+type of thing the reference is a reference to.
 Builtin types include:
 .Sp
 .Vb 6
@@ -2330,7 +2613,7 @@ name is returned instead.  You can think of \fIref()\fR as a \fItypeof()\fR oper
 .Sp
 .Vb 6
 \&    if (ref($r) eq "HASH") {
-\&        print "r is a reference to an associative array.\en";
+\&        print "r is a reference to a hash.\en";
 \&    } 
 \&    if (!ref ($r) {
 \&        print "r is not a reference at all.\en";
@@ -2340,14 +2623,14 @@ See also the \fIperlref\fR manpage.
 .Ip "rename \s-1OLDNAME\s0,\s-1NEWNAME\s0" 8
 .IX Item "rename \s-1OLDNAME\s0,\s-1NEWNAME\s0"
 Changes the name of a file.  Returns 1 for success, 0 otherwise.  Will
-not work across filesystem boundaries.
+not work across file system boundaries.
 .Ip "require \s-1EXPR\s0" 8
 .IX Item "require \s-1EXPR\s0"
 .Ip "require" 8
 .IX Item "require"
 Demands some semantics specified by \s-1EXPR\s0, or by \f(CW$_\fR if \s-1EXPR\s0 is not
 supplied.  If \s-1EXPR\s0 is numeric, demands that the current version of Perl
-($] or \f(CW$PERL_VERSION\fR) be equal or greater than \s-1EXPR\s0.
+(\f(CW$]\fR or \f(CW$PERL_VERSION\fR) be equal or greater than \s-1EXPR\s0.
 .Sp
 Otherwise, demands that a library file be included if it hasn't already
 been included.  The file is included via the do-\s-1FILE\s0 mechanism, which is
@@ -2387,7 +2670,7 @@ replaces \*(L"\fI::\fR\*(R" with \*(L"\fI/\fR\*(R" in the filename for you,
 to make it easy to load standard modules.  This form of loading of 
 modules does not risk altering your namespace.
 .Sp
-For a yet-more-powerful import facility, see the \f(CWuse\fR entry elsewhere in this documentthe \fIperlmod\fR manpage.
+For a yet-more-powerful import facility, see the \f(CWuse\fR entry elsewhere in this document the \fIperlmod\fR manpage.
 .Ip "reset \s-1EXPR\s0" 8
 .IX Item "reset \s-1EXPR\s0"
 .Ip "reset" 8
@@ -2397,8 +2680,8 @@ variables and reset ?? searches so that they work again.  The
 expression is interpreted as a list of single characters (hyphens
 allowed for ranges).  All variables and arrays beginning with one of
 those letters are reset to their pristine state.  If the expression is
-omitted, one-match searches (?pattern?) are reset to match again.  Only
-resets variables or searches in the current package.  Always returns
+omitted, one-match searches (?pattern?) are reset to match again.  Resets
+only variables or searches in the current package.  Always returns
 1.  Examples:
 .Sp
 .Vb 3
@@ -2406,10 +2689,10 @@ resets variables or searches in the current package.  Always returns
 \&    reset 'a-z';        # reset lower case variables
 \&    reset;              # just reset ?? searches
 .Ve
-Resetting \*(L"A\-Z\*(R" is not recommended since you'll wipe out your
-\s-1ARGV\s0 and \s-1ENV\s0 arrays.  Only resets package variables\*(--lexical variables
+Resetting \*(L"A\-Z\*(R" is not recommended because you'll wipe out your
+\s-1ARGV\s0 and \s-1ENV\s0 arrays.  Resets only package variables\*(--lexical variables
 are unaffected, but they clean themselves up on scope exit anyway,
-so you'll probably want to use them instead.  See the \f(CWmy\fR entry elsewhere in this document.
+so you'll probably want to use them instead.  See the \f(CWmy\fR entry elsewhere in this document .
 .Ip "return \s-1LIST\s0" 8
 .IX Item "return \s-1LIST\s0"
 Returns from a subroutine or eval with the value specified.  (Note that
@@ -2418,16 +2701,25 @@ return the value of the last expression evaluated.)
 .Ip "reverse \s-1LIST\s0" 8
 .IX Item "reverse \s-1LIST\s0"
 In a list context, returns a list value consisting of the elements
-of \s-1LIST\s0 in the opposite order.  In a scalar context, returns a string
-value consisting of the bytes of the first element of \s-1LIST\s0 in the
-opposite order.   
+of \s-1LIST\s0 in the opposite order.  In a scalar context, concatenates the
+elements of \s-1LIST\s0, and returns a string value consisting of those bytes,
+but in the opposite order.
 .Sp
 .Vb 1
-\&    print reverse <>;                   # line tac 
+\&    print reverse <>;           # line tac, last line first
 .Ve
 .Vb 2
-\&    undef $/;
-\&    print scalar reverse scalar <>;     # byte tac
+\&    undef $/;                   # for efficiency of <>
+\&    print scalar reverse <>;    # byte tac, last line tsrif
+.Ve
+This operator is also handy for inverting a hash, although there are some
+caveats.  If a value is duplicated in the original hash, only one of those
+can be represented as a key in the inverted hash.  Also, this has to
+unwind one hash and build a whole new one, which may take some time
+on a large hash.
+.Sp
+.Vb 1
+\&    %by_name = reverse %by_address;     # Invert the hash
 .Ve
 .Ip "rewinddir \s-1DIRHANDLE\s0" 8
 .IX Item "rewinddir \s-1DIRHANDLE\s0"
@@ -2442,8 +2734,10 @@ occurrence of \s-1SUBSTR\s0 in \s-1STR\s0.  If \s-1POSITION\s0 is specified, ret
 last occurrence at or before that position.
 .Ip "rmdir \s-1FILENAME\s0" 8
 .IX Item "rmdir \s-1FILENAME\s0"
+.Ip "rmdir " 8
+.IX Item "rmdir "
 Deletes the directory specified by \s-1FILENAME\s0 if it is empty.  If it
-succeeds it returns 1, otherwise it returns 0 and sets $! (errno).  If
+succeeds it returns 1, otherwise it returns 0 and sets \f(CW$!\fR (errno).  If
 \s-1FILENAME\s0 is omitted, uses \f(CW$_\fR.
 .Ip "s///" 8
 .IX Item "s///"
@@ -2483,7 +2777,7 @@ This is also useful for applications emulating \f(CWtail -f\fR.  Once you hit
 \fIseek()\fR to reset things.  First the simple trick listed above to clear the
 filepointer.  The \fIseek()\fR doesn't change the current position, but it
 \fIdoes\fR clear the end-of-file condition on the handle, so that the next
-\f(CW<FILE>\fR makes Perl try again to read something.  Hopefully.
+\f(CW<FILE>\fR makes Perl try again to read something.  We hope.
 .Sp
 If that doesn't work (some stdios are particularly cantankerous), then
 you may need something more like this:
@@ -2531,12 +2825,12 @@ Some programmers may prefer to think of filehandles as objects with
 methods, preferring to write the last example as:
 .Sp
 .Vb 2
-\&    use FileHandle;
+\&    use IO::Handle;
 \&    STDERR->autoflush(1);
 .Ve
 .Ip "select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0" 8
 .IX Item "select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0"
-This calls the \fIselect\fR\|(2) system call with the bitmasks specified, which
+This calls the \fIselect\fR\|(2) system call with the bit masks specified, which
 can be constructed using \fIfileno()\fR and \fIvec()\fR, along these lines:
 .Sp
 .Vb 4
@@ -2570,15 +2864,15 @@ or to block until something becomes ready just do this
 .Vb 1
 \&    $nfound = select($rout=$rin, $wout=$win, $eout=$ein, undef);
 .Ve
-Most systems do not both to return anything useful in \f(CW$timeleft\fR, so
+Most systems do not bother to return anything useful in \f(CW$timeleft\fR, so
 calling \fIselect()\fR in a scalar context just returns \f(CW$nfound\fR.
 .Sp
-Any of the bitmasks can also be undef.  The timeout, if specified, is
+Any of the bit masks can also be undef.  The timeout, if specified, is
 in seconds, which may be fractional.  Note: not all implementations are
 capable of returning the \f(CW$timeleft\fR.  If not, they always return
 \f(CW$timeleft\fR equal to the supplied \f(CW$timeout\fR.
 .Sp
-You can effect a 250-millisecond sleep this way:
+You can effect a sleep of 250 milliseconds this way:
 .Sp
 .Vb 1
 \&    select(undef, undef, undef, 0.25);
@@ -2625,7 +2919,7 @@ See the section on \fI\s-1UDP\s0: Message Passing\fR in the \fIperlipc\fR manpag
 .IX Item "setpgrp \s-1PID\s0,\s-1PGRP\s0"
 Sets the current process group for the specified \s-1PID\s0, 0 for the current
 process.  Will produce a fatal error if used on a machine that doesn't
-implement \fIsetpgrp\fR\|(2).  If the arguments are ommitted, it defaults to
+implement \fIsetpgrp\fR\|(2).  If the arguments are omitted, it defaults to
 0,0.  Note that the \s-1POSIX\s0 version of \fIsetpgrp()\fR does not accept any
 arguments, so only setpgrp 0,0 is portable.
 .Ip "setpriority \s-1WHICH\s0,\s-1WHO\s0,\s-1PRIORITY\s0" 8
@@ -2648,7 +2942,7 @@ array, returns the undefined value.  If \s-1ARRAY\s0 is omitted, shifts the
 \f(CW@ARGV\fR array in the main program, and the \f(CW@_\fR array in subroutines.
 (This is determined lexically.)  See also \fIunshift()\fR, \fIpush()\fR, and \fIpop()\fR.
 \fIShift()\fR and \fIunshift()\fR do the same thing to the left end of an array
-that \fIpush()\fR and \fIpop()\fR do to the right end.
+that \fIpop()\fR and \fIpush()\fR do to the right end.
 .Ip "shmctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0" 8
 .IX Item "shmctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0"
 Calls the System V \s-1IPC\s0 function shmctl.  If \s-1CMD\s0 is &\s-1IPC_STAT\s0, then \s-1ARG\s0
@@ -2675,8 +2969,17 @@ Shuts down a socket connection in the manner indicated by \s-1HOW\s0, which
 has the same interpretation as in the system call of the same name.
 .Ip "sin \s-1EXPR\s0" 8
 .IX Item "sin \s-1EXPR\s0"
+.Ip "sin " 8
+.IX Item "sin "
 Returns the sine of \s-1EXPR\s0 (expressed in radians).  If \s-1EXPR\s0 is omitted,
 returns sine of \f(CW$_\fR.
+.Sp
+For the inverse sine operation, you may use the \fI\s-1POSIX::\s0sin()\fR
+function, or use this relation:
+.Sp
+.Vb 1
+\&    sub asin { atan2($_[0], sqrt(1 - $_[0] * $_[0])) }
+.Ve
 .Ip "sleep \s-1EXPR\s0" 8
 .IX Item "sleep \s-1EXPR\s0"
 .Ip "sleep" 8
@@ -2684,7 +2987,7 @@ returns sine of \f(CW$_\fR.
 Causes the script to sleep for \s-1EXPR\s0 seconds, or forever if no \s-1EXPR\s0.
 May be interrupted by sending the process a \s-1SIGALRM\s0.  Returns the
 number of seconds actually slept.  You probably cannot mix \fIalarm()\fR and
-\fIsleep()\fR calls, since \fIsleep()\fR is often implemented using \fIalarm()\fR.
+\fIsleep()\fR calls, because \fIsleep()\fR is often implemented using \fIalarm()\fR.
 .Sp
 On some older systems, it may sleep up to a full second less than what
 you requested, depending on how it counts seconds.  Most modern systems
@@ -2692,17 +2995,19 @@ always sleep the full amount.
 .Sp
 For delays of finer granularity than one second, you may use Perl's
 \fIsyscall()\fR interface to access \fIsetitimer\fR\|(2) if your system supports it, 
-or else see the \f(CWselect()\fR entry elsewhere in this documentbelow.  
+or else see the \f(CWselect()\fR entry elsewhere in this document below.  
+.Sp
+See also the \s-1POSIX\s0 module's \fIsigpause()\fR function.
 .Ip "socket \s-1SOCKET\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0" 8
 .IX Item "socket \s-1SOCKET\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
 Opens a socket of the specified kind and attaches it to filehandle
-\s-1SOCKET\s0.  \s-1DOMAIN\s0, \s-1TYPE\s0 and \s-1PROTOCOL\s0 are specified the same as for the
+\s-1SOCKET\s0.  \s-1DOMAIN\s0, \s-1TYPE\s0, and \s-1PROTOCOL\s0 are specified the same as for the
 system call of the same name.  You should \*(L"use Socket;\*(R" first to get
 the proper definitions imported.  See the example in the section on \fISockets: Client/Server Communication\fR in the \fIperlipc\fR manpage.
 .Ip "socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0" 8
 .IX Item "socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0"
 Creates an unnamed pair of sockets in the specified domain, of the
-specified type.  \s-1DOMAIN\s0, \s-1TYPE\s0 and \s-1PROTOCOL\s0 are specified the same as
+specified type.  \s-1DOMAIN\s0, \s-1TYPE\s0, and \s-1PROTOCOL\s0 are specified the same as
 for the system call of the same name.  If unimplemented, yields a fatal
 error.  Returns \s-1TRUE\s0 if successful.
 .Ip "sort \s-1SUBNAME\s0 \s-1LIST\s0" 8
@@ -2711,16 +3016,15 @@ error.  Returns \s-1TRUE\s0 if successful.
 .IX Item "sort \s-1BLOCK\s0 \s-1LIST\s0"
 .Ip "sort \s-1LIST\s0" 8
 .IX Item "sort \s-1LIST\s0"
-Sorts the \s-1LIST\s0 and returns the sorted list value.  Nonexistent values
-of arrays are stripped out.  If \s-1SUBNAME\s0 or \s-1BLOCK\s0 is omitted, sorts
-in standard string comparison order.  If \s-1SUBNAME\s0 is specified, it
-gives the name of a subroutine that returns an integer less than, equal
-to, or greater than 0, depending on how the elements of the array are
-to be ordered.  (The <=> and cmp operators are extremely useful in such
-routines.)  \s-1SUBNAME\s0 may be a scalar variable name, in which case the
-value provides the name of the subroutine to use.  In place of a
-\s-1SUBNAME\s0, you can provide a \s-1BLOCK\s0 as an anonymous, in-line sort
-subroutine.
+Sorts the \s-1LIST\s0 and returns the sorted list value.  If \s-1SUBNAME\s0 or \s-1BLOCK\s0
+is omitted, sorts in standard string comparison order.  If \s-1SUBNAME\s0 is
+specified, it gives the name of a subroutine that returns an integer
+less than, equal to, or greater than 0, depending on how the elements
+of the array are to be ordered.  (The \f(CW<=>\fR and \f(CWcmp\fR
+operators are extremely useful in such routines.)  \s-1SUBNAME\s0 may be a
+scalar variable name, in which case the value provides the name of the
+subroutine to use.  In place of a \s-1SUBNAME\s0, you can provide a \s-1BLOCK\s0 as
+an anonymous, in-line sort subroutine.
 .Sp
 In the interests of efficiency the normal calling code for subroutines is
 bypassed, with the following effects: the subroutine may not be a
@@ -2728,6 +3032,12 @@ recursive subroutine, and the two elements to be compared are passed into
 the subroutine not via \f(CW@_\fR but as the package global variables \f(CW$a\fR and
 \f(CW$b\fR (see example below).  They are passed by reference, so don't
 modify \f(CW$a\fR and \f(CW$b\fR.  And don't try to declare them as lexicals either.
+.Sp
+You also cannot exit out of the sort block or subroutine using any of the
+loop control operators described in the \fIperlsyn\fR manpage or with \fIgoto()\fR.
+.Sp
+When \f(CWuse locale\fR is in effect, \f(CWsort LIST\fR sorts \s-1LIST\s0 according to the
+current collation locale.  See the \fIperllocale\fR manpage.
 .Sp
 Examples:
 .Sp
@@ -2758,13 +3068,13 @@ Examples:
 .Vb 5
 \&    # sort using explicit subroutine name
 \&    sub byage {
-\&        $age{$a} <=> $age{$b};  # presuming integers
+\&        $age{$a} <=> $age{$b};  # presuming numeric
 \&    }
 \&    @sortedclass = sort byage @class;
 .Ve
 .Vb 3
-\&    # this sorts the %age associative arrays by value 
-\&    # instead of key using an inline function
+\&    # this sorts the %age hash by value instead of key
+\&    # using an in-line function
 \&    @eldest = sort { $age{$b} <=> $age{$a} } keys %age;
 .Ve
 .Vb 9
@@ -2816,7 +3126,7 @@ Examples:
 \&               $a->[2] cmp $b->[2]
 \&        } map { [$_, /=(\ed+)/, uc($_)] } @old;
 .Ve
-If you're and using strict, you \fI\s-1MUST\s0 \s-1NOT\s0\fR declare \f(CW$a\fR
+If you're using strict, you \fI\s-1MUST\s0 \s-1NOT\s0\fR declare \f(CW$a\fR
 and \f(CW$b\fR as lexicals.  They are package globals.  That means
 if you're in the \f(CWmain\fR package, it's
 .Sp
@@ -2833,6 +3143,12 @@ but if you're in the \f(CWFooPack\fR package, it's
 .Vb 1
 \&    @articles = sort {$FooPack::b <=> $FooPack::a} @files;
 .Ve
+The comparison function is required to behave.  If it returns
+inconsistent results (sometimes saying \f(CW$x\fR[1] is less than \f(CW$x\fR[2] and
+sometimes saying the opposite, for example) the Perl interpreter will
+probably crash and dump core.  This is entirely due to and dependent
+upon your system's \fIqsort\fR\|(3) library routine; this routine often avoids
+sanity checks in the interest of speed.
 .Ip "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0" 8
 .IX Item "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0"
 .Ip "splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0" 8
@@ -2843,7 +3159,7 @@ Removes the elements designated by \s-1OFFSET\s0 and \s-1LENGTH\s0 from an array
 replaces them with the elements of \s-1LIST\s0, if any.  Returns the elements
 removed from the array.  The array grows or shrinks as necessary.  If
 \s-1LENGTH\s0 is omitted, removes everything from \s-1OFFSET\s0 onward.  The
-following equivalencies hold (assuming $[ == 0):
+following equivalences hold (assuming \f(CW$[ == 0\fR):
 .Sp
 .Vb 5
 \&    push(@a,$x,$y)      splice(@a,$#a+1,0,$x,$y)
@@ -2901,7 +3217,7 @@ characters at each point it matches that way.  For example:
 .Ve
 produces the output \*(L'h:i:t:h:e:r:e\*(R'.
 .Sp
-The \s-1LIMIT\s0 parameter can be used to partially split a line
+The \s-1LIMIT\s0 parameter can be used to split a line partially
 .Sp
 .Vb 1
 \&    ($login, $passwd, $remainder) = split(/:/, $_, 3);
@@ -2935,10 +3251,10 @@ patterns that vary at runtime.  (To do runtime compilation only once,
 use \f(CW/$variable/o\fR.)
 .Sp
 As a special case, specifying a \s-1PATTERN\s0 of space (\f(CW' '\fR) will split on
-white space just as split with no arguments does.  Thus, split(' \*(L') can
+white space just as split with no arguments does.  Thus, \fIsplit\fR\|(' \*(L') can
 be used to emulate \fBawk\fR's default behavior, whereas \f(CWsplit(/ /)\fR
 will give you as many null initial fields as there are leading spaces.
-A split on /\es+/ is like a split(' \*(L') except that any leading
+A split on /\es+/ is like a \fIsplit\fR\|(' \*(L') except that any leading
 whitespace produces a null first field.  A split with no arguments
 really does a \f(CWsplit(' ', $_)\fR internally.
 .Sp
@@ -2952,35 +3268,79 @@ Example:
 \&        ...
 \&    }
 .Ve
-(Note that \f(CW$shell\fR above will still have a newline on it.  See the \f(CWchop\fR, \f(CWchomp\fR,  and \f(CWjoin\fR entries elsewhere in this document.)
-.Ip "sprintf \s-1FORMAT\s0,\s-1LIST\s0" 8
-.IX Item "sprintf \s-1FORMAT\s0,\s-1LIST\s0"
+(Note that \f(CW$shell\fR above will still have a newline on it.  See the \f(CWchop\fR, \f(CWchomp\fR,  and \f(CWjoin\fR entries elsewhere in this document .)
+.Ip "sprintf \s-1FORMAT\s0, \s-1LIST\s0" 8
+.IX Item "sprintf \s-1FORMAT\s0, \s-1LIST\s0"
 Returns a string formatted by the usual printf conventions of the C
 language.  See the \fIsprintf(3)\fR manpage or the \fIprintf(3)\fR manpage on your system for details.
 (The * character for an indirectly specified length is not
 supported, but you can get the same effect by interpolating a variable
-into the pattern.)  Some C libraries\*(R' implementations of \fIsprintf()\fR can
+into the pattern.)  If \f(CWuse locale\fR is
+in effect, the character used for the decimal point in formatted real numbers
+is affected by the \s-1LC_NUMERIC\s0 locale.  See the \fIperllocale\fR manpage.
+Some C libraries\*(R' implementations of \fIsprintf()\fR can
 dump core when fed ludicrous arguments.
 .Ip "sqrt \s-1EXPR\s0" 8
 .IX Item "sqrt \s-1EXPR\s0"
+.Ip "sqrt " 8
+.IX Item "sqrt "
 Return the square root of \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, returns square
 root of \f(CW$_\fR.
 .Ip "srand \s-1EXPR\s0" 8
 .IX Item "srand \s-1EXPR\s0"
-Sets the random number seed for the \f(CWrand\fR operator.  If \s-1EXPR\s0 is omitted,
-uses a semirandom value based on the current time and process \s-1ID\s0, among
-other things.  Of course, you'd need something much more random than that for
-cryptographic purposes, since it's easy to guess the current time.
-Checksumming the compressed output of rapidly changing operating system
-status programs is the usual method.  Examples are posted regularly to
-the comp.security.unix newsgroup.
+.Ip "srand" 8
+.IX Item "srand"
+Sets the random number seed for the \f(CWrand\fR operator.  If \s-1EXPR\s0 is
+omitted, uses a semi-random value based on the current time and process
+\s-1ID\s0, among other things.  In versions of Perl prior to 5.004 the default
+seed was just the current \fItime()\fR.  This isn't a particularly good seed,
+so many old programs supply their own seed value (often \f(CWtime ^ $$\fR or
+C<time ^ ($$ + ($$ << 15))>), but that isn't necessary any more.
+.Sp
+In fact, it's usually not necessary to call \fIsrand()\fR at all, because if
+it is not called explicitly, it is called implicitly at the first use of
+the \f(CWrand\fR operator.  However, this was not the case in version of Perl
+before 5.004, so if your script will run under older Perl versions, it
+should call \fIsrand()\fR.
+.Sp
+Note that you need something much more random than the default seed for
+cryptographic purposes.  Checksumming the compressed output of one or more
+rapidly changing operating system status programs is the usual method.  For
+example:
+.Sp
+.Vb 1
+\&    srand (time ^ $$ ^ unpack "%L*", `ps axww | gzip`);
+.Ve
+If you're particularly concerned with this, see the Math::TrulyRandom
+module in \s-1CPAN\s0.
+.Sp
+Do \fInot\fR call \fIsrand()\fR multiple times in your program unless you know
+exactly what you're doing and why you're doing it.  The point of the
+function is to \*(L"seed\*(R" the \fIrand()\fR function so that \fIrand()\fR can produce
+a different sequence each time you run your program.  Just do it once at the
+top of your program, or you \fIwon't\fR get random numbers out of \fIrand()\fR!
+.Sp
+Frequently called programs (like \s-1CGI\s0 scripts) that simply use 
+.Sp
+.Vb 1
+\&    time ^ $$
+.Ve
+for a seed can fall prey to the mathematical property that 
+.Sp
+.Vb 1
+\&    a^b == (a+1)^(b+1)
+.Ve
+one-third of the time.  So don't do that.
 .Ip "stat \s-1FILEHANDLE\s0" 8
 .IX Item "stat \s-1FILEHANDLE\s0"
 .Ip "stat \s-1EXPR\s0" 8
 .IX Item "stat \s-1EXPR\s0"
+.Ip "stat " 8
+.IX Item "stat "
 Returns a 13-element array giving the status info for a file, either the
-file opened via \s-1FILEHANDLE\s0, or named by \s-1EXPR\s0.  Returns a null list if
-the stat fails.  Typically used as follows:
+file opened via \s-1FILEHANDLE\s0, or named by \s-1EXPR\s0.  If \s-1EXPR\s0 is omitted, it
+stats \f(CW$_\fR.  Returns a null list if the stat fails.  Typically used as
+follows:
 .Sp
 .Vb 3
 \&    ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
@@ -2996,13 +3356,13 @@ meaning of the fields:
 \&  mode      file mode  (type and permissions)
 \&  nlink     number of (hard) links to the file 
 \&  uid       numeric user ID of file's owner 
-\&  gid       numer group ID of file's owner 
+\&  gid       numeric group ID of file's owner 
 \&  rdev      the device identifier (special files only)
 \&  size      total size of file, in bytes 
 \&  atime     last access time since the epoch
 \&  mtime     last modify time since the epoch
-\&  ctime     inode change time (NOT creation type!) since the epoch
-\&  blksize   preferred blocksize for file system I/O
+\&  ctime     inode change time (NOT creation time!) since the epoch
+\&  blksize   preferred block size for file system I/O
 \&  blocks    actual number of blocks allocated
 .Ve
 (The epoch was at 00:00 January 1, 1970 \s-1GMT\s0.)
@@ -3016,17 +3376,17 @@ last stat or filetest are returned.  Example:
 \&        print "$file is executable NFS file\en";
 \&    }
 .Ve
-(This only works on machines for which the device number is negative under \s-1NFS\s0.)
+(This works on machines only for which the device number is negative under \s-1NFS\s0.)
 .Ip "study \s-1SCALAR\s0" 8
 .IX Item "study \s-1SCALAR\s0"
 .Ip "study" 8
 .IX Item "study"
-Takes extra time to study \s-1SCALAR\s0 ($_ if unspecified) in anticipation of
+Takes extra time to study \s-1SCALAR\s0 (\f(CW$_\fR if unspecified) in anticipation of
 doing many pattern matches on the string before it is next modified.
 This may or may not save time, depending on the nature and number of
 patterns you are searching on, and on the distribution of character
 frequencies in the string to be searched\*(--you probably want to compare
-runtimes with and without it to see which runs faster.  Those loops
+run times with and without it to see which runs faster.  Those loops
 which scan for many short constant strings (including the constant
 parts of more complex patterns) will benefit most.  You may have only
 one study active at a time\*(--if you study a different scalar the first
@@ -3061,7 +3421,7 @@ runtime, you can build an entire loop as a string and eval that to
 avoid recompiling all your patterns all the time.  Together with
 undefining $/ to input entire files as one record, this can be very
 fast, often faster than specialized programs like \fIfgrep\fR\|(1).  The following
-scans a list of files (@files) for a list of words (@words), and prints
+scans a list of files (\f(CW@files\fR) for a list of words (\f(CW@words\fR), and prints
 out the names of those files that contain a match:
 .Sp
 .Vb 12
@@ -3073,7 +3433,7 @@ out the names of those files that contain a match:
 \&    @ARGV = @files;
 \&    undef $/;
 \&    eval $search;               # this screams
-\&    $/ = "\en";          # put back to normal input delim
+\&    $/ = "\en";          # put back to normal input delimiter
 \&    foreach $file (sort keys(%seen)) {
 \&        print $file, "\en";
 \&    }
@@ -3087,14 +3447,15 @@ out the names of those files that contain a match:
 This is subroutine definition, not a real function \fIper se\fR.  With just a
 \s-1NAME\s0 (and possibly prototypes), it's just a forward declaration.  Without
 a \s-1NAME\s0, it's an anonymous function declaration, and does actually return a
-value: the \s-1CODE\s0 ref of the closure you just created. See the \fIperlsub\fR manpage and
+value: the \s-1CODE\s0 ref of the closure you just created.  See the \fIperlsub\fR manpage and
 the \fIperlref\fR manpage for details.
 .Ip "substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0" 8
 .IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0"
 .Ip "substr \s-1EXPR\s0,\s-1OFFSET\s0" 8
 .IX Item "substr \s-1EXPR\s0,\s-1OFFSET\s0"
 Extracts a substring out of \s-1EXPR\s0 and returns it.  First character is at
-offset 0, or whatever you've set $[ to.  If \s-1OFFSET\s0 is negative, starts
+offset 0, or whatever you've set \f(CW$[\fR to (but don't do that).
+If \s-1OFFSET\s0 is negative, starts
 that far from the end of the string.  If \s-1LEN\s0 is omitted, returns
 everything to the end of the string.  If \s-1LEN\s0 is negative, leaves that
 many characters off the end of the string.
@@ -3132,7 +3493,7 @@ like numbers.
 \&    require 'syscall.ph';               # may need to run h2ph
 \&    syscall(&SYS_write, fileno(STDOUT), "hi there\en", 9);
 .Ve
-Note that Perl only supports passing of up to 14 arguments to your system call,
+Note that Perl supports passing of up to only 14 arguments to your system call,
 which in practice should usually suffice.
 .Ip "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0" 8
 .IX Item "sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0"
@@ -3154,6 +3515,9 @@ creates it (typically because \s-1MODE\s0 includes the O_CREAT flag), then
 the value of \s-1PERMS\s0 specifies the permissions of the newly created
 file.  If \s-1PERMS\s0 is omitted, the default value is 0666, which allows
 read and write for all.  This default is reasonable: see \f(CWumask\fR.
+.Sp
+The \s-1IO::\s0File module provides a more object-oriented approach, if you're
+into that kind of thing.
 .Ip "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
 .IX Item "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
@@ -3162,9 +3526,15 @@ Attempts to read \s-1LENGTH\s0 bytes of data into variable \s-1SCALAR\s0 from th
 specified \s-1FILEHANDLE\s0, using the system call \fIread\fR\|(2).  It bypasses
 stdio, so mixing this with other kinds of reads may cause confusion.
 Returns the number of bytes actually read, or undef if there was an
-error.  \s-1SCALAR\s0 will be grown or shrunk to the length actually read.  An
-\s-1OFFSET\s0 may be specified to place the read data at some other place than
-the beginning of the string.
+error.  \s-1SCALAR\s0 will be grown or shrunk so that the last byte actually
+read is the last byte of the scalar after the read.
+.Sp
+An \s-1OFFSET\s0 may be specified to place the read data at some place in the
+string other than the beginning.  A negative \s-1OFFSET\s0 specifies
+placement at that many bytes counting backwards from the end of the
+string.  A positive \s-1OFFSET\s0 greater than the length of \s-1SCALAR\s0 results
+in the string being padded to the required size with \*(L"\e0\*(R" bytes before
+the result of the read is appended.
 .Ip "system \s-1LIST\s0" 8
 .IX Item "system \s-1LIST\s0"
 Does exactly the same thing as \*(L"exec \s-1LIST\s0\*(R" except that a fork is done
@@ -3172,9 +3542,45 @@ first, and the parent process waits for the child process to complete.
 Note that argument processing varies depending on the number of
 arguments.  The return value is the exit status of the program as
 returned by the \fIwait()\fR call.  To get the actual exit value divide by
-256.  See also the \f(CWexec\fR entry elsewhere in this document.  This is \fI\s-1NOT\s0\fR what you want to use to capture 
-the output from a command, for that you should merely use backticks, as
-described in the section on \fI`\s-1STRING\s0`\fR in the \fIperlop\fR manpage.
+256.  See also the \f(CWexec\fR entry elsewhere in this document .  This is \fI\s-1NOT\s0\fR what you want to use to capture 
+the output from a command, for that you should use merely back-ticks or
+qx//, as described in the section on \fI`\s-1STRING\s0`\fR in the \fIperlop\fR manpage.
+.Sp
+Because \fIsystem()\fR and back-ticks block \s-1SIGINT\s0 and \s-1SIGQUIT\s0, killing the
+program they're running doesn't actually interrupt your program.
+.Sp
+.Vb 3
+\&    @args = ("command", "arg1", "arg2");
+\&    system(@args) == 0 
+\&         or die "system @args failed: $?" 
+.Ve
+Here's a more elaborate example of analysing the return value from
+\fIsystem()\fR on a \s-1UNIX\s0 system to check for all possibilities, including for
+signals and coredumps.
+.Sp
+.Vb 21
+\&    $rc = 0xffff & system @args;
+\&    printf "system(%s) returned %#04x: ", "@args", $rc;
+\&    if ($rc == 0) {
+\&        print "ran with normal exit\en";
+\&    } 
+\&    elsif ($rc == 0xff00) {
+\&        print "command failed: $!\en";
+\&    } 
+\&    elsif ($rc > 0x80) {
+\&        $rc >>= 8;
+\&        print "ran with non-zero exit status $rc\en";
+\&    } 
+\&    else {
+\&        print "ran with ";
+\&        if ($rc &   0x80) {
+\&            $rc &= ~0x80;
+\&            print "coredump from ";
+\&        } 
+\&        print "signal $rc\en"
+\&    } 
+\&    $ok = ($rc != 0);
+.Ve
 .Ip "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0" 8
 .IX Item "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0"
 .Ip "syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0" 8
@@ -3182,9 +3588,13 @@ described in the section on \fI`\s-1STRING\s0`\fR in the \fIperlop\fR manpage.
 Attempts to write \s-1LENGTH\s0 bytes of data from variable \s-1SCALAR\s0 to the
 specified \s-1FILEHANDLE\s0, using the system call \fIwrite\fR\|(2).  It bypasses
 stdio, so mixing this with prints may cause confusion.  Returns the
-number of bytes actually written, or undef if there was an error.  An
-\s-1OFFSET\s0 may be specified to get the write data from some other place than
-the beginning of the string.
+number of bytes actually written, or undef if there was an error.
+If the length is greater than the available data, only as much data as
+is available will be written.
+.Sp
+An \s-1OFFSET\s0 may be specified to write the data from some part of the
+string other than the beginning.  A negative \s-1OFFSET\s0 specifies writing
+from that many bytes counting backwards from the end of the string.
 .Ip "tell \s-1FILEHANDLE\s0" 8
 .IX Item "tell \s-1FILEHANDLE\s0"
 .Ip "tell" 8
@@ -3223,8 +3633,7 @@ use the \fIeach()\fR function to iterate over such.  Example:
 \&    }
 \&    untie(%HIST);
 .Ve
-A class implementing an associative array should have the following
-methods:
+A class implementing a hash should have the following methods:
 .Sp
 .Vb 8
 \&    TIEHASH classname, LIST
@@ -3288,42 +3697,57 @@ specified length.  Produces a fatal error if truncate isn't implemented
 on your system.
 .Ip "uc \s-1EXPR\s0" 8
 .IX Item "uc \s-1EXPR\s0"
+.Ip "uc " 8
+.IX Item "uc "
 Returns an uppercased version of \s-1EXPR\s0.  This is the internal function
 implementing the \eU escape in double-quoted strings.
-Should respect any \s-1POSIX\s0 \fIsetlocale()\fR settings.
+Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
+.Sp
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "ucfirst \s-1EXPR\s0" 8
 .IX Item "ucfirst \s-1EXPR\s0"
+.Ip "ucfirst " 8
+.IX Item "ucfirst "
 Returns the value of \s-1EXPR\s0 with the first character uppercased.  This is
 the internal function implementing the \eu escape in double-quoted strings.
-Should respect any \s-1POSIX\s0 \fIsetlocale()\fR settings.
+Respects current \s-1LC_CTYPE\s0 locale if \f(CWuse locale\fR in force.  See the \fIperllocale\fR manpage.
+.Sp
+If \s-1EXPR\s0 is omitted, uses \f(CW$_\fR.
 .Ip "umask \s-1EXPR\s0" 8
 .IX Item "umask \s-1EXPR\s0"
 .Ip "umask" 8
 .IX Item "umask"
-Sets the umask for the process and returns the old one.  If \s-1EXPR\s0 is
-omitted, merely returns current umask.
+Sets the umask for the process to \s-1EXPR\s0 and returns the previous value.
+If \s-1EXPR\s0 is omitted, merely returns the current umask.  Remember that a
+umask is a number, usually given in octal; it is \fInot\fR a string of octal
+digits.  See also the \fIoct\fR manpage, if all you have is a string.
 .Ip "undef \s-1EXPR\s0" 8
 .IX Item "undef \s-1EXPR\s0"
 .Ip "undef" 8
 .IX Item "undef"
-Undefines the value of \s-1EXPR\s0, which must be an lvalue.  Use only on a
-scalar value, an entire array, or a subroutine name (using \*(L"&").  (Using \fIundef()\fR
-will probably not do what you expect on most predefined variables or
-\s-1DBM\s0 list values, so don't do that.)  Always returns the undefined value.  You can omit
-the \s-1EXPR\s0, in which case nothing is undefined, but you still get an
-undefined value that you could, for instance, return from a
-subroutine.  Examples:
+Undefines the value of \s-1EXPR\s0, which must be an lvalue.  Use on only a
+scalar value, an entire array or hash, or a subroutine name (using
+\*(L"&").  (Using \fIundef()\fR will probably not do what you expect on most
+predefined variables or \s-1DBM\s0 list values, so don't do that.)  Always
+returns the undefined value.  You can omit the \s-1EXPR\s0, in which case
+nothing is undefined, but you still get an undefined value that you
+could, for instance, return from a subroutine, assign to a variable or
+pass as a parameter.  Examples:
 .Sp
-.Vb 6
+.Vb 8
 \&    undef $foo;
-\&    undef $bar{'blurfl'};
+\&    undef $bar{'blurfl'};             # Compare to: delete $bar{'blurfl'};
 \&    undef @ary;
-\&    undef %assoc;
+\&    undef %hash;
 \&    undef &mysub;
 \&    return (wantarray ? () : undef) if $they_blew_it;
+\&    select undef, undef, undef, 0.25;
+\&    ($a, $b, undef, $c) = &foo;       # Ignore third value returned
 .Ve
 .Ip "unlink \s-1LIST\s0" 8
 .IX Item "unlink \s-1LIST\s0"
+.Ip "unlink " 8
+.IX Item "unlink "
 Deletes a list of files.  Returns the number of files successfully
 deleted.
 .Sp
@@ -3336,11 +3760,13 @@ Note: unlink will not delete directories unless you are superuser and
 the \fB\-U\fR flag is supplied to Perl.  Even if these conditions are
 met, be warned that unlinking a directory can inflict damage on your
 filesystem.  Use rmdir instead.
+.Sp
+If \s-1LIST\s0 is omitted, uses \f(CW$_\fR.
 .Ip "unpack \s-1TEMPLATE\s0,\s-1EXPR\s0" 8
 .IX Item "unpack \s-1TEMPLATE\s0,\s-1EXPR\s0"
 Unpack does the reverse of pack: it takes a string representing a
 structure and expands it out into a list value, returning the array
-value.  (In a scalar context, it merely returns the first value
+value.  (In a scalar context, it returns merely the first value
 produced.)  The \s-1TEMPLATE\s0 has the same format as in the pack function.
 Here's a subroutine that does substring:
 .Sp
@@ -3418,7 +3844,9 @@ call into the \*(L"Module\*(R" package to tell the module to import the list of
 features back into the current package.  The module can implement its
 import method any way it likes, though most modules just choose to
 derive their import method via inheritance from the Exporter class that
-is defined in the Exporter module. See the \fIExporter\fR manpage.
+is defined in the Exporter module.  See the \fIExporter\fR manpage.  If no import
+method can be found then the error is currently silently ignored.  This
+may change to a fatal error in a future version.
 .Sp
 If you don't want your namespace altered, explicitly supply an empty list:
 .Sp
@@ -3431,8 +3859,11 @@ That is exactly equivalent to
 \&    BEGIN { require Module; }
 .Ve
 If the \s-1VERSION\s0 argument is present between Module and \s-1LIST\s0, then the
-\f(CWuse\fR will fail if the \f(CW$VERSION\fR variable in package Module is
-less than \s-1VERSION\s0.
+\f(CWuse\fR will call the \s-1VERSION\s0 method in class Module with the given
+version as an argument.  The default \s-1VERSION\s0 method, inherited from
+the Universal class, croaks if the given version is larger than the
+value of the variable \f(CW$Module::VERSION\fR.  (Note that there is not a
+comma after \s-1VERSION\s0!)
 .Sp
 Because this is a wide-open interface, pragmas (compiler directives)
 are also implemented this way.  Currently implemented pragmas are:
@@ -3444,17 +3875,19 @@ are also implemented this way.  Currently implemented pragmas are:
 \&    use strict  qw(subs vars refs);
 \&    use subs    qw(afunc blurfl);
 .Ve
-These pseudomodules import semantics into the current block scope, unlike
+These pseudo-modules import semantics into the current block scope, unlike
 ordinary modules, which import symbols into the current package (which are
 effective through the end of the file).
 .Sp
 There's a corresponding \*(L"no\*(R" command that unimports meanings imported
-by use, i.e. it calls \f(CWunimport Module LIST\fR instead of \f(CWimport\fR.
+by use, i.e., it calls \f(CWunimport Module LIST\fR instead of \f(CWimport\fR.
 .Sp
 .Vb 2
 \&    no integer;
 \&    no strict 'refs';
 .Ve
+If no unimport method can be found the call fails with a fatal error.
+.Sp
 See the \fIperlmod\fR manpage for a list of standard modules and pragmas.
 .Ip "utime \s-1LIST\s0" 8
 .IX Item "utime \s-1LIST\s0"
@@ -3469,27 +3902,27 @@ to the current time.  Example of a \*(L"touch\*(R" command:
 \&    $now = time;
 \&    utime $now, $now, @ARGV;
 .Ve
-.Ip "values \s-1ASSOC_ARRAY\s0" 8
-.IX Item "values \s-1ASSOC_ARRAY\s0"
-Returns a normal array consisting of all the values of the named
-associative array.  (In a scalar context, returns the number of
-values.)  The values are returned in an apparently random order, but it
-is the same order as either the \fIkeys()\fR or \fIeach()\fR function would produce
-on the same array.  See also \fIkeys()\fR, \fIeach()\fR, and \fIsort()\fR.
+.Ip "values \s-1HASH\s0" 8
+.IX Item "values \s-1HASH\s0"
+Returns a normal array consisting of all the values of the named hash.
+(In a scalar context, returns the number of values.)  The values are
+returned in an apparently random order, but it is the same order as either
+the \fIkeys()\fR or \fIeach()\fR function would produce on the same hash.  As a side
+effect, it resets \s-1HASH\s0's iterator.  See also \fIkeys()\fR, \fIeach()\fR, and \fIsort()\fR.
 .Ip "vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0" 8
 .IX Item "vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0"
 Treats the string in \s-1EXPR\s0 as a vector of unsigned integers, and
-returns the value of the bitfield specified by \s-1OFFSET\s0.  \s-1BITS\s0 specifies
+returns the value of the bit field specified by \s-1OFFSET\s0.  \s-1BITS\s0 specifies
 the number of bits that are reserved for each entry in the bit
-vector. This must be a power of two from 1 to 32. \fIvec()\fR may also be
-assigned to, in which case parens are needed to give the expression
+vector.  This must be a power of two from 1 to 32. \fIvec()\fR may also be
+assigned to, in which case parentheses are needed to give the expression
 the correct precedence as in
 .Sp
 .Vb 1
 \&    vec($image, $max_x * $x + $y, 8) = 3;
 .Ve
 Vectors created with \fIvec()\fR can also be manipulated with the logical
-operators |, & and ^, which will assume a bit vector operation is
+operators |, &, and ^, which will assume a bit vector operation is
 desired when both operands are strings.
 .Sp
 To transform a bit vector into a string or array of 0's and 1's, use these:
@@ -3503,20 +3936,20 @@ If you know the exact length in bits, it can be used in place of the *.
 .IX Item "wait"
 Waits for a child process to terminate and returns the pid of the
 deceased process, or \-1 if there are no child processes.  The status is
-returned in $?.
+returned in \f(CW$?\fR.
 .Ip "waitpid \s-1PID\s0,\s-1FLAGS\s0" 8
 .IX Item "waitpid \s-1PID\s0,\s-1FLAGS\s0"
 Waits for a particular child process to terminate and returns the pid
 of the deceased process, or \-1 if there is no such child process.  The
-status is returned in $?.  If you say
+status is returned in \f(CW$?\fR.  If you say
 .Sp
 .Vb 3
-\&    use POSIX ":wait_h";
+\&    use POSIX ":sys_wait_h";
 \&    ...
 \&    waitpid(-1,&WNOHANG);
 .Ve
 then you can do a non-blocking wait for any process.  Non-blocking wait
-is only available on machines supporting either the \fIwaitpid\fR\|(2) or
+is available on machines supporting either the \fIwaitpid\fR\|(2) or
 \fIwait4\fR\|(2) system calls.  However, waiting for a particular pid with
 \s-1FLAGS\s0 of 0 is implemented everywhere.  (Perl emulates the system call
 by remembering the status values of processes that have exited but have
@@ -3532,8 +3965,40 @@ for a scalar.
 .Ve
 .Ip "warn \s-1LIST\s0" 8
 .IX Item "warn \s-1LIST\s0"
-Produces a message on \s-1STDERR\s0 just like \fIdie()\fR, but doesn't exit or
-on an exception.
+Produces a message on \s-1STDERR\s0 just like \fIdie()\fR, but doesn't exit or throw
+an exception.
+.Sp
+No message is printed if there is a \f(CW$SIG{__WARN__}\fR handler
+installed.  It is the handler's responsibility to deal with the message
+as it sees fit (like, for instance, converting it into a \fIdie()\fR).  Most
+handlers must therefore make arrangements to actually display the
+warnings that they are not prepared to deal with, by calling \fIwarn()\fR
+again in the handler.  Note that this is quite safe and will not
+produce an endless loop, since \f(CW__WARN__\fR hooks are not called from
+inside one.
+.Sp
+You will find this behavior is slightly different from that of
+\f(CW$SIG{__DIE__}\fR handlers (which don't suppress the error text, but can
+instead call \fIdie()\fR again to change it).
+.Sp
+Using a \f(CW__WARN__\fR handler provides a powerful way to silence all
+warnings (even the so-called mandatory ones).  An example:
+.Sp
+.Vb 7
+\&    # wipe out *all* compile-time warnings
+\&    BEGIN { $SIG{'__WARN__'} = sub { warn $_[0] if $DOWARN } }
+\&    my $foo = 10;
+\&    my $foo = 20;          # no warning about duplicate my $foo,
+\&                           # but hey, you asked for it!
+\&    # no compile-time or run-time warnings before here
+\&    $DOWARN = 1;
+.Ve
+.Vb 2
+\&    # run-time warnings enabled after here
+\&    warn "\e$foo is alive and $foo!";     # does show up
+.Ve
+See the \fIperlvar\fR manpage for details on setting \f(CW%SIG\fR entries, and for more
+examples.
 .Ip "write \s-1FILEHANDLE\s0" 8
 .IX Item "write \s-1FILEHANDLE\s0"
 .Ip "write \s-1EXPR\s0" 8
@@ -3544,7 +4009,7 @@ Writes a formatted record (possibly multi-line) to the specified file,
 using the format associated with that file.  By default the format for
 a file is the one having the same name is the filehandle, but the
 format for the current output channel (see the \fIselect()\fR function) may be set
-explicitly by assigning the name of the format to the $~ variable.
+explicitly by assigning the name of the format to the \f(CW$~\fR variable.
 .Sp
 Top of form processing is handled automatically:  if there is
 insufficient room on the current page for the formatted record, the
@@ -3552,9 +4017,9 @@ page is advanced by writing a form feed, a special top-of-page format
 is used to format the new page header, and then the record is written.
 By default the top-of-page format is the name of the filehandle with
 \*(L"_TOP\*(R" appended, but it may be dynamically set to the format of your
-choice by assigning the name to the $^ variable while the filehandle is
+choice by assigning the name to the \f(CW$^\fR variable while the filehandle is
 selected.  The number of lines remaining on the current page is in
-variable $\-, which can be set to 0 to force a new page.
+variable \f(CW$-\fR, which can be set to 0 to force a new page.
 .Sp
 If \s-1FILEHANDLE\s0 is unspecified, output goes to the current default output
 channel, which starts out as \s-1STDOUT\s0 but may be changed by the

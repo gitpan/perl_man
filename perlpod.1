@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLPOD 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLPOD 1 "perl 5.003, patch 93" "7/Jan/97" "Perl Programmers Reference Guide"
 .IX Title "PERLPOD 1"
 .UC
 .IX Name "perlpod - plain old documentation"
@@ -190,7 +190,7 @@ A command.  All command paragraphs start with \*(L"=\*(R", followed by an
 identifier, followed by arbitrary text that the command can
 use however it pleases.  Currently recognized commands are
 .Sp
-.Vb 7
+.Vb 10
 \&    =head1 heading
 \&    =head2 heading
 \&    =item text
@@ -198,18 +198,21 @@ use however it pleases.  Currently recognized commands are
 \&    =back
 \&    =cut
 \&    =pod
+\&    =for X
+\&    =begin X
+\&    =end X
 .Ve
 The \*(L"=pod\*(R" directive does nothing beyond telling the compiler to lay
-off of through the next \*(L"=cut\*(R".  It's useful for adding another 
-paragraph to the doc if you're mixing up code and pod a lot.  
+off parsing code through the next \*(L"=cut\*(R".  It's useful for adding
+another paragraph to the doc if you're mixing up code and pod a lot.
 .Sp
-Head1 and head2 produce first and second level headings, with the text on
-the same paragraph as \*(L"=headn\*(R" forming the heading description.
+Head1 and head2 produce first and second level headings, with the text in
+the same paragraph as the \*(L"=headn\*(R" directive forming the heading description.
 .Sp
-Item, over, and back require a little more explanation: Over starts a
-section specifically for the generation of a list using =item commands. At
-the end of your list, use =back to end it. You will probably want to give
-\*(L"4\*(R" as the number to =over, as some formatters will use this for indention.
+Item, over, and back require a little more explanation: \*(L"=over\*(R" starts a
+section specifically for the generation of a list using \*(L"=item\*(R" commands. At
+the end of your list, use \*(L"=back\*(R" to end it. You will probably want to give
+\*(L"4\*(R" as the number to \*(L"=over\*(R", as some formatters will use this for indentation.
 This should probably be a default. Note also that there are some basic rules
 to using =item: don't use them outside of an =over/=back block, use at least
 one inside an =over/=back block, you don't _have_ to include the =back if
@@ -218,11 +221,56 @@ items consistent: either use \*(L"=item *\*(R" for all of them, to produce bulle
 or use \*(L"=item 1.\*(R", \*(L"=item 2.\*(R", etc., to produce numbered lists, or use
 \*(L"=item foo\*(R", \*(L"=item bar\*(R", etc., i.e., things that looks nothing like bullets
 or numbers. If you start with bullets or numbers, stick with them, as many
-formatters you the first =item type to decide how to format the list.  
+formatters use the first \*(L"=item\*(R" type to decide how to format the list.  
 .Sp
-And don't forget, when using any command, that that command lasts up until
+For, begin, and end let you include sections that are not interpreted
+as pod text, but passed directly to particular formatters. A formatter
+that can utilize that format will use the section, otherwise it will be
+completely ignored.  The directive \*(L"=for\*(R" specifies that the entire next
+paragraph is in the format indicated by the first word after
+\*(L"=for\*(R", like this:
+.Sp
+.Vb 2
+\& =for html <br> 
+\&  <p> This is a raw HTML paragraph </p>
+.Ve
+The paired commands \*(L"=begin\*(R" and \*(L"=end\*(R" work very similarly to \*(L"=for\*(R", but
+instead of only accepting a single paragraph, all text from \*(L"=begin\*(R" to a
+paragraph with a matching \*(L"=end\*(R" are treated as a particular format. 
+.Sp
+Here are some examples of how to use these:
+.Sp
+.Vb 1
+\& =begin html
+.Ve
+.Vb 1
+\& <br>Figure 1.<IMG SRC="figure1.png"><br>
+.Ve
+.Vb 1
+\& =end html
+.Ve
+.Vb 1
+\& =begin text
+.Ve
+.Vb 4
+\&   ---------------
+\&   |  foo        |
+\&   |        bar  |
+\&   ---------------
+.Ve
+.Vb 1
+\& ^^^^ Figure 1. ^^^^
+.Ve
+.Vb 1
+\& =end text
+.Ve
+Some format names that formatters currently are known to accept include
+\*(L"roff\*(R", \*(L"man\*(R", \*(L"latex\*(R", \*(L"tex\*(R", \*(L"text\*(R", and \*(L"html\*(R". (Some formatters will
+treat some of these as synonyms.)
+.Sp
+And don't forget, when using any command, that the command lasts up until
 the end of the \fBparagraph\fR, not the line. Hence in the examples below, you
-can see the blank lines after each command to end it's paragraph.
+can see the blank lines after each command to end its paragraph.
 .Sp
 Some examples of lists include:
 .Sp
@@ -268,21 +316,29 @@ An ordinary block of text.  It will be filled, and maybe even
 justified.  Certain interior sequences are recognized both
 here and in commands:
 .Sp
-.Vb 14
+.Vb 22
 \&    I<text>     italicize text, used for emphasis or variables
 \&    B<text>     embolden text, used for switches and programs
 \&    S<text>     text contains non-breaking spaces
 \&    C<code>     literal code 
 \&    L<name>     A link (cross reference) to name
-\&                    L<name>             manpage
-\&                    L<name/ident>       item in manpage
-\&                    L<name/"sec">       section in other manpage
-\&                    L<"sec">            section in this manpage
+\&                    L<name>             manual page
+\&                    L<name/ident>       item in manual page
+\&                    L<name/"sec">       section in other manual page
+\&                    L<"sec">            section in this manual page
 \&                                        (the quotes are optional)
 \&                    L</"sec">           ditto
 \&    F<file>     Used for filenames
 \&    X<index>    An index entry
-\&    Z<>         A zero-width character
+\&    ZE<lt>E<gt> A zero-width character
+\&    E<escape>   A named character (very similar to HTML escapes)
+\&                    E<lt>               A literal <
+\&                    E<gt>               A literal >
+\&                    (these are optional except in other interior
+\&                     sequences and when preceded by a capital letter)
+\&                    E<n>                Character number n (probably in ASCII)
+\&                    E<html>             Some non-numeric HTML entity, such
+\&                                        as E<Agrave>
 .Ve
 .PP
 That's it.  The intent is simplicity, not power.  I wanted paragraphs
@@ -290,7 +346,7 @@ to look like paragraphs (block format), so that they stand out
 visually, and so that I could run them through fmt easily to reformat
 them (that's F7 in my version of \fBvi\fR).  I wanted the translator (and not
 me) to worry about whether \*(L" or \*(L' is a left quote or a right quote
-within filled text, and I wanted it to leave the quotes alone dammit in
+within filled text, and I wanted it to leave the quotes alone, dammit, in
 verbatim mode, so I could slurp in a working program, shift it over 4
 spaces, and have it print out, er, verbatim.  And presumably in a
 constant width font.
@@ -315,12 +371,12 @@ Translators exist for \fBpod2man\fR  (that's for \fInroff\fR\|(1) and \fItroff\f
 .SH "Embedding Pods in Perl Modules"
 .IX Header "Embedding Pods in Perl Modules"
 You can embed pod documentation in your Perl scripts.  Start your
-documentation with a =head1 command at the beg, and end it with 
-an =cut command.  Perl will ignore the pod text.  See any of the
-supplied library modules for examples.  If you're going to put
-your pods at the end of the file, and you're using an _\|_END_\|_
-or _\|_DATA_\|_ cut mark, make sure to put a blank line there before
-the first pod directive.
+documentation with a \*(L"=head1\*(R" command at the beginning, and end it
+with a \*(L"=cut\*(R" command.  Perl will ignore the pod text.  See any of the
+supplied library modules for examples.  If you're going to put your
+pods at the end of the file, and you're using an _\|_END_\|_ or _\|_DATA_\|_
+cut mark, make sure to put a blank line there before the first pod
+directive.
 .PP
 .Vb 1
 \&    __END__
@@ -333,6 +389,29 @@ the first pod directive.
 .Ve
 If you had not had that blank line there, then the translators wouldn't
 have seen it.
+.SH "Common Pod Pitfalls"
+.IX Header "Common Pod Pitfalls"
+.Ip "\(bu" 4
+.IX Item "\(bu"
+Pod translators usually will require paragraphs to be separated by
+completely empty lines.  If you have an apparently blank line with
+some spaces on it, this can cause odd formatting.
+.Ip "\(bu" 4
+.IX Item "\(bu"
+Translators will mostly add wording around a L<> link, so that
+\f(CWL<\fIfoo\fR\|(1)>\fR becomes \*(L"the \fIfoo\fR(1) manpage\*(R", for example (see
+\fBpod2man\fR for details).  Thus, you shouldn't write things like \f(CWthe
+L<foo> manpage\fR, if you want the translated document to read
+sensibly.
+.Ip "\(bu" 4
+.IX Item "\(bu"
+The script \fIpod/checkpods.\s-1PL\s0\fR in the Perl source distribution
+provides skeletal checking for lines that look blank but aren't
+\fBonly\fR, but is there as a placeholder until someone writes
+Pod::Checker.  The best way to check your pod is to pass it through
+one or more translators and proofread the result, or print out the
+result and proofread that.  Some of the problems found may be bugs in
+the translators, which you may or may not wish to work around.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 the \fIpod2man\fR manpage and the section on \fIPODs: Embedded Documentation\fR in the \fIperlsyn\fR manpage

@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH LWP-RGET 1 "perl 5.003, patch 93" "6/Dec/96" "User Contributed Perl Documentation"
+.IX Title "LWP-RGET 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "lwp-rget - Retrieve WWW documents recursively"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,79 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+lwp-rget \- Retrieve WWW documents recursively
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+.PP
+.Vb 2
+\& lwp-rget [--verbose] [--depth=N] [--limit=N] [--prefix=URL] <URL>
+\& lwp-rget --version
+.Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+This program will retrieve a document and store it in a local file.  It
+will follow any links found in the document and store these documents
+as well, patching links so that they refer to these local copies.
+This process continues until there are no more unvisited links or the
+process is stopped by the one or more of the limits which can be
+controlled by the command line arguments.
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
-.SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
-S2p uses no environment variables.
-.SH "AUTHOR"
-.IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
-.SH "FILES"
-.IX Header "FILES"
+This program is useful if you want to make a local copy of a
+collection of documents or want to do web reading off-line.
+.PP
+All documents are stored as plain files in the current directory. The
+file names chosen are derived from the last component of URL paths.
+.PP
+The options are:
+.Ip "--depth=\fIn\fR" 3
+.IX Item "--depth=\fIn\fR"
+Limit the recursive level. Embedded images are always loaded, even if
+they fall outside the \fI--depth\fR. This means that one can use
+\fI--depth=0\fR in order to fetch a single document together with all
+inline graphics.
+.Sp
+The default depth is 5.
+.Ip "--limit=\fIn\fR" 3
+.IX Item "--limit=\fIn\fR"
+Limit the number of documents to get.  The default limit is 50.
+.Ip "--prefix=\fIurl_prefix\fR" 3
+.IX Item "--prefix=\fIurl_prefix\fR"
+Limit the links to follow. Only URLs that start the prefix string are
+followed.
+.Sp
+The default prefix is set as the \*(L"directory\*(R" of the initial \s-1URL\s0 to
+follow.  For instance if we start lwp-rget with the \s-1URL\s0
+\f(CWhttp://www.sn.no/foo/bar.html\fR, then prefix will be set to
+\f(CWhttp://www.sn.no/foo/\fR.
+.Sp
+Use \f(CW--prefix=''\fR if you don't want the fetching to be limited by any
+prefix.
+.Ip "--sleep=\fIn\fR" 3
+.IX Item "--sleep=\fIn\fR"
+Sleep \fIn\fR seconds before retrieving each document. This options allows
+you to go slowly, not loading the server you visiting too much.
+.Ip "--verbose" 3
+.IX Item "--verbose"
+Make more noise while running.
+.Ip "--quiet" 3
+.IX Item "--quiet"
+Don't make any noise.
+.Ip "--version" 3
+.IX Item "--version"
+Print program version number and quit.
+.Ip "--help" 3
+.IX Item "--help"
+Print the usage message and quit.
+.PP
+Before the program exits the name of the file, where the initial \s-1URL\s0
+is stored, is printed on stdout.  All used filenames are also printed
+on stderr as they are loaded.  This printing can be suppressed with
+the \fI--quiet\fR option.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-.PP
-.Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
-.Ve
-.SH "DIAGNOSTICS"
-.IX Header "DIAGNOSTICS"
-.SH "BUGS"
-.IX Header "BUGS"
+the \fIlwp-request\fR manpage, the \fILWP\fR manpage
+.SH "AUTHOR"
+.IX Header "AUTHOR"
+Gisle Aas <aas@sn.no>
 
 .rn }` ''

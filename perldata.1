@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDATA 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLDATA 1 "perl 5.003, patch 93" "10/Feb/97" "Perl Programmers Reference Guide"
 .IX Title "PERLDATA 1"
 .UC
 .IX Name "perldata - Perl data types"
@@ -189,9 +189,9 @@ value to which it refers.  Most often, it consists of a single
 and containing letters, underscores, and digits.  In some cases, it
 may be a chain of identifiers, separated by \f(CW::\fR (or by \f(CW'\fR, but
 that's deprecated); all but the last are interpreted as names of
-packages, in order to locate the namespace in which to look
+packages, to locate the namespace in which to look
 up the final identifier (see the \f(CWPackages\fR entry in the \fIperlmod\fR manpage for details).
-It's possible to substutite for a simple identifier an expression
+It's possible to substitute for a simple identifier an expression
 which produces a reference to the value at runtime; this is
 described in more detail below, and in the \fIperlref\fR manpage.
 .PP
@@ -238,14 +238,14 @@ This means that \f(CW$foo\fR and \f(CW@foo\fR are two different variables.  It a
 means that \f(CW$foo[1]\fR is a part of \f(CW@foo\fR, not a part of \f(CW$foo\fR.  This may
 seem a bit weird, but that's okay, because it is weird.
 .PP
-Since variable and array references always start with \*(L'$\*(R', \*(L'@\*(R', or \*(L'%\*(R',
+Because variable and array references always start with \*(L'$\*(R', \*(L'@\*(R', or \*(L'%\*(R',
 the \*(L"reserved\*(R" words aren't in fact reserved with respect to variable
 names.  (They \s-1ARE\s0 reserved with respect to labels and filehandles,
 however, which don't have an initial special character.  You can't have
 a filehandle named \*(L"log\*(R", for instance.  Hint: you could say
 \f(CWopen(LOG,'logfile')\fR rather than \f(CWopen(log,'logfile')\fR.  Using uppercase
 filehandles also improves readability and protects you from conflict
-with future reserved words.)  Case \fI\s-1IS\s0\fR significant\*(--"\s-1FOO\s0\*(R", \*(L"Foo\*(R" and
+with future reserved words.)  Case \fI\s-1IS\s0\fR significant\*(--"\s-1FOO\s0\*(R", \*(L"Foo\*(R", and
 \*(L"foo\*(R" are all different names.  Names that start with a letter or
 underscore may also contain digits and underscores.
 .PP
@@ -253,9 +253,9 @@ It is possible to replace such an alphanumeric name with an expression
 that returns a reference to an object of that type.  For a description
 of this, see the \fIperlref\fR manpage.
 .PP
-Names that start with a digit may only contain more digits.  Names
+Names that start with a digit may contain only more digits.  Names
 which do not start with a letter, underscore,  or digit are limited to
-one character, e.g.  \f(CW$%\fR or \f(CW$$\fR.  (Most of these one character names
+one character, e.g.,  \f(CW$%\fR or \f(CW$$\fR.  (Most of these one character names
 have a predefined significance to Perl.  For instance, \f(CW$$\fR is the
 current process id.)
 .Sh "Context"
@@ -308,7 +308,7 @@ Scalar variables may contain various kinds of singular data, such as
 numbers, strings, and references.  In general, conversion from one form to
 another is transparent.  (A scalar may not contain multiple values, but
 may contain a reference to an array or hash containing multiple values.)
-Because of the automatic conversion of scalars, operations and functions
+Because of the automatic conversion of scalars, operations, and functions
 that return scalars don't need to care (and, in fact, can't care) whether
 the context is looking for a string or a number.
 .PP
@@ -336,7 +336,7 @@ use it as if it were defined, but prior to that you can use the
 To find out whether a given string is a valid non-zero number, it's usually
 enough to test it against both numeric 0 and also lexical \*(L"0\*(R" (although
 this will cause \fB\-w\fR noises).  That's because strings that aren't
-numbers count as 0, just as they do in \fIawk\fR:
+numbers count as 0, just as they do in \fBawk\fR:
 .PP
 .Vb 3
 \&    if ($str == 0 && $str ne "0")  {
@@ -358,7 +358,7 @@ for details on regular expressions.
 .Ve
 The length of an array is a scalar value.  You may find the length of
 array \f(CW@days\fR by evaluating \f(CW$#days\fR, as in \fBcsh\fR.  (Actually, it's not
-the length of the array, it's the subscript of the last element, since
+the length of the array, it's the subscript of the last element, because
 there is (ordinarily) a 0th element.)  Assigning to \f(CW$#days\fR changes the
 length of the array.  Shortening an array by this method destroys
 intervening values.  Lengthening an array that was previously shortened
@@ -381,10 +381,10 @@ last value, like the C comma operator.)  The following is always true:
 .Vb 1
 \&    scalar(@whatever) == $#whatever - $[ + 1;
 .Ve
-Version 5 of Perl changed the semantics of $[: files that don't set
-the value of $[ no longer need to worry about whether another
-file changed its value.  (In other words, use of $[ is deprecated.)
-So in general you can just assume that
+Version 5 of Perl changed the semantics of \f(CW$[\fR: files that don't set
+the value of \f(CW$[\fR no longer need to worry about whether another
+file changed its value.  (In other words, use of \f(CW$[\fR is deprecated.)
+So in general you can assume that
 .PP
 .Vb 1
 \&    scalar(@whatever) == $#whatever + 1;
@@ -399,7 +399,7 @@ If you evaluate a hash in a scalar context, it returns a value which is
 true if and only if the hash contains any key/value pairs.  (If there
 are any key/value pairs, the value returned is a string consisting of
 the number of used buckets and the number of allocated buckets, separated
-by a slash.  This is pretty much only useful to find out whether Perl's
+by a slash.  This is pretty much useful only to find out whether Perl's
 (compiled in) hashing algorithm is performing poorly on your data set.
 For example, you stick 10,000 things in a hash, but evaluating \f(CW%HASH\fR in
 scalar context reveals \*(L"1/16\*(R", which means only one out of sixteen buckets
@@ -418,14 +418,15 @@ integer formats:
 \&    0377                # octal
 \&    4_294_967_296       # underline for legibility
 .Ve
-String literals are usually delimited by either single or double quotes.  They
-work much like shell quotes:  double-quoted string literals are subject
-to backslash and variable substitution; single-quoted strings are not
-(except for \*(L"\f(CW\e'\fR\*(R" and \*(L"\f(CW\e\e\fR").  The usual Unix backslash rules apply for making
-characters such as newline, tab, etc., as well as some more exotic
-forms.  See the \f(CWqq\fR entry in the \fIperlop\fR manpage for a list.
+String literals are usually delimited by either single or double
+quotes.  They work much like shell quotes: double-quoted string
+literals are subject to backslash and variable substitution;
+single-quoted strings are not (except for \*(L"\f(CW\e'\fR\*(R" and \*(L"\f(CW\e\e\fR").
+The usual Unix backslash rules apply for making characters such as
+newline, tab, etc., as well as some more exotic forms.  See
+the section on \fIQuote and Quotelike Operators\fR in the \fIperlop\fR manpage for a list.
 .PP
-You can also embed newlines directly in your strings, i.e. they can end
+You can also embed newlines directly in your strings, i.e., they can end
 on a different line than they begin.  This is nice, but if you forget
 your trailing quote, the error will not be reported until Perl finds
 another line containing the quote character, which may be much further
@@ -433,7 +434,7 @@ on in the script.  Variable substitution inside strings is limited to
 scalar variables, arrays, and array slices.  (In other words,
 names beginning with $ or @, followed by an optional bracketed
 expression as a subscript.)  The following code segment prints out \*(L"The
-price is \f(CW$100\fR.\*(R"
+price is $\&100.\*(R"
 .PP
 .Vb 2
 \&    $Price = '$100';    # not interpreted
@@ -457,16 +458,16 @@ in the subscript will be interpreted as an expression.
 .PP
 Note that a
 single-quoted string must be separated from a preceding word by a
-space, since single quote is a valid (though deprecated) character in
+space, because single quote is a valid (though deprecated) character in
 a variable name (see the \f(CWPackages\fR entry in the \fIperlmod\fR manpage).
 .PP
 Two special literals are _\|_LINE_\|_ and _\|_FILE_\|_, which represent the
 current line number and filename at that point in your program.  They
-may only be used as separate tokens; they will not be interpolated into
+may be used only as separate tokens; they will not be interpolated into
 strings.  In addition, the token _\|_END_\|_ may be used to indicate the
 logical end of the script before the actual end of file.  Any following
 text is ignored, but may be read via the \s-1DATA\s0 filehandle.  (The \s-1DATA\s0
-filehandle may read data only from the main script, but not from any
+filehandle may read data from only the main script, but not from any
 required file or evaluated string.)  The two control characters ^D and
 ^Z are synonyms for _\|_END_\|_ (or _\|_DATA_\|_ in a module; see the \fISelfLoader\fR manpage for 
 details on _\|_DATA_\|_).
@@ -489,7 +490,7 @@ by saying \f(CWno strict 'subs'\fR.
 .PP
 Array variables are interpolated into double-quoted strings by joining all
 the elements of the array with the delimiter specified in the \f(CW$"\fR
-variable ($\s-1LIST_SEPARATOR\s0 in English), space by default.  The following
+variable (\f(CW$LIST_SEPARATOR\fR in English), space by default.  The following
 are equivalent:
 .PP
 .Vb 2
@@ -509,17 +510,18 @@ and is almost always right.  If it does guess wrong, or if you're just
 plain paranoid, you can force the correct interpretation with curly
 brackets as above.
 .PP
-A line-oriented form of quoting is based on the shell \*(L"here-doc\*(R" syntax.
-Following a \f(CW<<\fR you specify a string to terminate the quoted material,
-and all lines following the current line down to the terminating string
-are the value of the item.  The terminating string may be either an
-identifier (a word), or some quoted text.  If quoted, the type of
-quotes you use determines the treatment of the text, just as in regular
-quoting.  An unquoted identifier works like double quotes.  There must
-be no space between the \f(CW<<\fR and the identifier.  (If you put a space it
-will be treated as a null identifier, which is valid, and matches the
-first blank line.)  The terminating string must appear by itself 
-(unquoted and with no surrounding whitespace) on the terminating line.
+A line-oriented form of quoting is based on the shell \*(L"here-doc\*(R"
+syntax.  Following a \f(CW<<\fR you specify a string to terminate
+the quoted material, and all lines following the current line down to
+the terminating string are the value of the item.  The terminating
+string may be either an identifier (a word), or some quoted text.  If
+quoted, the type of quotes you use determines the treatment of the
+text, just as in regular quoting.  An unquoted identifier works like
+double quotes.  There must be no space between the \f(CW<<\fR and
+the identifier.  (If you put a space it will be treated as a null
+identifier, which is valid, and matches the first blank line.)  The
+terminating string must appear by itself (unquoted and with no
+surrounding whitespace) on the terminating line.
 .PP
 .Vb 3
 \&        print <<EOF;    
@@ -628,7 +630,7 @@ put the list in parentheses to avoid ambiguity.  Examples:
 .Ve
 .Vb 2
 \&    # SYNTAX ERROR HERE.
-\&    $time = stat($file)[8];  # OOPS, FORGOT PARENS
+\&    $time = stat($file)[8];  # OOPS, FORGOT PARENTHESES
 .Ve
 .Vb 2
 \&    # Find a hex digit.
@@ -655,7 +657,7 @@ produced by the expression on the right side of the assignment:
 \&    $x = (($foo,$bar) = f());           # set $x to f()'s return count
 .Ve
 This is very handy when you want to do a list assignment in a Boolean
-context, since most list functions return a null list when finished,
+context, because most list functions return a null list when finished,
 which when assigned produces a 0, which is interpreted as \s-1FALSE\s0.
 .PP
 The final element may be an array or a hash:
@@ -718,17 +720,19 @@ or for using call-by-named-parameter to complicated functions:
 Note that just because a hash is initialized in that order doesn't
 mean that it comes out in that order.  See the \f(CWsort\fR entry in the \fIperlfunc\fR manpage for examples
 of how to arrange for an output ordering.
-.Sh "Typeglobs and FileHandles"
-.IX Subsection "Typeglobs and FileHandles"
+.Sh "Typeglobs and Filehandles"
+.IX Subsection "Typeglobs and Filehandles"
 Perl uses an internal type called a \fItypeglob\fR to hold an entire
 symbol table entry.  The type prefix of a typeglob is a \f(CW*\fR, because
 it represents all types.  This used to be the preferred way to 
 pass arrays and hashes by reference into a function, but now that
-we have real references, this is seldom needed.
+we have real references, this is seldom needed.  It also used to be the
+preferred way to pass filehandles into a function, but now
+that we have the *foo{\s-1THING\s0} notation it isn't often needed for that,
+either.  It is still needed to pass new filehandles into functions
+(*\s-1HANDLE\s0{\s-1IO\s0} only works if \s-1HANDLE\s0 has already been used).
 .PP
-One place where you still use typeglobs (or references thereto)
-is for passing or storing filehandles.  If you want to save away
-a filehandle, do it this way:
+If you need to use a typeglob to save away a filehandle, do it this way:
 .PP
 .Vb 1
 \&    $fh = *STDOUT;
@@ -738,19 +742,21 @@ or perhaps as a real reference, like this:
 .Vb 1
 \&    $fh = \e*STDOUT;
 .Ve
-This is also the way to create a local filehandle.  For example:
+This is also a way to create a local filehandle.  For example:
 .PP
 .Vb 7
 \&    sub newopen {
 \&        my $path = shift;
 \&        local *FH;  # not my!
 \&        open (FH, $path) || return undef;
-\&        return \e*FH;
+\&        return *FH;
 \&    }
 \&    $fh = newopen('/etc/passwd');
 .Ve
-See the \fIperlref\fR manpage, the \fIperlsub\fR manpage, and the section on \fISymbols Tables\fR in the \fIperlmod\fR manpage for more
-discussion on typeglobs.  See the \f(CWopen\fR entry in the \fIperlfunc\fR manpage for other ways of
-generating filehandles.
+Another way to create local filehandles is with \s-1IO::\s0Handle and its ilk,
+see the bottom of the \f(CWopen()\fR entry in the \fIperlfunc\fR manpage.
+.PP
+See the \fIperlref\fR manpage, the \fIperlsub\fR manpage, and the section on \fISymbol Tables\fR in the \fIperlmod\fR manpage for more
+discussion on typeglobs.
 
 .rn }` ''

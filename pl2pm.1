@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOVL 1 "perl 5.003, patch 05" "12/Feb/96" "Perl Programmers Reference Guide"
-.IX Title "PERLOVL 1"
+.TH PL2PM 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
+.IX Title "PL2PM 1"
 .UC
-.IX Name "perlovl - overload perl mathematical functions [superseded]"
+.IX Name "pl2pm - Rough tool to translate Perl4 .pl files to Perl5 .pm modules."
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,15 +171,22 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-perlovl \- overload perl mathematical functions [superseded]
+pl2pm \- Rough tool to translate Perl4 .pl files to Perl5 .pm modules.
+.SH "SYNOPSIS"
+.IX Header "SYNOPSIS"
+\fBpl2pm\fR \fIfiles\fR
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-This man page has been superseded by the \fIoverload\fR manpage.
-.SH "WARNING"
-.IX Header "WARNING"
-The old interface involving \f(CW%OVERLOAD\fR is deprecated and will go away
-RSN. Convert your scripts to
-use overload ...;
-style.
+\fBpl2pm\fR is a tool to aid in the conversion of Perl4-style .pl
+library files to Perl5-style library modules.  Usually, your old .pl
+file will still work fine and you should only use this tool if you
+plan to update your library to use some of the newer Perl 5 features,
+such as AutoLoading.
+.SH "LIMITATIONS"
+.IX Header "LIMITATIONS"
+It's just a first step, but it's usually a good first step.
+.SH "AUTHOR"
+.IX Header "AUTHOR"
+Larry Wall <larry@wall.org>
 
 .rn }` ''

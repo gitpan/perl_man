@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH S2P 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
-.IX Title "S2P 1"
+.TH H2PH 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
+.IX Title "H2PH 1"
 .UC
-.IX Name "s2p - Sed to Perl translator"
+.IX Name "h2ph - convert .h C header files to .ph Perl header files"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,61 +171,50 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-s2p \- Sed to Perl translator
+h2ph \- convert .h C header files to .ph Perl header files
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBs2p [options] filename\fR
+\fBh2ph [headerfiles]\fR
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIS2p\fR takes a sed script specified on the command line (or from
-standard input) and produces a comparable \fIperl\fR script on the
-standard output.
-.Sh "Options"
-.IX Subsection "Options"
-Options include:
-.Ip "\fB\-D<number>\fR" 5
-.IX Item "\fB\-D<number>\fR"
-sets debugging flags.
-.Ip "\fB\-n\fR" 5
-.IX Item "\fB\-n\fR"
-specifies that this sed script was always invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Ip "\fB\-p\fR" 5
-.IX Item "\fB\-p\fR"
-specifies that this sed script was never invoked with a \fBsed \-n\fR.
-Otherwise a switch parser is prepended to the front of the script.
-.Sh "Considerations"
-.IX Subsection "Considerations"
-The perl script produced looks very sed-ish, and there may very well
-be better ways to express what you want to do in perl.  For instance,
-s2p does not make any use of the split operator, but you might want
-to.
+\fIh2ph\fR
+converts any C header files specified to the corresponding Perl header file
+format.
+It is most easily run while in /usr/include:
 .PP
-The perl script you end up with may be either faster or slower than
-the original sed script.  If you're only interested in speed you'll
-just have to try it both ways.  Of course, if you want to do something
-sed doesn't do, you have no choice.  It's often possible to speed up
-the perl script by various methods, such as deleting all references to
-$\e and chop.
+.Vb 1
+\&        cd /usr/include; h2ph * sys/*
+.Ve
+If run with no arguments, filters standard input to standard output.
 .SH "ENVIRONMENT"
 .IX Header "ENVIRONMENT"
-S2p uses no environment variables.
-.SH "AUTHOR"
-.IX Header "AUTHOR"
-Larry Wall <\fIlarry@wall.org\fR>
+No environment variables are used.
 .SH "FILES"
 .IX Header "FILES"
+.PP
+.Vb 2
+\& /usr/include/*.h
+\& /usr/include/sys/*.h
+.Ve
+etc.
+.SH "AUTHOR"
+.IX Header "AUTHOR"
+Larry Wall
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-.PP
-.Vb 3
-\& perl   The perl compiler/interpreter
-\& 
-\& a2p    awk to perl translator
-.Ve
+\fIperl\fR\|(1)
 .SH "DIAGNOSTICS"
 .IX Header "DIAGNOSTICS"
+The usual warnings if it can't read or write the files involved.
 .SH "BUGS"
 .IX Header "BUGS"
+Doesn't construct the \f(CW%sizeof\fR array for you.
+.PP
+It doesn't handle all C constructs, but it does attempt to isolate
+definitions inside evals so that you can get at the definitions
+that it can translate.
+.PP
+It's only intended as a rough tool.
+You may need to dicker with the files produced.
 
 .rn }` ''

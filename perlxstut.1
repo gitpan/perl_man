@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXSTUT 1 "perl 5.003, patch 05" "25/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLXSTUT 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLXSTUT 1"
 .UC
-.IX Name "perlXStut - Tutorial for XSUB's"
+.IX Name "perlXStut - Tutorial for XSUBs"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,7 +171,7 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-perlXStut \- Tutorial for XSUB's
+perlXStut \- Tutorial for XSUBs
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 This tutorial will educate the reader on the steps involved in creating
@@ -180,8 +180,8 @@ the \fIperlxs\fR manpage.
 .PP
 This tutorial starts with very simple examples and becomes more complex,
 with each new example adding new features.  Certain concepts may not be
-completely explained until later in the tutorial in order to slowly ease
-the reader into building extensions.
+completely explained until later in the tutorial to ease the
+reader slowly into building extensions.
 .Sh "\s-1VERSION\s0 \s-1CAVEAT\s0"
 .IX Subsection "\s-1VERSION\s0 \s-1CAVEAT\s0"
 This tutorial tries hard to keep up with the latest development versions
@@ -191,21 +191,21 @@ not work on earlier versions.  This section will keep track of when various
 features were added to Perl 5.
 .Ip "\(bu" 4
 .IX Item "\(bu"
-In versions of 5.002 prior to the gamma version, the test script in Example
-1 will not function properly.  You need to change the \*(L"use lib\*(R" line to
-read:
+In versions of Perl 5.002 prior to the gamma version, the test script
+in Example 1 will not function properly.  You need to change the \*(L"use
+lib\*(R" line to read:
 .Sp
 .Vb 1
 \&        use lib './blib';
 .Ve
 .Ip "\(bu" 4
 .IX Item "\(bu"
-In versions of 5.002 prior to version beta 3, then the line in the .xs file
+In versions of Perl 5.002 prior to version beta 3, the line in the .xs file
 about \*(L"\s-1PROTOTYPES\s0: \s-1DISABLE\s0\*(R" will cause a compiler error.  Simply remove that
 line from the file.
 .Ip "\(bu" 4
 .IX Item "\(bu"
-In versions of 5.002 prior to version 5.002b1h, the test.pl file was not
+In versions of Perl 5.002 prior to version 5.002b1h, the test.pl file was not
 automatically created by h2xs.  This means that you cannot say \*(L"make test\*(R"
 to run the test script.  You will need to add the following line before the
 \*(L"use extension\*(R" statement:
@@ -228,7 +228,7 @@ Some systems may have installed Perl version 5 as \*(L"perl5\*(R".
 .Sh "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
 .IX Subsection "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
 It is commonly thought that if a system does not have the capability to
-dynamically load a library, you cannot build \s-1XSUB\s0's.  This is incorrect.
+load a library dynamically, you cannot build XSUBs.  This is incorrect.
 You \fIcan\fR build them, but you must link the \s-1XSUB\s0's subroutines with the
 rest of Perl, creating a new executable.  This situation is similar to
 Perl 4.
@@ -381,7 +381,7 @@ Now we run the script and we should see the following output:
 .Sh "\s-1EXAMPLE\s0 2"
 .IX Subsection "\s-1EXAMPLE\s0 2"
 Now let's add to our extension a subroutine that will take a single argument
-and return 0 if the argument is even, 1 if the argument is odd.
+and return 1 if the argument is even, 0 if the argument is odd.
 .PP
 Add the following to the end of Mytest.xs:
 .PP
@@ -408,7 +408,7 @@ Now re-run make to rebuild our new shared library.
 Now perform the same steps as before, generating a Makefile from the
 Makefile.\s-1PL\s0 file, and running make.
 .PP
-In order to test that our extension works, we now need to look at the
+To test that our extension works, we now need to look at the
 file test.pl.  This file is set up to imitate the same kind of testing
 structure that Perl itself has.  Within the test script, you perform a
 number of tests to confirm the behavior of the extension, printing \*(L"ok\*(R"
@@ -444,7 +444,8 @@ h2xs creates a number of files in the extension directory.  The file
 Makefile.\s-1PL\s0 is a perl script which will generate a true Makefile to build
 the extension.  We'll take a closer look at it later.
 .PP
-The files <extension>.pm and <extension>.xs contain the meat of the extension.
+The files <extension>.pm and <extension>.xs contain the meat
+of the extension.
 The .xs file holds the C routines that make up the extension.  The .pm file
 contains routines that tell Perl how to load your extension.
 .PP
@@ -625,7 +626,7 @@ section on the argument stack.
 .Sh "\s-1WARNING\s0"
 .IX Subsection "\s-1WARNING\s0"
 In general, it's not a good idea to write extensions that modify their input
-parameters, as in Example 3.  However, in order to better accomodate calling
+parameters, as in Example 3.  However, to accommodate better calling
 pre-existing C routines, which often do modify their input parameters,
 this behavior is tolerated.  The next example will show how to do this.
 .Sh "\s-1EXAMPLE\s0 4"
@@ -668,16 +669,17 @@ Also create a file mylib.c that looks like this:
 .Ve
 And finally create a file Makefile.\s-1PL\s0 that looks like this:
 .PP
-.Vb 6
+.Vb 7
 \&        use ExtUtils::MakeMaker;
 \&        $Verbose = 1;
 \&        WriteMakefile(
-\&            'NAME' => 'Mytest2::mylib',
-\&            'clean'     => {'FILES' => 'libmylib.a'},
+\&            NAME      => 'Mytest2::mylib',
+\&            SKIP      => [qw(all static static_lib dynamic dynamic_lib)],
+\&            clean     => {'FILES' => 'libmylib$(LIB_EXT)'},
 \&        );
 .Ve
 .Vb 3
-\&        sub MY::postamble {
+\&        sub MY::top_targets {
 \&                '
 \&        all :: static
 .Ve
@@ -721,7 +723,8 @@ and a new replacement subroutine too:
 \&        }
 .Ve
 (Note: Most makes will require that there be a tab character that indents
-the line \*(L"cd mylib && $(\s-1MAKE\s0)\*(R".)
+the line \*(L"cd mylib && $(\s-1MAKE\s0)\*(R", similarly for the Makefile in the
+subdirectory.)
 .PP
 Let's also fix the \s-1MANIFEST\s0 file so that it accurately reflects the contents
 of our extension.  The single line that says \*(L"mylib\*(R" should be replaced by
@@ -770,7 +773,7 @@ and add the following lines to the end of the script:
 \&        print &Mytest2::foo(1, 2, "0.0") == 7 ? "ok 3\en" : "not ok 3\en";
 \&        print abs(&Mytest2::foo(0, 0, "-3.4") - 0.6) <= 0.01 ? "ok 4\en" : "not ok 4\en";
 .Ve
-(When dealing with floating-point comparisons, it is often useful to not check
+(When dealing with floating-point comparisons, it is often useful not to check
 for equality, but rather the difference being below a certain epsilon factor,
 0.01 in this case)
 .PP
@@ -794,7 +797,7 @@ header file available to the Perl script (in this case, by calling
 .IX Item "\(bu"
 The .pm file has exported the name \s-1TESTVAL\s0 in the \f(CW@EXPORT\fR array.  This
 could lead to name clashes.  A good rule of thumb is that if the #define
-is only going to be used by the C routines themselves, and not by the user,
+is going to be used by only the C routines themselves, and not by the user,
 they should be removed from the \f(CW@EXPORT\fR array.  Alternately, if you don't
 mind using the \*(L"fully qualified name\*(R" of a variable, you could remove most
 or all of the items in the \f(CW@EXPORT\fR array.
@@ -804,12 +807,12 @@ If our include file contained #include directives, these would not be
 processed at all by h2xs.  There is no good solution to this right now.
 .PP
 We've also told Perl about the library that we built in the mylib
-subdirectory.  That required only the addition of the \s-1MYEXTLIB\s0 variable
+subdirectory.  That required the addition of only the \s-1MYEXTLIB\s0 variable
 to the WriteMakefile call and the replacement of the postamble subroutine
 to cd into the subdirectory and run make.  The Makefile.\s-1PL\s0 for the
 library is a bit more complicated, but not excessively so.  Again we
 replaced the postamble subroutine to insert our own code.  This code
-simply specified that the library to be created here was a static
+specified simply that the library to be created here was a static
 archive (as opposed to a dynamically loadable library) and provided the
 commands to build it.
 .Sh "\s-1SPECIFYING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1XSUBPP\s0"
@@ -870,7 +873,7 @@ usually 0.  The \*(L"\s-1ST\s0\*(R" is actually a macro that points to the n'th 
 on the argument stack.  \fI\s-1ST\s0\fR\|(0) is thus the first argument passed to the
 \s-1XSUB\s0, \fI\s-1ST\s0\fR\|(1) is the second argument, and so on.
 .PP
-When you list the arguments to the \s-1XSUB\s0 in the .xs file, that tell xsubpp
+When you list the arguments to the \s-1XSUB\s0 in the .xs file, that tells xsubpp
 which argument corresponds to which of the argument stack (i.e., the first
 one listed is the first argument, and so on).  You invite disaster if you
 do not list them in the same order as the function expects them.
@@ -880,7 +883,7 @@ Sometimes you might want to provide some extra methods or subroutines
 to assist in making the interface between Perl and your extension simpler
 or easier to understand.  These routines should live in the .pm file.
 Whether they are automatically loaded when the extension itself is loaded
-or only loaded when called depends on where in the .pm file the subroutine
+or loaded only when called depends on where in the .pm file the subroutine
 definition is placed.
 .Sh "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 .IX Subsection "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
@@ -907,7 +910,7 @@ For more information, consult the \fIperlguts\fR manpage, the \fIperlxs\fR manpa
 and the \fIperlpod\fR manpage.
 .Sh "Author"
 .IX Subsection "Author"
-Jeff Okamoto <okamoto@corp.hp.com>
+Jeff Okamoto <\fIokamoto@corp.hp.com\fR>
 .PP
 Reviewed and assisted by Dean Roehrich, Ilya Zakharevich, Andreas Koenig,
 and Tim Bunce.

@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOL 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLLOL 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLLOL 1"
 .UC
 .IX Name "perlLoL - Manipulating Lists of Lists in Perl"
@@ -182,7 +182,7 @@ that applies here will also be applicable later on with the fancier data
 structures.
 .PP
 A list of lists, or an array of an array if you would, is just a regular
-old array \f(CW@LoL\fR that you can get at with two subscripts, like \f(CW$LoL\fR[3][2].  Here's
+old array \f(CW@LoL\fR that you can get at with two subscripts, like \f(CW$LoL[3][2]\fR.  Here's
 a declaration of the array:
 .PP
 .Vb 6
@@ -199,7 +199,7 @@ a declaration of the array:
 .Ve
 Now you should be very careful that the outer bracket type
 is a round one, that is, parentheses.  That's because you're assigning to
-an \f(CW@list\fR, so you need parens.  If you wanted there \fInot\fR to be an \f(CW@LoL\fR,
+an \f(CW@list\fR, so you need parentheses.  If you wanted there \fInot\fR to be an \f(CW@LoL\fR,
 but rather just a reference to it, you could do something more like this:
 .PP
 .Vb 6
@@ -216,7 +216,7 @@ but rather just a reference to it, you could do something more like this:
 Notice that the outer bracket type has changed, and so our access syntax 
 has also changed.  That's because unlike C, in perl you can't freely
 interchange arrays and references thereto.  \f(CW$ref_to_LoL\fR is a reference to an 
-array, whereas \f(CW@LoL\fR is an array proper.  Likewise, \f(CW$LoL\fR[2] is not an 
+array, whereas \f(CW@LoL\fR is an array proper.  Likewise, \f(CW$LoL[2]\fR is not an 
 array, but an array ref.  So how come you can write these:
 .PP
 .Vb 2
@@ -230,7 +230,7 @@ instead of having to write these:
 \&    $ref_to_LoL->[2]->[2]
 .Ve
 Well, that's because the rule is that on adjacent brackets only (whether
-square or curly), you are free to omit the pointer dereferencing array.
+square or curly), you are free to omit the pointer dereferencing arrow.
 But you cannot do so for the very first one if it's a scalar containing
 a reference, which means that \f(CW$ref_to_LoL\fR always needs it.
 .SH "Growing Your Own"
@@ -298,7 +298,7 @@ if you knew where you wanted to put it:
 .PP
 .Vb 5
 \&    my (@LoL, $i, $line);
-\&    for $i ( 0 .. 10 ) 
+\&    for $i ( 0 .. 10 ) {
 \&        $line = <>;
 \&        $LoL[$i] = [ split ' ', $line ];
 \&    } 
@@ -307,7 +307,7 @@ or even just
 .PP
 .Vb 4
 \&    my (@LoL, $i);
-\&    for $i ( 0 .. 10 ) 
+\&    for $i ( 0 .. 10 ) {
 \&        $LoL[$i] = [ split ' ', <> ];
 \&    } 
 .Ve
@@ -317,7 +317,7 @@ This would be clearer to the casual reader:
 .PP
 .Vb 4
 \&    my (@LoL, $i);
-\&    for $i ( 0 .. 10 ) 
+\&    for $i ( 0 .. 10 ) {
 \&        $LoL[$i] = [ split ' ', scalar(<>) ];
 \&    } 
 .Ve
@@ -329,10 +329,10 @@ you'd have to do something like this:
 \&        push @$ref_to_LoL, [ split ];
 \&    } 
 .Ve
-Actually, if you were using strict, you'd not only have to declare \f(CW$ref_to_LoL\fR as
-you had to declare \f(CW@LoL\fR, but you'd \fIalso\fR having to initialize it to a
-reference to an empty list.  (This was a bug in 5.001m that's been fixed
-for the 5.002 release.)
+Actually, if you were using strict, you'd have to declare not only
+\f(CW$ref_to_LoL\fR as you had to declare \f(CW@LoL\fR, but you'd \fIalso\fR having to
+initialize it to a reference to an empty list.  (This was a bug in
+perl version 5.001m that's been fixed for the 5.002 release.)
 .PP
 .Vb 4
 \&    my $ref_to_LoL = [];
@@ -341,7 +341,7 @@ for the 5.002 release.)
 \&    } 
 .Ve
 Ok, now you can add new rows.  What about adding new columns?  If you're
-just dealing with matrices, it's often easiest to use simple assignment:
+dealing with just matrices, it's often easiest to use simple assignment:
 .PP
 .Vb 5
 \&    for $x (1 .. 10) {
@@ -359,14 +359,14 @@ It doesn't matter whether those elements are already
 there or not: it'll gladly create them for you, setting
 intervening elements to \f(CWundef\fR as need be.
 .PP
-If you just wanted to append to a row, you'd have
+If you wanted just to append to a row, you'd have
 to do something a bit funnier looking:
 .PP
 .Vb 2
 \&    # add new columns to an existing row
 \&    push @{ $LoL[0] }, "wilma", "betty";
 .Ve
-Notice that I \fIcouldn't\fR just say:
+Notice that I \fIcouldn't\fR say just:
 .PP
 .Vb 1
 \&    push $LoL[0], "wilma", "betty";  # WRONG!
@@ -376,19 +376,19 @@ to \fIpush()\fR must be a real array, not just a reference to such.
 .SH "Access and Printing"
 .IX Header "Access and Printing"
 Now it's time to print your data structure out.  How 
-are you going to do that?  Well, if you only want one
+are you going to do that?  Well, if you want only one
 of the elements, it's trivial:
 .PP
 .Vb 1
 \&    print $LoL[0][0];
 .Ve
 If you want to print the whole thing, though, you can't
-just say 
+say
 .PP
 .Vb 1
 \&    print @LoL;         # WRONG
 .Ve
-because you'll just get references listed, and perl will never
+because you'll get just references listed, and perl will never
 automatically dereference things for you.  Instead, you have to 
 roll yourself a loop or two.  This prints the whole structure,
 using the shell-style \fIfor()\fR construct to loop across the outer
@@ -426,7 +426,7 @@ sometimes is easier to take a temporary on your way through:
 \&        }
 \&    }
 .Ve
-Hm... that's still a bit ugly.  How about this:
+Hmm... that's still a bit ugly.  How about this:
 .PP
 .Vb 7
 \&    for $i ( 0 .. $#LoL ) {
@@ -464,7 +464,7 @@ That same loop could be replaced with a slice operation:
 but as you might well imagine, this is pretty rough on the reader.
 .PP
 Ah, but what if you wanted a \fItwo-dimensional slice\fR, such as having
-\f(CW$x\fR run from 4..8 and \f(CW$y\fR run from 7 to 12?  Hm... here's the simple way:
+\f(CW$x\fR run from 4..8 and \f(CW$y\fR run from 7 to 12?  Hmm... here's the simple way:
 .PP
 .Vb 6
 \&    @newLoL = ();
@@ -509,7 +509,7 @@ If I were you, I'd put that in a function:
 \fIperldata\fR\|(1), \fIperlref\fR\|(1), \fIperldsc\fR\|(1)
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Tom Christiansen <tchrist@perl.com>
+Tom Christiansen <\fItchrist@perl.com\fR>
 .PP
 Last udpate: Sat Oct  7 19:35:26 MDT 1995
 

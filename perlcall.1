@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLCALL 1 "perl 5.003, patch 05" "29/Jan/96" "Perl Programmers Reference Guide"
+.TH PERLCALL 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLCALL 1"
 .UC
 .IX Name "perlcall - Perl calling conventions from C"
@@ -175,7 +175,7 @@ perlcall \- Perl calling conventions from C
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 The purpose of this document is to show you how to call Perl subroutines
-directly from C, i.e. how to write \fIcallbacks\fR.
+directly from C, i.e., how to write \fIcallbacks\fR.
 .PP
 Apart from discussing the C interface provided by Perl for writing
 callbacks the document uses a series of examples to show how the
@@ -195,8 +195,8 @@ called instead.
 .IX Item "\(bu An Event Driven Program"
 The classic example of where callbacks are used is when writing an
 event driven program like for an X windows application.  In this case
-your register functions to be called whenever specific events occur,
-e.g. a mouse button is pressed, the cursor moves into a window or a
+you register functions to be called whenever specific events occur,
+e.g., a mouse button is pressed, the cursor moves into a window or a
 menu item is selected.
 .PP
 Although the techniques described here are applicable when embedding
@@ -225,7 +225,7 @@ subroutines.  They are
 The key function is \fIperl_call_sv\fR.  All the other functions are
 fairly simple wrappers which make it easier to call Perl subroutines in
 special cases. At the end of the day they will all call \fIperl_call_sv\fR
-to actually invoke the Perl subroutine.
+to invoke the Perl subroutine.
 .PP
 All the \fIperl_call_*\fR functions have a \f(CWflags\fR parameter which is
 used to pass a bit mask of options to Perl.  This bit mask operates
@@ -244,9 +244,9 @@ use of \fIperl_call_sv\fR.
 .IX Item "\fBperl_call_pv\fR"
 The function, \fIperl_call_pv\fR, is similar to \fIperl_call_sv\fR except it
 expects its first parameter to be a C char* which identifies the Perl
-subroutine you want to call, e.g. \f(CWperl_call_pv("fred", 0)\fR.  If the
+subroutine you want to call, e.g., \f(CWperl_call_pv("fred", 0)\fR.  If the
 subroutine you want to call is in another package, just include the
-package name in the string, e.g. \f(CW"pkg::fred"\fR.
+package name in the string, e.g., \f(CW"pkg::fred"\fR.
 .Ip "\fBperl_call_method\fR" 5
 .IX Item "\fBperl_call_method\fR"
 The function \fIperl_call_method\fR is used to call a method from a Perl
@@ -284,19 +284,19 @@ OR'ed together.
 Calls the Perl subroutine in a scalar context.  This is the default
 context flag setting for all the \fIperl_call_*\fR functions.
 .PP
-This flag has 2 effects
+This flag has 2 effects:
 .Ip "1." 5
 .IX Item "1."
-it indicates to the subroutine being called that it is executing in a
+It indicates to the subroutine being called that it is executing in a
 scalar context (if it executes \fIwantarray\fR the result will be false).
 .Ip "2." 5
 .IX Item "2."
-it ensures that only a scalar is actually returned from the subroutine.
+It ensures that only a scalar is actually returned from the subroutine.
 The subroutine can, of course,  ignore the \fIwantarray\fR and return a
 list anyway. If so, then only the last element of the list will be
 returned.
 .PP
-The value returned by the \fIperl_call_*\fR function indicates how may
+The value returned by the \fIperl_call_*\fR function indicates how many
 items have been returned by the Perl subroutine \- in this case it will
 be either 0 or 1.
 .PP
@@ -315,20 +315,20 @@ context\fR shows an example of this behaviour.
 .IX Subsection "G_ARRAY"
 Calls the Perl subroutine in a list context.
 .PP
-As with G_SCALAR, this flag has 2 effects
+As with G_SCALAR, this flag has 2 effects:
 .Ip "1." 5
 .IX Item "1."
-it indicates to the subroutine being called that it is executing in an
+It indicates to the subroutine being called that it is executing in an
 array context (if it executes \fIwantarray\fR the result will be true).
 .Ip "2." 5
 .IX Item "2."
-it ensures that all items returned from the subroutine will be
+It ensures that all items returned from the subroutine will be
 accessible when control returns from the \fIperl_call_*\fR function.
 .PP
-The value returned by the \fIperl_call_*\fR function indicates how may
+The value returned by the \fIperl_call_*\fR function indicates how many
 items have been returned by the Perl subroutine.
 .PP
-If 0, the you have specified the G_DISCARD flag.
+If 0, then you have specified the G_DISCARD flag.
 .PP
 If not 0, then it will be a count of the number of items returned by
 the subroutine. These items will be stored on the Perl stack.  The
@@ -344,10 +344,10 @@ automatically for you.  Note that it is still possible to indicate a
 context to the Perl subroutine by using either G_SCALAR or G_ARRAY.
 .PP
 If you do not set this flag then it is \fIvery\fR important that you make
-sure that any temporaries (i.e. parameters passed to the Perl
+sure that any temporaries (i.e., parameters passed to the Perl
 subroutine and values returned from the subroutine) are disposed of
 yourself.  The section \fIReturning a Scalar\fR gives details of how to
-explicitly dispose of these temporaries and the section \fIUsing Perl to
+dispose of these temporaries explicitly and the section \fIUsing Perl to
 dispose of temporaries\fR discusses the specific circumstances where you
 can ignore the problem and let Perl deal with it for you.
 .Sh "G_NOARGS"
@@ -391,7 +391,7 @@ belongs to \f(CWjoe\fR.
 .Sh "G_EVAL	"
 .IX Subsection "G_EVAL	"
 It is possible for the Perl subroutine you are calling to terminate
-abnormally, e.g. by calling \fIdie\fR explicitly or by not actually
+abnormally, e.g., by calling \fIdie\fR explicitly or by not actually
 existing.  By default, when either of these of events occurs, the
 process will terminate immediately.  If though, you want to trap this
 type of event, specify the G_EVAL flag.  It will put an \fIeval { }\fR
@@ -402,7 +402,7 @@ check the \f(CW$@\fR variable as you would in a normal Perl script.
 .PP
 The value returned from the \fIperl_call_*\fR function is dependent on
 what other flags have been specified and whether an error has
-occurred.  Here are all the different cases that can occur
+occurred.  Here are all the different cases that can occur:
 .Ip "\(bu" 5
 .IX Item "\(bu"
 If the \fIperl_call_*\fR function returns normally, then the value
@@ -446,7 +446,7 @@ The G_KEEPERR flag is meant to be used in conjunction with G_EVAL in
 has no effect when G_EVAL is not used.
 .PP
 When G_KEEPERR is used, any errors in the called code will be prefixed
-with the string \*(L"\et(in cleanup)\*(R", and appended to the current value
+with the string \*(L"\e\fIt\fR\|(in cleanup)\*(R", and appended to the current value
 of \f(CW$@\fR.
 .PP
 The G_KEEPERR flag was introduced in Perl version 5.002.
@@ -529,7 +529,7 @@ Enough of the definition talk, let's have a few examples.
 .PP
 Perl provides many macros to assist in accessing the Perl stack.
 Wherever possible, these macros should always be used when interfacing
-to Perl internals.  Hopefully this should make the code less vulnerable
+to Perl internals.  We hope this should make the code less vulnerable
 to any changes made to Perl in the future.
 .PP
 Another point worth noting is that in the first series of examples I
@@ -576,7 +576,7 @@ specified.
 .Ip "3." 5
 .IX Item "3."
 We aren't interested in anything returned from \fIPrintUID\fR, so
-G_DISCARD is specified. Even if \fIPrintUID\fR was changed to actually
+G_DISCARD is specified. Even if \fIPrintUID\fR was changed to
 return some \fIvalue\fR\|(s), having specified G_DISCARD will mean that they
 will be wiped by the time control returns from \fIperl_call_pv\fR.
 .Ip "4." 5
@@ -641,14 +641,14 @@ have used this macro.
 .Sp
 The exception to this rule is if you are calling a Perl subroutine
 directly from an \s-1XSUB\s0 function. In this case it is not necessary to
-explicitly use the \f(CWdSP\fR macro \- it will be declared for you
+use the \f(CWdSP\fR macro explicitly \- it will be declared for you
 automatically.
 .Ip "3." 5
 .IX Item "3."
 Any parameters to be pushed onto the stack should be bracketed by the
 \f(CWPUSHMARK\fR and \f(CWPUTBACK\fR macros.  The purpose of these two macros, in
-this context, is to automatically count the number of parameters you
-are pushing. Then whenever Perl is creating the \f(CW@_\fR array for the
+this context, is to count the number of parameters you are
+pushing automatically.  Then whenever Perl is creating the \f(CW@_\fR array for the
 subroutine, it knows how big to make it.
 .Sp
 The \f(CWPUSHMARK\fR macro tells Perl to make a mental note of the current
@@ -665,7 +665,7 @@ up to now all the stack pointer manipulation we have done is with our
 local copy, \fInot\fR the global copy.
 .Ip "4." 5
 .IX Item "4."
-The only flag specified this time is G_DISCARD. Since we are passing 2
+The only flag specified this time is G_DISCARD. Because we are passing 2
 parameters to the Perl subroutine this time, we have not specified
 G_NOARGS.
 .Ip "5." 5
@@ -674,7 +674,7 @@ Next, we come to XPUSHs. This is where the parameters actually get
 pushed onto the stack. In this case we are pushing a string and an
 integer.
 .Sp
-See the section the section on \fI\s-1XSUB\s0'S and the Argument Stack\fR in the \fIperlguts\fR manpage for details
+See the the section on \fI\s-1XSUB\s0's and the Argument Stack\fR in the \fIperlguts\fR manpage for details
 on how the \s-1XPUSH\s0 macros work.
 .Ip "6." 5
 .IX Item "6."
@@ -685,7 +685,7 @@ function.
 Now for an example of dealing with the items returned from a Perl
 subroutine.
 .PP
-Here is a Perl subroutine, \fIAdder\fR,  which takes 2 integer parameters
+Here is a Perl subroutine, \fIAdder\fR, that takes 2 integer parameters
 and simply returns their sum.
 .PP
 .Vb 5
@@ -695,7 +695,7 @@ and simply returns their sum.
 \&        $a + $b ;
 \&    }
 .Ve
-Since we are now concerned with the return value from \fIAdder\fR, the C
+Because we are now concerned with the return value from \fIAdder\fR, the C
 function required to call it is now a bit more complex.
 .PP
 .Vb 7
@@ -793,7 +793,7 @@ Expecting a single value is not quite the same as knowing that there
 will be one. If someone modified \fIAdder\fR to return a list and we
 didn't check for that possibility and take appropriate action the Perl
 stack would end up in an inconsistent state. That is something you
-\fIreally\fR don't want to ever happen.
+\fIreally\fR don't want to happen ever.
 .Ip "5." 5
 .IX Item "5."
 The \f(CWPOPi\fR macro is used here to pop the return value from the stack.
@@ -1128,7 +1128,7 @@ refers to the C equivalent of \f(CW$@\fR.
 Note that the stack is popped using \f(CWPOPs\fR in the block where
 \f(CWSvTRUE(GvSV(errgv))\fR is true.  This is necessary because whenever a
 \fIperl_call_*\fR function invoked with G_EVAL|G_SCALAR returns an error,
-the top of the stack holds the value \fIundef\fR. Since we want the
+the top of the stack holds the value \fIundef\fR. Because we want the
 program to continue after detecting this error, it is essential that
 the stack is tidied up by removing the \fIundef\fR.
 .Sh "Using G_KEEPERR"
@@ -1154,7 +1154,7 @@ version of the call_Subtract example above inside a destructor:
 .Ve
 This example will fail to recognize that an error occurred inside the
 \f(CWeval {}\fR.  Here's why: the call_Subtract code got executed while perl
-was cleaning up temporaries when exiting the eval block, and since
+was cleaning up temporaries when exiting the eval block, and because
 call_Subtract is implemented with \fIperl_call_pv\fR using the G_EVAL
 flag, it promptly reset \f(CW$@\fR.  This results in the failure of the
 outermost test for \f(CW$@\fR, and thereby the failure of the error trap.
@@ -1195,7 +1195,7 @@ Here is a snippet of \s-1XSUB\s0 which defines \fICallSubPV\fR.
 \&        perl_call_pv(name, G_DISCARD|G_NOARGS) ;
 .Ve
 That is fine as far as it goes. The thing is, the Perl subroutine 
-can be specified only as a string.  For Perl 4 this was adequate,
+can be specified as only a string.  For Perl 4 this was adequate,
 but Perl 5 allows references to subroutines and anonymous subroutines.
 This is where \fIperl_call_sv\fR is useful.
 .PP
@@ -1211,7 +1211,7 @@ that the \f(CWname\fR parameter is now defined as an \s-1SV\s0* and we use
 \&        PUSHMARK(sp) ;
 \&        perl_call_sv(name, G_DISCARD|G_NOARGS) ;
 .Ve
-Since we are using an \s-1SV\s0 to call \fIfred\fR the following can all be used
+Because we are using an \s-1SV\s0 to call \fIfred\fR the following can all be used
 .PP
 .Vb 5
 \&    CallSubSV("fred") ;
@@ -1225,7 +1225,7 @@ how you can specify the Perl subroutine.
 .PP
 You should note that if it is necessary to store the \s-1SV\s0 (\f(CWname\fR in the
 example above) which corresponds to the Perl subroutine so that it can
-be used later in the program, it not enough to just store a copy of the
+be used later in the program, it not enough just to store a copy of the
 pointer to the \s-1SV\s0. Say the code above had been like this
 .PP
 .Vb 1
@@ -1275,7 +1275,7 @@ Similarly, with this code
 \&    $ref = 47 ;
 \&    CallSavedSub1() ;
 .Ve
-you can expect one of these messages (which you actually get is dependant on 
+you can expect one of these messages (which you actually get is dependent on 
 the version of Perl you are using) 
 .PP
 .Vb 2
@@ -1284,7 +1284,7 @@ the version of Perl you are using)
 .Ve
 The variable \f(CW$ref\fR may have referred to the subroutine \f(CWfred\fR
 whenever the call to \f(CWSaveSub1\fR was made but by the time
-\f(CWCallSavedSub1\fR gets called it now holds the number \f(CW47\fR. Since we
+\f(CWCallSavedSub1\fR gets called it now holds the number \f(CW47\fR. Because we
 saved only a pointer to the original \s-1SV\s0 in \f(CWSaveSub1\fR, any changes to
 \f(CW$ref\fR will be tracked by the pointer \f(CWrememberSub\fR. This means that
 whenever \f(CWCallSavedSub1\fR gets called, it will attempt to execute the
@@ -1330,7 +1330,7 @@ To get around these problems it is necessary to take a full copy of the
 \&        PUSHMARK(sp) ;
 \&        perl_call_sv(keepSub, G_DISCARD|G_NOARGS) ;
 .Ve
-In order to avoid creating a new \s-1SV\s0 every time \f(CWSaveSub2\fR is called,
+To avoid creating a new \s-1SV\s0 every time \f(CWSaveSub2\fR is called,
 the function first checks to see if it has been called before.  If not,
 then space for a new \s-1SV\s0 is allocated and the reference to the Perl
 subroutine, \f(CWname\fR is copied to the variable \f(CWkeepSub\fR in one
@@ -1399,9 +1399,9 @@ Consider the following Perl code
 \&        }
 \&    }
 .Ve
-It just implements a very simple class to manage an array.  Apart from
+It implements just a very simple class to manage an array.  Apart from
 the constructor, \f(CWnew\fR, it declares methods, one static and one
-virtual. The static method, \f(CWPrintID\fR, simply prints out the class
+virtual. The static method, \f(CWPrintID\fR, prints out simply the class
 name and a version number. The virtual method, \f(CWDisplay\fR, prints out a
 single element of the array.  Here is an all Perl example of using it.
 .PP
@@ -1499,7 +1499,7 @@ The output from that will be
 .Sh "Using Perl to dispose of temporaries"
 .IX Subsection "Using Perl to dispose of temporaries"
 In the examples given to date, any temporaries created in the callback
-(i.e. parameters passed on the stack to the \fIperl_call_*\fR function or
+(i.e., parameters passed on the stack to the \fIperl_call_*\fR function or
 values returned via the stack) have been freed by one of these methods
 .Ip "\(bu" 5
 .IX Item "\(bu"
@@ -1593,7 +1593,7 @@ the extreme left.
 .PP
 So what is the big problem? Well, if you are expecting Perl to tidy up
 those temporaries for you, you might be in for a long wait.  For Perl
-to actually dispose of your temporaries, control must drop back to the
+to dispose of your temporaries, control must drop back to the
 enclosing scope at some stage.  In the event driven scenario that may
 never happen.  This means that as time goes on, your program will
 create more and more temporaries, none of which will ever be freed. As
@@ -1602,7 +1602,7 @@ eventually consume all the available memory in your system \- kapow!
 .PP
 So here is the bottom line \- if you are sure that control will revert
 back to the enclosing Perl scope fairly quickly after the end of your
-callback, then it isn't absolutely necessary to explicitly dispose of
+callback, then it isn't absolutely necessary to dispose explicitly of
 any temporaries you may have created. Mind you, if you are at all
 uncertain about what to do, it doesn't do any harm to tidy up anyway.
 .Sh "Strategies for storing Callback Context Information"
@@ -1682,7 +1682,7 @@ registers, \f(CWpcb1\fR, might look like this
 The mapping between the C callback and the Perl equivalent is stored in
 the global variable \f(CWcallback\fR.
 .PP
-This will be adequate if you ever need to have only 1 callback
+This will be adequate if you ever need to have only one callback
 registered at any time. An example could be an error handler like the
 code sketched out above. Remember though, repeated calls to
 \f(CWregister_fatal\fR will replace the previously registered callback
@@ -1958,7 +1958,7 @@ series of C functions to act as the interface to Perl, thus
 .Vb 1
 \&        asynch_close(fh) ;
 .Ve
-In this case the functions \f(CWfn1\fR, \f(CWfn2\fR and \f(CWfn3\fR are used to
+In this case the functions \f(CWfn1\fR, \f(CWfn2\fR, and \f(CWfn3\fR are used to
 remember the Perl subroutine to be called. Each of the functions holds
 a separate hard-wired index which is used in the function \f(CWPcb\fR to
 access the \f(CWMap\fR array and actually call the Perl subroutine.
@@ -2076,7 +2076,7 @@ refers to the last.
 the \fIperlxs\fR manpage, the \fIperlguts\fR manpage, the \fIperlembed\fR manpage
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Paul Marquess <pmarquess@bfsec.bt.co.uk>
+Paul Marquess <\fIpmarquess@bfsec.bt.co.uk\fR>
 .PP
 Special thanks to the following people who assisted in the creation of
 the document.

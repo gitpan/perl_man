@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSUB 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLSUB 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLSUB 1"
 .UC
 .IX Name "perlsub - Perl subroutines"
@@ -197,8 +197,8 @@ To import subroutines:
 To call subroutines:
 .PP
 .Vb 3
-\&    NAME(LIST);    # & is optional with parens.
-\&    NAME LIST;     # Parens optional if predeclared/imported.
+\&    NAME(LIST);    # & is optional with parentheses.
+\&    NAME LIST;     # Parentheses optional if pre-declared/imported.
 \&    &NAME;         # Passes current @_ to subroutine.
 .Ve
 .SH "DESCRIPTION"
@@ -233,7 +233,7 @@ indistinguishable list.
 Perl does not have named formal parameters, but in practice all you do is
 assign to a \fImy()\fR list of these.  Any variables you use in the function
 that aren't declared private are global variables.  For the gory details
-on creating private variables, see the sections below on
+on creating private variables, see
 the section on \fIPrivate Variables via my()\fR and the section on \fITemporary Values via local()\fR.
 To create protected environments for a set of functions in a separate
 package (and probably a separate file), see the section on \fIPackages\fR in the \fIperlmod\fR manpage.
@@ -285,8 +285,8 @@ Use array assignment to a local list to name your formal arguments:
 \&    }
 .Ve
 This also has the effect of turning call-by-reference into call-by-value,
-since the assignment copies the values.  Otherwise a function is free to
-do in-place modifications of \f(CW@_\fR and change its callers values.
+because the assignment copies the values.  Otherwise a function is free to
+do in-place modifications of \f(CW@_\fR and change its caller's values.
 .PP
 .Vb 4
 \&    upcase_in($v1, $v2);  # this changes $v1 and $v2
@@ -334,13 +334,14 @@ Because like its flat incoming parameter list, the return list is also
 flat.  So all you have managed to do here is stored everything in \f(CW@a\fR and
 made \f(CW@b\fR an empty list.  See the section on \fI/"Pass by Reference\fR for alternatives.
 .PP
-A subroutine may be called using the \*(L"&\*(R" prefix.  The \*(L"&\*(R" is optional in
-Perl 5, and so are the parens if the subroutine has been predeclared.
-(Note, however, that the \*(L"&\*(R" is \fINOT\fR optional when you're just naming
-the subroutine, such as when it's used as an argument to \fIdefined()\fR or
-\fIundef()\fR.  Nor is it optional when you want to do an indirect subroutine
-call with a subroutine name or reference using the \f(CW&$subref()\fR or
-\f(CW&{$subref}()\fR constructs.  See the \fIperlref\fR manpage for more on that.)
+A subroutine may be called using the \*(L"&\*(R" prefix.  The \*(L"&\*(R" is optional
+in modern Perls, and so are the parentheses if the subroutine has been
+pre-declared.  (Note, however, that the \*(L"&\*(R" is \fINOT\fR optional when
+you're just naming the subroutine, such as when it's used as an
+argument to \fIdefined()\fR or \fIundef()\fR.  Nor is it optional when you want to
+do an indirect subroutine call with a subroutine name or reference
+using the \f(CW&$subref()\fR or \f(CW&{$subref}()\fR constructs.  See the \fIperlref\fR manpage
+for more on that.)
 .PP
 Subroutines may be called recursively.  If a subroutine is called using
 the \*(L"&\*(R" form, the argument list is optional, and if omitted, no \f(CW@_\fR array is
@@ -375,11 +376,12 @@ Synopsis:
 \&    my @oof = @bar;     # declare @oof lexical, and init it
 .Ve
 A \*(L"my\*(R" declares the listed variables to be confined (lexically) to the
-enclosing block, subroutine, \f(CWeval\fR, or \f(CWdo/require/use\fR'd file.  If
-more than one value is listed, the list must be placed in parens.  All
-listed elements must be legal lvalues.  Only alphanumeric identifiers may
-be lexically scoped\*(--magical builtins like $/ must currently be localized with
-\*(L"local\*(R" instead.  
+enclosing block, conditional (\f(CWif/unless/elsif/else\fR), loop
+(\f(CWfor/foreach/while/until/continue\fR), subroutine, \f(CWeval\fR, or
+\f(CWdo/require/use\fR'd file.  If more than one value is listed, the list
+must be placed in parentheses.  All listed elements must be legal lvalues.
+Only alphanumeric identifiers may be lexically scoped\*(--magical
+builtins like $/ must currently be localized with \*(L"local\*(R" instead.
 .PP
 Unlike dynamic variables created by the \*(L"local\*(R" statement, lexical
 variables declared with \*(L"my\*(R" are totally hidden from the outside world,
@@ -416,12 +418,12 @@ change whether those variables is viewed as a scalar or an array.  So
 \&    my ($foo) = <STDIN>;
 \&    my @FOO = <STDIN>;
 .Ve
-both supply a list context to the righthand side, while
+both supply a list context to the right-hand side, while
 .PP
 .Vb 1
 \&    my $foo = <STDIN>;
 .Ve
-supplies a scalar context.  But the following only declares one variable:
+supplies a scalar context.  But the following declares only one variable:
 .PP
 .Vb 1
 \&    my $foo, $bar = 1;
@@ -445,6 +447,52 @@ the expression
 \&    my $x = 123 and $x == 123
 .Ve
 is false unless the old \f(CW$x\fR happened to have the value 123.
+.PP
+Lexical scopes of control structures are not bounded precisely by the
+braces that delimit their controlled blocks; control expressions are
+part of the scope, too.  Thus in the loop
+.PP
+.Vb 5
+\&    while (my $line = <>) {
+\&        $line = lc $line;
+\&    } continue {
+\&        print $line;
+\&    }
+.Ve
+the scope of \f(CW$line\fR extends from its declaration throughout the rest of
+the loop construct (including the \f(CWcontinue\fR clause), but not beyond
+it.  Similarly, in the conditional
+.PP
+.Vb 8
+\&    if ((my $answer = <STDIN>) =~ /^yes$/i) {
+\&        user_agrees();
+\&    } elsif ($answer =~ /^no$/i) {
+\&        user_disagrees();
+\&    } else {
+\&        chomp $answer;
+\&        die "'$answer' is neither 'yes' nor 'no'";
+\&    }
+.Ve
+the scope of \f(CW$answer\fR extends from its declaration throughout the rest
+of the conditional (including \f(CWelsif\fR and \f(CWelse\fR clauses, if any),
+but not beyond it.
+.PP
+(None of the foregoing applies to \f(CWif/unless\fR or \f(CWwhile/until\fR
+modifiers appended to simple statements.  Such modifiers are not
+control structures and have no effect on scoping.)
+.PP
+The \f(CWforeach\fR loop defaults to scoping its index variable dynamically
+(in the manner of \f(CWlocal\fR; see below).  However, if the index
+variable is prefixed with the keyword \*(L"my\*(R", then it is lexically
+scoped instead.  Thus in the loop
+.PP
+.Vb 3
+\&    for my $i (1, 2, 3) {
+\&        some_function();
+\&    }
+.Ve
+the scope of \f(CW$i\fR extends to the end of the loop, but not beyond it, and
+so the value of \f(CW$i\fR is unavailable in \fIsome_function()\fR.
 .PP
 Some users may wish to encourage the use of lexically scoped variables.
 As an aid to catching implicit references to package variables,
@@ -483,8 +531,8 @@ lexical of the same name is also visible:
 .Ve
 That will print out 20 and 10.
 .PP
-You may declare \*(L"my\*(R" variables at the outer most scope of a file to
-totally hide any such identifiers from the outside world.  This is similar
+You may declare \*(L"my\*(R" variables at the outermost scope of a file to
+hide any such identifiers totally from the outside world.  This is similar
 to C's static variables at the file level.  To do this with a subroutine
 requires the use of a closure (anonymous function).  If a block (such as
 an \fIeval()\fR, function, or \f(CWpackage\fR) wants to create a private subroutine
@@ -497,7 +545,7 @@ variable containing an anonymous sub reference:
 \&    &$secret_sub();
 .Ve
 As long as the reference is never returned by any function within the
-module, no outside module can see the subroutine, since its name is not in
+module, no outside module can see the subroutine, because its name is not in
 any package's symbol table.  Remember that it's not \fI\s-1REALLY\s0\fR called
 \f(CW$some_pack::secret_version\fR or anything; it's just \f(CW$secret_version\fR,
 unqualified and unqualifiable.
@@ -527,7 +575,7 @@ If this function is being sourced in from a separate file
 via \f(CWrequire\fR or \f(CWuse\fR, then this is probably just fine.  If it's
 all in the main program, you'll need to arrange for the \fImy()\fR 
 to be executed early, either by putting the whole block above
-your pain program, or more likely, merely placing a \s-1BEGIN\s0 
+your pain program, or more likely, placing merely a \s-1BEGIN\s0 
 sub around it to make sure it gets executed before your program
 starts to run:
 .PP
@@ -565,15 +613,15 @@ Synopsis:
 \&    local *merlyn = \e$randal;   # just alias $merlyn, not @merlyn etc 
 .Ve
 A \fIlocal()\fR modifies its listed variables to be local to the enclosing
-block, (or subroutine, \f(CWeval{}\fR or \f(CWdo\fR) and \fIthe any called from
+block, (or subroutine, \f(CWeval{}\fR, or \f(CWdo\fR) and \fIany called from
 within that block\fR.  A \fIlocal()\fR just gives temporary values to global
 (meaning package) variables.  This is known as dynamic scoping.  Lexical
 scoping is done with \*(L"my\*(R", which works more like C's auto declarations.
 .PP
 If more than one variable is given to \fIlocal()\fR, they must be placed in
-parens.  All listed elements must be legal lvalues.  This operator works
+parentheses.  All listed elements must be legal lvalues.  This operator works
 by saving the current values of those variables in its argument list on a
-hidden stack and restoring them upon exiting the block, subroutine or
+hidden stack and restoring them upon exiting the block, subroutine, or
 eval.  This means that called subroutines can also reference the local
 variable, but not the global one.  The argument list may be assigned to if
 desired, which allows you to initialize your local variables.  (If no
@@ -597,7 +645,7 @@ subroutine.  Examples:
 \&    }
 \&    # old %digits restored here
 .Ve
-Because \fIlocal()\fR is a run-time command, and so gets executed every time
+Because \fIlocal()\fR is a run-time command, it gets executed every time
 through a loop.  In releases of Perl previous to 5.0, this used more stack
 storage each time until the loop was exited.  Perl now reclaims the space
 each time through, but it's still more efficient to declare your variables
@@ -611,7 +659,7 @@ as a scalar or an array.  So
 \&    local($foo) = <STDIN>;
 \&    local @FOO = <STDIN>;
 .Ve
-both supply a list context to the righthand side, while
+both supply a list context to the right-hand side, while
 .PP
 .Vb 1
 \&    local $foo = <STDIN>;
@@ -628,12 +676,12 @@ Sometimes you don't want to pass the value of an array to a subroutine
 but rather the name of it, so that the subroutine can modify the global
 copy of it rather than working with a local copy.  In perl you can
 refer to all objects of a particular name by prefixing the name
-with a star: \f(CW*foo\fR.  This is often known as a \*(L"type glob\*(R", since the
+with a star: \f(CW*foo\fR.  This is often known as a \*(L"typeglob\*(R", because the
 star on the front can be thought of as a wildcard match for all the
 funny prefix characters on variables and subroutines and such.
 .PP
-When evaluated, the type glob produces a scalar value that represents
-all the objects of that name, including any filehandle, format or
+When evaluated, the typeglob produces a scalar value that represents
+all the objects of that name, including any filehandle, format, or
 subroutine.  When assigned to, it causes the name mentioned to refer to
 whatever \*(L"*\*(R" value was assigned to it.  Example:
 .PP
@@ -649,21 +697,22 @@ whatever \*(L"*\*(R" value was assigned to it.  Example:
 .Ve
 Note that scalars are already passed by reference, so you can modify
 scalar arguments without using this mechanism by referring explicitly
-to \f(CW$_\fR[0] etc.  You can modify all the elements of an array by passing
+to \f(CW$_[0]\fR etc.  You can modify all the elements of an array by passing
 all the elements as scalars, but you have to use the * mechanism (or
-the equivalent reference mechanism) to push, pop or change the size of
+the equivalent reference mechanism) to push, pop, or change the size of
 an array.  It will certainly be faster to pass the typeglob (or reference).
 .PP
 Even if you don't want to modify an array, this mechanism is useful for
-passing multiple arrays in a single \s-1LIST\s0, since normally the \s-1LIST\s0
+passing multiple arrays in a single \s-1LIST\s0, because normally the \s-1LIST\s0
 mechanism will merge all the array values so that you can't extract out
-the individual arrays.  For more on typeglobs, see the section on \fITypeglobs\fR in the \fIperldata\fR manpage.
+the individual arrays.  For more on typeglobs, see
+the section on \fITypeglobs and Filehandles\fR in the \fIperldata\fR manpage.
 .Sh "Pass by Reference"
 .IX Subsection "Pass by Reference"
-If you want to pass more than one array or hash into a function\*(--or 
-return them from it\*(--and have them maintain their integrity,
-then you're going to have to use an explicit pass-by-reference.
-Before you do that, you need to understand references as detailed in the \fIperlref\fR manpage.
+If you want to pass more than one array or hash into a function\*(--or
+return them from it\*(--and have them maintain their integrity, then
+you're going to have to use an explicit pass-by-reference.  Before you
+do that, you need to understand references as detailed in the \fIperlref\fR manpage.
 This section may not make much sense to you otherwise.
 .PP
 Here are a few simple examples.  First, let's pass in several
@@ -698,9 +747,9 @@ list of keys occurring in all the hashes passed to it:
 \&        return grep { $seen{$_} == @_ } keys %seen;
 \&    } 
 .Ve
-So far, we're just using the normal list return mechanism.
+So far, we're using just the normal list return mechanism.
 What happens if you want to pass or return a hash?  Well, 
-if you're only using one of them, or you don't mind them 
+if you're using only one of them, or you don't mind them 
 concatenating, then the normal calling convention is ok, although
 a little expensive.  
 .PP
@@ -711,7 +760,7 @@ Where people get into trouble is here:
 \&or
 \&    (%a, %b) = func(%c, %d);
 .Ve
-That syntax simply won't work.  It just sets \f(CW@a\fR or \f(CW%a\fR and clears the \f(CW@b\fR or
+That syntax simply won't work.  It sets just \f(CW@a\fR or \f(CW%a\fR and clears the \f(CW@b\fR or
 \f(CW%b\fR.  Plus the function didn't get passed into two separate arrays or
 hashes: it got one long list in \f(CW@_\fR, as always.
 .PP
@@ -748,7 +797,7 @@ It turns out that you can actually do this also:
 .Ve
 Here we're using the typeglobs to do symbol table aliasing.  It's
 a tad subtle, though, and also won't work if you're using \fImy()\fR
-variables, since only globals (well, and \fIlocal()\fRs) are in the symbol table.
+variables, because only globals (well, and \fIlocal()\fRs) are in the symbol table.
 .PP
 If you're passing around filehandles, you could usually just use the bare
 typeglob, like *\s-1STDOUT\s0, but typeglobs references would be better because
@@ -768,18 +817,21 @@ they'll still work properly under \f(CWuse strict 'refs'\fR.  For example:
 \&        return scalar <$fh>;
 \&    }
 .Ve
+Another way to do this is using *\s-1HANDLE\s0{\s-1IO\s0}, see the \fIperlref\fR manpage for usage
+and caveats.
+.PP
 If you're planning on generating new filehandles, you could do this:
 .PP
 .Vb 5
 \&    sub openit {
 \&        my $name = shift;
 \&        local *FH;
-\&        return open (FH, $path) ? \e*FH : undef;
+\&        return open (FH, $path) ? *FH : undef;
 \&    } 
 .Ve
 Although that will actually produce a small memory leak.  See the bottom
-of the \f(CWopen()\fR entry in the \fIperlfunc\fR manpage for a somewhat cleaner way using the FileHandle
-functions supplied with the \s-1POSIX\s0 package.
+of the \f(CWopen()\fR entry in the \fIperlfunc\fR manpage for a somewhat cleaner way using the \s-1IO::\s0Handle
+package.
 .Sh "Prototypes"
 .IX Subsection "Prototypes"
 As of the 5.002 release of perl, if you declare
@@ -789,7 +841,7 @@ As of the 5.002 release of perl, if you declare
 .Ve
 then \fImypush()\fR takes arguments exactly like \fIpush()\fR does.  The declaration
 of the function to be called must be visible at compile time.  The prototype
-only affects the interpretation of new-style calls to the function, where
+affects only the interpretation of new-style calls to the function, where
 new-style is defined as not using the \f(CW&\fR character.  In other words,
 if you call it like a builtin function, then it behaves like a builtin
 function.  If you call it like an old-fashioned subroutine, then it
@@ -798,10 +850,10 @@ this rule that prototypes have no influence on subroutine references
 like \f(CW\e&foo\fR or on indirect subroutine calls like \f(CW&{$subref}\fR.
 .PP
 Method calls are not influenced by prototypes either, because the
-function to be called is indeterminate at compile time, since it depends
+function to be called is indeterminate at compile time, because it depends
 on inheritance.
 .PP
-Since the intent is primarily to let you define subroutines that work
+Because the intent is primarily to let you define subroutines that work
 like builtin commands, here are the prototypes for some other functions
 that parse almost exactly like the corresponding builtins.
 .PP
@@ -844,7 +896,7 @@ A semicolon separates mandatory arguments from optional arguments.
 Note how the last three examples above are treated specially by the parser.
 \fImygrep()\fR is parsed as a true list operator, \fImyrand()\fR is parsed as a
 true unary operator with unary precedence the same as \fIrand()\fR, and
-\fImytime()\fR is truly argumentless, just like \fItime()\fR.  That is, if you
+\fImytime()\fR is truly without arguments, just like \fItime()\fR.  That is, if you
 say
 .PP
 .Vb 1
@@ -864,7 +916,7 @@ The interesting thing about & is that you can generate new syntax with it:
 \&            &$catch;
 \&        }
 \&    }
-\&    sub catch (&) { @_ }
+\&    sub catch (&) { $_[0] }
 .Ve
 .Vb 5
 \&    try {
@@ -877,7 +929,7 @@ That prints \*(L"unphooey\*(R".  (Yes, there are still unresolved
 issues having to do with the visibility of \f(CW@_\fR.  I'm ignoring that
 question for the moment.  (But note that if we make \f(CW@_\fR lexically
 scoped, those anonymous subroutines can act like closures... (Gee,
-is this sounding a little Lispish?  (Nevermind.))))
+is this sounding a little Lispish?  (Never mind.))))
 .PP
 And here's a reimplementation of grep:
 .PP
@@ -921,22 +973,68 @@ returning a list:
 Then you've just supplied an automatic \fIscalar()\fR in front of their
 argument, which can be more than a bit surprising.  The old \f(CW@foo\fR
 which used to hold one thing doesn't get passed in.  Instead,
-the \fIfunc()\fR now gets passed in 1, that is, the number of elments
+the \fIfunc()\fR now gets passed in 1, that is, the number of elements
 in \f(CW@foo\fR.  And the \fIsplit()\fR gets called in a scalar context and
 starts scribbling on your \f(CW@_\fR parameter list.
 .PP
-This is all very powerful, of course, and should only be used in moderation
+This is all very powerful, of course, and should be used only in moderation
 to make the world a better place.  
+.Sh "Constant Functions"
+.IX Subsection "Constant Functions"
+Functions with a prototype of \f(CW()\fR are potential candidates for
+inlining.  If the result after optimization and constant folding is a
+constant then it will be used in place of new-style calls to the
+function.  Old-style calls (that is, calls made using \f(CW&\fR) are not
+affected.
+.PP
+All of the following functions would be inlined.
+.PP
+.Vb 3
+\&    sub PI ()           { 3.14159 }
+\&    sub ST_DEV ()       { 0 }
+\&    sub ST_INO ()       { 1 }
+.Ve
+.Vb 13
+\&    sub FLAG_FOO ()     { 1 << 8 }
+\&    sub FLAG_BAR ()     { 1 << 9 }
+\&    sub FLAG_MASK ()    { FLAG_FOO | FLAG_BAR }
+\&    
+\&    sub OPT_BAZ ()      { 1 }
+\&    sub BAZ_VAL () {
+\&        if (OPT_BAZ) {
+\&            return 23;
+\&        }
+\&        else {
+\&            return 42;
+\&        }
+\&    }
+.Ve
+If you redefine a subroutine which was eligible for inlining you'll get
+a mandatory warning.  (You can use this warning to tell whether or not a
+particular subroutine is considered constant.)  The warning is
+considered severe enough not to be optional because previously compiled
+invocations of the function will still be using the old value of the
+function.  If you need to be able to redefine the subroutine you need to
+ensure that it isn't inlined, either by dropping the \f(CW()\fR prototype
+(which changes the calling semantics, so beware) or by thwarting the
+inlining mechanism in some other way, such as
+.PP
+.Vb 4
+\&    my $dummy;
+\&    sub not_inlined () {
+\&        $dummy || 23
+\&    }
+.Ve
 .Sh "Overriding Builtin Functions"
 .IX Subsection "Overriding Builtin Functions"
-Many builtin functions may be overridden, though this should only be
-tried occasionally and for good reason.  Typically this might be
+Many builtin functions may be overridden, though this should be tried
+only occasionally and for good reason.  Typically this might be
 done by a package attempting to emulate missing builtin functionality
 on a non-Unix system.
 .PP
-Overriding may only be done by importing the name from a
+Overriding may be done only by importing the name from a
 module\*(--ordinary predeclaration isn't good enough.  However, the
-\f(CWsubs\fR pragma (compiler directive) lets you, in effect, predeclare subs
+\f(CWsubs\fR pragma (compiler directive) lets you, in effect, pre-declare subs
 via the import syntax, and these names may then override the builtin ones:
 .PP
 .Vb 3
@@ -945,7 +1043,7 @@ via the import syntax, and these names may then override the builtin ones:
 \&    sub chdir { ... }
 .Ve
 Library modules should not in general export builtin names like \*(L"open\*(R"
-or \*(L"chdir\*(R" as part of their default \f(CW@EXPORT\fR list, since these may
+or \*(L"chdir\*(R" as part of their default \f(CW@EXPORT\fR list, because these may
 sneak into someone else's namespace and change the semantics unexpectedly.
 Instead, if the module adds the name to the \f(CW@EXPORT_OK\fR list, then it's
 possible for a user to import the name explicitly, but not implicitly.
@@ -992,7 +1090,7 @@ should just call \fIsystem()\fR with those arguments.  All you'd do is this:
 \&    who('am', 'i');
 \&    ls('-l');
 .Ve
-In fact, if you preclare the functions you want to call that way, you don't
+In fact, if you pre-declare the functions you want to call that way, you don't
 even need the parentheses:
 .PP
 .Vb 4

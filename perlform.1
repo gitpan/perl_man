@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFORM 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLFORM 1 "perl 5.003, patch 93" "7/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLFORM 1"
 .UC
 .IX Name "perlform - Perl formats"
@@ -200,8 +200,8 @@ Output record formats are declared as follows:
 \&    FORMLIST
 \&    .
 .Ve
-If name is omitted, format \*(L"STDOUT\*(R" is defined.  FORMLIST consists of a
-sequence of lines, each of which may be of one of three types:
+If name is omitted, format \*(L"STDOUT\*(R" is defined.  FORMLIST consists of
+a sequence of lines, each of which may be of one of three types:
 .Ip "1." 4
 .IX Item "1."
 A comment, indicated by putting a \*(L'#\*(R' in the first column.
@@ -236,7 +236,14 @@ separated by commas.  The expressions are all evaluated in a list context
 before the line is processed, so a single list expression could produce
 multiple list elements.  The expressions may be spread out to more than
 one line if enclosed in braces.  If so, the opening brace must be the first
-token on the first line.
+token on the first line.  If an expression evaluates to a number with a
+decimal part, and if the corresponding picture specifies that the decimal
+part should appear in the output (that is, any picture except multiple \*(L"#\*(R"
+characters \fBwithout\fR an embedded \*(L"."), the character used for the decimal
+point is \fBalways\fR determined by the current \s-1LC_NUMERIC\s0 locale.  This
+means that, if, for example, the run-time environment happens to specify a
+German locale, \*(L",\*(R" will be used instead of the default \*(L".\*(R".  See
+the \fIperllocale\fR manpage and the section on \fI\s-1WARNINGS\s0\fR for more information.
 .PP
 Picture fields that begin with ^ rather than @ are treated specially.
 With a # field, the field is blanked out if the value is undefined.  For
@@ -312,17 +319,17 @@ Examples:
 \& .
 .Ve
 It is possible to intermix \fIprint()\fRs with \fIwrite()\fRs on the same output
-channel, but you'll have to handle $\- ($\s-1FORMAT_LINES_LEFT\s0)
+channel, but you'll have to handle \f(CW$-\fR (\f(CW$FORMAT_LINES_LEFT\fR)
 yourself.
 .Sh "Format Variables"
 .IX Subsection "Format Variables"
-The current format name is stored in the variable \f(CW$~\fR ($\s-1FORMAT_NAME\s0),
-and the current top of form format name is in \f(CW$^\fR ($\s-1FORMAT_TOP_NAME\s0).
-The current output page number is stored in \f(CW$%\fR ($\s-1FORMAT_PAGE_NUMBER\s0),
-and the number of lines on the page is in \f(CW$=\fR ($\s-1FORMAT_LINES_PER_PAGE\s0).
+The current format name is stored in the variable \f(CW$~\fR (\f(CW$FORMAT_NAME\fR),
+and the current top of form format name is in \f(CW$^\fR (\f(CW$FORMAT_TOP_NAME\fR).
+The current output page number is stored in \f(CW$%\fR (\f(CW$FORMAT_PAGE_NUMBER\fR),
+and the number of lines on the page is in \f(CW$=\fR (\f(CW$FORMAT_LINES_PER_PAGE\fR).
 Whether to autoflush output on this handle is stored in \f(CW$|\fR
-($\s-1OUTPUT_AUTOFLUSH\s0).  The string output before each top of page (except
-the first) is stored in \f(CW$^L\fR ($\s-1FORMAT_FORMFEED\s0).  These variables are
+(\f(CW$OUTPUT_AUTOFLUSH\fR).  The string output before each top of page (except
+the first) is stored in \f(CW$^L\fR (\f(CW$FORMAT_FORMFEED\fR).  These variables are
 set on a per-filehandle basis, so you'll need to \fIselect()\fR into a different
 one to affect them:
 .PP
@@ -365,7 +372,7 @@ method names instead:
 Much better!
 .SH "NOTES"
 .IX Header "NOTES"
-Since the values line may contain arbitrary expressions (for at fields, 
+Because the values line may contain arbitrary expressions (for at fields, 
 not caret fields), you can farm out more sophisticated processing
 to other functions, like \fIsprintf()\fR or one of your own.  For example:
 .PP
@@ -484,12 +491,27 @@ is to \fIprintf()\fR, do this:
 \& END
 \&    print $string;
 .Ve
-.SH "WARNING"
-.IX Header "WARNING"
+.SH "WARNINGS"
+.IX Header "WARNINGS"
+The lone dot that ends a format can also prematurely end an E\-Mail
+message passing through a misconfigured Internet mailer (and based on
+experience, such misconfiguration is the rule, not the exception).  So
+when sending format code through E\-Mail, you should indent it so that
+the format-ending dot is not on the left margin; this will prevent
+E\-Mail cutoff.
+.PP
 Lexical variables (declared with \*(L"my") are not visible within a
 format unless the format is declared within the scope of the lexical
-variable.  (They weren't visible at all before version 5.001.)  Furthermore,
-lexical aliases will not be compiled correctly: see
-the \f(CWmy\fR entry in the \fIperlfunc\fR manpage for other issues.
+variable.  (They weren't visible at all before version 5.001.)
+.PP
+Formats are the only part of Perl which unconditionally use information
+from a program's locale; if a program's environment specifies an
+LC_NUMERIC locale, it is always used to specify the decimal point
+character in formatted output.  Perl ignores all other aspects of locale
+handling unless the \f(CWuse locale\fR pragma is in effect.  Formatted output
+cannot be controlled by \f(CWuse locale\fR because the pragma is tied to the
+block structure of the program, and, for historical reasons, formats
+exist outside that block structure.  See the \fIperllocale\fR manpage for further
+discussion of locale handling.
 
 .rn }` ''

@@ -73,10 +73,10 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLIPC 1 "perl 5.003, patch 05" "9/Sep/96" "Perl Programmers Reference Guide"
+.TH PERLIPC 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLIPC 1"
 .UC
-.IX Name "perlipc - Perl interprocess communication (signals, fifos, pipes, safe subprocceses, sockets, and semaphores)"
+.IX Name "perlipc - Perl interprocess communication (signals, fifos, pipes, safe subprocesses, sockets, and semaphores)"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -171,7 +171,7 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-perlipc \- Perl interprocess communication (signals, fifos, pipes, safe subprocceses, sockets, and semaphores)
+perlipc \- Perl interprocess communication (signals, fifos, pipes, safe subprocesses, sockets, and semaphores)
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 The basic IPC facilities of Perl are built out of the good old Unix
@@ -218,7 +218,7 @@ indexed by name to get the number:
 \&        $i++;
 \&    }   
 .Ve
-So to check whether signal 17 and SIGALRM were the same, just do this:
+So to check whether signal 17 and SIGALRM were the same, do just this:
 .PP
 .Vb 4
 \&    print "signal #17 = $signame[17]\en";
@@ -272,16 +272,18 @@ handlers:
 .Ve
 But that will be problematic for the more complicated handlers that need
 to re-install themselves.  Because Perl's signal mechanism is currently
-based on the \fIsignal\fR\|(3) function from the C library, you may somtimes be so
+based on the \fIsignal\fR\|(3) function from the C library, you may sometimes be so
 misfortunate as to run on systems where that function is \*(L"broken\*(R", that
 is, it behaves in the old unreliable SysV way rather than the newer, more
 reasonable BSD and POSIX fashion.  So you'll see defensive people writing
 signal handlers like this:
 .PP
-.Vb 6
+.Vb 8
 \&    sub REAPER { 
-\&        $SIG{CHLD} = \e&REAPER;  # loathe sysV
 \&        $waitedpid = wait;
+\&        # loathe sysV: it makes us not only reinstate
+\&        # the handler, but place it after the wait
+\&        $SIG{CHLD} = \e&REAPER;  
 \&    }
 \&    $SIG{CHLD} = \e&REAPER;
 \&    # now do something that forks...
@@ -289,13 +291,13 @@ signal handlers like this:
 or even the more elaborate:
 .PP
 .Vb 10
-\&    use POSIX ":wait_h";
+\&    use POSIX ":sys_wait_h";
 \&    sub REAPER { 
 \&        my $child;
-\&        $SIG{CHLD} = \e&REAPER;  # loathe sysV
 \&        while ($child = waitpid(-1,WNOHANG)) {
 \&            $Kid_Status{$child} = $?;
 \&        } 
+\&        $SIG{CHLD} = \e&REAPER;  # still loathe sysV
 \&    }
 \&    $SIG{CHLD} = \e&REAPER;
 \&    # do something that forks...
@@ -349,9 +351,9 @@ on the other end.
 .PP
 For example, let's say you'd like to have your \fI.signature\fR file be a
 named pipe that has a Perl program on the other end.  Now every time any
-program (like a mailer, newsreader, finger program, etc.) tries to read
+program (like a mailer, news reader, finger program, etc.) tries to read
 from that file, the reading program will block and your program will
-supply the the new signature.  We'll use the pipe-checking file test \fB\-p\fR
+supply the new signature.  We'll use the pipe-checking file test \fB\-p\fR
 to find out whether anyone (or anything) has accidentally removed our fifo.
 .PP
 .Vb 3
@@ -372,7 +374,7 @@ to find out whether anyone (or anything) has accidentally removed our fifo.
 \&        open (FIFO, "> $FIFO") || die "can't write $FIFO: $!";
 \&        print FIFO "John Smith (smith\e@host.org)\en", `fortune -s`;
 \&        close FIFO;
-\&        sleep 2;    # to avoid dup sigs
+\&        sleep 2;    # to avoid dup signals
 \&    }
 .Ve
 .SH "Using \fIopen()\fR for IPC"
@@ -412,7 +414,7 @@ read from the file \fIf1\fR, the process \fIcmd1\fR, standard input (\fItmpfile\
 in this case), the \fIf2\fR file, the \fIcmd2\fR command, and finally the \fIf3\fR
 file.  Pretty nifty, eh?
 .PP
-You might notice that you could use backticks for much the
+You might notice that you could use back-ticks for much the
 same effect as opening a pipe for reading:
 .PP
 .Vb 2
@@ -432,7 +434,7 @@ exist: the \fIopen()\fR will in all likelihood succeed (it only reflects the
 \fIfork()\fR's success), but then your output will fail\*(--spectacularly.  Perl
 can't know whether the command worked because your command is actually
 running in a separate process whose \fIexec()\fR might have failed.  Therefore,
-while readers of bogus commands just return a quick end of file, writers
+while readers of bogus commands return just a quick end of file, writers
 to bogus command will trigger a signal they'd better be prepared to
 handle.  Consider:
 .PP
@@ -484,11 +486,11 @@ you opened whatever your kid writes to his \s-1STDOUT\s0.
 .Ve
 Another common use for this construct is when you need to execute
 something without the shell's interference.  With \fIsystem()\fR, it's
-straightforward, but you can't use a pipe open or backticks safely.
+straightforward, but you can't use a pipe open or back-ticks safely.
 That's because there's no way to stop the shell from getting its hands on
 your arguments.   Instead, use lower-level control to call \fIexec()\fR directly.
 .PP
-Here's a safe backtick or pipe open for read:
+Here's a safe back-tick or pipe open for read:
 .PP
 .Vb 2
 \&    # add error processing as above
@@ -533,8 +535,8 @@ And here's a safe pipe open for writing:
 .Ve
 Note that these operations are full Unix forks, which means they may not be
 correctly implemented on alien systems.  Additionally, these are not true
-multithreading.  If you'd like to learn more about threading, see the
-\fImodules\fR file mentioned below in the the section on \fI\s-1SEE\s0 \s-1ALSO\s0\fR section.
+multi-threading.  If you'd like to learn more about threading, see the
+\fImodules\fR file mentioned below in the \s-1SEE\s0 \s-1ALSO\s0 section.
 .Sh "Bidirectional Communication"
 .IX Subsection "Bidirectional Communication"
 While this works reasonably well for unidirectional communication, what
@@ -551,7 +553,7 @@ entirely on the diagnostic message:
 \&    Can't do bidirectional pipe at -e line 1.
 .Ve
 If you really want to, you can use the standard \fIopen2()\fR library function
-to catch both ends.  There's also an \fIopen3()\fR for tridirectional I/O so you
+to catch both ends.  There's also an \fIopen3()\fR for tri-directional I/O so you
 can also catch your child's \s-1STDERR\s0, but doing so would then require an
 awkward \fIselect()\fR loop and wouldn't allow you to use normal Perl input
 operations.
@@ -573,10 +575,10 @@ Here's an example of using \fIopen2()\fR:
 \&    print Writer "stuff\en";
 \&    $got = <Reader>;
 .Ve
-The problem with this is that Unix buffering is going to really
-ruin your day.  Even though your \f(CWWriter\fR filehandle is autoflushed,
+The problem with this is that Unix buffering is really going to
+ruin your day.  Even though your \f(CWWriter\fR filehandle is auto-flushed,
 and the process on the other end will get your data in a timely manner,
-you can't usually do anything to force it to actually give it back to you
+you can't usually do anything to force it to give it back to you
 in a similarly quick fashion.  In this case, we could, because we 
 gave \fIcat\fR a \fB\-u\fR flag to make it unbuffered.  But very few Unix
 commands are designed to operate over pipes, so this seldom works
@@ -596,16 +598,16 @@ pseudo-ttys to make your program behave more reasonably:
 .Ve
 This way you don't have to have control over the source code of the
 program you're using.  The \fIComm\fR library also has \fIexpect()\fR 
-and \fIinteract()\fR functions.  Find the library (and hopefully its 
+and \fIinteract()\fR functions.  Find the library (and we hope its 
 successor \fI\s-1IPC::\s0Chat\fR) at your nearest \s-1CPAN\s0 archive as detailed
-in the the section on \fI\s-1SEE\s0 \s-1ALSO\s0\fR section below.
+in the \s-1SEE\s0 \s-1ALSO\s0 section below.
 .SH "Sockets: Client/Server Communication"
 .IX Header "Sockets: Client/Server Communication"
-While not limited to Unix-derived operating systems (e.g. WinSock on PCs
+While not limited to Unix-derived operating systems (e.g., WinSock on PCs
 provides socket support, as do some VMS libraries), you may not have
-sockets on your system, in which this section probably isn't going to do
-you much good.  With sockets, you can do both virtual circuits (i.e. TCP
-streams) and datagrams (i.e. UDP packets).  You may be able to do even more
+sockets on your system, in which case this section probably isn't going to do
+you much good.  With sockets, you can do both virtual circuits (i.e., TCP
+streams) and datagrams (i.e., UDP packets).  You may be able to do even more
 depending on your system.
 .PP
 The Perl function calls for dealing with sockets have the same names as
@@ -656,7 +658,7 @@ Here's a sample \s-1TCP\s0 client using Internet-domain sockets:
 .Ve
 And here's a corresponding server to go along with it.  We'll
 leave the address as \s-1INADDR_ANY\s0 so that the kernel can choose
-the appropriate interface on multihomed hosts.  If you want sit
+the appropriate interface on multi-homed hosts.  If you want sit
 on a particular interface (like the external side of a gateway
 or firewall machine), you should fill this in with your real address
 instead.
@@ -672,9 +674,12 @@ instead.
 .Vb 1
 \&    sub logmsg { print "$0 $$: @_ at ", scalar localtime, "\en" } 
 .Ve
-.Vb 7
+.Vb 3
 \&    my $port = shift || 2345;
 \&    my $proto = getprotobyname('tcp');
+\&    $port = $1 if $port =~ /(\ed+)/; # untaint port number
+.Ve
+.Vb 5
 \&    socket(Server, PF_INET, SOCK_STREAM, $proto)        || die "socket: $!";
 \&    setsockopt(Server, SOL_SOCKET, SO_REUSEADDR, 
 \&                                        pack("l", 1))   || die "setsockopt: $!";
@@ -705,7 +710,7 @@ instead.
 \&                        scalar localtime, "\en";
 \&    } 
 .Ve
-And here's a multithreaded version.  It's multithreaded in that
+And here's a multi-threaded version.  It's multi-threaded in that
 like most typical servers, it spawns (forks) a slave server to 
 handle the client request so that the master server can quickly
 go back to service a new client.
@@ -742,8 +747,8 @@ go back to service a new client.
 .Ve
 .Vb 5
 \&    sub REAPER { 
-\&        $SIG{CHLD} = \e&REAPER;  # loathe sysV
 \&        $waitedpid = wait;
+\&        $SIG{CHLD} = \e&REAPER;  # loathe sysV
 \&        logmsg "reaped $waitedpid" . ($? ? " with exit $?" : '');
 \&    }
 .Ve
@@ -755,7 +760,7 @@ go back to service a new client.
 \&          ($paddr = accept(Client,Server)) || $waitedpid; 
 \&          $waitedpid = 0, close Client) 
 \&    {
-\&        next if $waitedpid;
+\&        next if $waitedpid and not $paddr;
 \&        my($port,$iaddr) = sockaddr_in($paddr);
 \&        my $name = gethostbyaddr($iaddr,AF_INET);
 .Ve
@@ -790,9 +795,9 @@ go back to service a new client.
 \&            return;
 \&        } elsif ($pid) {
 \&            logmsg "begat $pid";
-\&            return; # i'm the parent
+\&            return; # I'm the parent
 \&        }
-\&        # else i'm the child -- go spawn
+\&        # else I'm the child -- go spawn
 .Ve
 .Vb 5
 \&        open(STDIN,  "<&Client")   || die "can't dup client to stdin";
@@ -885,7 +890,7 @@ Here's a sample Unix-domain client:
 .Vb 7
 \&    $rendezvous = shift || '/tmp/catsock';
 \&    socket(SOCK, PF_UNIX, SOCK_STREAM, 0)       || die "socket: $!";
-\&    connect(SOCK, sockaddr_un($remote))         || die "connect: $!";
+\&    connect(SOCK, sockaddr_un($rendezvous))     || die "connect: $!";
 \&    while ($line = <SOCK>) {
 \&        print $line;
 \&    } 
@@ -958,7 +963,7 @@ all, let alone in order and unmangled.  Still, \s-1UDP\s0 offers some advantages
 over \s-1TCP\s0, including being able to \*(L"broadcast\*(R" or \*(L"multicast\*(R" to a whole
 bunch of destination hosts at once (usually on your local subnet).  If you
 find yourself overly concerned about reliability and start building checks
-into your message system, then you probably should just use \s-1TCP\s0 to start
+into your message system, then you probably should use just \s-1TCP\s0 to start
 with.
 .PP
 Here's a \s-1UDP\s0 program similar to the sample Internet \s-1TCP\s0 client given
@@ -1154,7 +1159,7 @@ your socket programs this way for optimal success, and don't forget to add
 All these routines create system-specific portability problems.  As noted
 elsewhere, Perl is at the mercy of your C libraries for much of its system
 behaviour.  It's probably safest to assume broken SysV semantics for
-signals and to stick with simple TCP and UDP socket operations; e.g. don't
+signals and to stick with simple TCP and UDP socket operations; e.g., don't
 try to pass open file descriptors over a local UDP datagram socket if you
 want your code to stand a chance of being portable.
 .PP
@@ -1171,7 +1176,7 @@ Besides the obvious functions in the \fIperlfunc\fR manpage, you should also che
 the \fImodules\fR file at your nearest CPAN site.  (See the \fIperlmod\fR manpage or best
 yet, the \fIPerl FAQ\fR for a description of what CPAN is and where to get it.)
 Section 5 of the \fImodules\fR file is devoted to \*(L"Networking, Device Control
-(modems) and Interprocess Communication\*(R", and contains numerous unbundled
+(modems), and Interprocess Communication\*(R", and contains numerous unbundled
 modules numerous networking modules, Chat and Expect operations, CGI
 programming, DCE, FTP, IPC, NNTP, Proxy, Ptty, RPC, SNMP, SMTP, Telnet,
 Threads, and ToolTalk\*(--just to name a few.

@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLREF 1 "perl 5.003, patch 05" "4/Sep/96" "Perl Programmers Reference Guide"
+.TH PERLREF 1 "perl 5.003, patch 93" "30/Dec/96" "Perl Programmers Reference Guide"
 .IX Title "PERLREF 1"
 .UC
 .IX Name "perlref - Perl references and nested data structures"
@@ -177,9 +177,9 @@ perlref \- Perl references and nested data structures
 Before release 5 of Perl it was difficult to represent complex data
 structures, because all references had to be symbolic, and even that was
 difficult to do when you wanted to refer to a variable rather than a
-symbol table entry.  Perl 5 not only makes it easier to use symbolic
+symbol table entry.  Perl not only makes it easier to use symbolic
 references to variables, but lets you have \*(L"hard\*(R" references to any piece
-of data.  Any scalar may hold a hard reference.  Since arrays and hashes
+of data.  Any scalar may hold a hard reference.  Because arrays and hashes
 contain scalars, you can now easily build arrays of arrays, arrays of
 hashes, hashes of arrays, arrays of hashes of functions, and so on.
 .PP
@@ -194,7 +194,7 @@ everything in Perl is an object, but we usually reserve the word for
 references to objects that have been officially \*(L"blessed\*(R" into a class package.)
 .PP
 A symbolic reference contains the name of a variable, just as a
-symbolic link in the filesystem merely contains the name of a file.  
+symbolic link in the filesystem contains merely the name of a file.  
 The \f(CW*glob\fR notation is a kind of symbolic reference.  Hard references
 are more like hard links in the file system: merely another way
 at getting at the same underlying object, irrespective of its name.
@@ -210,7 +210,7 @@ References can be constructed several ways.
 .IX Item "1."
 By using the backslash operator on a variable, subroutine, or value.
 (This works much like the & (address-of) operator works in C.)  Note
-that this typically creates \fI\s-1ANOTHER\s0\fR reference to a variable, since
+that this typically creates \fI\s-1ANOTHER\s0\fR reference to a variable, because
 there's already a reference to the variable in the symbol table.  But
 the symbol table reference might go away, and you'll still have the
 reference that the backslash returned.  Here are some examples:
@@ -220,8 +220,13 @@ reference that the backslash returned.  Here are some examples:
 \&    $arrayref  = \e@ARGV;
 \&    $hashref   = \e%ENV;
 \&    $coderef   = \e&handler;
-\&    $globref   = \e*STDOUT;
+\&    $globref   = \e*foo;
 .Ve
+It isn't possible to create a true reference to an \s-1IO\s0 handle (filehandle or
+dirhandle) using the backslash operator.  See the explanation of the
+*foo{\s-1THING\s0} syntax below.  (However, you're apt to find Perl code
+out there using globrefs as though they were \s-1IO\s0 handles, which is 
+grandfathered into continued functioning.)
 .Ip "2." 4
 .IX Item "2."
 A reference to an anonymous array can be constructed using square
@@ -233,7 +238,7 @@ brackets:
 Here we've constructed a reference to an anonymous array of three elements
 whose final element is itself reference to another anonymous array of three
 elements.  (The multidimensional syntax described later can be used to
-access this.  For example, after the above, \f(CW$arrayref\fR\->[2][1] would have
+access this.  For example, after the above, \f(CW$arrayref->[2][1]\fR would have
 the value \*(L"b\*(R".)
 .Sp
 Note that taking a reference to an enumerated list is not the same
@@ -338,7 +343,7 @@ Note particularly that \f(CW$x\fR continues to refer to the value passed into
 scope by the time the anonymous subroutine runs.  That's what closure
 is all about.
 .Sp
-This only applies to lexical variables, by the way.  Dynamic variables
+This applies to only lexical variables, by the way.  Dynamic variables
 continue to work as they have always worked.  Closure is not something
 that most Perl programmers need trouble themselves about to begin with.
 .Ip "5." 4
@@ -357,28 +362,64 @@ named \fInew()\fR, but don't have to be:
 .Ip "6." 4
 .IX Item "6."
 References of the appropriate type can spring into existence if you
-dereference them in a context that assumes they exist.  Since we haven't
+dereference them in a context that assumes they exist.  Because we haven't
 talked about dereferencing yet, we can't show you any examples yet.
 .Ip "7." 4
 .IX Item "7."
-References to filehandles can be created by taking a reference to 
-a typeglob.  This is currently the best way to pass filehandles into or
+A reference can be created by using a special syntax, lovingly known as
+the *foo{\s-1THING\s0} syntax.  *foo{\s-1THING\s0} returns a reference to the \s-1THING\s0
+slot in *foo (which is the symbol table entry which holds everything
+known as foo).
+.Sp
+.Vb 6
+\&    $scalarref = *foo{SCALAR};
+\&    $arrayref  = *ARGV{ARRAY};
+\&    $hashref   = *ENV{HASH};
+\&    $coderef   = *handler{CODE};
+\&    $ioref     = *STDIN{IO};
+\&    $globref   = *foo{GLOB};
+.Ve
+All of these are self-explanatory except for *foo{\s-1IO\s0}.  It returns the
+\s-1IO\s0 handle, used for file handles (the \f(CWopen\fR entry in the \fIperlfunc\fR manpage), sockets
+(the \f(CWsocket\fR entry in the \fIperlfunc\fR manpage and the \f(CWsocketpair\fR entry in the \fIperlfunc\fR manpage), and directory handles
+(the \f(CWopendir\fR entry in the \fIperlfunc\fR manpage).  For compatibility with previous versions of
+Perl, *foo{\s-1FILEHANDLE\s0} is a synonym for *foo{\s-1IO\s0}.
+.Sp
+*foo{\s-1THING\s0} returns undef if that particular \s-1THING\s0 hasn't been used yet,
+except in the case of scalars.  *foo{\s-1SCALAR\s0} returns a reference to an
+anonymous scalar if \f(CW$foo\fR hasn't been used yet.  This might change in a
+future release.
+.Sp
+The use of *foo{\s-1IO\s0} is the best way to pass bareword filehandles into or
 out of subroutines, or to store them in larger data structures.
 .Sp
 .Vb 5
-\&    splutter(\e*STDOUT);
+\&    splutter(*STDOUT{IO});
 \&    sub splutter {
 \&        my $fh = shift;
 \&        print $fh "her um well a hmmm\en";
 \&    }
 .Ve
 .Vb 5
-\&    $rec = get_rec(\e*STDIN);
+\&    $rec = get_rec(*STDIN{IO});
 \&    sub get_rec {
 \&        my $fh = shift;
 \&        return scalar <$fh>;
 \&    }
 .Ve
+Beware, though, that you can't do this with a routine which is going to
+open the filehandle for you, because *\s-1HANDLE\s0{\s-1IO\s0} will be undef if \s-1HANDLE\s0
+hasn't been used yet.  Use \e*\s-1HANDLE\s0 for that sort of thing instead.
+.Sp
+Using \e*\s-1HANDLE\s0 (or *\s-1HANDLE\s0) is another way to use and store non-bareword
+filehandles (before perl version 5.002 it was the only way).  The two
+methods are largely interchangeable, you can do
+.Sp
+.Vb 2
+\&    splutter(\e*STDOUT);
+\&    $rec = get_rec(\e*STDIN);
+.Ve
+with the above subroutine definitions.
 .PP
 That's it for creating references.  By now you're probably dying to
 know how to use references to get back to your long-lost data.  There
@@ -421,7 +462,7 @@ previous examples could be written like this:
 \&    ${$arrayref}[0] = "January";
 \&    ${$hashref}{"KEY"} = "VALUE";
 \&    &{$coderef}(1,2,3);
-\&    $globref->print("output\en");  # iff you use FileHandle
+\&    $globref->print("output\en");  # iff IO::Handle is loaded
 .Ve
 Admittedly, it's a little silly to use the curlies in this case, but
 the \s-1BLOCK\s0 can contain any arbitrary expression, in particular,
@@ -433,7 +474,7 @@ subscripted expressions:
 Because of being able to omit the curlies for the simple case of \f(CW$$x\fR,
 people often make the mistake of viewing the dereferencing symbols as
 proper operators, and wonder about their precedence.  If they were,
-though, you could use parens instead of braces.  That's not the case.
+though, you could use parentheses instead of braces.  That's not the case.
 Consider the difference below; case 0 is a short-hand version of case 1,
 \fI\s-1NOT\s0\fR case 2:
 .Sp
@@ -500,7 +541,7 @@ reference is pointing to.  See the \fIperlfunc\fR manpage.
 The \fIbless()\fR operator may be used to associate a reference with a package
 functioning as an object class.  See the \fIperlobj\fR manpage.
 .PP
-A typeglob may be dereferenced the same way a reference can, since
+A typeglob may be dereferenced the same way a reference can, because
 the dereference syntax always indicates the kind of reference desired.
 So \f(CW${*foo}\fR and \f(CW${\e$foo}\fR both indicate the same scalar variable.
 .PP
@@ -517,7 +558,7 @@ dereferenced by \f(CW@{...}\fR and stuck into the double-quoted string. This
 chicanery is also useful for arbitrary expressions:
 .PP
 .Vb 1
-\&    print "That yeilds @{[$n + 5]} widgets\en";
+\&    print "That yields @{[$n + 5]} widgets\en";
 .Ve
 .Sh "Symbolic references"
 .IX Subsection "Symbolic references"
@@ -572,8 +613,8 @@ This will still print 10, not 20.  Remember that \fIlocal()\fR affects package
 variables, which are all \*(L"global\*(R" to the package.
 .Sh "Not-so-symbolic references"
 .IX Subsection "Not-so-symbolic references"
-A new feature contributing to readability in 5.001 is that the brackets
-around a symbolic reference behave more like quotes, just as they
+A new feature contributing to readability in perl version 5.001 is that the
+brackets around a symbolic reference behave more like quotes, just as they
 always have within a string.  That is,
 .PP
 .Vb 2
@@ -593,7 +634,7 @@ and even
 \&    print ${ push } . "over";
 .Ve
 will have the same effect.  (This would have been a syntax error in
-5.000, though Perl 4 allowed it in the spaceless form.)  Note that this
+Perl 5.000, though Perl 4 allowed it in the spaceless form.)  Note that this
 construct is \fInot\fR considered to be a symbolic reference when you're
 using strict refs:
 .PP
@@ -609,7 +650,7 @@ subscripting a hash.  So now, instead of writing
 .Vb 1
 \&    $array{ "aaa" }{ "bbb" }{ "ccc" }
 .Ve
-you can just write
+you can write just
 .PP
 .Vb 1
 \&    $array{ aaa }{ bbb }{ ccc }
@@ -629,7 +670,7 @@ makes it more than a bareword:
 \&    $array{ shift @_ }
 .Ve
 The \fB\-w\fR switch will warn you if it interprets a reserved word as a string.
-But it will no longer warn you about using lowercase words, since the
+But it will no longer warn you about using lowercase words, because the
 string is effectively quoted.
 .SH "WARNING"
 .IX Header "WARNING"
@@ -640,7 +681,7 @@ converted into a string:
 \&    $x{ \e$a } = $a;
 .Ve
 If you try to dereference the key, it won't do a hard dereference, and 
-you won't accomplish what you're attemping.  You might want to do something
+you won't accomplish what you're attempting.  You might want to do something
 more like
 .PP
 .Vb 2

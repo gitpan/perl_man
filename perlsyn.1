@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSYN 1 "perl 5.003, patch 05" "28/Mar/96" "Perl Programmers Reference Guide"
+.TH PERLSYN 1 "perl 5.003, patch 93" "28/Jan/97" "Perl Programmers Reference Guide"
 .IX Title "PERLSYN 1"
 .UC
 .IX Name "perlsyn - Perl syntax"
@@ -204,7 +204,7 @@ take effect at compile time.  Typically all the declarations are put at
 the beginning or the end of the script.  However, if you're using 
 lexically-scoped private variables created with \fImy()\fR, you'll have to make sure
 your format or subroutine definition is within the same block scope
-as the my if you expect to to be able to access those private variables.
+as the my if you expect to be able to access those private variables.
 .PP
 Declaring a subroutine allows a subroutine name to be used as if it were a
 list operator from that point forward in the program.  You can declare a
@@ -232,7 +232,7 @@ The only kind of simple statement is an expression evaluated for its
 side effects.  Every simple statement must be terminated with a
 semicolon, unless it is the final statement in a block, in which case
 the semicolon is optional.  (A semicolon is still encouraged there if the
-block takes up more than one line, since you may eventually add another line.)
+block takes up more than one line, because you may eventually add another line.)
 Note that there are some operators like \f(CWeval {}\fR and \f(CWdo {}\fR that look
 like compound statements, but aren't (they're just TERMs in an expression), 
 and thus need an explicit termination if used as the last item in a statement.
@@ -262,7 +262,7 @@ can write loops like:
 \&    } until $line  eq ".\en";
 .Ve
 See the \f(CWdo\fR entry in the \fIperlfunc\fR manpage.  Note also that the loop control
-statements described later will \fI\s-1NOT\s0\fR work in this construct, since
+statements described later will \fI\s-1NOT\s0\fR work in this construct, because
 modifiers don't take loop labels.  Sorry.  You can always wrap
 another block around it to do that sort of thing.
 .Sh "Compound statements"
@@ -300,7 +300,7 @@ all do the same thing:
 \&    open(FOO) ? 'hi mom' : die "Can't open $FOO: $!";
 \&                        # a bit exotic, that last one
 .Ve
-The \f(CWif\fR statement is straightforward.  Since BLOCKs are always
+The \f(CWif\fR statement is straightforward.  Because BLOCKs are always
 bounded by curly brackets, there is never any ambiguity about which
 \f(CWif\fR an \f(CWelse\fR goes with.  If you use \f(CWunless\fR in place of \f(CWif\fR,
 the sense of the test is reversed.
@@ -371,7 +371,7 @@ which is Perl short-hand for the more explicitly written version:
 \&        # now process $line
 \&    } 
 .Ve
-Or here's a a simpleminded Pascal comment stripper (warning: assumes no { or } in strings)
+Or here's a simpleminded Pascal comment stripper (warning: assumes no { or } in strings).
 .PP
 .Vb 14
 \&    LINE: while (<STDIN>) {
@@ -396,11 +396,8 @@ If the word \f(CWwhile\fR is replaced by the word \f(CWuntil\fR, the sense of th
 test is reversed, but the conditional is still tested before the first
 iteration.
 .PP
-In either the \f(CWif\fR or the \f(CWwhile\fR statement, you may replace \*(L"(\s-1EXPR\s0)\*(R"
-with a \s-1BLOCK\s0, and the conditional is true if the value of the last
-statement in that block is true.  While this \*(L"feature\*(R" continues to work in 
-version 5, it has been deprecated, so please change any occurrences of \*(L"if \s-1BLOCK\s0\*(R" to
-\*(L"if (do \s-1BLOCK\s0)\*(R".
+The form \f(CWwhile/if BLOCK BLOCK\fR, available in Perl 4, is no longer
+available.   Replace any occurrence of \f(CWif BLOCK\fR by \f(CWif (do BLOCK)\fR.
 .Sh "For Loops"
 .IX Subsection "For Loops"
 Perl's C\-style \f(CWfor\fR loop works exactly like the corresponding \f(CWwhile\fR loop;
@@ -421,6 +418,9 @@ is the same as this:
 \&        $i++;
 \&    }
 .Ve
+(There is one minor difference: The first form implies a lexical scope
+for variables declared with \f(CWmy\fR in the initialization expression.)
+.PP
 Besides the normal array index looping, \f(CWfor\fR can lend itself
 to many other interesting applications.  Here's one that avoids the
 problem you get into if you explicitly test for end-of-file on 
@@ -437,12 +437,14 @@ hang.
 .Sh "Foreach Loops"
 .IX Subsection "Foreach Loops"
 The \f(CWforeach\fR loop iterates over a normal list value and sets the
-variable \s-1VAR\s0 to be each element of the list in turn.  The variable is
-implicitly local to the loop and regains its former value upon exiting the
-loop.  If the variable was previously declared with \f(CWmy\fR, it uses that
-variable instead of the global one, but it's still localized to the loop.
-This can cause problems if you have subroutine or format declarations
-within that block's scope.
+variable \s-1VAR\s0 to be each element of the list in turn.  If the variable
+is preceded with the keyword \f(CWmy\fR, then it is lexically scoped, and
+is therefore visible only within the loop.  Otherwise, the variable is
+implicitly local to the loop and regains its former value upon exiting
+the loop.  If the variable was previously declared with \f(CWmy\fR, it uses
+that variable instead of the global one, but it's still localized to
+the loop.  (Note that a lexically scoped variable can cause problems
+with you have subroutine or format declarations.)
 .PP
 The \f(CWforeach\fR keyword is actually a synonym for the \f(CWfor\fR keyword, so
 you can use \f(CWforeach\fR for readability or \f(CWfor\fR for brevity.  If \s-1VAR\s0 is
@@ -458,7 +460,7 @@ Examples:
 \&    for (@ary) { s/foo/bar/ }
 .Ve
 .Vb 3
-\&    foreach $elem (@elements) {
+\&    foreach my $elem (@elements) {
 \&        $elem *= 2;
 \&    }
 .Ve
@@ -478,8 +480,8 @@ Examples:
 Here's how a C programmer might code up a particular algorithm in Perl:
 .PP
 .Vb 9
-\&    for ($i = 0; $i < @ary1; $i++) {
-\&        for ($j = 0; $j < @ary2; $j++) {
+\&    for (my $i = 0; $i < @ary1; $i++) {
+\&        for (my $j = 0; $j < @ary2; $j++) {
 \&            if ($ary1[$i] > $ary2[$j]) {
 \&                last; # can't go to outer :-(
 \&            }
@@ -488,12 +490,12 @@ Here's how a C programmer might code up a particular algorithm in Perl:
 \&        # this is where that last takes me
 \&    }
 .Ve
-Whereas here's how a Perl programmer more confortable with the idiom might
+Whereas here's how a Perl programmer more comfortable with the idiom might
 do it:
 .PP
 .Vb 6
-\&    OUTER: foreach $wid (@ary1) { 
-\&    INNER:   foreach $jet (@ary2) {
+\&    OUTER: foreach my $wid (@ary1) { 
+\&    INNER:   foreach my $jet (@ary2) {
 \&                next OUTER if $wid > $jet;
 \&                $wid += $jet;
 \&             } 
@@ -502,18 +504,18 @@ do it:
 See how much easier this is?  It's cleaner, safer, and faster.  It's
 cleaner because it's less noisy.  It's safer because if code gets added
 between the inner and outer loops later on, the new code won't be
-accidentally executed, the \f(CWnext\fR explicitly iterates the other loop
+accidentally executed.  The \f(CWnext\fR explicitly iterates the other loop
 rather than merely terminating the inner one.  And it's faster because
 Perl executes a \f(CWforeach\fR statement more rapidly than it would the
 equivalent \f(CWfor\fR loop.
 .Sh "Basic BLOCKs and Switch Statements"
 .IX Subsection "Basic BLOCKs and Switch Statements"
-A \s-1BLOCK\s0 by itself (labeled or not) is semantically equivalent to a loop
-that executes once.  Thus you can use any of the loop control
-statements in it to leave or restart the block.  (Note that this
-is \fI\s-1NOT\s0\fR true in \f(CWeval{}\fR, \f(CWsub{}\fR, or contrary to popular belief \f(CWdo{}\fR blocks,
-which do \fI\s-1NOT\s0\fR count as loops.)  The \f(CWcontinue\fR block
-is optional.  
+A \s-1BLOCK\s0 by itself (labeled or not) is semantically equivalent to a
+loop that executes once.  Thus you can use any of the loop control
+statements in it to leave or restart the block.  (Note that this is
+\fI\s-1NOT\s0\fR true in \f(CWeval{}\fR, \f(CWsub{}\fR, or contrary to popular belief
+\f(CWdo{}\fR blocks, which do \fI\s-1NOT\s0\fR count as loops.)  The \f(CWcontinue\fR
+block is optional.
 .PP
 The \s-1BLOCK\s0 construct is particularly nice for doing case
 structures.
@@ -689,8 +691,8 @@ and your documentation text freely, as in
 \&        .........
 \&    } 
 .Ve
-Note that pod translators should only look at paragraphs beginning 
-with a pod diretive (it makes parsing easier), whereas the compiler
+Note that pod translators should look at only paragraphs beginning 
+with a pod directive (it makes parsing easier), whereas the compiler
 actually knows to look for pod escapes even in the middle of a 
 paragraph.  This means that the following secret stuff will be
 ignored by both the compiler and the translators.
@@ -705,5 +707,48 @@ ignored by both the compiler and the translators.
 You probably shouldn't rely upon the \fIwarn()\fR being podded out forever.
 Not all pod translators are well-behaved in this regard, and perhaps
 the compiler will become pickier.
+.PP
+One may also use pod directives to quickly comment out a section
+of code.
+.Sh "Plain Old Comments (Not!)"
+.IX Subsection "Plain Old Comments (Not!)"
+Much like the C preprocessor, perl can process line directives.  Using
+this, one can control perl's idea of filenames and line numbers in
+error or warning messages (especially for strings that are processed
+with \fIeval()\fR).  The syntax for this mechanism is the same as for most
+C preprocessors: it matches the regular expression
+\f(CW/^#\es*line\es+(\ed+)\es*(?:\es"([^"]*)")?/\fR with \f(CW$1\fR being the line
+number for the next line, and \f(CW$2\fR being the optional filename
+(specified within quotes).
+.PP
+Here are some examples that you should be able to type into your command
+shell:
+.PP
+.Vb 24
+\&    % perl
+\&    # line 200 "bzzzt"
+\&    # the `#' on the previous line must be the first char on line
+\&    die 'foo';
+\&    __END__
+\&    foo at bzzzt line 201.
+\&    
+\&    % perl
+\&    # line 200 "bzzzt"
+\&    eval qq[\en#line 2001 ""\endie 'foo']; print $@;
+\&    __END__
+\&    foo at - line 2001.
+\&    
+\&    % perl
+\&    eval qq[\en#line 200 "foo bar"\endie 'foo']; print $@;
+\&    __END__
+\&    foo at foo bar line 200.
+\&    
+\&    % perl
+\&    # line 345 "goop"
+\&    eval "\en#line " . __LINE__ . ' "' . __FILE__ ."\e"\endie 'foo'";
+\&    print $@;
+\&    __END__
+\&    foo at goop line 345.
+.Ve
 
 .rn }` ''

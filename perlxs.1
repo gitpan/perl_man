@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXS 1 "perl 5.003, patch 05" "29/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLXS 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLXS 1"
 .UC
 .IX Name "perlxs - XS language reference manual"
@@ -348,7 +348,21 @@ be received by Perl as the return value of the \s-1XSUB\s0.
 .PP
 If the \s-1XSUB\s0 has a return type of \f(CWvoid\fR then the compiler will
 not supply a \s-1RETVAL\s0 variable for that function.  When using
-the \s-1PPCODE\s0: directive the \s-1RETVAL\s0 variable may not be needed.
+the \s-1PPCODE\s0: directive the \s-1RETVAL\s0 variable is not needed, unless used
+explicitly.
+.PP
+If \s-1PPCODE\s0: directive is not used, \f(CWvoid\fR return value should be used
+only for subroutines which do not return a value, \fIeven if\fR \s-1CODE\s0:
+directive is used which sets \fI\s-1ST\s0\fR\|(0) explicitly. 
+.PP
+Older versions of this document recommended to use \f(CWvoid\fR return
+value in such cases. It was discovered that this could lead to
+segfaults in cases when \s-1XSUB\s0 was \fItruely\fR \f(CWvoid\fR. This practice is
+now deprecated, and may be not supported at some future version. Use
+the return value \f(CWSV *\fR in such cases. (Currently \f(CWxsubpp\fR contains
+some heuristic code which tries to disambiguate between \*(L"truely-void\*(R"
+and \*(L"old-practice-declared-as-void\*(R" functions. Hence your code is at
+mercy of this heuristics unless you use \f(CWSV *\fR as return value.)
 .Sh "The \s-1MODULE\s0 Keyword"
 .IX Subsection "The \s-1MODULE\s0 Keyword"
 The \s-1MODULE\s0 keyword is used to start the \s-1XS\s0 code and to
@@ -768,7 +782,7 @@ the following statement.
 .Ve
 .Sh "Returning Undef And Empty Lists"
 .IX Subsection "Returning Undef And Empty Lists"
-Occasionally the programmer will want to simply return
+Occasionally the programmer will want to return simply
 \f(CWundef\fR or an empty list if a function fails rather than a
 separate status value.  The \fIrpcb_gettime()\fR function offers
 just this situation.  If the function succeeds we would like
@@ -779,14 +793,14 @@ of \f(CW$timep\fR will either be undef or it will be a valid time.
 .Vb 1
 \&     $timep = rpcb_gettime( "localhost" );
 .Ve
-The following \s-1XSUB\s0 uses the \f(CWvoid\fR return type to disable the generation of
-the \s-1RETVAL\s0 variable and uses a \s-1CODE\s0: block to indicate to the compiler
+The following \s-1XSUB\s0 uses the \f(CWSV *\fR return type as a mneumonic only,
+and uses a \s-1CODE\s0: block to indicate to the compiler
 that the programmer has supplied all the necessary code.  The
 \fIsv_newmortal()\fR call will initialize the return value to undef, making that
 the default return value.
 .PP
 .Vb 10
-\&     void
+\&     SV *
 \&     rpcb_gettime(host)
 \&          char *  host
 \&          PREINIT:
@@ -801,7 +815,7 @@ The next example demonstrates how one would place an explicit undef in the
 return value, should the need arise.
 .PP
 .Vb 14
-\&     void
+\&     SV *
 \&     rpcb_gettime(host)
 \&          char *  host
 \&          PREINIT:
@@ -842,7 +856,7 @@ other \f(CWXSRETURN\fR macros.
 .IX Subsection "The \s-1REQUIRE\s0: Keyword"
 The \s-1REQUIRE\s0: keyword is used to indicate the minimum version of the
 \fBxsubpp\fR compiler needed to compile the \s-1XS\s0 module.  An \s-1XS\s0 module which
-contains the following statement will only compile with \fBxsubpp\fR version
+contains the following statement will compile with only \fBxsubpp\fR version
 1.922 or greater:
 .PP
 .Vb 1
@@ -876,7 +890,7 @@ terminate the code block.
 .Sh "The \s-1VERSIONCHECK\s0: Keyword"
 .IX Subsection "The \s-1VERSIONCHECK\s0: Keyword"
 The \s-1VERSIONCHECK\s0: keyword corresponds to \fBxsubpp\fR's \f(CW-versioncheck\fR and
-\f(CW-noversioncheck\fR options.  This keyword overrides the commandline
+\f(CW-noversioncheck\fR options.  This keyword overrides the command line
 options.  Version checking is enabled by default.  When version checking is
 enabled the \s-1XS\s0 module will attempt to verify that its version matches the
 version of the \s-1PM\s0 module.
@@ -894,7 +908,7 @@ To disable version checking:
 .Sh "The \s-1PROTOTYPES\s0: Keyword"
 .IX Subsection "The \s-1PROTOTYPES\s0: Keyword"
 The \s-1PROTOTYPES\s0: keyword corresponds to \fBxsubpp\fR's \f(CW-prototypes\fR and
-\f(CW-noprototypes\fR options.  This keyword overrides the commandline options.
+\f(CW-noprototypes\fR options.  This keyword overrides the command-line options.
 Prototypes are enabled by default.  When prototypes are enabled XSUBs will
 be given Perl prototypes.  This keyword may be used multiple times in an \s-1XS\s0
 module to enable and disable prototypes for different parts of the module.
@@ -1070,7 +1084,7 @@ parameters \f(CW(char *host, time_t *timep)\fR.  It does this by carrying the
 .Sh "Inserting Comments and C Preprocessor Directives"
 .IX Subsection "Inserting Comments and C Preprocessor Directives"
 C preprocessor directives are allowed within \s-1BOOT\s0:, \s-1PREINIT\s0: \s-1INIT\s0:,
-\s-1CODE\s0:, \s-1PPCODE\s0: and \s-1CLEANUP\s0: blocks, as well as outside the functions.
+\s-1CODE\s0:, \s-1PPCODE\s0:, and \s-1CLEANUP\s0: blocks, as well as outside the functions.
 Comments are allowed anywhere after the \s-1MODULE\s0 keyword.  The compiler
 will pass the preprocessor directives through untouched and will remove
 the commented lines.
@@ -1186,13 +1200,14 @@ example.
 \&    TYPEMAP
 \&    color *             O_OBJECT
 .Ve
-.Vb 14
+.Vb 5
 \&    OUTPUT
 \&    # The Perl object is blessed into 'CLASS', which should be a
 \&    # char* having the name of the package for the blessing.
 \&    O_OBJECT
 \&        sv_setref_pv( $arg, CLASS, (void*)$var );
-\&    
+.Ve
+.Vb 8
 \&    INPUT
 \&    O_OBJECT
 \&        if( sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG) )
@@ -1353,7 +1368,7 @@ File \f(CWRPC.xs\fR: Interface to some ONC+ RPC bind library functions.
 \&     MODULE = RPC  PACKAGE = RPC
 .Ve
 .Vb 9
-\&     void
+\&     SV *
 \&     rpcb_gettime(host="localhost")
 \&          char *host
 \&          PREINIT:
@@ -1422,7 +1437,7 @@ File \f(CWrpctest.pl\fR: Perl test program for the RPC extension.
 This document covers features supported by \f(CWxsubpp\fR 1.935.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Dean Roehrich \fI<roehrich@cray.com>\fR
+Dean Roehrich <\fIroehrich@cray.com\fR>
 Jul 8, 1996
 
 .rn }` ''

@@ -73,7 +73,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDSC 1 "perl 5.003, patch 05" "16/Aug/96" "Perl Programmers Reference Guide"
+.TH PERLDSC 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLDSC 1"
 .UC
 .IX Name "perldsc - Perl Data Structures Cookbook"
@@ -201,7 +201,7 @@ with three dimensions!
 Alas, however simple this may appear, underneath it's a much more
 elaborate construct than meets the eye!
 .PP
-How do you print it out?  Why can't you just say \f(CWprint @LoL\fR?  How do
+How do you print it out?  Why can't you say just \f(CWprint @LoL\fR?  How do
 you sort it?  How can you pass it to a function or get one of these back
 from a function?  Is is an object?  Can you save it to disk to read
 back later?  How do you access whole rows or columns of that matrix?  Do
@@ -212,14 +212,14 @@ of the blame for this can be attributed to the reference-based
 implementation, it's really more due to a lack of existing documentation with
 examples designed for the beginner.
 .PP
-This document is meant to be a detailed but understandable treatment of
-the many different sorts of data structures you might want to develop.  It should
-also serve as a cookbook of examples.  That way, when you need to create one of these
-complex data structures, you can just pinch, pilfer, or purloin
-a drop-in example from here.
+This document is meant to be a detailed but understandable treatment of the
+many different sorts of data structures you might want to develop.  It
+should also serve as a cookbook of examples.  That way, when you need to
+create one of these complex data structures, you can just pinch, pilfer, or
+purloin a drop-in example from here.
 .PP
 Let's look at each of these possible constructs in detail.  There are separate
-documents on each of the following:
+sections on each of the following:
 .Ip "\(bu arrays of arrays" 5
 .IX Item "\(bu arrays of arrays"
 .Ip "\(bu hashes of arrays" 5
@@ -230,10 +230,6 @@ documents on each of the following:
 .IX Item "\(bu hashes of hashes"
 .Ip "\(bu more elaborate constructs" 5
 .IX Item "\(bu more elaborate constructs"
-.Ip "\(bu recursive and self-referential data structures" 5
-.IX Item "\(bu recursive and self-referential data structures"
-.Ip "\(bu objects" 5
-.IX Item "\(bu objects"
 .PP
 But for now, let's look at some of the general issues common to all
 of these types of data structures.
@@ -242,15 +238,15 @@ of these types of data structures.
 The most important thing to understand about all data structures in Perl
 -- including multidimensional arrays\*(--is that even though they might
 appear otherwise, Perl \f(CW@ARRAY\fRs and \f(CW%HASH\fRes are all internally
-one-dimensional.  They can only hold scalar values (meaning a string,
+one-dimensional.  They can hold only scalar values (meaning a string,
 number, or a reference).  They cannot directly contain other arrays or
 hashes, but instead contain \fIreferences\fR to other arrays or hashes.
 .PP
-You can't use a reference to a array or hash in quite the same way that
-you would a real array or hash.  For C or \*(C+ programmers unused to distinguishing
-between arrays and pointers to the same, this can be confusing.  If so,
-just think of it as the difference between a structure and a pointer to a
-structure.
+You can't use a reference to a array or hash in quite the same way that you
+would a real array or hash.  For C or \*(C+ programmers unused to
+distinguishing between arrays and pointers to the same, this can be
+confusing.  If so, just think of it as the difference between a structure
+and a pointer to a structure.
 .PP
 You can (and should) read more about references in the \fIperlref\fR\|(1) man
 page.  Briefly, references are rather like pointers that know what they
@@ -269,7 +265,7 @@ multidimensional arrays work as well.
 \&    $hash{string}[7]                    # hash of arrays
 \&    $hash{string}{'another string'}     # hash of hashes
 .Ve
-Now, because the top level only contains references, if you try to print
+Now, because the top level contains only references, if you try to print
 out your array in with a simple \fIprint()\fR function, you'll get something
 that doesn't look very nice, like this:
 .PP
@@ -318,7 +314,7 @@ again and again:
 \&        $LoL[$i] = \e@list;      # WRONG!
 \&    }
 .Ve
-So, just what's the big problem with that?  It looks right, doesn't it?
+So, what's the big problem with that?  It looks right, doesn't it?
 After all, I just told you that you need an array of references, so by
 golly, you've made me one!
 .PP
@@ -394,7 +390,7 @@ something is \*(L"interesting\*(R", that rather than meaning \*(L"intriguing\*(R
 they're disturbingly more apt to mean that it's \*(L"annoying\*(R",
 \*(L"difficult\*(R", or both?  :\-)
 .PP
-So just remember to always use the array or hash constructors with \f(CW[]\fR
+So just remember always to use the array or hash constructors with \f(CW[]\fR
 or \f(CW{}\fR, and you'll be fine, although it's not always optimally
 efficient.
 .PP
@@ -469,7 +465,7 @@ this:
 \&    my $listref = [
 \&        [ "fred", "barney", "pebbles", "bambam", "dino", ],
 \&        [ "homer", "bart", "marge", "maggie", ],
-\&        [ "george", "jane", "alroy", "judy", ],
+\&        [ "george", "jane", "elroy", "judy", ],
 \&    ];
 .Ve
 .Vb 1
@@ -477,15 +473,15 @@ this:
 .Ve
 The compiler would immediately flag that as an error \fIat compile time\fR,
 because you were accidentally accessing \f(CW@listref\fR, an undeclared
-variable, and it would thereby remind you to instead write:
+variable, and it would thereby remind you to write instead:
 .PP
 .Vb 1
 \&    print $listref->[2][2]
 .Ve
 .SH "DEBUGGING"
 .IX Header "DEBUGGING"
-Before 5.002, the standard Perl debugger didn't do a very nice job of
-printing out complex data structures.  With version 5.002 or above, the
+Before version 5.002, the standard Perl debugger didn't do a very nice job of
+printing out complex data structures.  With 5.002 or above, the
 debugger includes several new features, including command line editing as
 well as the \f(CWx\fR command to dump out complex data structures.  For
 example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
@@ -507,7 +503,7 @@ example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
 \&       2  ARRAY(0x13b540)
 \&          0  'george'
 \&          1  'jane'
-\&          2  'alroy'
+\&          2  'elroy'
 \&          3  'judy'
 .Ve
 There's also a lower-case \fBx\fR command which is nearly the same.
@@ -580,7 +576,7 @@ types of data structures.
 .Vb 6
 \& # print the whole thing one at a time
 \& for $i ( 0 .. $#LoL ) {
-\&     for $j ( 0 .. $#{$LoL[$i]} ) {
+\&     for $j ( 0 .. $#{ $LoL[$i] } ) {
 \&         print "elt $i $j is $LoL[$i][$j]\en";
 \&     }
 \& }
@@ -592,9 +588,9 @@ types of data structures.
 .PP
 .Vb 5
 \& %HoL = (
-\&        "flintstones"        => [ "fred", "barney" ],
-\&        "jetsons"            => [ "george", "jane", "elroy" ],
-\&        "simpsons"           => [ "homer", "marge", "bart" ],
+\&        flintstones        => [ "fred", "barney" ],
+\&        jetsons            => [ "george", "jane", "elroy" ],
+\&        simpsons           => [ "homer", "marge", "bart" ],
 \&      );
 .Ve
 .Sh "Generation of a \s-1HASH\s0 \s-1OF\s0 \s-1LISTS\s0"
@@ -655,7 +651,7 @@ types of data structures.
 \& # print the whole thing with indices
 \& foreach $family ( keys %HoL ) {
 \&     print "family: ";
-\&     foreach $i ( 0 .. $#{ $HoL{$family} ) {
+\&     foreach $i ( 0 .. $#{ $HoL{$family} } ) {
 \&         print " $i = $HoL{$family}[$i]";
 \&     }
 \&     print "\en";
@@ -663,13 +659,18 @@ types of data structures.
 .Ve
 .Vb 4
 \& # print the whole thing sorted by number of members
-\& foreach $family ( sort { @{$HoL{$b}} <=> @{$HoL{$b}} } keys %HoL ) {
+\& foreach $family ( sort { @{$HoL{$b}} <=> @{$HoL{$a}} } keys %HoL ) {
 \&     print "$family: @{ $HoL{$family} }\en"
 \& }
 .Ve
-.Vb 4
+.Vb 9
 \& # print the whole thing sorted by number of members and name
-\& foreach $family ( sort { @{$HoL{$b}} <=> @{$HoL{$a}} } keys %HoL ) {
+\& foreach $family ( sort { 
+\&                            @{$HoL{$b}} <=> @{$HoL{$a}}
+\&                                        ||
+\&                                    $a cmp $b
+\&            } keys %HoL )
+\& {
 \&     print "$family: ", join(", ", sort @{ $HoL{$family}), "\en";
 \& }
 .Ve
@@ -722,7 +723,7 @@ types of data structures.
 .Vb 5
 \& # calling a function  that returns a key,value list, like
 \& # "lead","fred","daughter","pebbles"
-\& while ( %fields = getnextpairset() )
+\& while ( %fields = getnextpairset() ) {
 \&     push @LoH, { %fields };
 \& }
 .Ve
@@ -783,19 +784,19 @@ types of data structures.
 .PP
 .Vb 16
 \& %HoH = (
-\&        "flintstones" => {
-\&            "lead"    => "fred",
-\&            "pal"     => "barney",
+\&        flintstones => {
+\&                lead      => "fred",
+\&                pal       => "barney",
 \&        },
-\&        "jetsons"     => {
-\&            "lead"    => "george",
-\&            "wife"    => "jane",
-\&            "his boy" => "elroy",
+\&        jetsons     => {
+\&                lead      => "george",
+\&                wife      => "jane",
+\&                "his boy" => "elroy",
 \&        },
-\&        "simpsons"    => {
-\&             "lead"   => "homer",
-\&             "wife"   => "marge",
-\&             "kid"    => "bart",
+\&        simpsons    => {
+\&                lead      => "homer",
+\&                wife      => "marge",
+\&                kid       => "bart",
 \&        },
 \& );
 .Ve
@@ -826,13 +827,6 @@ types of data structures.
 \&     }
 \& }
 .Ve
-.Vb 5
-\& # calling a function  that returns a key,value list, like
-\& # "lead","fred","daughter","pebbles"
-\& while ( %fields = getnextpairset() )
-\&     push @a, { %fields };
-\& }
-.Ve
 .Vb 4
 \& # calling a function  that returns a key,value hash
 \& for $group ( "simpsons", "jetsons", "flintstones" ) {
@@ -849,8 +843,8 @@ types of data structures.
 .Vb 5
 \& # append new members to an existing family
 \& %new_folks = (
-\&     "wife" => "wilma",
-\&     "pet"  => "dino";
+\&     wife => "wilma",
+\&     pet  => "dino";
 \& );
 .Ve
 .Vb 3
@@ -872,7 +866,7 @@ types of data structures.
 .Vb 8
 \& # print the whole thing
 \& foreach $family ( keys %HoH ) {
-\&     print "$family: ";
+\&     print "$family: { ";
 \&     for $role ( keys %{ $HoH{$family} } ) {
 \&         print "$role=$HoH{$family}{$role} ";
 \&     }
@@ -882,7 +876,7 @@ types of data structures.
 .Vb 8
 \& # print the whole thing  somewhat sorted
 \& foreach $family ( sort keys %HoH ) {
-\&     print "$family: ";
+\&     print "$family: { ";
 \&     for $role ( sort keys %{ $HoH{$family} } ) {
 \&         print "$role=$HoH{$family}{$role} ";
 \&     }
@@ -891,8 +885,8 @@ types of data structures.
 .Ve
 .Vb 8
 \& # print the whole thing sorted by number of members
-\& foreach $family ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$b}} } keys %HoH ) {
-\&     print "$family: ";
+\& foreach $family ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$a}} } keys %HoH ) {
+\&     print "$family: { ";
 \&     for $role ( sort keys %{ $HoH{$family} } ) {
 \&         print "$role=$HoH{$family}{$role} ";
 \&     }
@@ -906,10 +900,10 @@ types of data structures.
 .Ve
 .Vb 9
 \& # now print the whole thing sorted by number of members
-\& foreach $family ( sort { keys %{$HoH{$b}} <=> keys %{$HoH{$b}} } keys %HoH ) {
-\&     print "$family: ";
+\& foreach $family ( sort { keys %{ $HoH{$b} } <=> keys %{ $HoH{$a} } } keys %HoH ) {
+\&     print "$family: { ";
 \&     # and print these according to rank order
-\&     for $role ( sort { $rank{$a} <=> $rank{$b} keys %{ $HoH{$family} } ) {
+\&     for $role ( sort { $rank{$a} <=> $rank{$b} }  keys %{ $HoH{$family} } ) {
 \&         print "$role=$HoH{$family}{$role} ";
 \&     }
 \&     print "}\en";
@@ -961,7 +955,7 @@ many different sorts:
 .PP
 .Vb 10
 \&     %TV = (
-\&        "flintstones" => {
+\&        flintstones => {
 \&            series   => "flintstones",
 \&            nights   => [ qw(monday thursday friday) ],
 \&            members  => [
@@ -972,7 +966,7 @@ many different sorts:
 \&        },
 .Ve
 .Vb 9
-\&        "jetsons"     => {
+\&        jetsons     => {
 \&            series   => "jetsons",
 \&            nights   => [ qw(wednesday saturday) ],
 \&            members  => [
@@ -983,7 +977,7 @@ many different sorts:
 \&         },
 .Ve
 .Vb 10
-\&        "simpsons"    => {
+\&        simpsons    => {
 \&            series   => "simpsons",
 \&            nights   => [ qw(monday) ],
 \&            members  => [
@@ -1001,7 +995,7 @@ many different sorts:
 \&     # reading from file
 \&     # this is most easily done by having the file itself be
 \&     # in the raw data format as shown above.  perl is happy
-\&     # to parse complex datastructures if declared as data, so
+\&     # to parse complex data structures if declared as data, so
 \&     # sometimes it's easiest to do that
 .Ve
 .Vb 4
@@ -1013,7 +1007,7 @@ many different sorts:
 .Vb 7
 \&     @members = ();
 \&     # assume this file in field=value syntax
-\&     while () {
+\&     while (<>) {
 \&         %fields = split /[\es=]+/;
 \&         push @members, { %fields };
 \&     }
@@ -1035,7 +1029,7 @@ many different sorts:
 \&     foreach $family (keys %TV) {
 \&         $rec = $TV{$family}; # temp pointer
 \&         @kids = ();
-\&         for $person ( @{$rec->{members}} ) {
+\&         for $person ( @{ $rec->{members} } ) {
 \&             if ($person->{role} =~ /kid|son|daughter/) {
 \&                 push @kids, $person;
 \&             }
@@ -1069,7 +1063,7 @@ many different sorts:
 \&         for $who ( @{ $TV{$family}{members} } ) {
 \&             print " $who->{name} ($who->{role}), age $who->{age}\en";
 \&         }
-\&         print "it turns out that $TV{$family}{'lead'} has ";
+\&         print "it turns out that $TV{$family}{lead} has ";
 \&         print scalar ( @{ $TV{$family}{kids} } ), " kids named ";
 \&         print join (", ", map { $_->{name} } @{ $TV{$family}{kids} } );
 \&         print "\en";
@@ -1081,17 +1075,17 @@ You cannot easily tie a multilevel data structure (such as a hash of
 hashes) to a dbm file.  The first problem is that all but GDBM and
 Berkeley DB have size limitations, but beyond that, you also have problems
 with how references are to be represented on disk.  One experimental
-module that does attempt to partially address this need is the MLDBM
+module that does partially attempt to address this need is the MLDBM
 module.  Check your nearest CPAN site as described in the \fIperlmod\fR manpage for
 source code to MLDBM.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-the \fIperlref\fR manpage, the \fIperllol\fR manpage, the \fIperldata\fR manpage, the \fIperlobj\fR manpage
+\fIperlref\fR\|(1), \fIperllol\fR\|(1), \fIperldata\fR\|(1), \fIperlobj\fR\|(1)
 .SH "AUTHOR"
 .IX Header "AUTHOR"
 Tom Christiansen <\fItchrist@perl.com\fR>
 .PP
 Last update:
-Mon Jul  8 05:22:49 MDT 1996
+Wed Oct 23 04:57:50 MET DST 1996
 
 .rn }` ''
