@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH LWP-RGET 1 "libwww-perl-5.36" "11/Nov/98" "User Contributed Perl Documentation"
+.TH LWP-RGET 1 "libwww-perl-5.64" "2/Jan/102" "User Contributed Perl Documentation"
 .UC
 .if n .hy 0
 .if n .na
@@ -194,7 +194,7 @@ lwp-rget \- Retrieve WWW documents recursively
 .Vb 4
 \& lwp-rget [--verbose] [--auth=USER:PASS] [--depth=N] [--hier] [--iis]
 \&          [--keepext=mime/type[,mime/type]] [--limit=N] [--nospace]
-\&          [--prefix=URL] [--sleep=N] [--tolower] <URL>
+\&          [--prefix=URL] [--referer=URL] [--sleep=N] [--tolower] <URL>
 \& lwp-rget --version
 .Ve
 .SH "DESCRIPTION"
@@ -227,6 +227,10 @@ The default depth is 5.
 .Ip "--hier" 3
 Download files into a hierarchy that mimics the web site structure.
 The default is to put all files in the current directory.
+.Ip "--referer=\fI\s-1URI\s0\fR" 3
+Set the value of the referer header for the initial request.  The
+special value \f(CW"NONE"\fR can be used to suppress the referer header in
+any of subsequent requests.
 .Ip "--iis" 3
 Sends an \*(L"Accept: */*\*(R" on all \s-1URL\s0 requests as a workaround for a bug in
 \s-1IIS\s0 2.0.  If no Accept \s-1MIME\s0 header is present, \s-1IIS\s0 2.0 returns with a
@@ -292,6 +296,8 @@ Gisle Aas <aas@sn.no>
 .IX Item "--depth=\fIn\fR"
 
 .IX Item "--hier"
+
+.IX Item "--referer=\fI\s-1URI\s0\fR"
 
 .IX Item "--iis"
 
