@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXS 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLXS 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLXS 1"
 .UC
 .IX Name "perlxs - XS language reference manual"
@@ -353,7 +373,7 @@ explicitly.
 .PP
 If \s-1PPCODE\s0: directive is not used, \f(CWvoid\fR return value should be used
 only for subroutines which do not return a value, \fIeven if\fR \s-1CODE\s0:
-directive is used which sets \fI\s-1ST\s0\fR\|(0) explicitly. 
+directive is used which sets \fI\s-1ST\s0\fR\|(0) explicitly.
 .PP
 Older versions of this document recommended to use \f(CWvoid\fR return
 value in such cases. It was discovered that this could lead to
@@ -480,7 +500,7 @@ its parameters.  The Perl usage is given first.
 .Vb 1
 \&     $status = rpcb_gettime( "localhost", $timep );
 .Ve
-The \s-1XSUB\s0 follows. 
+The \s-1XSUB\s0 follows.
 .PP
 .Vb 9
 \&     bool_t
@@ -512,7 +532,7 @@ above, this keyword does not affect the way the compiler handles \s-1RETVAL\s0.
 .Sh "The \s-1NO_INIT\s0 Keyword"
 .IX Subsection "The \s-1NO_INIT\s0 Keyword"
 The \s-1NO_INIT\s0 keyword is used to indicate that a function
-parameter is being used as only an output value.  The \fBxsubpp\fR
+parameter is being used only as an output value.  The \fBxsubpp\fR
 compiler will normally generate code to read the values of
 all function parameters from the argument stack and assign
 them to C variables upon entry to the function.  \s-1NO_INIT\s0
@@ -521,7 +541,7 @@ output rather than for input and that they will be handled
 before the function terminates.
 .PP
 The following example shows a variation of the \fIrpcb_gettime()\fR function.
-This function uses the timep variable as only an output variable and does
+This function uses the timep variable only as an output variable and does
 not care about its initial contents.
 .PP
 .Vb 6
@@ -908,7 +928,7 @@ To disable version checking:
 .Sh "The \s-1PROTOTYPES\s0: Keyword"
 .IX Subsection "The \s-1PROTOTYPES\s0: Keyword"
 The \s-1PROTOTYPES\s0: keyword corresponds to \fBxsubpp\fR's \f(CW-prototypes\fR and
-\f(CW-noprototypes\fR options.  This keyword overrides the command-line options.
+\f(CW-noprototypes\fR options.  This keyword overrides the command line options.
 Prototypes are enabled by default.  When prototypes are enabled XSUBs will
 be given Perl prototypes.  This keyword may be used multiple times in an \s-1XS\s0
 module to enable and disable prototypes for different parts of the module.
@@ -948,7 +968,7 @@ prototypes.
 .Ve
 .Sh "The \s-1ALIAS\s0: Keyword"
 .IX Subsection "The \s-1ALIAS\s0: Keyword"
-The \s-1ALIAS\s0: keyword allows an \s-1XSUB\s0 to have two more more unique Perl names
+The \s-1ALIAS\s0: keyword allows an \s-1XSUB\s0 to have two more unique Perl names
 and to know which of those names was used when it was invoked.  The Perl
 names may be fully-qualified with package names.  Each alias is given an
 index.  The compiler will setup a variable called \f(CWix\fR which contain the

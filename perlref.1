@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLREF 1 "perl 5.003, patch 93" "30/Dec/96" "Perl Programmers Reference Guide"
+.TH PERLREF 1 "perl 5.004, patch 01" "29/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLREF 1"
 .UC
 .IX Name "perlref - Perl references and nested data structures"
@@ -184,32 +204,38 @@ contain scalars, you can now easily build arrays of arrays, arrays of
 hashes, hashes of arrays, arrays of hashes of functions, and so on.
 .PP
 Hard references are smart\*(--they keep track of reference counts for you,
-automatically freeing the thing referred to when its reference count
-goes to zero.  (Note: The reference counts for values in self-referential
-or cyclic data structures may not go to zero without a little help; see
+automatically freeing the thing referred to when its reference count goes
+to zero.  (Note: The reference counts for values in self-referential or
+cyclic data structures may not go to zero without a little help; see
 the section on \fITwo-Phased Garbage Collection\fR in the \fIperlobj\fR manpage for a detailed explanation.
-If that thing happens to be an object, the object is
-destructed.  See the \fIperlobj\fR manpage for more about objects.  (In a sense,
-everything in Perl is an object, but we usually reserve the word for
-references to objects that have been officially \*(L"blessed\*(R" into a class package.)
+If that thing happens to be an object, the object is destructed.  See
+the \fIperlobj\fR manpage for more about objects.  (In a sense, everything in Perl is an
+object, but we usually reserve the word for references to objects that
+have been officially \*(L"blessed\*(R" into a class package.)
 .PP
-A symbolic reference contains the name of a variable, just as a
-symbolic link in the filesystem contains merely the name of a file.  
-The \f(CW*glob\fR notation is a kind of symbolic reference.  Hard references
-are more like hard links in the file system: merely another way
-at getting at the same underlying object, irrespective of its name.
+Symbolic references are names of variables or other objects, just as a
+symbolic link in a Unix filesystem contains merely the name of a file.
+The \f(CW*glob\fR notation is a kind of symbolic reference.  (Symbolic
+references are sometimes called \*(L"soft references\*(R", but please don't call
+them that; references are confusing enough without useless synonyms.)
 .PP
-\*(L"Hard\*(R" references are easy to use in Perl.  There is just one
-overriding principle:  Perl does no implicit referencing or
-dereferencing.  When a scalar is holding a reference, it always behaves
-as a scalar.  It doesn't magically start being an array or a hash
-unless you tell it so explicitly by dereferencing it.
+In contrast, hard references are more like hard links in a Unix file
+system: They are used to access an underlying object without concern for
+what its (other) name is.  When the word \*(L"reference\*(R" is used without an
+adjective, like in the following paragraph, it usually is talking about a
+hard reference.
 .PP
-References can be constructed several ways.
+References are easy to use in Perl.  There is just one overriding
+principle: Perl does no implicit referencing or dereferencing.  When a
+scalar is holding a reference, it always behaves as a simple scalar.  It
+doesn't magically start being an array or hash or subroutine; you have to
+tell it explicitly to do so, by dereferencing it.
+.PP
+References can be constructed in several ways.
 .Ip "1." 4
 .IX Item "1."
 By using the backslash operator on a variable, subroutine, or value.
-(This works much like the & (address-of) operator works in C.)  Note
+(This works much like the & (address-of) operator in C.)  Note
 that this typically creates \fI\s-1ANOTHER\s0\fR reference to a variable, because
 there's already a reference to the variable in the symbol table.  But
 the symbol table reference might go away, and you'll still have the
@@ -225,7 +251,7 @@ reference that the backslash returned.  Here are some examples:
 It isn't possible to create a true reference to an \s-1IO\s0 handle (filehandle or
 dirhandle) using the backslash operator.  See the explanation of the
 *foo{\s-1THING\s0} syntax below.  (However, you're apt to find Perl code
-out there using globrefs as though they were \s-1IO\s0 handles, which is 
+out there using globrefs as though they were \s-1IO\s0 handles, which is
 grandfathered into continued functioning.)
 .Ip "2." 4
 .IX Item "2."
@@ -236,7 +262,7 @@ brackets:
 \&    $arrayref = [1, 2, ['a', 'b', 'c']];
 .Ve
 Here we've constructed a reference to an anonymous array of three elements
-whose final element is itself reference to another anonymous array of three
+whose final element is itself a reference to another anonymous array of three
 elements.  (The multidimensional syntax described later can be used to
 access this.  For example, after the above, \f(CW$arrayref->[2][1]\fR would have
 the value \*(L"b\*(R".)
@@ -246,10 +272,10 @@ as using square brackets\*(--instead it's the same as creating
 a list of references!
 .Sp
 .Vb 2
-\&    @list = (\e$a, \e@b, \e%c);  
+\&    @list = (\e$a, \e@b, \e%c);
 \&    @list = \e($a, @b, %c);      # same thing!
 .Ve
-As a special case, \f(CW\e(@foo)\fR returns a list of references to the contents 
+As a special case, \f(CW\e(@foo)\fR returns a list of references to the contents
 of \f(CW@foo\fR, not a reference to \f(CW@foo\fR itself.  Likewise for \f(CW%foo\fR.
 .Ip "3." 4
 .IX Item "3."
@@ -308,8 +334,8 @@ context even when it's called outside of the context.
 In human terms, it's a funny way of passing arguments to a subroutine when
 you define it as well as when you call it.  It's useful for setting up
 little bits of code to run later, such as callbacks.  You can even
-do object-oriented stuff with it, though Perl provides a different
-mechanism to do that already\*(--see the \fIperlobj\fR manpage.
+do object-oriented stuff with it, though Perl already provides a different
+mechanism to do that\*(--see the \fIperlobj\fR manpage.
 .Sp
 You can also think of closure as a way to write a subroutine template without
 using eval.  (In fact, in version 5.000, eval was the \fIonly\fR way to get
@@ -469,7 +495,7 @@ the \s-1BLOCK\s0 can contain any arbitrary expression, in particular,
 subscripted expressions:
 .Sp
 .Vb 1
-\&    &{ $dispatch{$index} }(1,2,3);      # call correct routine 
+\&    &{ $dispatch{$index} }(1,2,3);      # call correct routine
 .Ve
 Because of being able to omit the curlies for the simple case of \f(CW$$x\fR,
 people often make the mistake of viewing the dereferencing symbols as
@@ -489,15 +515,16 @@ called \f(CW%hashref\fR, not dereferencing through \f(CW$hashref\fR to the hash
 it's presumably referencing.  That would be case 3.
 .Ip "3." 4
 .IX Item "3."
-The case of individual array elements arises often enough that it gets
-cumbersome to use method 2.  As a form of syntactic sugar, the two
-lines like that above can be written:
+Subroutine calls and lookups of individual array elements arise often
+enough that it gets cumbersome to use method 2.  As a form of
+syntactic sugar, the examples for method 2 may be written:
 .Sp
-.Vb 2
-\&    $arrayref->[0] = "January";
-\&    $hashref->{"KEY"} = "VALUE";
+.Vb 3
+\&    $arrayref->[0] = "January";   # Array element
+\&    $hashref->{"KEY"} = "VALUE";  # Hash element
+\&    $coderef->(1,2,3);            # Subroutine call
 .Ve
-The left side of the array can be any expression returning a reference,
+The left side of the arrow can be any expression returning a reference,
 including a previous dereference.  Note that \f(CW$array[$x]\fR is \fI\s-1NOT\s0\fR the
 same thing as \f(CW$array->[$x]\fR here:
 .Sp
@@ -592,7 +619,7 @@ that, you can say
 \&    use strict 'refs';
 .Ve
 and then only hard references will be allowed for the rest of the enclosing
-block.  An inner block may countermand that with 
+block.  An inner block may countermand that with
 .PP
 .Vb 1
 \&    no strict 'refs';
@@ -607,7 +634,7 @@ invisible to this mechanism.  For example:
 \&    {
 \&        my $value = 20;
 \&        print $$ref;
-\&    } 
+\&    }
 .Ve
 This will still print 10, not 20.  Remember that \fIlocal()\fR affects package
 variables, which are all \*(L"global\*(R" to the package.
@@ -680,7 +707,7 @@ converted into a string:
 .Vb 1
 \&    $x{ \e$a } = $a;
 .Ve
-If you try to dereference the key, it won't do a hard dereference, and 
+If you try to dereference the key, it won't do a hard dereference, and
 you won't accomplish what you're attempting.  You might want to do something
 more like
 .PP

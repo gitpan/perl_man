@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLBOOK 1 "perl 5.003, patch 93" "2/Oct/96" "Perl Programmers Reference Guide"
+.TH PERLBOOK 1 "perl 5.004, patch 01" "10/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLBOOK 1"
 .UC
 .IX Name "perlbook - Perl book information"
@@ -185,7 +205,9 @@ nearly all of Perl, while \fILearning Perl\fR is a tutorial that covers
 the most frequently used subset of the language.  You might also check
 out the very handy, inexpensive, and compact \fIPerl 5 Desktop
 Reference\fR, especially when the thought of lugging the 676-page Camel
-around doesn't make much sense.
+around doesn't make much sense.  \fIMastering Regular Expressions\fR, by
+Jeffrey Friedl, is a reference work that covers the art and implementation 
+of regular expressions in various languages including Perl.
 .PP
 .Vb 2
 \&    Programming Perl, Second Edition (the Camel Book):
@@ -198,11 +220,14 @@ around doesn't make much sense.
 \&        ISBN 2-84177-005-2      (French)
 \&        ISBN 3-930673-08-8      (German)
 .Ve
-.Vb 1
+.Vb 2
 \&    Perl 5 Desktop Reference (the reference card):
-.Ve
-.Vb 1
 \&        ISBN 1-56592-187-9      (brief English)
 .Ve
+.Vb 2
+\&    Mastering Regular Expressions (the Hip Owl Book):
+\&        ISBN 1-56592-257-3      (English)
+.Ve
+A new edition of Learning Perl is due mid/late 1997.
 
 .rn }` ''

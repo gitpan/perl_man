@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOL 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLLOL 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLLOL 1"
 .UC
 .IX Name "perlLoL - Manipulating Lists of Lists in Perl"
@@ -187,7 +207,7 @@ a declaration of the array:
 .PP
 .Vb 6
 \&    # assign to our array a list of list references
-\&    @LoL = ( 
+\&    @LoL = (
 \&           [ "fred", "barney" ],
 \&           [ "george", "jane", "elroy" ],
 \&           [ "homer", "marge", "bart" ],
@@ -213,10 +233,10 @@ but rather just a reference to it, you could do something more like this:
 .Vb 1
 \&    print $ref_to_LoL->[2][2];
 .Ve
-Notice that the outer bracket type has changed, and so our access syntax 
+Notice that the outer bracket type has changed, and so our access syntax
 has also changed.  That's because unlike C, in perl you can't freely
-interchange arrays and references thereto.  \f(CW$ref_to_LoL\fR is a reference to an 
-array, whereas \f(CW@LoL\fR is an array proper.  Likewise, \f(CW$LoL[2]\fR is not an 
+interchange arrays and references thereto.  \f(CW$ref_to_LoL\fR is a reference to an
+array, whereas \f(CW@LoL\fR is an array proper.  Likewise, \f(CW$LoL[2]\fR is not an
 array, but an array ref.  So how come you can write these:
 .PP
 .Vb 2
@@ -248,7 +268,7 @@ each line is a row and each word an element.  If you're trying to develop an
 \&    while (<>) {
 \&        @tmp = split;
 \&        push @LoL, [ @tmp ];
-\&    } 
+\&    }
 .Ve
 You might also have loaded that from a function:
 .PP
@@ -258,7 +278,7 @@ You might also have loaded that from a function:
 \&    }
 .Ve
 Or you might have had a temporary variable sitting around with the
-list in it.  
+list in it.
 .PP
 .Vb 4
 \&    for $i ( 1 .. 10 ) {
@@ -272,8 +292,8 @@ constructor.  That's because this will be very wrong:
 .Vb 1
 \&    $LoL[$i] = @tmp;
 .Ve
-You see, assigning a named list like that to a scalar just counts the 
-number of elements in \f(CW@tmp\fR, which probably isn't what you want.  
+You see, assigning a named list like that to a scalar just counts the
+number of elements in \f(CW@tmp\fR, which probably isn't what you want.
 .PP
 If you are running under \f(CWuse strict\fR, you'll have to add some
 declarations to make it happy:
@@ -284,14 +304,14 @@ declarations to make it happy:
 \&    while (<>) {
 \&        @tmp = split;
 \&        push @LoL, [ @tmp ];
-\&    } 
+\&    }
 .Ve
 Of course, you don't need the temporary array to have a name at all:
 .PP
 .Vb 3
 \&    while (<>) {
 \&        push @LoL, [ split ];
-\&    } 
+\&    }
 .Ve
 You also don't have to use \fIpush()\fR.  You could just make a direct assignment
 if you knew where you wanted to put it:
@@ -301,7 +321,7 @@ if you knew where you wanted to put it:
 \&    for $i ( 0 .. 10 ) {
 \&        $line = <>;
 \&        $LoL[$i] = [ split ' ', $line ];
-\&    } 
+\&    }
 .Ve
 or even just
 .PP
@@ -309,17 +329,17 @@ or even just
 \&    my (@LoL, $i);
 \&    for $i ( 0 .. 10 ) {
 \&        $LoL[$i] = [ split ' ', <> ];
-\&    } 
+\&    }
 .Ve
 You should in general be leery of using potential list functions
-in a scalar context without explicitly stating such.  
+in a scalar context without explicitly stating such.
 This would be clearer to the casual reader:
 .PP
 .Vb 4
 \&    my (@LoL, $i);
 \&    for $i ( 0 .. 10 ) {
 \&        $LoL[$i] = [ split ' ', scalar(<>) ];
-\&    } 
+\&    }
 .Ve
 If you wanted to have a \f(CW$ref_to_LoL\fR variable as a reference to an array,
 you'd have to do something like this:
@@ -327,7 +347,7 @@ you'd have to do something like this:
 .Vb 3
 \&    while (<>) {
 \&        push @$ref_to_LoL, [ split ];
-\&    } 
+\&    }
 .Ve
 Actually, if you were using strict, you'd have to declare not only
 \f(CW$ref_to_LoL\fR as you had to declare \f(CW@LoL\fR, but you'd \fIalso\fR having to
@@ -338,7 +358,7 @@ perl version 5.001m that's been fixed for the 5.002 release.)
 \&    my $ref_to_LoL = [];
 \&    while (<>) {
 \&        push @$ref_to_LoL, [ split ];
-\&    } 
+\&    }
 .Ve
 Ok, now you can add new rows.  What about adding new columns?  If you're
 dealing with just matrices, it's often easiest to use simple assignment:
@@ -353,9 +373,9 @@ dealing with just matrices, it's often easiest to use simple assignment:
 .Vb 3
 \&    for $x ( 3, 7, 9 ) {
 \&        $LoL[$x][20] += func2($x);
-\&    } 
+\&    }
 .Ve
-It doesn't matter whether those elements are already 
+It doesn't matter whether those elements are already
 there or not: it'll gladly create them for you, setting
 intervening elements to \f(CWundef\fR as need be.
 .PP
@@ -375,7 +395,7 @@ In fact, that wouldn't even compile.  How come?  Because the argument
 to \fIpush()\fR must be a real array, not just a reference to such.
 .SH "Access and Printing"
 .IX Header "Access and Printing"
-Now it's time to print your data structure out.  How 
+Now it's time to print your data structure out.  How
 are you going to do that?  Well, if you want only one
 of the elements, it's trivial:
 .PP
@@ -389,10 +409,10 @@ say
 \&    print @LoL;         # WRONG
 .Ve
 because you'll get just references listed, and perl will never
-automatically dereference things for you.  Instead, you have to 
+automatically dereference things for you.  Instead, you have to
 roll yourself a loop or two.  This prints the whole structure,
 using the shell-style \fIfor()\fR construct to loop across the outer
-set of subscripts.  
+set of subscripts.
 .PP
 .Vb 3
 \&    for $aref ( @LoL ) {
@@ -415,7 +435,7 @@ or maybe even this.  Notice the inner loop.
 \&        }
 \&    }
 .Ve
-As you can see, it's getting a bit complicated.  That's why 
+As you can see, it's getting a bit complicated.  That's why
 sometimes is easier to take a temporary on your way through:
 .PP
 .Vb 6
@@ -451,10 +471,10 @@ variable as before.
 .PP
 .Vb 5
 \&    @part = ();
-\&    $x = 4;     
+\&    $x = 4;
 \&    for ($y = 7; $y < 13; $y++) {
 \&        push @part, $LoL[$x][$y];
-\&    } 
+\&    }
 .Ve
 That same loop could be replaced with a slice operation:
 .PP
@@ -469,12 +489,12 @@ Ah, but what if you wanted a \fItwo-dimensional slice\fR, such as having
 .Vb 6
 \&    @newLoL = ();
 \&    for ($startx = $x = 4; $x <= 8; $x++) {
-\&        for ($starty = $y = 7; $x <= 12; $y++) {
+\&        for ($starty = $y = 7; $y <= 12; $y++) {
 \&            $newLoL[$x - $startx][$y - $starty] = $LoL[$x][$y];
 \&        }
-\&    } 
+\&    }
 .Ve
-We can reduce some of the looping through slices 
+We can reduce some of the looping through slices
 .PP
 .Vb 3
 \&    for ($x = 4; $x <= 8; $x++) {
@@ -495,14 +515,14 @@ If I were you, I'd put that in a function:
 \&    @newLoL = splice_2D( \e@LoL, 4 => 8, 7 => 12 );
 \&    sub splice_2D {
 \&        my $lrr = shift;        # ref to list of list refs!
-\&        my ($x_lo, $x_hi, 
+\&        my ($x_lo, $x_hi,
 \&            $y_lo, $y_hi) = @_;
 .Ve
 .Vb 4
-\&        return map { 
-\&            [ @{ $lrr->[$_] } [ $y_lo .. $y_hi ] ] 
+\&        return map {
+\&            [ @{ $lrr->[$_] } [ $y_lo .. $y_hi ] ]
 \&        } $x_lo .. $x_hi;
-\&    } 
+\&    }
 .Ve
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"

@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLBOT 1 "perl 5.003, patch 93" "18/Dec/96" "Perl Programmers Reference Guide"
+.TH PERLBOT 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLBOT 1"
 .UC
 .IX Name "perlbot - Bag'o Object Tricks (the BOT)"
@@ -447,7 +467,7 @@ This example demonstrates an interface for the SDBM class.  This creates a
 \&            $ref->FETCH(@_);
 \&        }
 \&        sub STORE {
-\&            my $self = shift; 
+\&            my $self = shift;
 \&            if (defined $_[0]){
 \&                my $ref = $self->{'dbm'};
 \&                $ref->STORE(@_);
@@ -627,10 +647,11 @@ method where that data is located.
 \&                bless $self, $type;
 \&        }
 .Ve
-.Vb 8
+.Vb 2
 \&        sub enter {
 \&                my $self = shift;
-\&        
+.Ve
+.Vb 5
 \&                # Don't try to guess if we should use %Bar::fizzle
 \&                # or %Foo::fizzle.  The object already knows which
 \&                # we should use, so just ask it.

@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOBJ 1 "perl 5.003, patch 93" "17/Feb/97" "Perl Programmers Reference Guide"
+.TH PERLOBJ 1 "perl 5.004, patch 01" "28/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLOBJ 1"
 .UC
 .IX Name "perlobj - Perl objects"
@@ -179,7 +199,7 @@ See the \fIperlref\fR manpage for that.  Second, if you still find the following
 reference work too complicated, a tutorial on object-oriented programming
 in Perl can be found in the \fIperltoot\fR manpage.
 .PP
-If you're still with us, then 
+If you're still with us, then
 here are three very simple definitions that you should find reassuring.
 .Ip "1." 4
 .IX Item "1."
@@ -207,11 +227,11 @@ constructor:
 \&    package Critter;
 \&    sub new { bless {} }
 .Ve
-The \f(CW{}\fR constructs a reference to an anonymous hash containing no 
+The \f(CW{}\fR constructs a reference to an anonymous hash containing no
 key/value pairs.  The \fIbless()\fR takes that reference and tells the object
 it references that it's now a Critter, and returns the reference.
 This is for convenience, because the referenced object itself knows that
-it has been blessed, and its reference to it could have been returned 
+it has been blessed, and the reference to it could have been returned
 directly, like this:
 .PP
 .Vb 5
@@ -248,7 +268,7 @@ so that your constructors may be inherited:
 .Ve
 Or if you expect people to call not just \f(CWCLASS->\fInew()\fR\fR but also
 \f(CW$obj->\fInew()\fR\fR, then use something like this.  The \fIinitialize()\fR
-method used will be of whatever \f(CW$class\fR we blessed the 
+method used will be of whatever \f(CW$class\fR we blessed the
 object into:
 .PP
 .Vb 8
@@ -269,7 +289,7 @@ be accessed only through the class's methods.
 A constructor may re-bless a referenced object currently belonging to
 another class, but then the new class is responsible for all cleanup
 later.  The previous blessing is forgotten, as an object may belong
-to only one class at a time.  (Although of course it's free to 
+to only one class at a time.  (Although of course it's free to
 inherit methods from many classes.)
 .PP
 A clarification:  Perl objects are blessed.  References are not.  Objects
@@ -283,7 +303,7 @@ the following example:
 \&    bless $a, BLAH;
 \&    print "\e$b is a ", ref($b), "\en";
 .Ve
-This reports \f(CW$b\fR as being a \s-1BLAH\s0, so obviously \fIbless()\fR 
+This reports \f(CW$b\fR as being a \s-1BLAH\s0, so obviously \fIbless()\fR
 operated on the object and not on the reference.
 .Sh "A Class is Simply a Package"
 .IX Subsection "A Class is Simply a Package"
@@ -297,7 +317,7 @@ package.  This is how Perl implements inheritance.  Each element of the
 \f(CW@ISA\fR array is just the name of another package that happens to be a
 class package.  The classes are searched (depth first) for missing
 methods in the order that they occur in \f(CW@ISA\fR.  The classes accessible
-through \f(CW@ISA\fR are known as base classes of the current class. 
+through \f(CW@ISA\fR are known as base classes of the current class.
 .PP
 If a missing method is found in one of the base classes, it is cached
 in the current class for efficiency.  Changing \f(CW@ISA\fR or defining new
@@ -325,7 +345,7 @@ Unlike say \*(C+, Perl doesn't provide any special syntax for method
 definition.  (It does provide a little syntax for method invocation
 though.  More on that later.)  A method expects its first argument
 to be the object or package it is being invoked on.  There are just two
-types of methods, which we'll call class and instance. 
+types of methods, which we'll call class and instance.
 (Sometimes you'll hear these called static and virtual, in honor of
 the two \*(C+ method types they most closely resemble.)
 .PP
@@ -460,7 +480,7 @@ The \f(CWUNIVERSAL\fR package automatically contains the following methods that
 are inherited by all other classes:
 .Ip "isa(\s-1CLASS\s0)" 4
 .IX Item "isa(\s-1CLASS\s0)"
-\f(CWisa\fR returns \fItrue\fR if its object is blessed into a sub-class of \f(CWCLASS\fR
+\f(CWisa\fR returns \fItrue\fR if its object is blessed into a subclass of \f(CWCLASS\fR
 .Sp
 \f(CWisa\fR is also exportable and can be called as a sub with two arguments. This
 allows the ability to check what a reference points to. Example
@@ -501,8 +521,8 @@ You may add other methods to the \s-1UNIVERSAL\s0 class via Perl or \s-1XS\s0 co
 You do not need to \f(CWuse UNIVERSAL\fR in order to make these methods
 available to your program.  This is necessary only if you wish to
 have \f(CWisa\fR available as a plain subroutine in the current package.
-.Sh "Destructors        "
-.IX Subsection "Destructors        "
+.Sh "Destructors"
+.IX Subsection "Destructors"
 When the last reference to an object goes away, the object is
 automatically destroyed.  (This may even be after you exit, if you've
 stored references in global variables.)  If you want to capture control
@@ -521,15 +541,15 @@ automatically when the current object is freed.
 An indirect object is limited to a name, a scalar variable, or a block,
 because it would have to do too much lookahead otherwise, just like any
 other postfix dereference in the language.  The left side of \-> is not so
-limited, because it's an infix operator, not a postfix operator.  
+limited, because it's an infix operator, not a postfix operator.
 .PP
-That means that below, A and B are equivalent to each other, and C and D
-are equivalent, but \s-1AB\s0 and \s-1CD\s0 are different:
+That means that in the following, A and B are equivalent to each other, and
+C and D are equivalent, but A/B and C/D are different:
 .PP
 .Vb 4
-\&    A: method $obref->{"fieldname"} 
+\&    A: method $obref->{"fieldname"}
 \&    B: (method $obref)->{"fieldname"}
-\&    C: $obref->{"fieldname"}->method() 
+\&    C: $obref->{"fieldname"}->method()
 \&    D: method {$obref->{"fieldname"}}
 .Ve
 .Sh "Summary"
@@ -548,13 +568,13 @@ probably won't matter.
 .PP
 A more serious concern is that unreachable memory with a non-zero
 reference count will not normally get freed.  Therefore, this is a bad
-idea:  
+idea:
 .PP
 .Vb 4
 \&    {
 \&        my $a;
 \&        $a = \e$a;
-\&    } 
+\&    }
 .Ve
 Even thought \f(CW$a\fR \fIshould\fR go away, it can't.  When building recursive data
 structures, you'll have to break the self-reference yourself explicitly
@@ -569,7 +589,7 @@ node such as one might use in a sophisticated tree structure:
 \&        $node->{LEFT} = $node->{RIGHT} = $node;
 \&        $node->{DATA} = [ @_ ];
 \&        return bless $node => $class;
-\&    } 
+\&    }
 .Ve
 If you create nodes like that, they (currently) won't go away unless you
 break their self reference yourself.  (In other words, this is not to be
@@ -581,11 +601,11 @@ When an interpreter thread finally shuts down (usually when your program
 exits), then a rather costly but complete mark-and-sweep style of garbage
 collection is performed, and everything allocated by that thread gets
 destroyed.  This is essential to support Perl as an embedded or a
-multi-threadable language.  For example, this program demonstrates Perl's
+multithreadable language.  For example, this program demonstrates Perl's
 two-phased garbage collection:
 .PP
 .Vb 2
-\&    #!/usr/bin/perl 
+\&    #!/usr/bin/perl
 \&    package Subtle;
 .Ve
 .Vb 6
@@ -594,13 +614,13 @@ two-phased garbage collection:
 \&        $test = \e$test;
 \&        warn "CREATING " . \e$test;
 \&        return bless \e$test;
-\&    } 
+\&    }
 .Ve
 .Vb 4
 \&    sub DESTROY {
 \&        my $self = shift;
 \&        warn "DESTROYING $self";
-\&    } 
+\&    }
 .Ve
 .Vb 1
 \&    package main;
@@ -612,7 +632,7 @@ two-phased garbage collection:
 \&        my $b = Subtle->new;
 \&        $$a = 0;  # break selfref
 \&        warn "leaving block";
-\&    } 
+\&    }
 .Ve
 .Vb 3
 \&    warn "just exited block";
@@ -632,7 +652,7 @@ When run as \fI/tmp/test\fR, the following output is produced:
 \&    DESTROYING Subtle=SCALAR(0x8e57c) during global destruction.
 .Ve
 Notice that \*(L"global destruction\*(R" bit there?  That's the thread
-garbage collector reaching the unreachable.  
+garbage collector reaching the unreachable.
 .PP
 Objects are always destructed, even when regular refs aren't and in fact
 are destructed in a separate pass before ordinary refs just to try to
@@ -646,10 +666,10 @@ A more complete garbage collection strategy will be implemented
 at a future date.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-A kinder, gentler tutorial on object-oriented programming in Perl can 
+A kinder, gentler tutorial on object-oriented programming in Perl can
 be found in the \fIperltoot\fR manpage.
-You should also check out the \fIperlbot\fR manpage for other object tricks, traps, and tips, 
-as well as the \fIperlmod\fR manpage for some style guides on constructing both modules
+You should also check out the \fIperlbot\fR manpage for other object tricks, traps, and tips,
+as well as the \fIperlmodlib\fR manpage for some style guides on constructing both modules
 and classes.
 
 .rn }` ''

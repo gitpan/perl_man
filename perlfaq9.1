@@ -1,0 +1,522 @@
+.rn '' }`
+''' $RCSfile$$Revision$$Date$
+'''
+''' $Log$
+'''
+.de Sh
+.br
+.if t .Sp
+.ne 5
+.PP
+\fB\\$1\fR
+.PP
+..
+.de Sp
+.if t .sp .5v
+.if n .sp
+..
+.de Ip
+.br
+.ie \\n(.$>=3 .ne \\$3
+.el .ne 3
+.IP "\\$1" \\$2
+..
+.de Vb
+.ft CW
+.nf
+.ne \\$1
+..
+.de Ve
+.ft R
+
+.fi
+..
+'''
+'''
+'''     Set up \*(-- to give an unbreakable dash;
+'''     string Tr holds user defined translation string.
+'''     Bell System Logo is used as a dummy character.
+'''
+.tr \(*W-|\(bv\*(Tr
+.ie n \{\
+.ds -- \(*W-
+.ds PI pi
+.if (\n(.H=4u)&(1m=24u) .ds -- \(*W\h'-12u'\(*W\h'-12u'-\" diablo 10 pitch
+.if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
+.ds L" ""
+.ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
+.ds L' '
+.ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
+'br\}
+.el\{\
+.ds -- \(em\|
+.tr \*(Tr
+.ds L" ``
+.ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
+.ds L' `
+.ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
+.ds PI \(*p
+'br\}
+.\"	If the F register is turned on, we'll generate
+.\"	index entries out stderr for the following things:
+.\"		TH	Title 
+.\"		SH	Header
+.\"		Sh	Subsection 
+.\"		Ip	Item
+.\"		X<>	Xref  (embedded
+.\"	Of course, you have to process the output yourself
+.\"	in some meaninful fashion.
+.if \nF \{
+.de IX
+.tm Index:\\$1\t\\n%\t"\\$2"
+..
+.nr % 0
+.rr F
+.\}
+.TH PERLFAQ9 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
+.IX Title "PERLFAQ9 1"
+.UC
+.IX Name "perlfaq9 - Networking ($Revision: 1.17 $, $Date: 1997/04/24 22:44:29 $)"
+.if n .hy 0
+.if n .na
+.ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
+.de CQ          \" put $1 in typewriter font
+.ft CW
+'if n "\c
+'if t \\&\\$1\c
+'if n \\&\\$1\c
+'if n \&"
+\\&\\$2 \\$3 \\$4 \\$5 \\$6 \\$7
+'.ft R
+..
+.\" @(#)ms.acc 1.5 88/02/08 SMI; from UCB 4.2
+.	\" AM - accent mark definitions
+.bd B 3
+.	\" fudge factors for nroff and troff
+.if n \{\
+.	ds #H 0
+.	ds #V .8m
+.	ds #F .3m
+.	ds #[ \f1
+.	ds #] \fP
+.\}
+.if t \{\
+.	ds #H ((1u-(\\\\n(.fu%2u))*.13m)
+.	ds #V .6m
+.	ds #F 0
+.	ds #[ \&
+.	ds #] \&
+.\}
+.	\" simple accents for nroff and troff
+.if n \{\
+.	ds ' \&
+.	ds ` \&
+.	ds ^ \&
+.	ds , \&
+.	ds ~ ~
+.	ds ? ?
+.	ds ! !
+.	ds /
+.	ds q
+.\}
+.if t \{\
+.	ds ' \\k:\h'-(\\n(.wu*8/10-\*(#H)'\'\h"|\\n:u"
+.	ds ` \\k:\h'-(\\n(.wu*8/10-\*(#H)'\`\h'|\\n:u'
+.	ds ^ \\k:\h'-(\\n(.wu*10/11-\*(#H)'^\h'|\\n:u'
+.	ds , \\k:\h'-(\\n(.wu*8/10)',\h'|\\n:u'
+.	ds ~ \\k:\h'-(\\n(.wu-\*(#H-.1m)'~\h'|\\n:u'
+.	ds ? \s-2c\h'-\w'c'u*7/10'\u\h'\*(#H'\zi\d\s+2\h'\w'c'u*8/10'
+.	ds ! \s-2\(or\s+2\h'-\w'\(or'u'\v'-.8m'.\v'.8m'
+.	ds / \\k:\h'-(\\n(.wu*8/10-\*(#H)'\z\(sl\h'|\\n:u'
+.	ds q o\h'-\w'o'u*8/10'\s-4\v'.4m'\z\(*i\v'-.4m'\s+4\h'\w'o'u*8/10'
+.\}
+.	\" troff and (daisy-wheel) nroff accents
+.ds : \\k:\h'-(\\n(.wu*8/10-\*(#H+.1m+\*(#F)'\v'-\*(#V'\z.\h'.2m+\*(#F'.\h'|\\n:u'\v'\*(#V'
+.ds 8 \h'\*(#H'\(*b\h'-\*(#H'
+.ds v \\k:\h'-(\\n(.wu*9/10-\*(#H)'\v'-\*(#V'\*(#[\s-4v\s0\v'\*(#V'\h'|\\n:u'\*(#]
+.ds _ \\k:\h'-(\\n(.wu*9/10-\*(#H+(\*(#F*2/3))'\v'-.4m'\z\(hy\v'.4m'\h'|\\n:u'
+.ds . \\k:\h'-(\\n(.wu*8/10)'\v'\*(#V*4/10'\z.\v'-\*(#V*4/10'\h'|\\n:u'
+.ds 3 \*(#[\v'.2m'\s-2\&3\s0\v'-.2m'\*(#]
+.ds o \\k:\h'-(\\n(.wu+\w'\(de'u-\*(#H)/2u'\v'-.3n'\*(#[\z\(de\v'.3n'\h'|\\n:u'\*(#]
+.ds d- \h'\*(#H'\(pd\h'-\w'~'u'\v'-.25m'\f2\(hy\fP\v'.25m'\h'-\*(#H'
+.ds D- D\\k:\h'-\w'D'u'\v'-.11m'\z\(hy\v'.11m'\h'|\\n:u'
+.ds th \*(#[\v'.3m'\s+1I\s-1\v'-.3m'\h'-(\w'I'u*2/3)'\s-1o\s+1\*(#]
+.ds Th \*(#[\s+2I\s-2\h'-\w'I'u*3/5'\v'-.3m'o\v'.3m'\*(#]
+.ds ae a\h'-(\w'a'u*4/10)'e
+.ds Ae A\h'-(\w'A'u*4/10)'E
+.ds oe o\h'-(\w'o'u*4/10)'e
+.ds Oe O\h'-(\w'O'u*4/10)'E
+.	\" corrections for vroff
+.if v .ds ~ \\k:\h'-(\\n(.wu*9/10-\*(#H)'\s-2\u~\d\s+2\h'|\\n:u'
+.if v .ds ^ \\k:\h'-(\\n(.wu*10/11-\*(#H)'\v'-.4m'^\v'.4m'\h'|\\n:u'
+.	\" for low resolution devices (crt and lpr)
+.if \n(.H>23 .if \n(.V>19 \
+\{\
+.	ds : e
+.	ds 8 ss
+.	ds v \h'-1'\o'\(aa\(ga'
+.	ds _ \h'-1'^
+.	ds . \h'-1'.
+.	ds 3 3
+.	ds o a
+.	ds d- d\h'-1'\(ga
+.	ds D- D\h'-1'\(hy
+.	ds th \o'bp'
+.	ds Th \o'LP'
+.	ds ae ae
+.	ds Ae AE
+.	ds oe oe
+.	ds Oe OE
+.\}
+.rm #[ #] #H #V #F C
+.SH "NAME"
+.IX Header "NAME"
+perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)
+.SH "DESCRIPTION"
+.IX Header "DESCRIPTION"
+This section deals with questions related to networking, the internet,
+and a few on the web.
+.Sh "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+.IX Subsection "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+Sure, but you probably can't afford our contracting rates :\-)
+.PP
+Seriously, if you can demonstrate that you've read the following FAQs
+and that your problem isn't something simple that can be easily
+answered, you'll probably receive a courteous and useful reply to your
+question if you post it on comp.infosystems.www.authoring.cgi (if it's
+something to do with \s-1HTTP\s0, \s-1HTML\s0, or the \s-1CGI\s0 protocols).  Questions that
+appear to be Perl questions but are really \s-1CGI\s0 ones that are posted to
+comp.lang.perl.misc may not be so well received.
+.PP
+The useful FAQs are:
+.PP
+.Vb 5
+\&    http://www.perl.com/perl/faq/idiots-guide.html
+\&    http://www3.pair.com/webthing/docs/cgi/faqs/cgifaq.shtml
+\&    http://www.perl.com/perl/faq/perl-cgi-faq.html
+\&    http://www-genome.wi.mit.edu/WWW/faqs/www-security-faq.html
+\&    http://www.boutell.com/faq/
+.Ve
+.Sh "How do I remove \s-1HTML\s0 from a string?"
+.IX Subsection "How do I remove \s-1HTML\s0 from a string?"
+The most correct way (albeit not the fastest) is to use \s-1HTML::\s0Parse
+from \s-1CPAN\s0 (part of the libwww-perl distribution, which is a must-have
+module for all web hackers).
+.PP
+Many folks attempt a simple-minded regular expression approach, like
+\f(CWs/<.*?>//g\fR, but that fails in many cases because the tags
+may continue over line breaks, they may contain quoted angle-brackets,
+or \s-1HTML\s0 comment may be present.  Plus folks forget to convert
+entities, like \f(CW&lt;\fR for example.
+.PP
+Here's one \*(L"simple-minded\*(R" approach, that works for most files:
+.PP
+.Vb 2
+\&    #!/usr/bin/perl -p0777
+\&    s/<(?:[^>'"]*|(['"]).*?\e1)*>//gs
+.Ve
+If you want a more complete solution, see the 3-stage striphtml
+program in
+http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/striphtml.gz
+\&.
+.Sh "How do I extract URLs?"
+.IX Subsection "How do I extract URLs?"
+A quick but imperfect approach is
+.PP
+.Vb 7
+\&    #!/usr/bin/perl -n00
+\&    # qxurl - tchrist@perl.com
+\&    print "$2\en" while m{
+\&        < \es*
+\&          A \es+ HREF \es* = \es* (["']) (.*?) \e1
+\&        \es* >
+\&    }gsix;
+.Ve
+This version does not adjust relative URLs, understand alternate
+bases, deal with \s-1HTML\s0 comments, deal with \s-1HREF\s0 and \s-1NAME\s0 attributes in
+the same tag, or accept URLs themselves as arguments.  It also runs
+about 100x faster than a more \*(L"complete\*(R" solution using the \s-1LWP\s0 suite
+of modules, such as the
+http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/xurl.gz
+program.
+.Sh "How do I download a file from the user's machine?  How do I open a file on another machine?"
+.IX Subsection "How do I download a file from the user's machine?  How do I open a file on another machine?"
+In the context of an \s-1HTML\s0 form, you can use what's known as
+\fBmultipart/form-data\fR encoding.  The \s-1CGI\s0.pm module (available from
+\s-1CPAN\s0) supports this in the \fIstart_multipart_form()\fR method, which isn't
+the same as the \fIstartform()\fR method.
+.Sh "How do I make a pop-up menu in \s-1HTML\s0?"
+.IX Subsection "How do I make a pop-up menu in \s-1HTML\s0?"
+Use the \fB<\s-1SELECT\s0>\fR and \fB<\s-1OPTION\s0>\fR tags.  The \s-1CGI\s0.pm
+module (available from \s-1CPAN\s0) supports this widget, as well as many
+others, including some that it cleverly synthesizes on its own.
+.Sh "How do I fetch an \s-1HTML\s0 file?"
+.IX Subsection "How do I fetch an \s-1HTML\s0 file?"
+One approach, if you have the lynx text-based \s-1HTML\s0 browser installed
+on your system, is this:
+.PP
+.Vb 2
+\&    $html_code = `lynx -source $url`;
+\&    $text_data = `lynx -dump $url`;
+.Ve
+The libwww-perl (\s-1LWP\s0) modules from \s-1CPAN\s0 provide a more powerful way to
+do this.  They work through proxies, and don't require lynx:
+.PP
+.Vb 3
+\&    # print HTML from a URL
+\&    use LWP::Simple;
+\&    getprint "http://www.sn.no/libwww-perl/";
+.Ve
+.Vb 10
+\&    # print ASCII from HTML from a URL
+\&    use LWP::Simple;
+\&    use HTML::Parse;
+\&    use HTML::FormatText;
+\&    my ($html, $ascii);
+\&    $html = get("http://www.perl.com/");
+\&    defined $html
+\&        or die "Can't fetch HTML from http://www.perl.com/";
+\&    $ascii = HTML::FormatText->new->format(parse_html($html));
+\&    print $ascii;
+.Ve
+.Sh "how do I decode or create those %\-encodings on the web?"
+.IX Subsection "how do I decode or create those %\-encodings on the web?"
+Here's an example of decoding:
+.PP
+.Vb 2
+\&    $string = "http://altavista.digital.com/cgi-bin/query?pg=q&what=news&fmt=.&q=%2Bcgi-bin+%2Bperl.exe";
+\&    $string =~ s/%([a-fA-F0-9]{2})/chr(hex($1))/ge;
+.Ve
+Encoding is a bit harder, because you can't just blindly change
+all the non-alphanumunder character (\f(CW\eW\fR) into their hex escapes.
+It's important that characters with special meaning like \f(CW/\fR and \f(CW?\fR
+\fInot\fR be translated.  Probably the easiest way to get this right is
+to avoid reinventing the wheel and just use the \s-1URI::\s0Escape module,
+which is part of the libwww-perl package (\s-1LWP\s0) available from \s-1CPAN\s0.
+.Sh "How do I redirect to another page?"
+.IX Subsection "How do I redirect to another page?"
+Instead of sending back a \f(CWContent-Type\fR as the headers of your
+reply, send back a \f(CWLocation:\fR header.  Officially this should be a
+\f(CWURI:\fR header, so the \s-1CGI\s0.pm module (available from \s-1CPAN\s0) sends back
+both:
+.PP
+.Vb 2
+\&    Location: http://www.domain.com/newpage
+\&    URI: http://www.domain.com/newpage
+.Ve
+Note that relative URLs in these headers can cause strange effects
+because of \*(L"optimizations\*(R" that servers do.
+.Sh "How do I put a password on my web pages?"
+.IX Subsection "How do I put a password on my web pages?"
+That depends.  You'll need to read the documentation for your web
+server, or perhaps check some of the other FAQs referenced above.
+.Sh "How do I edit my .htpasswd and .htgroup files with Perl?"
+.IX Subsection "How do I edit my .htpasswd and .htgroup files with Perl?"
+The \s-1HTTPD::\s0UserAdmin and \s-1HTTPD::\s0GroupAdmin modules provide a
+consistent \s-1OO\s0 interface to these files, regardless of how they're
+stored.  Databases may be text, dbm, Berkley \s-1DB\s0 or any database with a
+\s-1DBI\s0 compatible driver.  \s-1HTTPD::\s0UserAdmin supports files used by the
+`Basic\*(R' and `Digest\*(R' authentication schemes.  Here's an example:
+.PP
+.Vb 4
+\&    use HTTPD::UserAdmin ();
+\&    HTTPD::UserAdmin
+\&          ->new(DB => "/foo/.htpasswd")
+\&          ->add($username => $password);
+.Ve
+.Sh "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
+.IX Subsection "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
+Read the \s-1CGI\s0 security \s-1FAQ\s0, at
+http://www-genome.wi.mit.edu/\s-1WWW/\s0faqs/www-security-faq.html, and the
+Perl/\s-1CGI\s0 \s-1FAQ\s0 at
+http://www.perl.com/\s-1CPAN/\s0doc/FAQs/cgi/perl-cgi-faq.html.
+.PP
+In brief: use tainting (see the \fIperlsec\fR manpage), which makes sure that data
+from outside your script (eg, \s-1CGI\s0 parameters) are never used in
+\f(CWeval\fR or \f(CWsystem\fR calls.  In addition to tainting, never use the
+single-argument form of \fIsystem()\fR or \fIexec()\fR.  Instead, supply the
+command and arguments as a list, which prevents shell globbing.
+.Sh "How do I parse an email header?"
+.IX Subsection "How do I parse an email header?"
+For a quick-and-dirty solution, try this solution derived
+from page 222 of the 2nd edition of \*(L"Programming Perl":
+.PP
+.Vb 4
+\&    $/ = '';
+\&    $header = <MSG>;
+\&    $header =~ s/\en\es+/ /g;      # merge continuation lines
+\&    %head = ( UNIX_FROM_LINE, split /^([-\ew]+):\es*/m, $header );
+.Ve
+That solution doesn't do well if, for example, you're trying to
+maintain all the Received lines.  A more complete approach is to use
+the Mail::Header module from \s-1CPAN\s0 (part of the MailTools package).
+.Sh "How do I decode a \s-1CGI\s0 form?"
+.IX Subsection "How do I decode a \s-1CGI\s0 form?"
+A lot of people are tempted to code this up themselves, so you've
+probably all seen a lot of code involving \f(CW$ENV{CONTENT_LENGTH}\fR and
+\f(CW$ENV{QUERY_STRING}\fR.  It's true that this can work, but there are
+also a lot of versions of this floating around that are quite simply
+broken!
+.PP
+Please do not be tempted to reinvent the wheel.  Instead, use the
+\s-1CGI\s0.pm or CGI_Lite.pm (available from \s-1CPAN\s0), or if you're trapped in
+the module-free land of perl1 .. perl4, you might look into cgi-lib.pl
+(available from http://www.bio.cam.ac.uk/web/form.html).
+.Sh "How do I check a valid email address?"
+.IX Subsection "How do I check a valid email address?"
+You can't.
+.PP
+Without sending mail to the address and seeing whether it bounces (and
+even then you face the halting problem), you cannot determine whether
+an email address is valid.  Even if you apply the email header
+standard, you can have problems, because there are deliverable
+addresses that aren't \s-1RFC\s0\-822 (the mail header standard) compliant,
+and addresses that aren't deliverable which are compliant.
+.PP
+Many are tempted to try to eliminate many frequently-invalid email
+addresses with a simple regexp, such as
+\f(CW/^[\ew.-]+\e@([\ew.-]\e.)+\ew+$/\fR.  However, this also throws out many
+valid ones, and says nothing about potential deliverability, so is not
+suggested.  Instead, see
+http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/ckaddr.gz ,
+which actually checks against the full \s-1RFC\s0 spec (except for nested
+comments), looks for addresses you may not wish to accept email to
+(say, Bill Clinton or your postmaster), and then makes sure that the
+hostname given can be looked up in \s-1DNS\s0.  It's not fast, but it works.
+.PP
+Here's an alternative strategy used by many \s-1CGI\s0 script authors: Check
+the email address with a simple regexp (such as the one above).  If
+the regexp matched the address, accept the address.  If the regexp
+didn't match the address, request confirmation from the user that the
+email address they entered was correct.
+.Sh "How do I decode a \s-1MIME/BASE64\s0 string?"
+.IX Subsection "How do I decode a \s-1MIME/BASE64\s0 string?"
+The \s-1MIME\s0\-tools package (available from \s-1CPAN\s0) handles this and a lot
+more.  Decoding \s-1BASE64\s0 becomes as simple as:
+.PP
+.Vb 2
+\&    use MIME::base64;
+\&    $decoded = decode_base64($encoded);
+.Ve
+A more direct approach is to use the \fIunpack()\fR function's \*(L"u\*(R"
+format after minor transliterations:
+.PP
+.Vb 4
+\&    tr#A-Za-z0-9+/##cd;                   # remove non-base64 chars
+\&    tr#A-Za-z0-9+/# -_#;                  # convert to uuencoded format
+\&    $len = pack("c", 32 + 0.75*length);   # compute length byte
+\&    print unpack("u", $len . $_);         # uudecode and print
+.Ve
+.Sh "How do I return the user's email address?"
+.IX Subsection "How do I return the user's email address?"
+On systems that support getpwuid, the $< variable and the
+Sys::Hostname module (which is part of the standard perl distribution),
+you can probably try using something like this:
+.PP
+.Vb 2
+\&    use Sys::Hostname;
+\&    $address = sprintf('%s@%s', getpwuid($<), hostname);
+.Ve
+Company policies on email address can mean that this generates addresses
+that the company's email system will not accept, so you should ask for
+users\*(R' email addresses when this matters.  Furthermore, not all systems
+on which Perl runs are so forthcoming with this information as is Unix.
+.PP
+The Mail::Util module from \s-1CPAN\s0 (part of the MailTools package) provides a
+\fImailaddress()\fR function that tries to guess the mail address of the user.
+It makes a more intelligent guess than the code above, using information
+given when the module was installed, but it could still be incorrect.
+Again, the best way is often just to ask the user.
+.Sh "How do I send/read mail?"
+.IX Subsection "How do I send/read mail?"
+Sending mail: the Mail::Mailer module from \s-1CPAN\s0 (part of the MailTools
+package) is \s-1UNIX\s0\-centric, while Mail::Internet uses Net::\s-1SMTP\s0 which is
+not \s-1UNIX\s0\-centric.  Reading mail: use the Mail::Folder module from \s-1CPAN\s0
+(part of the MailFolder package) or the Mail::Internet module from
+\s-1CPAN\s0 (also part of the MailTools package).
+.PP
+.Vb 16
+\&   # sending mail
+\&    use Mail::Internet;
+\&    use Mail::Header;
+\&    # say which mail host to use
+\&    $ENV{SMTPHOSTS} = 'mail.frii.com';
+\&    # create headers
+\&    $header = new Mail::Header;
+\&    $header->add('From', 'gnat@frii.com');
+\&    $header->add('Subject', 'Testing');
+\&    $header->add('To', 'gnat@frii.com');
+\&    # create body
+\&    $body = 'This is a test, ignore';
+\&    # create mail object
+\&    $mail = new Mail::Internet(undef, Header => $header, Body => \e[$body]);
+\&    # send it
+\&    $mail->smtpsend or die;
+.Ve
+.Sh "How do I find out my hostname/domainname/\s-1IP\s0 address?"
+.IX Subsection "How do I find out my hostname/domainname/\s-1IP\s0 address?"
+A lot of code has historically cavalierly called the \f(CW`hostname`\fR
+program.  While sometimes expedient, this isn't very portable.  It's
+one of those tradeoffs of convenience versus portability.
+.PP
+The Sys::Hostname module (part of the standard perl distribution) will
+give you the hostname after which you can find out the \s-1IP\s0 address
+(assuming you have working \s-1DNS\s0) with a \fIgethostbyname()\fR call.
+.PP
+.Vb 4
+\&    use Socket;
+\&    use Sys::Hostname;
+\&    my $host = hostname();
+\&    my $addr = inet_ntoa(scalar(gethostbyname($name)) || 'localhost');
+.Ve
+Probably the simplest way to learn your \s-1DNS\s0 domain name is to grok
+it out of /etc/resolv.conf, at least under Unix.  Of course, this
+assumes several things about your resolv.conf configuration, including
+that it exists.
+.PP
+(We still need a good \s-1DNS\s0 domain name-learning method for non-Unix
+systems.)
+.Sh "How do I fetch a news article or the active newsgroups?"
+.IX Subsection "How do I fetch a news article or the active newsgroups?"
+Use the Net::\s-1NNTP\s0 or News::NNTPClient modules, both available from \s-1CPAN\s0.
+This can make tasks like fetching the newsgroup list as simple as:
+.PP
+.Vb 2
+\&    perl -MNews::NNTPClient
+\&      -e 'print News::NNTPClient->new->list("newsgroups")'
+.Ve
+.Sh "How do I fetch/put an \s-1FTP\s0 file?"
+.IX Subsection "How do I fetch/put an \s-1FTP\s0 file?"
+\s-1LWP::\s0Simple (available from \s-1CPAN\s0) can fetch but not put.  Net::\s-1FTP\s0 (also
+available from \s-1CPAN\s0) is more complex but can put as well as fetch.
+.Sh "How can I do \s-1RPC\s0 in Perl?"
+.IX Subsection "How can I do \s-1RPC\s0 in Perl?"
+A \s-1DCE::RPC\s0 module is being developed (but is not yet available), and
+will be released as part of the \s-1DCE\s0\-Perl package (available from
+\s-1CPAN\s0).  No \s-1ONC::RPC\s0 module is known.
+.SH "AUTHOR AND COPYRIGHT"
+.IX Header "AUTHOR AND COPYRIGHT"
+Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
+All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
+
+.rn }` ''

@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLPOD 1 "perl 5.003, patch 93" "7/Jan/97" "Perl Programmers Reference Guide"
+.TH PERLPOD 1 "perl 5.004, patch 01" "11/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLPOD 1"
 .UC
 .IX Name "perlpod - plain old documentation"
@@ -221,7 +241,7 @@ items consistent: either use \*(L"=item *\*(R" for all of them, to produce bulle
 or use \*(L"=item 1.\*(R", \*(L"=item 2.\*(R", etc., to produce numbered lists, or use
 \*(L"=item foo\*(R", \*(L"=item bar\*(R", etc., i.e., things that looks nothing like bullets
 or numbers. If you start with bullets or numbers, stick with them, as many
-formatters use the first \*(L"=item\*(R" type to decide how to format the list.  
+formatters use the first \*(L"=item\*(R" type to decide how to format the list.
 .Sp
 For, begin, and end let you include sections that are not interpreted
 as pod text, but passed directly to particular formatters. A formatter
@@ -231,12 +251,12 @@ paragraph is in the format indicated by the first word after
 \*(L"=for\*(R", like this:
 .Sp
 .Vb 2
-\& =for html <br> 
+\& =for html <br>
 \&  <p> This is a raw HTML paragraph </p>
 .Ve
 The paired commands \*(L"=begin\*(R" and \*(L"=end\*(R" work very similarly to \*(L"=for\*(R", but
 instead of only accepting a single paragraph, all text from \*(L"=begin\*(R" to a
-paragraph with a matching \*(L"=end\*(R" are treated as a particular format. 
+paragraph with a matching \*(L"=end\*(R" are treated as a particular format.
 .Sp
 Here are some examples of how to use these:
 .Sp
@@ -270,7 +290,7 @@ treat some of these as synonyms.)
 .Sp
 And don't forget, when using any command, that the command lasts up until
 the end of the \fBparagraph\fR, not the line. Hence in the examples below, you
-can see the blank lines after each command to end its paragraph.
+can see the empty lines after each command to end its paragraph.
 .Sp
 Some examples of lists include:
 .Sp
@@ -320,7 +340,7 @@ here and in commands:
 \&    I<text>     italicize text, used for emphasis or variables
 \&    B<text>     embolden text, used for switches and programs
 \&    S<text>     text contains non-breaking spaces
-\&    C<code>     literal code 
+\&    C<code>     literal code
 \&    L<name>     A link (cross reference) to name
 \&                    L<name>             manual page
 \&                    L<name/ident>       item in manual page
@@ -330,7 +350,7 @@ here and in commands:
 \&                    L</"sec">           ditto
 \&    F<file>     Used for filenames
 \&    X<index>    An index entry
-\&    ZE<lt>E<gt> A zero-width character
+\&    Z<>         A zero-width character
 \&    E<escape>   A named character (very similar to HTML escapes)
 \&                    E<lt>               A literal <
 \&                    E<gt>               A literal >
@@ -375,7 +395,7 @@ documentation with a \*(L"=head1\*(R" command at the beginning, and end it
 with a \*(L"=cut\*(R" command.  Perl will ignore the pod text.  See any of the
 supplied library modules for examples.  If you're going to put your
 pods at the end of the file, and you're using an _\|_END_\|_ or _\|_DATA_\|_
-cut mark, make sure to put a blank line there before the first pod
+cut mark, make sure to put an empty line there before the first pod
 directive.
 .PP
 .Vb 1
@@ -387,14 +407,14 @@ directive.
 .Vb 1
 \&    modern - I am a modern module
 .Ve
-If you had not had that blank line there, then the translators wouldn't
+If you had not had that empty line there, then the translators wouldn't
 have seen it.
 .SH "Common Pod Pitfalls"
 .IX Header "Common Pod Pitfalls"
 .Ip "\(bu" 4
 .IX Item "\(bu"
 Pod translators usually will require paragraphs to be separated by
-completely empty lines.  If you have an apparently blank line with
+completely empty lines.  If you have an apparently empty line with
 some spaces on it, this can cause odd formatting.
 .Ip "\(bu" 4
 .IX Item "\(bu"
@@ -406,7 +426,7 @@ sensibly.
 .Ip "\(bu" 4
 .IX Item "\(bu"
 The script \fIpod/checkpods.\s-1PL\s0\fR in the Perl source distribution
-provides skeletal checking for lines that look blank but aren't
+provides skeletal checking for lines that look empty but aren't
 \fBonly\fR, but is there as a placeholder until someone writes
 Pod::Checker.  The best way to check your pod is to pass it through
 one or more translators and proofread the result, or print out the

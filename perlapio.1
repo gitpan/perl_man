@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLAPIO 1 "perl 5.003, patch 93" "4/Jan/97" "Perl Programmers Reference Guide"
+.TH PERLAPIO 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLAPIO 1"
 .UC
 .IX Name "perlapio - perl's IO abstraction interface."
@@ -175,11 +195,12 @@ perlapio \- perl's IO abstraction interface.
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
 .PP
-.Vb 6
+.Vb 3
 \&    PerlIO *PerlIO_stdin(void);
 \&    PerlIO *PerlIO_stdout(void);
 \&    PerlIO *PerlIO_stderr(void);
-\&    
+.Ve
+.Vb 2
 \&    PerlIO *PerlIO_open(const char *,const char *);
 \&    int     PerlIO_close(PerlIO *);
 .Ve
@@ -187,9 +208,9 @@ perlapio \- perl's IO abstraction interface.
 \&    int     PerlIO_stdoutf(const char *,...)
 \&    int     PerlIO_puts(PerlIO *,const char *);
 \&    int     PerlIO_putc(PerlIO *,int);
-\&    int     PerlIO_write(PerlIO *,const void *,size_t); 
+\&    int     PerlIO_write(PerlIO *,const void *,size_t);
 \&    int     PerlIO_printf(PerlIO *, const char *,...);
-\&    int     PerlIO_vprintf(PerlIO *, const char *, va_list); 
+\&    int     PerlIO_vprintf(PerlIO *, const char *, va_list);
 \&    int     PerlIO_flush(PerlIO *);
 .Ve
 .Vb 3
@@ -200,7 +221,7 @@ perlapio \- perl's IO abstraction interface.
 .Vb 3
 \&    int     PerlIO_getc(PerlIO *);
 \&    int     PerlIO_ungetc(PerlIO *,int);
-\&    int     PerlIO_read(PerlIO *,void *,size_t); 
+\&    int     PerlIO_read(PerlIO *,void *,size_t);
 .Ve
 .Vb 6
 \&    int     PerlIO_fileno(PerlIO *);
@@ -211,46 +232,47 @@ perlapio \- perl's IO abstraction interface.
 \&    void    PerlIO_releaseFILE(PerlIO *,FILE *);
 .Ve
 .Vb 1
-\&    void    PerlIO_setlinebuf(PerlIO *); 
+\&    void    PerlIO_setlinebuf(PerlIO *);
 .Ve
-.Vb 10
+.Vb 5
 \&    long    PerlIO_tell(PerlIO *);
 \&    int     PerlIO_seek(PerlIO *,off_t,int);
-\&    int     PerlIO_getpos(PerlIO *,Fpos_t *) 
-\&    int     PerlIO_setpos(PerlIO *,Fpos_t *) 
+\&    int     PerlIO_getpos(PerlIO *,Fpos_t *)
+\&    int     PerlIO_setpos(PerlIO *,Fpos_t *)
 \&    void    PerlIO_rewind(PerlIO *);
-\&     
-\&    int     PerlIO_has_base(PerlIO *); 
-\&    int     PerlIO_has_cntptr(PerlIO *); 
-\&    int     PerlIO_fast_gets(PerlIO *); 
-\&    int     PerlIO_canset_cnt(PerlIO *); 
+.Ve
+.Vb 4
+\&    int     PerlIO_has_base(PerlIO *);
+\&    int     PerlIO_has_cntptr(PerlIO *);
+\&    int     PerlIO_fast_gets(PerlIO *);
+\&    int     PerlIO_canset_cnt(PerlIO *);
 .Ve
 .Vb 6
-\&    char   *PerlIO_get_ptr(PerlIO *); 
-\&    int     PerlIO_get_cnt(PerlIO *); 
-\&    void    PerlIO_set_cnt(PerlIO *,int); 
-\&    void    PerlIO_set_ptrcnt(PerlIO *,char *,int); 
-\&    char   *PerlIO_get_base(PerlIO *); 
-\&    int     PerlIO_get_bufsiz(PerlIO *); 
+\&    char   *PerlIO_get_ptr(PerlIO *);
+\&    int     PerlIO_get_cnt(PerlIO *);
+\&    void    PerlIO_set_cnt(PerlIO *,int);
+\&    void    PerlIO_set_ptrcnt(PerlIO *,char *,int);
+\&    char   *PerlIO_get_base(PerlIO *);
+\&    int     PerlIO_get_bufsiz(PerlIO *);
 .Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 Perl's source code should use the above functions instead of those
-defined in ANSI C's \fIstdio.h\fR,  \fIperlio.h\fR will the \f(CW#define\fR them to 
+defined in ANSI C's \fIstdio.h\fR,  \fIperlio.h\fR will the \f(CW#define\fR them to
 the I/O mechanism selected at Configure time.
 .PP
 The functions are modeled on those in \fIstdio.h\fR, but parameter order
 has been \*(L"tidied up a little\*(R".
 .Ip "\fBPerlIO *\fR" 4
 .IX Item "\fBPerlIO *\fR"
-This takes the place of \s-1FILE\s0 *. Unlike \s-1FILE\s0 * it should be treated as 
+This takes the place of \s-1FILE\s0 *. Unlike \s-1FILE\s0 * it should be treated as
 opaque (it is probably safe to assume it is a pointer to something).
 .Ip "\fBPerlIO_stdin()\fR, \fBPerlIO_stdout()\fR, \fBPerlIO_stderr()\fR" 4
 .IX Item "\fBPerlIO_stdin()\fR, \fBPerlIO_stdout()\fR, \fBPerlIO_stderr()\fR"
 Use these rather than \f(CWstdin\fR, \f(CWstdout\fR, \f(CWstderr\fR. They are written
 to look like \*(L"function calls\*(R" rather than variables because this makes
-it easier to \fImake them\fR function calls if platform cannot export data 
-to loaded modules, or if (say) different \*(L"threads\*(R" might have different 
+it easier to \fImake them\fR function calls if platform cannot export data
+to loaded modules, or if (say) different \*(L"threads\*(R" might have different
 values.
 .Ip "\fBPerlIO_open(path, mode)\fR, \fBPerlIO_fdopen(fd,mode)\fR" 4
 .IX Item "\fBPerlIO_open(path, mode)\fR, \fBPerlIO_fdopen(fd,mode)\fR"
@@ -264,14 +286,14 @@ This is \fIprintf()\fR equivalent. printf is #defined to this function,
 so it is (currently) legal to use \f(CWprintf(fmt,...)\fR in perl sources.
 .Ip "\fBPerlIO_read(f,buf,count)\fR, \fBPerlIO_write(f,buf,count)\fR" 4
 .IX Item "\fBPerlIO_read(f,buf,count)\fR, \fBPerlIO_write(f,buf,count)\fR"
-These correspond to \fIfread()\fR and \fIfwrite()\fR. Note that arguments 
+These correspond to \fIfread()\fR and \fIfwrite()\fR. Note that arguments
 are different, there is only one \*(L"count\*(R" and order has
 \*(L"file\*(R" first.
 .Ip "\fBPerlIO_close(f)\fR" 4
 .IX Item "\fBPerlIO_close(f)\fR"
 .Ip "\fBPerlIO_puts(s,f)\fR, \fBPerlIO_putc(c,f)\fR" 4
 .IX Item "\fBPerlIO_puts(s,f)\fR, \fBPerlIO_putc(c,f)\fR"
-These correspond to \fIfputs()\fR and \fIfputc()\fR. 
+These correspond to \fIfputs()\fR and \fIfputc()\fR.
 Note that arguments have been revised to have \*(L"file\*(R" first.
 .Ip "\fBPerlIO_ungetc(c,f)\fR" 4
 .IX Item "\fBPerlIO_ungetc(c,f)\fR"
@@ -288,8 +310,8 @@ This corresponds to \fIfeof()\fR.
 This corresponds to \fIferror()\fR.
 .Ip "\fBPerlIO_fileno(f)\fR" 4
 .IX Item "\fBPerlIO_fileno(f)\fR"
-This corresponds to \fIfileno()\fR, note that on some platforms, 
-the meaning of \*(L"fileno\*(R" may not match \s-1UNIX\s0.
+This corresponds to \fIfileno()\fR, note that on some platforms,
+the meaning of \*(L"fileno\*(R" may not match Unix.
 .Ip "\fBPerlIO_clearerr(f)\fR" 4
 .IX Item "\fBPerlIO_clearerr(f)\fR"
 This corresponds to \fIclearerr()\fR, i.e., clears \*(L'eof\*(R' and \*(L'error\*(R'
@@ -305,7 +327,7 @@ This corresponds to \fIftell()\fR.
 This corresponds to \fIfseek()\fR.
 .Ip "\fBPerlIO_getpos(f,p)\fR, \fBPerlIO_setpos(f,p)\fR" 4
 .IX Item "\fBPerlIO_getpos(f,p)\fR, \fBPerlIO_setpos(f,p)\fR"
-These correspond to \fIfgetpos()\fR and \fIfsetpos()\fR. If platform does not 
+These correspond to \fIfgetpos()\fR and \fIfsetpos()\fR. If platform does not
 have the stdio calls then they are implemented in terms of \fIPerlIO_tell()\fR
 and \fIPerlIO_seek()\fR.
 .Ip "\fBPerlIO_rewind(f)\fR" 4
@@ -319,9 +341,9 @@ PerlIO which will automatically be deleted when closed.
 .Sh "Co-existence with stdio"
 .IX Subsection "Co-existence with stdio"
 There is outline support for co-existence of PerlIO with stdio.
-Obviously if PerlIO is implemented in terms of stdio there is 
+Obviously if PerlIO is implemented in terms of stdio there is
 no problem. However if perlio is implemented on top of (say) sfio
-then mechanisms must exist to create a \s-1FILE\s0 * which can be passed 
+then mechanisms must exist to create a \s-1FILE\s0 * which can be passed
 to library code which is going to use stdio calls.
 .Ip "\fBPerlIO_importFILE(f,flags)\fR" 4
 .IX Item "\fBPerlIO_importFILE(f,flags)\fR"
@@ -330,12 +352,12 @@ May need additional arguments, interface under review.
 .Ip "\fBPerlIO_exportFILE(f,flags)\fR" 4
 .IX Item "\fBPerlIO_exportFILE(f,flags)\fR"
 Given an PerlIO * return a \*(L'native\*(R' \s-1FILE\s0 * suitable for
-passing to code expecting to be compiled and linked with 
+passing to code expecting to be compiled and linked with
 \s-1ANSI\s0 C \fIstdio.h\fR.
 .Sp
 The fact that such a \s-1FILE\s0 * has been \*(L'exported\*(R' is recorded,
-and may affect future PerlIO operations on the original 
-PerlIO *. 
+and may affect future PerlIO operations on the original
+PerlIO *.
 .Ip "\fBPerlIO_findFILE(f)\fR" 4
 .IX Item "\fBPerlIO_findFILE(f)\fR"
 Returns previously \*(L'exported\*(R' \s-1FILE\s0 * (if any).
@@ -344,7 +366,7 @@ Place holder until interface is fully defined.
 .IX Item "\fBPerlIO_releaseFILE(p,f)\fR"
 Calling PerlIO_releaseFILE informs PerlIO that all use
 of \s-1FILE\s0 * is complete. It is removed from list of \*(L'exported\*(R'
-\s-1FILE\s0 *s, and associated PerlIO * should revert to original 
+\s-1FILE\s0 *s, and associated PerlIO * should revert to original
 behaviour.
 .Ip "\fBPerlIO_setlinebuf(f)\fR" 4
 .IX Item "\fBPerlIO_setlinebuf(f)\fR"
@@ -370,21 +392,21 @@ Return pointer to next readable byte in buffer.
 Return count of readable bytes in the buffer.
 .Ip "\fBPerlIO_canset_cnt(f)\fR" 4
 .IX Item "\fBPerlIO_canset_cnt(f)\fR"
-Implementation can adjust its idea of number of 
+Implementation can adjust its idea of number of
 bytes in the buffer.
 .Ip "\fBPerlIO_fast_gets(f)\fR" 4
 .IX Item "\fBPerlIO_fast_gets(f)\fR"
-Implementation has all the interfaces required to 
+Implementation has all the interfaces required to
 allow perl's fast code to handle <\s-1FILE\s0> mechanism.
 .Sp
 .Vb 3
-\&  PerlIO_fast_gets(f) = PerlIO_has_cntptr(f) && \e 
+\&  PerlIO_fast_gets(f) = PerlIO_has_cntptr(f) && \e
 \&                        PerlIO_canset_cnt(f) && \e
 \&                        `Can set pointer into buffer'
 .Ve
 .Ip "\fBPerlIO_set_ptrcnt(f,p,c)\fR" 4
 .IX Item "\fBPerlIO_set_ptrcnt(f,p,c)\fR"
-Set pointer into buffer, and a count of bytes still in the 
+Set pointer into buffer, and a count of bytes still in the
 buffer. Should be used only to set
 pointer to within range implied by previous calls
 to \f(CWPerlIO_get_ptr\fR and \f(CWPerlIO_get_cnt\fR.
@@ -394,7 +416,7 @@ Obscure \- set count of bytes in the buffer. Deprecated.
 Currently used in only doio.c to force count < \-1 to \-1.
 Perhaps should be PerlIO_set_empty or similar.
 This call may actually do nothing if \*(L"count\*(R" is deduced from pointer
-and a \*(L"limit\*(R". 
+and a \*(L"limit\*(R".
 .Ip "\fBPerlIO_has_base(f)\fR" 4
 .IX Item "\fBPerlIO_has_base(f)\fR"
 Implementation has a buffer, and can return pointer

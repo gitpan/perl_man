@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH A2P 1 "perl 5.003, patch 93" "19/Feb/97" "Perl Programmers Reference Guide"
+.TH A2P 1 "perl 5.004, patch 01" "10/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "A2P 1"
 .UC
 .IX Name "a2p - Awk to Perl translator"
@@ -203,8 +223,13 @@ Any delimiter can be used to separate the field names.
 .Ip "\fB\-<number>\fR" 5
 .IX Item "\fB\-<number>\fR"
 causes a2p to assume that input will always have that many fields.
-.Sh "\*(L"Considerations\*(R""
-.IX Subsection "\*(L"Considerations\*(R""
+.Ip "\fB\-o\fR" 5
+.IX Item "\fB\-o\fR"
+tells a2p to use old awk behavior.  For now, the only difference is
+that old awk always has a line loop, even if there are no line
+actions, whereas new awk does not.
+.Sh "\*(M"Considerations\*(S""
+.IX Subsection "\*(M"Considerations\*(S""
 A2p cannot do as good a job translating as a human would, but it
 usually does pretty well.  There are some areas where you may want to
 examine the perl script produced and tweak it some.  Here are some of

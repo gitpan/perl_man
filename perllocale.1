@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOCALE 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLLOCALE 1 "perl 5.004, patch 01" "4/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLLOCALE 1"
 .UC
 .IX Name "perllocale - Perl locale handling (internationalization and localization)"
@@ -175,7 +195,7 @@ perllocale \- Perl locale handling (internationalization and localization)
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
 Perl supports language-specific notions of data such as \*(L"is this a
-letter\*(R", \*(L"what is the upper-case equivalent of this letter\*(R", and \*(L"which
+letter\*(R", \*(L"what is the uppercase equivalent of this letter\*(R", and \*(L"which
 of these letters comes first\*(R".  These are important issues, especially
 for languages other than English \- but also for English: it would be
 very nai\*:ve to think that \f(CWA-Za-z\fR defines all the \*(L"letters\*(R". Perl
@@ -334,7 +354,7 @@ As the example shows, if the second argument is an empty string, the
 category's locale is returned to the default specified by the
 corresponding environment variables.  Generally, this results in a
 return to the default which was in force when Perl started up: changes
-to the environment made by the application after start-up may or may not
+to the environment made by the application after startup may or may not
 be noticed, depending on the implementation of your system's C library.
 .PP
 If the second argument does not correspond to a valid locale, the locale
@@ -534,10 +554,10 @@ which stands for alphanumeric characters \- that is, alphabetic and
 numeric characters.  (Consult the \fIperlre\fR manpage for more information about
 regular expressions.)  Thanks to \f(CWLC_CTYPE\fR, depending on your locale
 setting, characters like \*(L'\*(ae\*(R', \*(L'\*(d-\*(R', \*(L'\*8\*(R', and
-\*(L'o\*/\*(R' may be understood as \f(CW\ew\fR characters.
+\&'o\*/\*(R' may be understood as \f(CW\ew\fR characters.
 .PP
 The \f(CWLC_CTYPE\fR locale also provides the map used in translating
-characters between lower- and upper-case.  This affects the case-mapping
+characters between lower and uppercase.  This affects the case-mapping
 functions \- \fIlc()\fR, lcfirst, \fIuc()\fR and \fIucfirst()\fR; case-mapping
 interpolation with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or <\eU> in double-quoted strings
 and in \f(CWs///\fR substitutions; and case-independent regular expression
@@ -727,7 +747,7 @@ True/false results are never tainted.
 .PP
 Three examples illustrate locale-dependent tainting.
 The first program, which ignores its locale, won't run: a value taken
-directly from the command-line may not be used to name an output file
+directly from the command line may not be used to name an output file
 when taint checks are enabled.
 .PP
 .Vb 2
@@ -735,7 +755,7 @@ when taint checks are enabled.
 \&        # Run with taint checking
 .Ve
 .Vb 2
-\&        # Command-line sanity check omitted...
+\&        # Command line sanity check omitted...
 \&        $tainted_output_file = shift;
 .Ve
 .Vb 2
@@ -744,7 +764,7 @@ when taint checks are enabled.
 .Ve
 The program can be made to run by \*(L"laundering\*(R" the tainted value through
 a regular expression: the second example \- which still ignores locale
-information \- runs, creating the file named on its command-line
+information \- runs, creating the file named on its command line
 if it can.
 .PP
 .Vb 1
@@ -781,7 +801,7 @@ of a match involving \f(CW\ew\fR when \f(CWuse locale\fR is in effect.
 .Ip "\s-1PERL_BADLANG\s0" 12
 .IX Item "\s-1PERL_BADLANG\s0"
 A string that can suppress Perl's warning about failed locale settings
-at start-up.  Failure can occur if the locale support in the operating
+at startup.  Failure can occur if the locale support in the operating
 system is lacking (broken) is some way \- or if you mistyped the name of
 a locale when you set up your environment.  If this environment variable
 is absent, or has a value which does not evaluate to integer zero \- that

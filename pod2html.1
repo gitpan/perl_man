@@ -93,10 +93,10 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDOC 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
-.IX Title "PERLDOC 1"
+.TH POD2HTML 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
+.IX Title "POD2HTML 1"
 .UC
-.IX Name "perldoc - Look up Perl documentation in pod format."
+.IX Name "pod2html - convert .pod files to .html files"
 .if n .hy 0
 .if n .na
 .ds C+ C\v'-.1v'\h'-1p'\s-2+\h'-1p'+\s0\v'.1v'\h'-1p'
@@ -191,70 +191,142 @@
 .rm #[ #] #H #V #F C
 .SH "NAME"
 .IX Header "NAME"
-perldoc \- Look up Perl documentation in pod format.
+pod2html \- convert .pod files to .html files
 .SH "SYNOPSIS"
 .IX Header "SYNOPSIS"
-\fBperldoc\fR [\fB\-h\fR] [\fB\-v\fR] [\fB\-t\fR] [\fB\-u\fR] [\fB\-m\fR] [\fB\-l\fR] PageName|ModuleName|ProgramName
 .PP
-\fBperldoc\fR \fB\-f\fR BuiltinFunction
+.Vb 4
+\&    pod2html --help --htmlroot=<name> --infile=<name> --outfile=<name>
+\&             --podpath=<name>:...:<name> --podroot=<name>
+\&             --libpods=<name>:...:<name> --recurse --norecurse --verbose
+\&             --index --noindex --title=<name>
+.Ve
 .SH "DESCRIPTION"
 .IX Header "DESCRIPTION"
-\fIperldoc\fR looks up a piece of documentation in .pod format that is embedded
-in the perl installation tree or in a perl script, and displays it via
-\f(CWpod2man | nroff -man | $PAGER\fR. (In addition, if running under HP\-UX,
-\f(CWcol -x\fR will be used.) This is primarily used for the documentation for
-the perl library modules.
-.PP
-Your system may also have man pages installed for those modules, in
-which case you can probably just use the \fIman\fR\|(1) command.
-.SH "OPTIONS"
-.IX Header "OPTIONS"
-.Ip "\fB\-h\fR help" 5
-.IX Item "\fB\-h\fR help"
-Prints out a brief help message.
-.Ip "\fB\-v\fR verbose" 5
-.IX Item "\fB\-v\fR verbose"
-Describes search for the item in detail.
-.Ip "\fB\-t\fR text output" 5
-.IX Item "\fB\-t\fR text output"
-Display docs using plain text converter, instead of nroff. This may be faster,
-but it won't look as nice.
-.Ip "\fB\-u\fR unformatted" 5
-.IX Item "\fB\-u\fR unformatted"
-Find docs only; skip reformatting by pod2*
-.Ip "\fB\-m\fR module" 5
-.IX Item "\fB\-m\fR module"
-Display the entire module: both code and unformatted pod documentation.
-This may be useful if the docs don't explain a function in the detail
-you need, and you'd like to inspect the code directly; perldoc will find
-the file for you and simply hand it off for display.
-.Ip "\fB\-l\fR file name only" 5
-.IX Item "\fB\-l\fR file name only"
-Display the file name of the module found.
-.Ip "\fB\-f\fR perlfunc" 5
-.IX Item "\fB\-f\fR perlfunc"
-The \fB\-f\fR option followed by the name of a perl built in function will
-extract the documentation of this function from the \fIperlfunc\fR manpage.
-.Ip "\fBPageName|ModuleName|ProgramName\fR" 5
-.IX Item "\fBPageName|ModuleName|ProgramName\fR"
-The item you want to look up.  Nested modules (such as \f(CWFile::Basename\fR)
-are specified either as \f(CWFile::Basename\fR or \f(CWFile/Basename\fR.  You may also
-give a descriptive name of a page, such as \f(CWperlfunc\fR. You make also give a
-partial or wrong-case name, such as \*(L"basename\*(R" for \*(L"File::Basename\*(R", but
-this will be slower, if there is more then one page with the same partial
-name, you will only get the first one.
-.SH "ENVIRONMENT"
-.IX Header "ENVIRONMENT"
-Any switches in the \f(CWPERLDOC\fR environment variable will be used before the 
-command line arguments.  \f(CWperldoc\fR also searches directories
-specified by the \f(CWPERL5LIB\fR (or \f(CWPERLLIB\fR if \f(CWPERL5LIB\fR is not
-defined) and \f(CWPATH\fR environment variables.
-(The latter is so that embedded pods for executables, such as
-\f(CWperldoc\fR itself, are available.)
+Converts files from pod format (see the \fIperlpod\fR manpage) to HTML format.
+.SH "ARGUMENTS"
+.IX Header "ARGUMENTS"
+pod2html takes the following arguments:
+.Ip "help" 4
+.IX Item "help"
+.Sp
+.Vb 1
+\&  --help
+.Ve
+Displays the usage message.
+.Ip "htmlroot" 4
+.IX Item "htmlroot"
+.Sp
+.Vb 1
+\&  --htmlroot=name
+.Ve
+Sets the base \s-1URL\s0 for the \s-1HTML\s0 files.  When cross-references are made,
+the \s-1HTML\s0 root is prepended to the \s-1URL\s0.
+.Ip "infile" 4
+.IX Item "infile"
+.Sp
+.Vb 1
+\&  --infile=name
+.Ve
+Specify the pod file to convert.  Input is taken from \s-1STDIN\s0 if no
+infile is specified.
+.Ip "outfile" 4
+.IX Item "outfile"
+.Sp
+.Vb 1
+\&  --outfile=name
+.Ve
+Specify the \s-1HTML\s0 file to create.  Output goes to \s-1STDOUT\s0 if no outfile
+is specified.
+.Ip "podroot" 4
+.IX Item "podroot"
+.Sp
+.Vb 1
+\&  --podroot=name
+.Ve
+Specify the base directory for finding library pods.
+.Ip "podpath" 4
+.IX Item "podpath"
+.Sp
+.Vb 1
+\&  --podpath=name:...:name
+.Ve
+Specify which subdirectories of the podroot contain pod files whose
+\s-1HTML\s0 converted forms can be linked-to in cross-references.
+.Ip "libpods" 4
+.IX Item "libpods"
+.Sp
+.Vb 1
+\&  --libpods=name:...:name
+.Ve
+List of page names (eg, \*(L"perlfunc") which contain linkable \f(CW=item\fRs.
+.Ip "netscape" 4
+.IX Item "netscape"
+.Sp
+.Vb 1
+\&  --netscape
+.Ve
+Use Netscape \s-1HTML\s0 directives when applicable.
+.Ip "nonetscape" 4
+.IX Item "nonetscape"
+.Sp
+.Vb 1
+\&  --nonetscape
+.Ve
+Do not use Netscape \s-1HTML\s0 directives (default).
+.Ip "index" 4
+.IX Item "index"
+.Sp
+.Vb 1
+\&  --index
+.Ve
+Generate an index at the top of the \s-1HTML\s0 file (default behaviour).
+.Ip "noindex" 4
+.IX Item "noindex"
+.Sp
+.Vb 1
+\&  --noindex
+.Ve
+Do not generate an index at the top of the \s-1HTML\s0 file.
+.Ip "recurse" 4
+.IX Item "recurse"
+.Sp
+.Vb 1
+\&  --recurse
+.Ve
+Recurse into subdirectories specified in podpath (default behaviour).
+.Ip "norecurse" 4
+.IX Item "norecurse"
+.Sp
+.Vb 1
+\&  --norecurse
+.Ve
+Do not recurse into subdirectories specified in podpath.
+.Ip "title" 4
+.IX Item "title"
+.Sp
+.Vb 1
+\&  --title=title
+.Ve
+Specify the title of the resulting \s-1HTML\s0 file.
+.Ip "verbose" 4
+.IX Item "verbose"
+.Sp
+.Vb 1
+\&  --verbose
+.Ve
+Display progress messages.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
-Kenneth Albanowski <kjahds@kjahds.com>
-.PP
-Minor updates by Andy Dougherty <doughera@lafcol.lafayette.edu>
+Tom Christiansen, <tchrist@perl.com>.
+.SH "BUGS"
+.IX Header "BUGS"
+See the \fIPod::Html\fR manpage for a list of known bugs in the translator.
+.SH "SEE ALSO"
+.IX Header "SEE ALSO"
+the \fIperlpod\fR manpage, the \fIPod::HTML\fR manpage
+.SH "COPYRIGHT"
+.IX Header "COPYRIGHT"
+This program is distributed under the Artistic License.
 
 .rn }` ''

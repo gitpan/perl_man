@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTOC 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLTOC 1 "perl 5.004, patch 01" "10/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLTOC 1"
 .UC
 .IX Name "perltoc - perl documentation table of contents"
@@ -205,6 +225,675 @@ expression enhancements, Innumerable Unbundled Modules, Compilability
 .IX Item "\s-1BUGS\s0"
 .Ip "\s-1NOTES\s0" 0
 .IX Item "\s-1NOTES\s0"
+.Sh "perlfaq \- frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
+.IX Subsection "perlfaq \- frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+perlfaq: Structural overview of the \s-1FAQ\s0, the \fIperlfaq1\fR manpage: General Questions
+About Perl, the \fIperlfaq2\fR manpage: Obtaining and Learning about Perl, the \fIperlfaq3\fR manpage:
+Programming Tools, the \fIperlfaq4\fR manpage: Data Manipulation, the \fIperlfaq5\fR manpage: Files and
+Formats, the \fIperlfaq6\fR manpage: Regexps, the \fIperlfaq7\fR manpage: General Perl Language Issues,
+the \fIperlfaq8\fR manpage: System Interaction, the \fIperlfaq9\fR manpage: Networking
+.Ip "Where to get this document" 5
+.IX Item "Where to get this document"
+.Ip "How to contribute to this document" 5
+.IX Item "How to contribute to this document"
+.Ip "What will happen if you mail your Perl programming problems to the authors" 5
+.IX Item "What will happen if you mail your Perl programming problems to the authors"
+.Ip "Credits" 0
+.IX Item "Credits"
+.Ip "Author and Copyright Information" 0
+.IX Item "Author and Copyright Information"
+.Ip "Noncommercial Reproduction" 5
+.IX Item "Noncommercial Reproduction"
+.Ip "Commercial Reproduction" 5
+.IX Item "Commercial Reproduction"
+.Ip "Disclaimer" 5
+.IX Item "Disclaimer"
+.Ip "Changes" 0
+.IX Item "Changes"
+24/April/97, 23/April/97, 25/March/97, 18/March/97, 17/March/97 Version,
+Initial Release: 11/March/97
+.Sh "perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)"
+.IX Subsection "perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "What is Perl?" 5
+.IX Item "What is Perl?"
+.Ip "Who supports Perl?  Who develops it?  Why is it free?" 5
+.IX Item "Who supports Perl?  Who develops it?  Why is it free?"
+.Ip "Which version of Perl should I use?" 5
+.IX Item "Which version of Perl should I use?"
+.Ip "What are perl4 and perl5?" 5
+.IX Item "What are perl4 and perl5?"
+.Ip "How stable is Perl?" 5
+.IX Item "How stable is Perl?"
+.Ip "Is Perl difficult to learn?" 5
+.IX Item "Is Perl difficult to learn?"
+.Ip "How does Perl compare with other languages like Java, Python, \s-1REXX\s0, Scheme, or Tcl?" 5
+.IX Item "How does Perl compare with other languages like Java, Python, \s-1REXX\s0, Scheme, or Tcl?"
+.Ip "Can I do [task] in Perl?" 5
+.IX Item "Can I do [task] in Perl?"
+.Ip "When shouldn't I program in Perl?" 5
+.IX Item "When shouldn't I program in Perl?"
+.Ip "What's the difference between \*(N"perl\*(T" and \*(N"Perl\*(T"?" 5
+.IX Item "What's the difference between \*(N"perl\*(T" and \*(N"Perl\*(T"?"
+.Ip "Is it a Perl program or a Perl script?" 5
+.IX Item "Is it a Perl program or a Perl script?"
+.Ip "What is a \s-1JAPH\s0?" 5
+.IX Item "What is a \s-1JAPH\s0?"
+.Ip "Where can I get a list of Larry Wall witticisms?" 5
+.IX Item "Where can I get a list of Larry Wall witticisms?"
+.Ip "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?" 5
+.IX Item "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.16 $, \f(CW$Date:\fR 1997/04/23 18:04:09 $)"
+.IX Subsection "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.16 $, \f(CW$Date:\fR 1997/04/23 18:04:09 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "What machines support Perl?  Where do I get it?" 5
+.IX Item "What machines support Perl?  Where do I get it?"
+.Ip "How can I get a binary version of Perl?" 5
+.IX Item "How can I get a binary version of Perl?"
+.Ip "I don't have a C compiler on my system.  How can I compile perl?" 5
+.IX Item "I don't have a C compiler on my system.  How can I compile perl?"
+.Ip "I copied the Perl binary from one machine to another, but scripts don't work." 5
+.IX Item "I copied the Perl binary from one machine to another, but scripts don't work."
+.Ip "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?" 5
+.IX Item "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?"
+.Ip "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?" 5
+.IX Item "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?"
+.Ip "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?" 5
+.IX Item "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?"
+.Ip "Where can I get information on Perl?" 5
+.IX Item "Where can I get information on Perl?"
+.Ip "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?" 5
+.IX Item "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?"
+.Ip "Where should I post source code?" 5
+.IX Item "Where should I post source code?"
+.Ip "Perl Books" 5
+.IX Item "Perl Books"
+.Ip "Perl in Magazines" 5
+.IX Item "Perl in Magazines"
+.Ip "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access" 5
+.IX Item "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access"
+.Ip "What mailing lists are there for perl?" 5
+.IX Item "What mailing lists are there for perl?"
+MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
+.Ip "Archives of comp.lang.perl.misc" 5
+.IX Item "Archives of comp.lang.perl.misc"
+.Ip "Perl Training" 5
+.IX Item "Perl Training"
+.Ip "Where can I buy a commercial version of Perl?" 5
+.IX Item "Where can I buy a commercial version of Perl?"
+.Ip "Where do I send bug reports?" 5
+.IX Item "Where do I send bug reports?"
+.Ip "What is perl.com?  perl.org?  The Perl Institute?" 5
+.IX Item "What is perl.com?  perl.org?  The Perl Institute?"
+.Ip "How do I learn about object-oriented Perl programming?" 5
+.IX Item "How do I learn about object-oriented Perl programming?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq3 \- Programming Tools ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:43:42 $)"
+.IX Subsection "perlfaq3 \- Programming Tools ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:43:42 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "How do I do (anything)?" 5
+.IX Item "How do I do (anything)?"
+.Ip "How can I use Perl interactively?" 5
+.IX Item "How can I use Perl interactively?"
+.Ip "Is there a Perl shell?" 5
+.IX Item "Is there a Perl shell?"
+.Ip "How do I debug my Perl programs?" 5
+.IX Item "How do I debug my Perl programs?"
+.Ip "How do I profile my Perl programs?" 5
+.IX Item "How do I profile my Perl programs?"
+.Ip "How do I cross-reference my Perl programs?" 5
+.IX Item "How do I cross-reference my Perl programs?"
+.Ip "Is there a pretty-printer (formatter) for Perl?" 5
+.IX Item "Is there a pretty-printer (formatter) for Perl?"
+.Ip "Is there a ctags for Perl?" 5
+.IX Item "Is there a ctags for Perl?"
+.Ip "Where can I get Perl macros for vi?" 5
+.IX Item "Where can I get Perl macros for vi?"
+.Ip "Where can I get perl-mode for emacs?" 5
+.IX Item "Where can I get perl-mode for emacs?"
+.Ip "How can I use curses with Perl?" 5
+.IX Item "How can I use curses with Perl?"
+.Ip "How can I use X or Tk with Perl?" 5
+.IX Item "How can I use X or Tk with Perl?"
+.Ip "How can I generate simple menus without using \s-1CGI\s0 or Tk?" 5
+.IX Item "How can I generate simple menus without using \s-1CGI\s0 or Tk?"
+.Ip "Can I dynamically load C routines into Perl?" 5
+.IX Item "Can I dynamically load C routines into Perl?"
+.Ip "What is undump?" 5
+.IX Item "What is undump?"
+.Ip "How can I make my Perl program run faster?" 5
+.IX Item "How can I make my Perl program run faster?"
+.Ip "How can I make my Perl program take less memory?" 5
+.IX Item "How can I make my Perl program take less memory?"
+.Ip "Is it unsafe to return a pointer to local data?" 5
+.IX Item "Is it unsafe to return a pointer to local data?"
+.Ip "How can I free an array or hash so my program shrinks?" 5
+.IX Item "How can I free an array or hash so my program shrinks?"
+.Ip "How can I make my \s-1CGI\s0 script more efficient?" 5
+.IX Item "How can I make my \s-1CGI\s0 script more efficient?"
+.Ip "How can I hide the source for my Perl program?" 5
+.IX Item "How can I hide the source for my Perl program?"
+.Ip "How can I compile my Perl program into byte code or C?" 5
+.IX Item "How can I compile my Perl program into byte code or C?"
+.Ip "How can I get \*(N'#!perl\*(T' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?" 5
+.IX Item "How can I get \*(N'#!perl\*(T' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
+.Ip "Can I write useful perl programs on the command line?" 5
+.IX Item "Can I write useful perl programs on the command line?"
+.Ip "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?" 5
+.IX Item "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?"
+.Ip "Where can I learn about \s-1CGI\s0 or Web programming in Perl?" 5
+.IX Item "Where can I learn about \s-1CGI\s0 or Web programming in Perl?"
+.Ip "Where can I learn about object-oriented Perl programming?" 5
+.IX Item "Where can I learn about object-oriented Perl programming?"
+.Ip "Where can I learn about linking C with Perl? [h2xs, xsubpp]" 5
+.IX Item "Where can I learn about linking C with Perl? [h2xs, xsubpp]"
+.Ip "I've read perlembed, perlguts, etc., but I can't embed perl in my C program, what am I doing wrong?" 5
+.IX Item "I've read perlembed, perlguts, etc., but I can't embed perl in my C program, what am I doing wrong?"
+.Ip "When I tried to run my script, I got this message. What does it mean?" 5
+.IX Item "When I tried to run my script, I got this message. What does it mean?"
+.Ip "What's MakeMaker?" 5
+.IX Item "What's MakeMaker?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq4 \- Data Manipulation ($Revision: 1.19 $, \f(CW$Date:\fR 1997/04/24 22:43:57 $)"
+.IX Subsection "perlfaq4 \- Data Manipulation ($Revision: 1.19 $, \f(CW$Date:\fR 1997/04/24 22:43:57 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "Data: Numbers" 0
+.IX Item "Data: Numbers"
+.Ip "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?" 5
+.IX Item "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?"
+.Ip "Why isn't my octal data interpreted correctly?" 5
+.IX Item "Why isn't my octal data interpreted correctly?"
+.Ip "Does perl have a round function?	What about ceil() and floor()? Trig functions?" 5
+.IX Item "Does perl have a round function?	What about ceil() and floor()? Trig functions?"
+.Ip "How do I convert bits into ints?" 5
+.IX Item "How do I convert bits into ints?"
+.Ip "How do I multiply matrices?" 5
+.IX Item "How do I multiply matrices?"
+.Ip "How do I perform an operation on a series of integers?" 5
+.IX Item "How do I perform an operation on a series of integers?"
+.Ip "How can I output Roman numerals?" 5
+.IX Item "How can I output Roman numerals?"
+.Ip "Why aren't my random numbers random?" 5
+.IX Item "Why aren't my random numbers random?"
+.Ip "Data: Dates" 0
+.IX Item "Data: Dates"
+.Ip "How do I find the week-of-the-year/day-of-the-year?" 5
+.IX Item "How do I find the week-of-the-year/day-of-the-year?"
+.Ip "How can I compare two date strings?" 5
+.IX Item "How can I compare two date strings?"
+.Ip "How can I take a string and turn it into epoch seconds?" 5
+.IX Item "How can I take a string and turn it into epoch seconds?"
+.Ip "How can I find the Julian Day?" 5
+.IX Item "How can I find the Julian Day?"
+.Ip "Does Perl have a year 2000 problem?" 5
+.IX Item "Does Perl have a year 2000 problem?"
+.Ip "Data: Strings" 0
+.IX Item "Data: Strings"
+.Ip "How do I validate input?" 5
+.IX Item "How do I validate input?"
+.Ip "How do I unescape a string?" 5
+.IX Item "How do I unescape a string?"
+.Ip "How do I remove consecutive pairs of characters?" 5
+.IX Item "How do I remove consecutive pairs of characters?"
+.Ip "How do I expand function calls in a string?" 5
+.IX Item "How do I expand function calls in a string?"
+.Ip "How do I find matching/nesting anything?" 5
+.IX Item "How do I find matching/nesting anything?"
+.Ip "How do I reverse a string?" 5
+.IX Item "How do I reverse a string?"
+.Ip "How do I expand tabs in a string?" 5
+.IX Item "How do I expand tabs in a string?"
+.Ip "How do I reformat a paragraph?" 5
+.IX Item "How do I reformat a paragraph?"
+.Ip "How can I access/change the first N letters of a string?" 5
+.IX Item "How can I access/change the first N letters of a string?"
+.Ip "How do I change the Nth occurrence of something?" 5
+.IX Item "How do I change the Nth occurrence of something?"
+.Ip "How can I count the number of occurrences of a substring within a string?" 5
+.IX Item "How can I count the number of occurrences of a substring within a string?"
+.Ip "How do I capitalize all the words on one line?" 5
+.IX Item "How do I capitalize all the words on one line?"
+.Ip "How can I split a [character] delimited string except when inside [character]? (Comma-separated files)" 5
+.IX Item "How can I split a [character] delimited string except when inside [character]? (Comma-separated files)"
+.Ip "How do I strip blank space from the beginning/end of a string?" 5
+.IX Item "How do I strip blank space from the beginning/end of a string?"
+.Ip "How do I extract selected columns from a string?" 5
+.IX Item "How do I extract selected columns from a string?"
+.Ip "How do I find the soundex value of a string?" 5
+.IX Item "How do I find the soundex value of a string?"
+.Ip "How can I expand variables in text strings?" 5
+.IX Item "How can I expand variables in text strings?"
+.Ip "What's wrong with always quoting \*(N"$vars\*(T"?" 5
+.IX Item "What's wrong with always quoting \*(N"$vars\*(T"?"
+.Ip "Why don't my <<\s-1HERE\s0 documents work?" 5
+.IX Item "Why don't my <<\s-1HERE\s0 documents work?"
+1. There must be no space after the << part, 2. There (probably) should be
+a semicolon at the end, 3. You can't (easily) have any space in front of
+the tag
+.Ip "Data: Arrays" 0
+.IX Item "Data: Arrays"
+.Ip "What is the difference between $array[1] and @array[1]?" 5
+.IX Item "What is the difference between $array[1] and @array[1]?"
+.Ip "How can I extract just the unique elements of an array?" 5
+.IX Item "How can I extract just the unique elements of an array?"
+a) If \f(CW@in\fR is sorted, and you want \f(CW@out\fR to be sorted:, b) If you don't know
+whether \f(CW@in\fR is sorted:, c) Like (b), but \f(CW@in\fR contains only small integers:,
+d) A way to do (b) without any loops or greps:, e) Like (d), but \f(CW@in\fR
+contains only small positive integers:
+.Ip "How can I tell whether an array contains a certain element?" 5
+.IX Item "How can I tell whether an array contains a certain element?"
+.Ip "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?" 5
+.IX Item "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?"
+.Ip "How do I find the first array element for which a condition is true?" 5
+.IX Item "How do I find the first array element for which a condition is true?"
+.Ip "How do I handle linked lists?" 5
+.IX Item "How do I handle linked lists?"
+.Ip "How do I handle circular lists?" 5
+.IX Item "How do I handle circular lists?"
+.Ip "How do I shuffle an array randomly?" 5
+.IX Item "How do I shuffle an array randomly?"
+.Ip "How do I process/modify each element of an array?" 5
+.IX Item "How do I process/modify each element of an array?"
+.Ip "How do I select a random element from an array?" 5
+.IX Item "How do I select a random element from an array?"
+.Ip "How do I permute N elements of a list?" 5
+.IX Item "How do I permute N elements of a list?"
+.Ip "How do I sort an array by (anything)?" 5
+.IX Item "How do I sort an array by (anything)?"
+.Ip "How do I manipulate arrays of bits?" 5
+.IX Item "How do I manipulate arrays of bits?"
+.Ip "Why does defined() return true on empty arrays and hashes?" 5
+.IX Item "Why does defined() return true on empty arrays and hashes?"
+.Ip "Data: Hashes (Associative Arrays)" 0
+.IX Item "Data: Hashes (Associative Arrays)"
+.Ip "How do I process an entire hash?" 5
+.IX Item "How do I process an entire hash?"
+.Ip "What happens if I add or remove keys from a hash while iterating over it?" 5
+.IX Item "What happens if I add or remove keys from a hash while iterating over it?"
+.Ip "How do I look up a hash element by value?" 5
+.IX Item "How do I look up a hash element by value?"
+.Ip "How can I know how many entries are in a hash?" 5
+.IX Item "How can I know how many entries are in a hash?"
+.Ip "How do I sort a hash (optionally by value instead of key)?" 5
+.IX Item "How do I sort a hash (optionally by value instead of key)?"
+.Ip "How can I always keep my hash sorted?" 5
+.IX Item "How can I always keep my hash sorted?"
+.Ip "What's the difference between \*(N"delete\*(T" and \*(N"undef\*(T" with hashes?" 5
+.IX Item "What's the difference between \*(N"delete\*(T" and \*(N"undef\*(T" with hashes?"
+.Ip "Why don't my tied hashes make the defined/exists distinction?" 5
+.IX Item "Why don't my tied hashes make the defined/exists distinction?"
+.Ip "How do I reset an each() operation part-way through?" 5
+.IX Item "How do I reset an each() operation part-way through?"
+.Ip "How can I get the unique keys from two hashes?" 5
+.IX Item "How can I get the unique keys from two hashes?"
+.Ip "How can I store a multidimensional array in a \s-1DBM\s0 file?" 5
+.IX Item "How can I store a multidimensional array in a \s-1DBM\s0 file?"
+.Ip "How can I make my hash remember the order I put elements into it?" 5
+.IX Item "How can I make my hash remember the order I put elements into it?"
+.Ip "Why does passing a subroutine an undefined element in a hash create it?" 5
+.IX Item "Why does passing a subroutine an undefined element in a hash create it?"
+.Ip "How can I make the Perl equivalent of a C structure/\*(C+ class/hash or array of hashes or arrays?" 5
+.IX Item "How can I make the Perl equivalent of a C structure/\*(C+ class/hash or array of hashes or arrays?"
+.Ip "How can I use a reference as a hash key?" 5
+.IX Item "How can I use a reference as a hash key?"
+.Ip "Data: Misc" 0
+.IX Item "Data: Misc"
+.Ip "How do I handle binary data correctly?" 5
+.IX Item "How do I handle binary data correctly?"
+.Ip "How do I determine whether a scalar is a number/whole/integer/float?" 5
+.IX Item "How do I determine whether a scalar is a number/whole/integer/float?"
+.Ip "How do I keep persistent data across program calls?" 5
+.IX Item "How do I keep persistent data across program calls?"
+.Ip "How do I print out or copy a recursive data structure?" 5
+.IX Item "How do I print out or copy a recursive data structure?"
+.Ip "How do I define methods for every class/object?" 5
+.IX Item "How do I define methods for every class/object?"
+.Ip "How do I verify a credit card checksum?" 5
+.IX Item "How do I verify a credit card checksum?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq5 \- Files and Formats ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:44:02 $)"
+.IX Subsection "perlfaq5 \- Files and Formats ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:44:02 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "How do I flush/unbuffer a filehandle?  Why must I do this?" 5
+.IX Item "How do I flush/unbuffer a filehandle?  Why must I do this?"
+.Ip "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?" 5
+.IX Item "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?"
+.Ip "How do I count the number of lines in a file?" 5
+.IX Item "How do I count the number of lines in a file?"
+.Ip "How do I make a temporary file name?" 5
+.IX Item "How do I make a temporary file name?"
+.Ip "How can I manipulate fixed-record-length files?" 5
+.IX Item "How can I manipulate fixed-record-length files?"
+.Ip "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?" 5
+.IX Item "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?"
+.Ip "How can I set up a footer format to be used with write()?" 5
+.IX Item "How can I set up a footer format to be used with write()?"
+.Ip "How can I write() into a string?" 5
+.IX Item "How can I write() into a string?"
+.Ip "How can I output my numbers with commas added?" 5
+.IX Item "How can I output my numbers with commas added?"
+.Ip "How can I translate tildes (~) in a filename?" 5
+.IX Item "How can I translate tildes (~) in a filename?"
+.Ip "How come when I open the file read-write it wipes it out?" 5
+.IX Item "How come when I open the file read-write it wipes it out?"
+.Ip "Why do I sometimes get an \*(N"Argument list too long\*(T" when I use <*>?" 5
+.IX Item "Why do I sometimes get an \*(N"Argument list too long\*(T" when I use <*>?"
+.Ip "Is there a leak/bug in glob()?" 5
+.IX Item "Is there a leak/bug in glob()?"
+.Ip "How can I open a file with a leading \*(N">\*(T" or trailing blanks?" 5
+.IX Item "How can I open a file with a leading \*(N">\*(T" or trailing blanks?"
+.Ip "How can I reliably rename a file?" 5
+.IX Item "How can I reliably rename a file?"
+.Ip "How can I lock a file?" 5
+.IX Item "How can I lock a file?"
+.Ip "What can't I just open(\s-1FH\s0, \*(N">file.lock"")?" 5
+.IX Item "What can't I just open(\s-1FH\s0, \*(N">file.lock"")?"
+.Ip "I still don't get locking.  I just want to increment the number in the file.  How can I do this?" 5
+.IX Item "I still don't get locking.  I just want to increment the number in the file.  How can I do this?"
+.Ip "How do I randomly update a binary file?" 5
+.IX Item "How do I randomly update a binary file?"
+.Ip "How do I get a file's timestamp in perl?" 5
+.IX Item "How do I get a file's timestamp in perl?"
+.Ip "How do I set a file's timestamp in perl?" 5
+.IX Item "How do I set a file's timestamp in perl?"
+.Ip "How do I print to more than one file at once?" 5
+.IX Item "How do I print to more than one file at once?"
+.Ip "How can I read in a file by paragraphs?" 5
+.IX Item "How can I read in a file by paragraphs?"
+.Ip "How can I read a single character from a file?  From the keyboard?" 5
+.IX Item "How can I read a single character from a file?  From the keyboard?"
+.Ip "How can I tell if there's a character waiting on a filehandle?" 5
+.IX Item "How can I tell if there's a character waiting on a filehandle?"
+.Ip "How do I open a file without blocking?" 5
+.IX Item "How do I open a file without blocking?"
+.Ip "How do I create a file only if it doesn't exist?" 5
+.IX Item "How do I create a file only if it doesn't exist?"
+.Ip "How do I do a \f(CWtail -f\fR in perl?" 5
+.IX Item "How do I do a \f(CWtail -f\fR in perl?"
+.Ip "How do I dup() a filehandle in Perl?" 5
+.IX Item "How do I dup() a filehandle in Perl?"
+.Ip "How do I close a file descriptor by number?" 5
+.IX Item "How do I close a file descriptor by number?"
+.Ip "Why can't I use \*(N"C:\etemp\efoo\*(T" in \s-1DOS\s0 paths?  What doesn't `C:\etemp\efoo.exe` work?" 5
+.IX Item "Why can't I use \*(N"C:\etemp\efoo\*(T" in \s-1DOS\s0 paths?  What doesn't `C:\etemp\efoo.exe` work?"
+.Ip "Why doesn't glob'*.*' get all the files?" 5
+.IX Item "Why doesn't glob'*.*' get all the files?"
+.Ip "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?" 5
+.IX Item "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?"
+.Ip "How do I select a random line from a file?" 5
+.IX Item "How do I select a random line from a file?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq6 \- Regexps ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:10 $)"
+.IX Subsection "perlfaq6 \- Regexps ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:10 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "How can I hope to use regular expressions without creating illegible and unmaintainable code?" 5
+.IX Item "How can I hope to use regular expressions without creating illegible and unmaintainable code?"
+Comments Outside the Regexp, Comments Inside the Regexp, Different
+Delimiters
+.Ip "I'm having trouble matching over more than one line.  What's wrong?" 5
+.IX Item "I'm having trouble matching over more than one line.  What's wrong?"
+.Ip "How can I pull out lines between two patterns that are themselves on different lines?" 5
+.IX Item "How can I pull out lines between two patterns that are themselves on different lines?"
+.Ip "I put a regular expression into $/ but it didn't work. What's wrong?" 5
+.IX Item "I put a regular expression into $/ but it didn't work. What's wrong?"
+.Ip "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?" 5
+.IX Item "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?"
+.Ip "How can I make \f(CW\ew\fR match accented characters?" 5
+.IX Item "How can I make \f(CW\ew\fR match accented characters?"
+.Ip "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?" 5
+.IX Item "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?"
+.Ip "How can I quote a variable to use in a regexp?" 5
+.IX Item "How can I quote a variable to use in a regexp?"
+.Ip "What is \f(CW/o\fR really for?" 5
+.IX Item "What is \f(CW/o\fR really for?"
+.Ip "How do I use a regular expression to strip C style comments from a file?" 5
+.IX Item "How do I use a regular expression to strip C style comments from a file?"
+.Ip "Can I use Perl regular expressions to match balanced text?" 5
+.IX Item "Can I use Perl regular expressions to match balanced text?"
+.Ip "What does it mean that regexps are greedy?  How can I get around it?" 5
+.IX Item "What does it mean that regexps are greedy?  How can I get around it?"
+.Ip "How do I process each word on each line?" 5
+.IX Item "How do I process each word on each line?"
+.Ip "How can I print out a word-frequency or line-frequency summary?" 5
+.IX Item "How can I print out a word-frequency or line-frequency summary?"
+.Ip "How can I do approximate matching?" 5
+.IX Item "How can I do approximate matching?"
+.Ip "How do I efficiently match many regular expressions at once?" 5
+.IX Item "How do I efficiently match many regular expressions at once?"
+.Ip "Why don't word-boundary searches with \f(CW\eb\fR work for me?" 5
+.IX Item "Why don't word-boundary searches with \f(CW\eb\fR work for me?"
+.Ip "Why does using $&, $`, or $\*(T' slow my program down?" 5
+.IX Item "Why does using $&, $`, or $\*(T' slow my program down?"
+.Ip "What good is \f(CW\eG\fR in a regular expression?" 5
+.IX Item "What good is \f(CW\eG\fR in a regular expression?"
+.Ip "Are Perl regexps DFAs or NFAs?  Are they \s-1POSIX\s0 compliant?" 5
+.IX Item "Are Perl regexps DFAs or NFAs?  Are they \s-1POSIX\s0 compliant?"
+.Ip "What's wrong with using grep or map in a void context?" 5
+.IX Item "What's wrong with using grep or map in a void context?"
+.Ip "How can I match strings with multibyte characters?" 5
+.IX Item "How can I match strings with multibyte characters?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq7 \- Perl Language Issues ($Revision: 1.18 $, \f(CW$Date:\fR 1997/04/24 22:44:14 $)"
+.IX Subsection "perlfaq7 \- Perl Language Issues ($Revision: 1.18 $, \f(CW$Date:\fR 1997/04/24 22:44:14 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?" 5
+.IX Item "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?"
+.Ip "What are all these $@%* punctuation signs, and how do I know when to use them?" 5
+.IX Item "What are all these $@%* punctuation signs, and how do I know when to use them?"
+.Ip "Do I always/never have to quote my strings or use semicolons and commas?" 5
+.IX Item "Do I always/never have to quote my strings or use semicolons and commas?"
+.Ip "How do I skip some return values?" 5
+.IX Item "How do I skip some return values?"
+.Ip "How do I temporarily block warnings?" 5
+.IX Item "How do I temporarily block warnings?"
+.Ip "What's an extension?" 5
+.IX Item "What's an extension?"
+.Ip "Why do Perl operators have different precedence than C operators?" 5
+.IX Item "Why do Perl operators have different precedence than C operators?"
+.Ip "How do I declare/create a structure?" 5
+.IX Item "How do I declare/create a structure?"
+.Ip "How do I create a module?" 5
+.IX Item "How do I create a module?"
+.Ip "How do I create a class?" 5
+.IX Item "How do I create a class?"
+.Ip "How can I tell if a variable is tainted?" 5
+.IX Item "How can I tell if a variable is tainted?"
+.Ip "What's a closure?" 5
+.IX Item "What's a closure?"
+.Ip "What is variable suicide and how can I prevent it?" 5
+.IX Item "What is variable suicide and how can I prevent it?"
+.Ip "How can I pass/return a {Function, FileHandle, Array, Hash, Method, Regexp}?" 5
+.IX Item "How can I pass/return a {Function, FileHandle, Array, Hash, Method, Regexp}?"
+Passing Variables and Functions, Passing Filehandles, Passing Regexps,
+Passing Methods
+.Ip "How do I create a static variable?" 5
+.IX Item "How do I create a static variable?"
+.Ip "What's the difference between dynamic and lexical (static) scoping?  Between local() and my()?" 5
+.IX Item "What's the difference between dynamic and lexical (static) scoping?  Between local() and my()?"
+.Ip "How can I access a dynamic variable while a similarly named lexical is in scope?" 5
+.IX Item "How can I access a dynamic variable while a similarly named lexical is in scope?"
+.Ip "What's the difference between deep and shallow binding?" 5
+.IX Item "What's the difference between deep and shallow binding?"
+.Ip "Why doesn't \*(N"local($foo) = <\s-1FILE\s0>;\*(T" work right?" 5
+.IX Item "Why doesn't \*(N"local($foo) = <\s-1FILE\s0>;\*(T" work right?"
+.Ip "How do I redefine a builtin function, operator, or method?" 5
+.IX Item "How do I redefine a builtin function, operator, or method?"
+.Ip "What's the difference between calling a function as &foo and foo()?" 5
+.IX Item "What's the difference between calling a function as &foo and foo()?"
+.Ip "How do I create a switch or case statement?" 5
+.IX Item "How do I create a switch or case statement?"
+.Ip "How can I catch accesses to undefined variables/functions/methods?" 5
+.IX Item "How can I catch accesses to undefined variables/functions/methods?"
+.Ip "Why can't a method included in this same file be found?" 5
+.IX Item "Why can't a method included in this same file be found?"
+.Ip "How can I find out my current package?" 5
+.IX Item "How can I find out my current package?"
+.Ip "How can I comment out a large block of perl code?" 5
+.IX Item "How can I comment out a large block of perl code?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq8 \- System Interaction ($Revision: 1.21 $, \f(CW$Date:\fR 1997/04/24 22:44:19 $)"
+.IX Subsection "perlfaq8 \- System Interaction ($Revision: 1.21 $, \f(CW$Date:\fR 1997/04/24 22:44:19 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "How do I find out which operating system I'm running under?" 5
+.IX Item "How do I find out which operating system I'm running under?"
+.Ip "How come exec() doesn't return?" 5
+.IX Item "How come exec() doesn't return?"
+.Ip "How do I do fancy stuff with the keyboard/screen/mouse?" 5
+.IX Item "How do I do fancy stuff with the keyboard/screen/mouse?"
+Keyboard, Screen, Mouse
+.Ip "How do I ask the user for a password?" 5
+.IX Item "How do I ask the user for a password?"
+.Ip "How do I read and write the serial port?" 5
+.IX Item "How do I read and write the serial port?"
+lockfiles, open mode, end of line, flushing output, non-blocking input
+.Ip "How do I decode encrypted password files?" 5
+.IX Item "How do I decode encrypted password files?"
+.Ip "How do I start a process in the background?" 5
+.IX Item "How do I start a process in the background?"
+\s-1STDIN\s0, \s-1STDOUT\s0 and \s-1STDERR\s0 are shared, Signals, Zombies
+.Ip "How do I trap control characters/signals?" 5
+.IX Item "How do I trap control characters/signals?"
+.Ip "How do I modify the shadow password file on a Unix system?" 5
+.IX Item "How do I modify the shadow password file on a Unix system?"
+.Ip "How do I set the time and date?" 5
+.IX Item "How do I set the time and date?"
+.Ip "How can I sleep() or alarm() for under a second?" 5
+.IX Item "How can I sleep() or alarm() for under a second?"
+.Ip "How can I measure time under a second?" 5
+.IX Item "How can I measure time under a second?"
+.Ip "How can I do an atexit() or setjmp()/longjmp()? (Exception handling)" 5
+.IX Item "How can I do an atexit() or setjmp()/longjmp()? (Exception handling)"
+.Ip "Why doesn't my sockets program work under System V (Solaris)? What does the error message \*(N"Protocol not supported\*(T" mean?" 5
+.IX Item "Why doesn't my sockets program work under System V (Solaris)? What does the error message \*(N"Protocol not supported\*(T" mean?"
+.Ip "How can I call my system's unique C functions from Perl?" 5
+.IX Item "How can I call my system's unique C functions from Perl?"
+.Ip "Where do I get the include files to do ioctl() or syscall()?" 5
+.IX Item "Where do I get the include files to do ioctl() or syscall()?"
+.Ip "Why do setuid perl scripts complain about kernel problems?" 5
+.IX Item "Why do setuid perl scripts complain about kernel problems?"
+.Ip "How can I open a pipe both to and from a command?" 5
+.IX Item "How can I open a pipe both to and from a command?"
+.Ip "Why can't I get the output of a command with system()?" 5
+.IX Item "Why can't I get the output of a command with system()?"
+.Ip "How can I capture \s-1STDERR\s0 from an external command?" 5
+.IX Item "How can I capture \s-1STDERR\s0 from an external command?"
+.Ip "Why doesn't open() return an error when a pipe open fails?" 5
+.IX Item "Why doesn't open() return an error when a pipe open fails?"
+.Ip "What's wrong with using backticks in a void context?" 5
+.IX Item "What's wrong with using backticks in a void context?"
+.Ip "How can I call backticks without shell processing?" 5
+.IX Item "How can I call backticks without shell processing?"
+.Ip "Why can't my script read from \s-1STDIN\s0 after I gave it \s-1EOF\s0 (^D on Unix, ^Z on \s-1MS\s0\-\s-1DOS\s0)?" 5
+.IX Item "Why can't my script read from \s-1STDIN\s0 after I gave it \s-1EOF\s0 (^D on Unix, ^Z on \s-1MS\s0\-\s-1DOS\s0)?"
+.Ip "How can I convert my shell script to perl?" 5
+.IX Item "How can I convert my shell script to perl?"
+.Ip "Can I use perl to run a telnet or ftp session?" 5
+.IX Item "Can I use perl to run a telnet or ftp session?"
+.Ip "How can I write expect in Perl?" 5
+.IX Item "How can I write expect in Perl?"
+.Ip "Is there a way to hide perl's command line from programs such as \*(N"ps\*(T"?" 5
+.IX Item "Is there a way to hide perl's command line from programs such as \*(N"ps\*(T"?"
+.Ip "I {changed directory, modified my environment} in a perl script.	How come the change disappeared when I exited the script?  How do I get my changes to be visible?" 5
+.IX Item "I {changed directory, modified my environment} in a perl script.	How come the change disappeared when I exited the script?  How do I get my changes to be visible?"
+Unix, \s-1VMS\s0
+.Ip "How do I close a process's filehandle without waiting for it to complete?" 5
+.IX Item "How do I close a process's filehandle without waiting for it to complete?"
+.Ip "How do I fork a daemon process?" 5
+.IX Item "How do I fork a daemon process?"
+.Ip "How do I make my program run with sh and csh?" 5
+.IX Item "How do I make my program run with sh and csh?"
+.Ip "How do I find out if I'm running interactively or not?" 5
+.IX Item "How do I find out if I'm running interactively or not?"
+.Ip "How do I timeout a slow event?" 5
+.IX Item "How do I timeout a slow event?"
+.Ip "How do I set \s-1CPU\s0 limits?" 5
+.IX Item "How do I set \s-1CPU\s0 limits?"
+.Ip "How do I avoid zombies on a Unix system?" 5
+.IX Item "How do I avoid zombies on a Unix system?"
+.Ip "How do I use an \s-1SQL\s0 database?" 5
+.IX Item "How do I use an \s-1SQL\s0 database?"
+.Ip "How do I make a system() exit on control-C?" 5
+.IX Item "How do I make a system() exit on control-C?"
+.Ip "How do I open a file without blocking?" 5
+.IX Item "How do I open a file without blocking?"
+.Ip "How do I install a \s-1CPAN\s0 module?" 5
+.IX Item "How do I install a \s-1CPAN\s0 module?"
+.Ip "How do I keep my own module/library directory?" 5
+.IX Item "How do I keep my own module/library directory?"
+.Ip "How do I add the directory my program lives in to the module/library search path?" 5
+.IX Item "How do I add the directory my program lives in to the module/library search path?"
+.Ip "How do I add a directory to my include path at runtime?" 5
+.IX Item "How do I add a directory to my include path at runtime?"
+.Ip "How do I get one key from the terminal at a time, under \s-1POSIX\s0?" 0
+.IX Item "How do I get one key from the terminal at a time, under \s-1POSIX\s0?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+.Sh "perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)"
+.IX Subsection "perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?" 5
+.IX Item "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+.Ip "How do I remove \s-1HTML\s0 from a string?" 5
+.IX Item "How do I remove \s-1HTML\s0 from a string?"
+.Ip "How do I extract URLs?" 5
+.IX Item "How do I extract URLs?"
+.Ip "How do I download a file from the user's machine?  How do I open a file on another machine?" 5
+.IX Item "How do I download a file from the user's machine?  How do I open a file on another machine?"
+.Ip "How do I make a pop-up menu in \s-1HTML\s0?" 5
+.IX Item "How do I make a pop-up menu in \s-1HTML\s0?"
+.Ip "How do I fetch an \s-1HTML\s0 file?" 5
+.IX Item "How do I fetch an \s-1HTML\s0 file?"
+.Ip "how do I decode or create those %\-encodings on the web?" 5
+.IX Item "how do I decode or create those %\-encodings on the web?"
+.Ip "How do I redirect to another page?" 5
+.IX Item "How do I redirect to another page?"
+.Ip "How do I put a password on my web pages?" 5
+.IX Item "How do I put a password on my web pages?"
+.Ip "How do I edit my .htpasswd and .htgroup files with Perl?" 5
+.IX Item "How do I edit my .htpasswd and .htgroup files with Perl?"
+.Ip "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?" 5
+.IX Item "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
+.Ip "How do I parse an email header?" 5
+.IX Item "How do I parse an email header?"
+.Ip "How do I decode a \s-1CGI\s0 form?" 5
+.IX Item "How do I decode a \s-1CGI\s0 form?"
+.Ip "How do I check a valid email address?" 5
+.IX Item "How do I check a valid email address?"
+.Ip "How do I decode a \s-1MIME/BASE64\s0 string?" 5
+.IX Item "How do I decode a \s-1MIME/BASE64\s0 string?"
+.Ip "How do I return the user's email address?" 5
+.IX Item "How do I return the user's email address?"
+.Ip "How do I send/read mail?" 5
+.IX Item "How do I send/read mail?"
+.Ip "How do I find out my hostname/domainname/\s-1IP\s0 address?" 5
+.IX Item "How do I find out my hostname/domainname/\s-1IP\s0 address?"
+.Ip "How do I fetch a news article or the active newsgroups?" 5
+.IX Item "How do I fetch a news article or the active newsgroups?"
+.Ip "How do I fetch/put an \s-1FTP\s0 file?" 5
+.IX Item "How do I fetch/put an \s-1FTP\s0 file?"
+.Ip "How can I do \s-1RPC\s0 in Perl?" 5
+.IX Item "How can I do \s-1RPC\s0 in Perl?"
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 .Sh "perldelta \- what's new for perl5.004"
 .IX Subsection "perldelta \- what's new for perl5.004"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -213,94 +902,151 @@ expression enhancements, Innumerable Unbundled Modules, Compilability
 .IX Item "Supported Environments"
 .Ip "Core Changes" 0
 .IX Item "Core Changes"
-.Ip "Compilation Option: Binary Compatibility With 5.003" 5
-.IX Item "Compilation Option: Binary Compatibility With 5.003"
-.Ip "Subroutine Parameters Are Not Autovivified" 5
-.IX Item "Subroutine Parameters Are Not Autovivified"
-.Ip "Fixed Parsing of $$<digit>, &$<digit>, etc." 5
-.IX Item "Fixed Parsing of $$<digit>, &$<digit>, etc."
-.Ip "Changes to Tainting Checks" 5
-.IX Item "Changes to Tainting Checks"
-.Ip "New Opcode Module and Revised Safe Module" 5
-.IX Item "New Opcode Module and Revised Safe Module"
-.Ip "Internal Change: FileHandle Class Based on \s-1IO\s0::* Classes" 5
-.IX Item "Internal Change: FileHandle Class Based on \s-1IO\s0::* Classes"
-.Ip "Internal Change: PerlIO internal \s-1IO\s0 abstraction interface" 5
-.IX Item "Internal Change: PerlIO internal \s-1IO\s0 abstraction interface"
-.Ip "New and Changed Built-in Variables" 5
-.IX Item "New and Changed Built-in Variables"
+.Ip "List assignment to %\s-1ENV\s0 works" 5
+.IX Item "List assignment to %\s-1ENV\s0 works"
+.Ip "\*(N"Can't locate Foo.pm in @\s-1INC\s0\*(T" error now lists @\s-1INC\s0" 5
+.IX Item "\*(N"Can't locate Foo.pm in @\s-1INC\s0\*(T" error now lists @\s-1INC\s0"
+.Ip "Compilation option: Binary compatibility with 5.003" 5
+.IX Item "Compilation option: Binary compatibility with 5.003"
+.Ip "$\s-1PERL5OPT\s0 environment variable" 5
+.IX Item "$\s-1PERL5OPT\s0 environment variable"
+.Ip "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options" 5
+.IX Item "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options"
+.Ip "More precise warnings" 5
+.IX Item "More precise warnings"
+.Ip "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods" 5
+.IX Item "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods"
+.Ip "Previously deprecated %\s-1OVERLOAD\s0 is no longer usable" 5
+.IX Item "Previously deprecated %\s-1OVERLOAD\s0 is no longer usable"
+.Ip "Subroutine arguments created only when they're modified" 5
+.IX Item "Subroutine arguments created only when they're modified"
+.Ip "Group vector changeable with \f(CW$)\fR" 5
+.IX Item "Group vector changeable with \f(CW$)\fR"
+.Ip "Fixed parsing of $$<digit>, &$<digit>, etc." 5
+.IX Item "Fixed parsing of $$<digit>, &$<digit>, etc."
+.Ip "No resetting of $. on implicit close" 5
+.IX Item "No resetting of $. on implicit close"
+.Ip "\f(CWwantarray\fR may return undef" 5
+.IX Item "\f(CWwantarray\fR may return undef"
+.Ip "Changes to tainting checks" 5
+.IX Item "Changes to tainting checks"
+No \fIglob()\fR or <*>, No spawning if tainted \f(CW$CDPATH\fR, \f(CW$ENV\fR, \f(CW$BASH_ENV\fR, No
+spawning if tainted \f(CW$TERM\fR doesn't look like a terminal name
+.Ip "New Opcode module and revised Safe module" 5
+.IX Item "New Opcode module and revised Safe module"
+.Ip "Embedding improvements" 5
+.IX Item "Embedding improvements"
+.Ip "Internal change: FileHandle class based on \s-1IO\s0::* classes" 5
+.IX Item "Internal change: FileHandle class based on \s-1IO\s0::* classes"
+.Ip "Internal change: PerlIO abstraction interface" 5
+.IX Item "Internal change: PerlIO abstraction interface"
+.Ip "New and changed syntax" 5
+.IX Item "New and changed syntax"
+$coderef->(\s-1PARAMS\s0)
+.Ip "New and changed builtin constants" 5
+.IX Item "New and changed builtin constants"
+_\|_PACKAGE_\|_
+.Ip "New and changed builtin variables" 5
+.IX Item "New and changed builtin variables"
 $^E, $^H, $^M
-.Ip "New and Changed Built-in Functions" 5
-.IX Item "New and Changed Built-in Functions"
+.Ip "New and changed builtin functions" 5
+.IX Item "New and changed builtin functions"
 delete on slices, flock, printf and sprintf, keys as an lvalue, \fImy()\fR in
-Control Structures, \fIunpack()\fR and \fIpack()\fR, use \s-1VERSION\s0, use Module \s-1VERSION\s0
-\s-1LIST\s0, \fIprototype\fR\|(\s-1FUNCTION\s0), srand, \f(CW$_\fR as Default, \f(CWm//g\fR does not trigger a
-\fIpos()\fR reset on failure, nested \f(CWsub{}\fR closures work now, formats work
-right on changing lexicals
-.Ip "New Built-in Methods" 5
-.IX Item "New Built-in Methods"
+Control Structures, \fIpack()\fR and \fIunpack()\fR, \fIsysseek()\fR, use \s-1VERSION\s0, use Module
+\s-1VERSION\s0 \s-1LIST\s0, \fIprototype\fR\|(\s-1FUNCTION\s0), srand, \f(CW$_\fR as Default, \f(CWm//gc\fR does not
+reset search position on failure, \f(CWm//x\fR ignores whitespace before ?*+{},
+nested \f(CWsub{}\fR closures work now, formats work right on changing lexicals
+.Ip "New builtin methods" 5
+.IX Item "New builtin methods"
 \fIisa\fR\|(\s-1CLASS\s0), \fIcan\fR\|(\s-1METHOD\s0), \fI\s-1VERSION\s0\fR\|( [\s-1NEED\s0] )
-.Ip "\s-1TIEHANDLE\s0 Now Supported" 5
-.IX Item "\s-1TIEHANDLE\s0 Now Supported"
-\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1READ\s0 this \s-1LIST\s0, \s-1READLINE\s0 this,
-\s-1GETC\s0 this, \s-1DESTROY\s0 this
-.Ip "Malloc Enhancements" 5
-.IX Item "Malloc Enhancements"
+.Ip "\s-1TIEHANDLE\s0 now supported" 5
+.IX Item "\s-1TIEHANDLE\s0 now supported"
+\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1PRINTF\s0 this, \s-1LIST\s0, \s-1READ\s0 this
+\s-1LIST\s0, \s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1DESTROY\s0 this
+.Ip "Malloc enhancements" 5
+.IX Item "Malloc enhancements"
 -\s-1DDEBUGGING_MSTATS\s0, \-\s-1DEMERGENCY_SBRK\s0, \-\s-1DPACK_MALLOC\s0, \-\s-1DTWO_POT_OPTIMIZE\s0
-.Ip "Miscellaneous Efficiency Enhancements" 5
-.IX Item "Miscellaneous Efficiency Enhancements"
+.Ip "Miscellaneous efficiency enhancements" 5
+.IX Item "Miscellaneous efficiency enhancements"
+.Ip "Support for More Operating Systems" 0
+.IX Item "Support for More Operating Systems"
+.Ip "Win32" 5
+.IX Item "Win32"
+.Ip "Plan 9" 5
+.IX Item "Plan 9"
+.Ip "\s-1QNX\s0" 5
+.IX Item "\s-1QNX\s0"
+.Ip "AmigaOS" 5
+.IX Item "AmigaOS"
 .Ip "Pragmata" 0
 .IX Item "Pragmata"
-use blib, use blib \*(L'dir\*(R', use locale, use ops, use vmsish
+use autouse \s-1MODULE\s0 => \fIqw\fR\|(sub1 sub2 sub3), use blib, use blib \*(L'dir\*(R', use
+constant \s-1NAME\s0 => \s-1VALUE\s0, use locale, use ops, use vmsish
 .Ip "Modules" 0
 .IX Item "Modules"
-.Ip "Installation Directories" 5
-.IX Item "Installation Directories"
+.Ip "Required Updates" 5
+.IX Item "Required Updates"
+.Ip "Installation directories" 5
+.IX Item "Installation directories"
+.Ip "Module information summary" 5
+.IX Item "Module information summary"
 .Ip "Fcntl" 5
 .IX Item "Fcntl"
-.Ip "Module Information Summary" 5
-.IX Item "Module Information Summary"
 .Ip "\s-1IO\s0" 5
 .IX Item "\s-1IO\s0"
 .Ip "Math::Complex" 5
 .IX Item "Math::Complex"
+.Ip "Math::Trig" 5
+.IX Item "Math::Trig"
 .Ip "DB_File" 5
 .IX Item "DB_File"
 .Ip "Net::Ping" 5
 .IX Item "Net::Ping"
-.Ip "Overridden Built-ins" 5
-.IX Item "Overridden Built-ins"
+.Ip "Object-oriented overrides for builtin operators" 5
+.IX Item "Object-oriented overrides for builtin operators"
 .Ip "Utility Changes" 0
 .IX Item "Utility Changes"
+.Ip "pod2html" 5
+.IX Item "pod2html"
+Sends converted \s-1HTML\s0 to standard output
 .Ip "xsubpp" 5
 .IX Item "xsubpp"
 \f(CWvoid\fR XSUBs now default to returning nothing
 .Ip "C Language \s-1API\s0 Changes" 0
 .IX Item "C Language \s-1API\s0 Changes"
-\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR, Extended \s-1API\s0 for manipulating hashes
+\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR, \f(CWperl_eval_pv\fR, Extended \s-1API\s0 for
+manipulating hashes
 .Ip "Documentation Changes" 0
 .IX Item "Documentation Changes"
-the \fIperldelta\fR manpage, the \fIperllocale\fR manpage, the \fIperltoot\fR manpage, the \fIperlapio\fR manpage, the \fIperldebug\fR manpage,
-the \fIperlsec\fR manpage
+the \fIperldelta\fR manpage, the \fIperlfaq\fR manpage, the \fIperllocale\fR manpage, the \fIperltoot\fR manpage, the \fIperlapio\fR manpage,
+the \fIperlmodlib\fR manpage, the \fIperldebug\fR manpage, the \fIperlsec\fR manpage
 .Ip "New Diagnostics" 0
 .IX Item "New Diagnostics"
 \*(L"my\*(R" variable \f(CW%s\fR masks earlier declaration in same scope, \f(CW%s\fR argument is
 not a \s-1HASH\s0 element or slice, Allocation too large: \f(CW%lx\fR, Allocation too
-large, Attempt to free non-existent shared string, Attempt to use reference
-as lvalue in substr, Unsupported function fork, Ill-formed logical name
-|%s| in prime_env_iter, Can't use bareword ("%s") as \f(CW%s\fR ref while \*(L"strict
-refs\*(R" in use, Constant subroutine \f(CW%s\fR redefined, Died, Integer overflow in
-hex number, Integer overflow in octal number, Name \*(L"%s::%s\*(R" used only once:
-possible typo, Null picture in formline, Offset outside string, Stub found
-while resolving method `%s\*(R' overloading `%s\*(R' in package `%s\*(R', Cannot
-resolve method `%s\*(R' overloading `%s\*(R' in package `s\*(R', Out of memory!, Out of
-memory during request for \f(CW%s\fR, Possible attempt to put comments in \fIqw()\fR
+large, Applying \f(CW%s\fR to \f(CW%s\fR will act on \fIscalar\fR\|(%s), Attempt to free
+nonexistent shared string, Attempt to use reference as lvalue in substr,
+Can't redefine active sort subroutine \f(CW%s\fR, Can't use bareword ("%s") as \f(CW%s\fR
+ref while \*(L"strict refs\*(R" in use, Cannot resolve method `%s\*(R' overloading `%s\*(R'
+in package `%s\*(R', Constant subroutine \f(CW%s\fR redefined, Constant subroutine \f(CW%s\fR
+undefined, Copy method did not return a reference, Died, Exiting
+pseudo-block via \f(CW%s\fR, Identifier too long, Illegal character \f(CW%s\fR (carriage
+return), Illegal switch in \s-1PERL5OPT\s0: \f(CW%s\fR, Integer overflow in hex number,
+Integer overflow in octal number, internal error: glob failed, Invalid
+conversion in \f(CW%s:\fR \*(L"%s\*(R", Invalid type in pack: \*(L'%s\*(R', Invalid type in unpack:
+\&'%s\*(R', Name \*(L"%s::%s\*(R" used only once: possible typo, Null picture in
+formline, Offset outside string, Out of memory!, Out of memory during
+request for \f(CW%s\fR, panic: frexp, Possible attempt to put comments in \fIqw()\fR
 list, Possible attempt to separate words with commas, Scalar value @%s{%s}
-better written as $%s{%s}, untie attempted while \f(CW%d\fR inner references still
-exist, Value of \f(CW%s\fR construct can be \*(L"0\*(R"; test with \fIdefined()\fR, Variable \*(L"%s\*(R"
-may be unavailable, Variable \*(L"%s\*(R" will not stay shared, Warning:
-something's wrong, Got an error from DosAllocMem, Malformed \s-1PERLLIB_PREFIX\s0,
-\s-1PERL_SH_DIR\s0 too long, Process terminated by \s-1SIG\s0%s
+better written as $%s{%s}, Stub found while resolving method `%s\*(R'
+overloading `%s\*(R' in package `%s\*(R', Too late for \*(L"\fB\-T\fR\*(R" option, untie
+attempted while \f(CW%d\fR inner references still exist, Unrecognized character \f(CW%s\fR,
+Unsupported function fork, Use of \*(L"$$<digit>\*(R" to mean \*(L"${$}<digit>\*(R" is
+deprecated, Value of \f(CW%s\fR can be \*(L"0\*(R"; test with \fIdefined()\fR, Variable \*(L"%s\*(R" may
+be unavailable, Variable \*(L"%s\*(R" will not stay shared, Warning: something's
+wrong, Ill-formed logical name |%s| in prime_env_iter, Got an error from
+DosAllocMem, Malformed \s-1PERLLIB_PREFIX\s0, \s-1PERL_SH_DIR\s0 too long, Process
+terminated by \s-1SIG\s0%s
 .Ip "\s-1BUGS\s0" 0
 .IX Item "\s-1BUGS\s0"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -418,6 +1164,8 @@ y/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds
 .IX Item "Constant Folding"
 .Ip "Integer Arithmetic" 5
 .IX Item "Integer Arithmetic"
+.Ip "Floating-point Arithmetic" 5
+.IX Item "Floating-point Arithmetic"
 .Sh "perlre \- Perl regular expressions"
 .IX Subsection "perlre \- Perl regular expressions"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -432,12 +1180,17 @@ i, m, s, x
 .IX Item "Version 8 Regular Expressions"
 .Ip "\s-1WARNING\s0 on \e1 vs $1" 5
 .IX Item "\s-1WARNING\s0 on \e1 vs $1"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 5
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "perlrun \- how to execute the Perl interpreter"
 .IX Subsection "perlrun \- how to execute the Perl interpreter"
 .Ip "\s-1SYNOPSIS\s0" 0
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
+.Ip "#! and quoting on non-Unix systems" 5
+.IX Item "#! and quoting on non-Unix systems"
+\s-1OS/2\s0, \s-1MS\s0\-\s-1DOS\s0, Win95/\s-1NT\s0, Macintosh
 .Ip "Switches" 5
 .IX Item "Switches"
 \fB\-0\fR[\fIdigits\fR], \fB\-a\fR, \fB\-c\fR, \fB\-d\fR, \fB\-d:\fR\fIfoo\fR, \fB\-D\fR\fInumber\fR,
@@ -448,8 +1201,8 @@ i, m, s, x
 \fB\-T\fR, \fB\-u\fR, \fB\-U\fR, \fB\-v\fR, \fB\-V\fR, \fB\-V:\fR\fIname\fR, \fB\-w\fR, \fB\-x\fR \fIdirectory\fR
 .Ip "\s-1ENVIRONMENT\s0" 0
 .IX Item "\s-1ENVIRONMENT\s0"
-\s-1HOME\s0, \s-1LOGDIR\s0, \s-1PATH\s0, \s-1PERL5LIB\s0, \s-1PERLLIB\s0, \s-1PERL5DB\s0, \s-1PERL_DEBUG_MSTATS\s0,
-\s-1PERL_DESTRUCT_LEVEL\s0
+\s-1HOME\s0, \s-1LOGDIR\s0, \s-1PATH\s0, \s-1PERL5LIB\s0, \s-1PERL5OPT\s0, \s-1PERLLIB\s0, \s-1PERL5DB\s0, \s-1PERL5SHELL\s0
+(specific to \s-1WIN32\s0 port), \s-1PERL_DEBUG_MSTATS\s0, \s-1PERL_DESTRUCT_LEVEL\s0
 .Sh "perlfunc \- Perl builtin functions"
 .IX Subsection "perlfunc \- Perl builtin functions"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -484,26 +1237,26 @@ defined \s-1EXPR\s0, defined, delete \s-1EXPR\s0, die \s-1LIST\s0, do \s-1BLOCK\
 \fI\s-1SUBROUTINE\s0\fR\|(\s-1LIST\s0), do \s-1EXPR\s0, dump \s-1LABEL\s0, each \s-1HASH\s0, eof \s-1FILEHANDLE\s0, eof (),
 eof, eval \s-1EXPR\s0, eval \s-1BLOCK\s0, exec \s-1LIST\s0, exists \s-1EXPR\s0, exit \s-1EXPR\s0, exp \s-1EXPR\s0,
 exp, fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, fileno \s-1FILEHANDLE\s0, flock
-\s-1FILEHANDLE\s0,\s-1OPERATION\s0, fork, format, formline \s-1PICTURE\s0, \s-1LIST\s0, getc
-\s-1FILEHANDLE\s0, getc, getlogin, getpeername \s-1SOCKET\s0, getpgrp \s-1PID\s0, getppid,
-getpriority \s-1WHICH\s0,\s-1WHO\s0, getpwnam \s-1NAME\s0, getgrnam \s-1NAME\s0, gethostbyname \s-1NAME\s0,
-getnetbyname \s-1NAME\s0, getprotobyname \s-1NAME\s0, getpwuid \s-1UID\s0, getgrgid \s-1GID\s0,
-getservbyname \s-1NAME\s0,\s-1PROTO\s0, gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0, getnetbyaddr
-\s-1ADDR\s0,\s-1ADDRTYPE\s0, getprotobynumber \s-1NUMBER\s0, getservbyport \s-1PORT\s0,\s-1PROTO\s0, getpwent,
-getgrent, gethostent, getnetent, getprotoent, getservent, setpwent,
-setgrent, sethostent \s-1STAYOPEN\s0, setnetent \s-1STAYOPEN\s0, setprotoent \s-1STAYOPEN\s0,
-setservent \s-1STAYOPEN\s0, endpwent, endgrent, endhostent, endnetent,
-endprotoent, endservent, getsockname \s-1SOCKET\s0, getsockopt
-\s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0, glob \s-1EXPR\s0, glob, gmtime \s-1EXPR\s0, goto \s-1LABEL\s0, goto \s-1EXPR\s0,
-goto &\s-1NAME\s0, grep \s-1BLOCK\s0 \s-1LIST\s0, grep \s-1EXPR\s0,\s-1LIST\s0, hex \s-1EXPR\s0, hex, import, index
-\s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, index \s-1STR\s0,\s-1SUBSTR\s0, int \s-1EXPR\s0, int, ioctl
-\s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, join \s-1EXPR\s0,\s-1LIST\s0, keys \s-1HASH\s0, kill \s-1LIST\s0, last
-\s-1LABEL\s0, last, lc \s-1EXPR\s0, lc, lcfirst \s-1EXPR\s0, lcfirst, length \s-1EXPR\s0, length, link
-\s-1OLDFILE\s0,\s-1NEWFILE\s0, listen \s-1SOCKET\s0,\s-1QUEUESIZE\s0, local \s-1EXPR\s0, localtime \s-1EXPR\s0, log
-\s-1EXPR\s0, log, lstat \s-1FILEHANDLE\s0, lstat \s-1EXPR\s0, lstat, m//, map \s-1BLOCK\s0 \s-1LIST\s0, map
-\s-1EXPR\s0,\s-1LIST\s0, mkdir \s-1FILENAME\s0,\s-1MODE\s0, msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, msgget \s-1KEY\s0,\s-1FLAGS\s0, msgsnd
-\s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0, msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0, my \s-1EXPR\s0, next \s-1LABEL\s0, next, no
-Module \s-1LIST\s0, oct \s-1EXPR\s0, oct, open \s-1FILEHANDLE\s0,\s-1EXPR\s0, open \s-1FILEHANDLE\s0, opendir
+\s-1FILEHANDLE\s0,\s-1OPERATION\s0, fork, format, formline \s-1PICTURE\s0,\s-1LIST\s0, getc \s-1FILEHANDLE\s0,
+getc, getlogin, getpeername \s-1SOCKET\s0, getpgrp \s-1PID\s0, getppid, getpriority
+\s-1WHICH\s0,\s-1WHO\s0, getpwnam \s-1NAME\s0, getgrnam \s-1NAME\s0, gethostbyname \s-1NAME\s0, getnetbyname
+\s-1NAME\s0, getprotobyname \s-1NAME\s0, getpwuid \s-1UID\s0, getgrgid \s-1GID\s0, getservbyname
+\s-1NAME\s0,\s-1PROTO\s0, gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0, getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0,
+getprotobynumber \s-1NUMBER\s0, getservbyport \s-1PORT\s0,\s-1PROTO\s0, getpwent, getgrent,
+gethostent, getnetent, getprotoent, getservent, setpwent, setgrent,
+sethostent \s-1STAYOPEN\s0, setnetent \s-1STAYOPEN\s0, setprotoent \s-1STAYOPEN\s0, setservent
+\s-1STAYOPEN\s0, endpwent, endgrent, endhostent, endnetent, endprotoent,
+endservent, getsockname \s-1SOCKET\s0, getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0, glob \s-1EXPR\s0,
+glob, gmtime \s-1EXPR\s0, goto \s-1LABEL\s0, goto \s-1EXPR\s0, goto &\s-1NAME\s0, grep \s-1BLOCK\s0 \s-1LIST\s0, grep
+\s-1EXPR\s0,\s-1LIST\s0, hex \s-1EXPR\s0, hex, import, index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, index
+\s-1STR\s0,\s-1SUBSTR\s0, int \s-1EXPR\s0, int, ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, join
+\s-1EXPR\s0,\s-1LIST\s0, keys \s-1HASH\s0, kill \s-1LIST\s0, last \s-1LABEL\s0, last, lc \s-1EXPR\s0, lc, lcfirst
+\s-1EXPR\s0, lcfirst, length \s-1EXPR\s0, length, link \s-1OLDFILE\s0,\s-1NEWFILE\s0, listen
+\s-1SOCKET\s0,\s-1QUEUESIZE\s0, local \s-1EXPR\s0, localtime \s-1EXPR\s0, log \s-1EXPR\s0, log, lstat
+\s-1FILEHANDLE\s0, lstat \s-1EXPR\s0, lstat, m//, map \s-1BLOCK\s0 \s-1LIST\s0, map \s-1EXPR\s0,\s-1LIST\s0, mkdir
+\s-1FILENAME\s0,\s-1MODE\s0, msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, msgget \s-1KEY\s0,\s-1FLAGS\s0, msgsnd \s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0,
+msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0, my \s-1EXPR\s0, next \s-1LABEL\s0, next, no Module \s-1LIST\s0,
+oct \s-1EXPR\s0, oct, open \s-1FILEHANDLE\s0,\s-1EXPR\s0, open \s-1FILEHANDLE\s0, opendir
 \s-1DIRHANDLE\s0,\s-1EXPR\s0, ord \s-1EXPR\s0, ord, pack \s-1TEMPLATE\s0,\s-1LIST\s0, package \s-1NAMESPACE\s0, pipe
 \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0, pop \s-1ARRAY\s0, pop, pos \s-1SCALAR\s0, pos, print \s-1FILEHANDLE\s0
 \s-1LIST\s0, print \s-1LIST\s0, print, printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0, printf \s-1FORMAT\s0,
@@ -512,9 +1265,9 @@ qx/\s-1STRING\s0/, qw/\s-1STRING\s0/, quotemeta \s-1EXPR\s0, quotemeta, rand \s-
 \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, readdir
 \s-1DIRHANDLE\s0, readlink \s-1EXPR\s0, readlink, recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0, redo
 \s-1LABEL\s0, redo, ref \s-1EXPR\s0, ref, rename \s-1OLDNAME\s0,\s-1NEWNAME\s0, require \s-1EXPR\s0, require,
-reset \s-1EXPR\s0, reset, return \s-1LIST\s0, reverse \s-1LIST\s0, rewinddir \s-1DIRHANDLE\s0, rindex
-\s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, rindex \s-1STR\s0,\s-1SUBSTR\s0, rmdir \s-1FILENAME\s0, rmdir, s///, scalar
-\s-1EXPR\s0, seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, seekdir \s-1DIRHANDLE\s0,\s-1POS\s0, select
+reset \s-1EXPR\s0, reset, return \s-1EXPR\s0, return, reverse \s-1LIST\s0, rewinddir \s-1DIRHANDLE\s0,
+rindex \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, rindex \s-1STR\s0,\s-1SUBSTR\s0, rmdir \s-1FILENAME\s0, rmdir, s///,
+scalar \s-1EXPR\s0, seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, seekdir \s-1DIRHANDLE\s0,\s-1POS\s0, select
 \s-1FILEHANDLE\s0, select, select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0, semctl
 \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0, semget \s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0, semop \s-1KEY\s0,\s-1OPSTRING\s0, send
 \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0,\s-1TO\s0, send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0, setpgrp \s-1PID\s0,\s-1PGRP\s0, setpriority
@@ -530,16 +1283,16 @@ srand, stat \s-1FILEHANDLE\s0, stat \s-1EXPR\s0, stat, study \s-1SCALAR\s0, stud
 sub \s-1NAME\s0, sub \s-1NAME\s0 \s-1BLOCK\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0,
 symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0, syscall \s-1LIST\s0, sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,
 sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0, sysread
-\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, system
-\s-1LIST\s0, syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, syswrite
-\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, tell \s-1FILEHANDLE\s0, tell, telldir \s-1DIRHANDLE\s0, tie
-\s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0, tied \s-1VARIABLE\s0, time, times, tr///, truncate
-\s-1FILEHANDLE\s0,\s-1LENGTH\s0, truncate \s-1EXPR\s0,\s-1LENGTH\s0, uc \s-1EXPR\s0, uc, ucfirst \s-1EXPR\s0,
-ucfirst, umask \s-1EXPR\s0, umask, undef \s-1EXPR\s0, undef, unlink \s-1LIST\s0, unlink, unpack
-\s-1TEMPLATE\s0,\s-1EXPR\s0, untie \s-1VARIABLE\s0, unshift \s-1ARRAY\s0,\s-1LIST\s0, use Module \s-1LIST\s0, use
-Module, use Module \s-1VERSION\s0 \s-1LIST\s0, use \s-1VERSION\s0, utime \s-1LIST\s0, values \s-1HASH\s0, vec
-\s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0, wait, waitpid \s-1PID\s0,\s-1FLAGS\s0, wantarray, warn \s-1LIST\s0, write
-\s-1FILEHANDLE\s0, write \s-1EXPR\s0, write, y///
+\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, sysseek
+\s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, system \s-1LIST\s0, syswrite
+\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, tell
+\s-1FILEHANDLE\s0, tell, telldir \s-1DIRHANDLE\s0, tie \s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0, tied
+\s-1VARIABLE\s0, time, times, tr///, truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0, truncate
+\s-1EXPR\s0,\s-1LENGTH\s0, uc \s-1EXPR\s0, uc, ucfirst \s-1EXPR\s0, ucfirst, umask \s-1EXPR\s0, umask, undef
+\s-1EXPR\s0, undef, unlink \s-1LIST\s0, unlink, unpack \s-1TEMPLATE\s0,\s-1EXPR\s0, untie \s-1VARIABLE\s0,
+unshift \s-1ARRAY\s0,\s-1LIST\s0, use Module \s-1LIST\s0, use Module, use Module \s-1VERSION\s0 \s-1LIST\s0,
+use \s-1VERSION\s0, utime \s-1LIST\s0, values \s-1HASH\s0, vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0, wait, waitpid
+\s-1PID\s0,\s-1FLAGS\s0, wantarray, warn \s-1LIST\s0, write \s-1FILEHANDLE\s0, write \s-1EXPR\s0, write, y///
 .Sh "perlvar \- Perl predefined variables"
 .IX Subsection "perlvar \- Perl predefined variables"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -565,7 +1318,7 @@ format_line_break_characters \s-1HANDLE\s0 \s-1EXPR\s0, \f(CW$FORMAT_LINE_BREAK_
 \f(CW$EFFECTIVE_GROUP_ID\fR, \f(CW$EGID\fR, $), \f(CW$PROGRAM_NAME\fR, \f(CW$0\fR, $[, \f(CW$PERL_VERSION\fR, $],
 \f(CW$DEBUGGING\fR, $^D, \f(CW$SYSTEM_FD_MAX\fR, $^F, $^H, \f(CW$INPLACE_EDIT\fR, $^I, \f(CW$OSNAME\fR,
 $^O, \f(CW$PERLDB\fR, $^P, \f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$EXECUTABLE_NAME\fR, $^X,
-\f(CW$ARGV\fR, \f(CW@ARGV\fR, \f(CW@INC\fR, \f(CW%INC\fR, \f(CW$ENV\fR{expr}, \f(CW$SIG\fR{expr}
+\f(CW$ARGV\fR, \f(CW@ARGV\fR, \f(CW@INC\fR, \f(CW%INC\fR, \f(CW$ENV\fR{expr}, \f(CW$SIG\fR{expr}, $^M
 .Sh "perlsub \- Perl subroutines"
 .IX Subsection "perlsub \- Perl subroutines"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -590,8 +1343,8 @@ $^O, \f(CW$PERLDB\fR, $^P, \f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$
 .IX Item "Autoloading"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-.Sh "perlmod \- Perl modules (packages)"
-.IX Subsection "perlmod \- Perl modules (packages)"
+.Sh "perlmod \- Perl modules (packages and symbol tables)"
+.IX Subsection "perlmod \- Perl modules (packages and symbol tables)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
 .Ip "Packages" 5
@@ -604,18 +1357,22 @@ $^O, \f(CW$PERLDB\fR, $^P, \f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$
 .IX Item "Perl Classes"
 .Ip "Perl Modules" 5
 .IX Item "Perl Modules"
-.Ip "\s-1NOTE\s0" 0
-.IX Item "\s-1NOTE\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Sh "perlmodlib \- constructing new Perl modules and finding existing ones"
+.IX Subsection "perlmodlib \- constructing new Perl modules and finding existing ones"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
 .Ip "\s-1THE\s0 \s-1PERL\s0 \s-1MODULE\s0 \s-1LIBRARY\s0" 0
 .IX Item "\s-1THE\s0 \s-1PERL\s0 \s-1MODULE\s0 \s-1LIBRARY\s0"
 .Ip "Pragmatic Modules" 5
 .IX Item "Pragmatic Modules"
-blib, diagnostics, integer, less, lib, locale, ops, overload, sigtrap,
-strict, subs, vmsish, vars
+use autouse \s-1MODULE\s0 => \fIqw\fR\|(sub1 sub2 sub3), blib, diagnostics, integer, less,
+lib, locale, ops, overload, sigtrap, strict, subs, vmsish, vars
 .Ip "Standard Modules" 5
 .IX Item "Standard Modules"
 AnyDBM_File, AutoLoader, AutoSplit, Benchmark, \s-1CPAN\s0, \s-1CPAN::\s0FirstTime,
-\s-1CPAN::\s0Nox, Carp, Class::Template, Config, Cwd, DB_File, Devel::SelfStubber,
+\s-1CPAN::\s0Nox, Carp, Class::Struct, Config, Cwd, DB_File, Devel::SelfStubber,
 DirHandle, DynaLoader, English, Env, Exporter, ExtUtils::Embed,
 ExtUtils::Install, ExtUtils::Liblist, ExtUtils::\s-1MM_OS2\s0, ExtUtils::MM_Unix,
 ExtUtils::\s-1MM_VMS\s0, ExtUtils::MakeMaker, ExtUtils::Manifest,
@@ -624,14 +1381,14 @@ File::Basename, File::CheckTree, File::Compare, File::Copy, File::Find,
 File::Path, File::stat, FileCache, FileHandle, FindBin, GDBM_File,
 Getopt::Long, Getopt::Std, I18N::Collate, \s-1IO\s0, \s-1IO::\s0File, \s-1IO::\s0Handle,
 \s-1IO::\s0Pipe, \s-1IO::\s0Seekable, \s-1IO::\s0Select, \s-1IO::\s0Socket, \s-1IPC::\s0Open2, \s-1IPC::\s0Open3,
-Math::BigFloat, Math::BigInt, Math::Complex, NDBM_File, Net::Ping,
-Net::hostent, Net::netent, Net::protoent, Net::servent, Opcode, Pod::Text,
-\s-1POSIX\s0, SDBM_File, Safe, Search::Dict, SelectSaver, SelfLoader, Shell,
-Socket, Symbol, Sys::Hostname, Sys::Syslog, Term::Cap, Term::Complete,
-Term::ReadLine, Test::Harness, Text::Abbrev, Text::ParseWords,
-Text::Soundex, Text::Tabs, Text::Wrap, Tie::Hash, Tie::RefHash,
-Tie::Scalar, Tie::SubstrHash, Time::Local, Time::gmtime, Time::localtime,
-Time::tm, \s-1UNIVERSAL\s0, User::grent, User::pwent
+Math::BigFloat, Math::BigInt, Math::Complex, Math::Trig, NDBM_File,
+Net::Ping, Net::hostent, Net::netent, Net::protoent, Net::servent, Opcode,
+Pod::Text, \s-1POSIX\s0, SDBM_File, Safe, Search::Dict, SelectSaver, SelfLoader,
+Shell, Socket, Symbol, Sys::Hostname, Sys::Syslog, Term::Cap,
+Term::Complete, Term::ReadLine, Test::Harness, Text::Abbrev,
+Text::ParseWords, Text::Soundex, Text::Tabs, Text::Wrap, Tie::Hash,
+Tie::RefHash, Tie::Scalar, Tie::SubstrHash, Time::Local, Time::gmtime,
+Time::localtime, Time::tm, \s-1UNIVERSAL\s0, User::grent, User::pwent
 .Ip "Extension Modules" 5
 .IX Item "Extension Modules"
 .Ip "\s-1CPAN\s0" 0
@@ -678,6 +1435,8 @@ applications contain some perl code which could be reused, Break-out the
 reusable code into one or more separate module files, Take the opportunity
 to reconsider and redesign the interfaces, In some cases the \*(L'application\*(R'
 can then be reduced to a small
+.Ip "\s-1NOTE\s0" 0
+.IX Item "\s-1NOTE\s0"
 .Sh "perlform \- Perl formats"
 .IX Subsection "perlform \- Perl formats"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -904,8 +1663,8 @@ more elaborate constructs
 .IX Item "Inherited Autoloaded Data Methods"
 .Ip "Metaclassical Tools" 0
 .IX Item "Metaclassical Tools"
-.Ip "Class::Template" 5
-.IX Item "Class::Template"
+.Ip "Class::Struct" 5
+.IX Item "Class::Struct"
 .Ip "Data Members as Variables" 5
 .IX Item "Data Members as Variables"
 .Ip "\s-1NOTES\s0" 5
@@ -933,8 +1692,8 @@ more elaborate constructs
 .Ip "Default \s-1UNIVERSAL\s0 methods" 5
 .IX Item "Default \s-1UNIVERSAL\s0 methods"
 \fIisa\fR\|(\s-1CLASS\s0), \fIcan\fR\|(\s-1METHOD\s0), \fI\s-1VERSION\s0\fR\|( [\s-1NEED\s0] )
-.Ip "Destructors	 " 5
-.IX Item "Destructors	 "
+.Ip "Destructors" 5
+.IX Item "Destructors"
 .Ip "\s-1WARNING\s0" 5
 .IX Item "\s-1WARNING\s0"
 .Ip "Summary" 5
@@ -963,8 +1722,8 @@ this, key, value, \s-1DELETE\s0 this, key, \s-1CLEAR\s0 this, \s-1EXISTS\s0 this
 this, \s-1NEXTKEY\s0 this, lastkey, \s-1DESTROY\s0 this
 .Ip "Tying FileHandles" 5
 .IX Item "Tying FileHandles"
-\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1READ\s0 this \s-1LIST\s0, \s-1READLINE\s0 this,
-\s-1GETC\s0 this, \s-1DESTROY\s0 this
+\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1PRINTF\s0 this, \s-1LIST\s0, \s-1READ\s0 this
+\s-1LIST\s0, \s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1DESTROY\s0 this
 .Ip "The \f(CWuntie\fR Gotcha" 5
 .IX Item "The \f(CWuntie\fR Gotcha"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -1009,22 +1768,38 @@ this, \s-1NEXTKEY\s0 this, lastkey, \s-1DESTROY\s0 this
 .IX Item "Named Pipes"
 .Ip "Using open() for \s-1IPC\s0" 0
 .IX Item "Using open() for \s-1IPC\s0"
+.Ip "Filehandles" 5
+.IX Item "Filehandles"
+.Ip "Background Processes" 5
+.IX Item "Background Processes"
+.Ip "Complete Dissociation of Child from Parent" 5
+.IX Item "Complete Dissociation of Child from Parent"
 .Ip "Safe Pipe Opens" 5
 .IX Item "Safe Pipe Opens"
-.Ip "Bidirectional Communication" 5
-.IX Item "Bidirectional Communication"
+.Ip "Bidirectional Communication with Another Process" 5
+.IX Item "Bidirectional Communication with Another Process"
 .Ip "Sockets: Client/Server Communication" 0
 .IX Item "Sockets: Client/Server Communication"
 .Ip "Internet \s-1TCP\s0 Clients and Servers" 5
 .IX Item "Internet \s-1TCP\s0 Clients and Servers"
 .Ip "Unix-Domain \s-1TCP\s0 Clients and Servers" 5
 .IX Item "Unix-Domain \s-1TCP\s0 Clients and Servers"
-.Ip "\s-1UDP\s0: Message Passing" 5
+.Ip "\s-1TCP\s0 Clients with \s-1IO::\s0Socket" 0
+.IX Item "\s-1TCP\s0 Clients with \s-1IO::\s0Socket"
+.Ip "A Simple Client" 5
+.IX Item "A Simple Client"
+\f(CWProto\fR, \f(CWPeerAddr\fR, \f(CWPeerPort\fR
+.Ip "A Webget Client" 5
+.IX Item "A Webget Client"
+.Ip "Interactive Client with \s-1IO::\s0Socket" 5
+.IX Item "Interactive Client with \s-1IO::\s0Socket"
+.Ip "\s-1TCP\s0 Servers with \s-1IO::\s0Socket" 0
+.IX Item "\s-1TCP\s0 Servers with \s-1IO::\s0Socket"
+Proto, LocalPort, Listen, Reuse
+.Ip "\s-1UDP\s0: Message Passing" 0
 .IX Item "\s-1UDP\s0: Message Passing"
 .Ip "SysV \s-1IPC\s0" 0
 .IX Item "SysV \s-1IPC\s0"
-.Ip "\s-1WARNING\s0" 0
-.IX Item "\s-1WARNING\s0"
 .Ip "\s-1NOTES\s0" 0
 .IX Item "\s-1NOTES\s0"
 .Ip "\s-1BUGS\s0" 0
@@ -1049,16 +1824,16 @@ t, t expr, b [line] [condition], b subname [condition], b postpone subname
 command, A, O [opt[=val]] [opt"val"] [opt?].., \f(CWrecallCommand\fR,
 \f(CWShellBang\fR, \f(CWpager\fR, \f(CWtkRunning\fR, \f(CWsignalLevel\fR, \f(CWwarnLevel\fR,
 \f(CWdieLevel\fR, \f(CWAutoTrace\fR, \f(CWLineInfo\fR, \f(CWinhibit_exit\fR, \f(CWPrintRet\fR,
-\f(CWframe\fR, \f(CWmaxTraceLen\fR, \f(CWarrayDepth\fR, \f(CWhashDepth\fR, \f(CWcompactDump\fR,
-\f(CWveryCompact\fR, \f(CWglobPrint\fR, \f(CWDumpDBFiles\fR, \f(CWDumpPackages\fR, \f(CWquote\fR,
-\f(CWHighBit\fR, \f(CWundefPrint\fR, \f(CWUsageOnly\fR, \f(CWTTY\fR, \f(CWnoTTY\fR, \f(CWReadLine\fR,
-\f(CWNonStop\fR, < [ command ], << command, > command,
->> command, { [ command ], {{ command, ! number, ! \-number, !
-pattern, !! cmd, H \-number, q or ^D, R, |dbcmd, ||dbcmd, = [alias value],
-command, m expr, m package
+\f(CWornaments\fR, \f(CWframe\fR, \f(CWmaxTraceLen\fR, \f(CWarrayDepth\fR, \f(CWhashDepth\fR,
+\f(CWcompactDump\fR, \f(CWveryCompact\fR, \f(CWglobPrint\fR, \f(CWDumpDBFiles\fR,
+\f(CWDumpPackages\fR, \f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR, \f(CWUsageOnly\fR, \f(CWTTY\fR,
+\f(CWnoTTY\fR, \f(CWReadLine\fR, \f(CWNonStop\fR, < [ command ], << command,
+> command, >> command, { [ command ], {{ command, ! number, !
+\-number, ! pattern, !! cmd, H \-number, q or ^D, R, |dbcmd, ||dbcmd, =
+[alias value], command, m expr, m package
 .Ip "Debugger input/output" 5
 .IX Item "Debugger input/output"
-Prompt, Multi-line commands, Stack backtrace, Listing, Frame listing
+Prompt, Multiline commands, Stack backtrace, Listing, Frame listing
 .Ip "Debugging compile-time statements" 5
 .IX Item "Debugging compile-time statements"
 .Ip "Debugger Customization" 5
@@ -1087,12 +1862,14 @@ Prompt, Multi-line commands, Stack backtrace, Listing, Frame listing
 .IX Item "\s-1DESCRIPTION\s0"
 .Ip "Laundering and Detecting Tainted Data" 5
 .IX Item "Laundering and Detecting Tainted Data"
-.Ip "Switches On the '#!' Line" 5
-.IX Item "Switches On the '#!' Line"
+.Ip "Switches On the \*(N"#!\*(T" Line" 5
+.IX Item "Switches On the \*(N"#!\*(T" Line"
 .Ip "Cleaning Up Your Path" 5
 .IX Item "Cleaning Up Your Path"
 .Ip "Security Bugs" 5
 .IX Item "Security Bugs"
+.Ip "Protecting Your Programs" 5
+.IX Item "Protecting Your Programs"
 .Sh "perltrap \- Perl traps for the unwary"
 .IX Subsection "perltrap \- Perl traps for the unwary"
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1117,7 +1894,7 @@ Subroutine, Signal, Sorting Traps, \s-1OS\s0 Traps, \s-1DBM\s0 Traps, Unclassifi
 .IX Item "Discontinuance, Deprecation, and BugFix traps"
 Discontinuance, Deprecation, BugFix, Discontinuance, Discontinuance,
 Discontinuance, BugFix, Discontinuance, Discontinuance, BugFix,
-Discontinuance, Deprecation, Discontinuance
+Discontinuance, Discontinuance, Deprecation, Discontinuance
 .Ip "Parsing Traps" 5
 .IX Item "Parsing Traps"
 Parsing, Parsing, Parsing
@@ -1139,7 +1916,7 @@ Precedence
 .IX Item "General Regular Expression Traps using s///, etc."
 Regular Expression, Regular Expression, Regular Expression, Regular
 Expression, Regular Expression, Regular Expression, Regular Expression,
-Regular Expression
+Regular Expression, Regular Expression
 .Ip "Subroutine, Signal, Sorting Traps" 5
 .IX Item "Subroutine, Signal, Sorting Traps"
 (Signals), (Sort Subroutine), \fIwarn()\fR won't let you specify a filehandle
@@ -1182,7 +1959,7 @@ Unclassified
 .IX Item "\s-1DESCRIPTION\s0"
 .Ip "\s-1PREAMBLE\s0" 5
 .IX Item "\s-1PREAMBLE\s0"
-\fBUse C from Perl?\fR, \fBUse a \s-1UNIX\s0 program from Perl?\fR, \fBUse Perl from
+\fBUse C from Perl?\fR, \fBUse a Unix program from Perl?\fR, \fBUse Perl from
 Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .Ip "\s-1ROADMAP\s0" 5
 .IX Item "\s-1ROADMAP\s0"
@@ -1204,6 +1981,8 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .IX Item "Maintaining multiple interpreter instances"
 .Ip "Using Perl modules, which themselves use C libraries, from your C program" 5
 .IX Item "Using Perl modules, which themselves use C libraries, from your C program"
+.Ip "Embedding Perl under Win32" 0
+.IX Item "Embedding Perl under Win32"
 .Ip "\s-1MORAL\s0" 0
 .IX Item "\s-1MORAL\s0"
 .Ip "\s-1AUTHOR\s0" 0
@@ -1370,16 +2149,16 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .IX Item "Variables"
 .Ip "Datatypes" 5
 .IX Item "Datatypes"
-.Ip "What is an '\s-1IV\s0'?" 5
-.IX Item "What is an '\s-1IV\s0'?"
-.Ip "Working with \s-1SV\s0's" 5
-.IX Item "Working with \s-1SV\s0's"
+.Ip "What is an \*(N"\s-1IV\s0\*(T"?" 5
+.IX Item "What is an \*(N"\s-1IV\s0\*(T"?"
+.Ip "Working with SVs" 5
+.IX Item "Working with SVs"
 .Ip "What's Really Stored in an \s-1SV\s0?" 5
 .IX Item "What's Really Stored in an \s-1SV\s0?"
-.Ip "Working with \s-1AV\s0's" 5
-.IX Item "Working with \s-1AV\s0's"
-.Ip "Working with \s-1HV\s0's" 5
-.IX Item "Working with \s-1HV\s0's"
+.Ip "Working with AVs" 5
+.IX Item "Working with AVs"
+.Ip "Working with HVs" 5
+.IX Item "Working with HVs"
 .Ip "Hash \s-1API\s0 Extensions" 5
 .IX Item "Hash \s-1API\s0 Extensions"
 .Ip "References" 5
@@ -1392,8 +2171,8 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .IX Item "Reference Counts and Mortality"
 .Ip "Stashes and Globs" 5
 .IX Item "Stashes and Globs"
-.Ip "Double-Typed \s-1SV\s0's" 5
-.IX Item "Double-Typed \s-1SV\s0's"
+.Ip "Double-Typed SVs" 5
+.IX Item "Double-Typed SVs"
 .Ip "Magic Variables" 5
 .IX Item "Magic Variables"
 .Ip "Assigning Magic" 5
@@ -1402,10 +2181,12 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .IX Item "Magic Virtual Tables"
 .Ip "Finding Magic" 5
 .IX Item "Finding Magic"
+.Ip "Understanding the Magic of Tied Hashes and Arrays" 5
+.IX Item "Understanding the Magic of Tied Hashes and Arrays"
 .Ip "Subroutines" 0
 .IX Item "Subroutines"
-.Ip "\s-1XSUB\s0's and the Argument Stack" 5
-.IX Item "\s-1XSUB\s0's and the Argument Stack"
+.Ip "XSUBs and the Argument Stack" 5
+.IX Item "XSUBs and the Argument Stack"
 .Ip "Calling Perl Routines from within C Programs" 5
 .IX Item "Calling Perl Routines from within C Programs"
 .Ip "Memory Allocation" 5
@@ -1438,42 +2219,40 @@ AvFILL, av_clear, av_extend, av_fetch, av_len, av_make, av_pop, av_push,
 av_shift, av_store, av_undef, av_unshift, \s-1CLASS\s0, Copy, croak, CvSTASH,
 DBsingle, DBsub, DBtrace, dMARK, dORIGMARK, dowarn, dSP, dXSARGS, dXSI32,
 dXSI32, \s-1ENTER\s0, \s-1EXTEND\s0, \s-1FREETMPS\s0, G_ARRAY, G_DISCARD, G_EVAL, \s-1GIMME\s0,
-G_NOARGS, G_SCALAR, gv_fetchmeth, gv_fetchmethod, gv_stashpv, gv_stashsv,
-GvSV, he_delayfree, HEf_SVKEY, he_free, HeHASH, HeKEY, HeKLEN, HePV,
-HeSVKEY, HeSVKEY_force, HeSVKEY_set, HeVAL, hv_clear, hv_delete,
-hv_delete_ent, hv_exists, hv_exists_ent, hv_fetch, hv_fetch_ent,
-hv_iterinit, hv_iterkey, hv_iterkeysv	 
-Returns the key as an \f(CWSV*\fR from the current position of the hash
-iterator.  The return value will always be a mortal copy of the
-key.  Also see \f(CWhv_iterinit\fR, hv_iternext, hv_iternextsv, hv_iterval,
-hv_magic, HvNAME, hv_store, hv_store_ent, hv_undef, isALNUM, isALPHA,
-isDIGIT, isLOWER, isSPACE, isUPPER, items, ix, \s-1LEAVE\s0, \s-1MARK\s0, mg_clear,
-mg_copy, mg_find, mg_free, mg_get, mg_len, mg_magical, mg_set, Move, na,
-New, Newc, Newz, newAV, newHV, newRV_inc, newRV_noinc, newSV, newSViv,
-newSVnv, newSVpv, newSVrv, newSVsv, newXS, newXSproto, Nullav, Nullch,
-Nullcv, Nullhv, Nullsv, \s-1ORIGMARK\s0, perl_alloc, perl_call_argv,
-perl_call_method, perl_call_pv, perl_call_sv, perl_construct,
-perl_destruct, perl_eval_sv, perl_free, perl_get_av, perl_get_cv,
-perl_get_hv, perl_get_sv, perl_parse, perl_require_pv, perl_run, POPi,
-POPl, POPp, POPn, POPs, \s-1PUSHMARK\s0, PUSHi, PUSHn, PUSHp, PUSHs, \s-1PUTBACK\s0,
-Renew, Renewc, \s-1RETVAL\s0, safefree, safemalloc, saferealloc, savepv, savepvn,
-\s-1SAVETMPS\s0, \s-1SP\s0, \s-1SPAGAIN\s0, \s-1ST\s0, strEQ, strGE, strGT, strLE, strLT, strNE,
-strnEQ, strnNE, sv_2mortal, sv_bless, sv_catpv, sv_catpvn, sv_catsv,
-sv_cmp, sv_cmp, SvCUR, SvCUR_set, sv_dec, sv_dec, SvEND, sv_eq, SvGROW,
-sv_grow, sv_inc, SvIOK, SvIOK_off, SvIOK_on, SvIOK_only, SvIOK_only,
-SvIOKp, sv_isa, SvIV, sv_isobject, SvIVX, SvLEN, sv_len, sv_len, sv_magic,
-sv_mortalcopy, SvOK, sv_newmortal, sv_no, SvNIOK, SvNIOK_off, SvNIOKp,
-SvNOK, SvNOK_off, SvNOK_on, SvNOK_only, SvNOK_only, SvNOKp, SvNV, SvNVX,
-SvPOK, SvPOK_off, SvPOK_on, SvPOK_only, SvPOK_only, SvPOKp, SvPV, SvPVX,
-SvREFCNT, SvREFCNT_dec, SvREFCNT_inc, SvROK, SvROK_off, SvROK_on, SvRV,
-sv_setiv, sv_setnv, sv_setpv, sv_setpvn, sv_setref_iv, sv_setref_nv,
-sv_setref_pv, sv_setref_pvn, sv_setsv, SvSTASH, SVt_IV, SVt_PV, SVt_PVAV,
-SVt_PVCV, SVt_PVHV, SVt_PVMG, SVt_NV, SvTRUE, SvTYPE, svtype, SvUPGRADE,
-sv_upgrade, sv_undef, sv_unref, sv_usepvn, sv_yes, \s-1THIS\s0, toLOWER, toUPPER,
-warn, XPUSHi, XPUSHn, XPUSHp, XPUSHs, \s-1XS\s0, \s-1XSRETURN\s0, \s-1XSRETURN_EMPTY\s0,
-\s-1XSRETURN_IV\s0, \s-1XSRETURN_NO\s0, \s-1XSRETURN_NV\s0, \s-1XSRETURN_PV\s0, \s-1XSRETURN_UNDEF\s0,
-\s-1XSRETURN_YES\s0, XST_mIV, XST_mNV, XST_mNO, XST_mPV, XST_mUNDEF, XST_mYES,
-\s-1XS_VERSION\s0, \s-1XS_VERSION_BOOTCHECK\s0, Zero
+\s-1GIMME_V\s0, G_NOARGS, G_SCALAR, G_VOID, gv_fetchmeth, gv_fetchmethod,
+gv_fetchmethod_autoload, gv_stashpv, gv_stashsv, GvSV, HEf_SVKEY, HeHASH,
+HeKEY, HeKLEN, HePV, HeSVKEY, HeSVKEY_force, HeSVKEY_set, HeVAL, hv_clear,
+hv_delayfree_ent, hv_delete, hv_delete_ent, hv_exists, hv_exists_ent,
+hv_fetch, hv_fetch_ent, hv_free_ent, hv_iterinit, hv_iterkey, hv_iterkeysv,
+hv_iternext, hv_iternextsv, hv_iterval, hv_magic, HvNAME, hv_store,
+hv_store_ent, hv_undef, isALNUM, isALPHA, isDIGIT, isLOWER, isSPACE,
+isUPPER, items, ix, \s-1LEAVE\s0, \s-1MARK\s0, mg_clear, mg_copy, mg_find, mg_free,
+mg_get, mg_len, mg_magical, mg_set, Move, na, New, Newc, Newz, newAV,
+newHV, newRV_inc, newRV_noinc, newSV, newSViv, newSVnv, newSVpv, newSVrv,
+newSVsv, newXS, newXSproto, Nullav, Nullch, Nullcv, Nullhv, Nullsv,
+\s-1ORIGMARK\s0, perl_alloc, perl_call_argv, perl_call_method, perl_call_pv,
+perl_call_sv, perl_construct, perl_destruct, perl_eval_sv, perl_eval_pv,
+perl_free, perl_get_av, perl_get_cv, perl_get_hv, perl_get_sv, perl_parse,
+perl_require_pv, perl_run, POPi, POPl, POPp, POPn, POPs, \s-1PUSHMARK\s0, PUSHi,
+PUSHn, PUSHp, PUSHs, \s-1PUTBACK\s0, Renew, Renewc, \s-1RETVAL\s0, safefree, safemalloc,
+saferealloc, savepv, savepvn, \s-1SAVETMPS\s0, \s-1SP\s0, \s-1SPAGAIN\s0, \s-1ST\s0, strEQ, strGE,
+strGT, strLE, strLT, strNE, strnEQ, strnNE, sv_2mortal, sv_bless, sv_catpv,
+sv_catpvn, sv_catpvf, sv_catsv, sv_cmp, sv_cmp, SvCUR, SvCUR_set, sv_dec,
+sv_dec, SvEND, sv_eq, SvGROW, sv_grow, sv_inc, SvIOK, SvIOK_off, SvIOK_on,
+SvIOK_only, SvIOK_only, SvIOKp, sv_isa, SvIV, sv_isobject, SvIVX, SvLEN,
+sv_len, sv_len, sv_magic, sv_mortalcopy, SvOK, sv_newmortal, sv_no, SvNIOK,
+SvNIOK_off, SvNIOKp, SvNOK, SvNOK_off, SvNOK_on, SvNOK_only, SvNOK_only,
+SvNOKp, SvNV, SvNVX, SvPOK, SvPOK_off, SvPOK_on, SvPOK_only, SvPOK_only,
+SvPOKp, SvPV, SvPVX, SvREFCNT, SvREFCNT_dec, SvREFCNT_inc, SvROK,
+SvROK_off, SvROK_on, SvRV, sv_setiv, sv_setnv, sv_setpv, sv_setpvn,
+sv_setpvf, sv_setref_iv, sv_setref_nv, sv_setref_pv, sv_setref_pvn,
+sv_setsv, SvSTASH, SVt_IV, SVt_PV, SVt_PVAV, SVt_PVCV, SVt_PVHV, SVt_PVMG,
+SVt_NV, SvTRUE, SvTYPE, svtype, SvUPGRADE, sv_upgrade, sv_undef, sv_unref,
+sv_usepvn, sv_yes, \s-1THIS\s0, toLOWER, toUPPER, warn, XPUSHi, XPUSHn, XPUSHp,
+XPUSHs, \s-1XS\s0, \s-1XSRETURN\s0, \s-1XSRETURN_EMPTY\s0, \s-1XSRETURN_IV\s0, \s-1XSRETURN_NO\s0,
+\s-1XSRETURN_NV\s0, \s-1XSRETURN_PV\s0, \s-1XSRETURN_UNDEF\s0, \s-1XSRETURN_YES\s0, XST_mIV, XST_mNV,
+XST_mNO, XST_mPV, XST_mUNDEF, XST_mYES, \s-1XS_VERSION\s0, \s-1XS_VERSION_BOOTCHECK\s0,
+Zero
 .Ip "\s-1EDITOR\s0" 0
 .IX Item "\s-1EDITOR\s0"
 .Ip "\s-1DATE\s0" 0
@@ -1488,6 +2267,8 @@ An Error Handler, An Event Driven Program
 \fBperl_call_sv\fR, \fBperl_call_pv\fR, \fBperl_call_method\fR, \fBperl_call_argv\fR
 .Ip "\s-1FLAG\s0 \s-1VALUES\s0" 0
 .IX Item "\s-1FLAG\s0 \s-1VALUES\s0"
+.Ip "G_VOID" 5
+.IX Item "G_VOID"
 .Ip "G_SCALAR" 5
 .IX Item "G_SCALAR"
 .Ip "G_ARRAY" 5
@@ -1496,12 +2277,12 @@ An Error Handler, An Event Driven Program
 .IX Item "G_DISCARD"
 .Ip "G_NOARGS" 5
 .IX Item "G_NOARGS"
-.Ip "G_EVAL	" 5
-.IX Item "G_EVAL	"
+.Ip "G_EVAL" 5
+.IX Item "G_EVAL"
 .Ip "G_KEEPERR" 5
 .IX Item "G_KEEPERR"
-.Ip "Determining the Context " 5
-.IX Item "Determining the Context "
+.Ip "Determining the Context" 5
+.IX Item "Determining the Context"
 .Ip "\s-1KNOWN\s0 \s-1PROBLEMS\s0" 0
 .IX Item "\s-1KNOWN\s0 \s-1PROBLEMS\s0"
 .Ip "\s-1EXAMPLES\s0" 0
@@ -1528,8 +2309,8 @@ An Error Handler, An Event Driven Program
 .IX Item "Using perl_call_argv"
 .Ip "Using perl_call_method" 5
 .IX Item "Using perl_call_method"
-.Ip "Using \s-1GIMME\s0" 5
-.IX Item "Using \s-1GIMME\s0"
+.Ip "Using \s-1GIMME_V\s0" 5
+.IX Item "Using \s-1GIMME_V\s0"
 .Ip "Using Perl to dispose of temporaries" 5
 .IX Item "Using Perl to dispose of temporaries"
 .Ip "Strategies for storing Callback Context Information" 5
@@ -1539,6 +2320,8 @@ callbacks \- hard wired limit, 3. Use a parameter to map to the Perl
 callback
 .Ip "Alternate Stack Manipulation" 5
 .IX Item "Alternate Stack Manipulation"
+.Ip "Creating and calling an anonymous subroutine in C" 5
+.IX Item "Creating and calling an anonymous subroutine in C"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Ip "\s-1AUTHOR\s0" 0
@@ -1547,6 +2330,20 @@ callback
 .IX Item "\s-1DATE\s0"
 .SH "PRAGMA DOCUMENTATION"
 .IX Header "PRAGMA DOCUMENTATION"
+.Sh "autouse \- postpone load of modules until a function is used"
+.IX Subsection "autouse \- postpone load of modules until a function is used"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1WARNING\s0" 0
+.IX Item "\s-1WARNING\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "blib \- Use MakeMaker's uninstalled version of a package"
 .IX Subsection "blib \- Use MakeMaker's uninstalled version of a package"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1557,6 +2354,22 @@ callback
 .IX Item "\s-1BUGS\s0"
 .Ip "\s-1AUTHOR\s0" 0
 .IX Item "\s-1AUTHOR\s0"
+.Sh "constant \- Perl pragma to declare constants"
+.IX Subsection "constant \- Perl pragma to declare constants"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1NOTES\s0" 0
+.IX Item "\s-1NOTES\s0"
+.Ip "\s-1TECHNICAL\s0 \s-1NOTE\s0" 0
+.IX Item "\s-1TECHNICAL\s0 \s-1NOTE\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
+.Ip "\s-1COPYRIGHT\s0" 0
+.IX Item "\s-1COPYRIGHT\s0"
 .Sh "diagnostics \- Perl compiler pragma to force verbose warning diagnostics"
 .IX Subsection "diagnostics \- Perl compiler pragma to force verbose warning diagnostics"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1722,22 +2535,26 @@ is inherited by derived classes
 [0], [1], [2], [3]
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-.Sh "AutoLoader \- load functions only on demand"
-.IX Subsection "AutoLoader \- load functions only on demand"
+.Sh "AutoLoader \- load subroutines only on demand"
+.IX Subsection "AutoLoader \- load subroutines only on demand"
 .Ip "\s-1SYNOPSIS\s0" 0
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
-.Ip "_\|_END_\|_" 5
-.IX Item "_\|_END_\|_"
-.Ip "Loading Stubs" 5
-.IX Item "Loading Stubs"
+.Ip "Subroutine Stubs" 5
+.IX Item "Subroutine Stubs"
+.Ip "Using \fBAutoLoader\fR's \s-1AUTOLOAD\s0 Subroutine" 5
+.IX Item "Using \fBAutoLoader\fR's \s-1AUTOLOAD\s0 Subroutine"
+.Ip "Overriding \fBAutoLoader\fR's \s-1AUTOLOAD\s0 Subroutine" 5
+.IX Item "Overriding \fBAutoLoader\fR's \s-1AUTOLOAD\s0 Subroutine"
 .Ip "Package Lexicals" 5
 .IX Item "Package Lexicals"
-.Ip "AutoLoader vs. SelfLoader" 5
-.IX Item "AutoLoader vs. SelfLoader"
-.Ip "\s-1CAVEAT\s0" 0
-.IX Item "\s-1CAVEAT\s0"
+.Ip "\fBAutoLoader\fR vs. \fBSelfLoader\fR" 5
+.IX Item "\fBAutoLoader\fR vs. \fBSelfLoader\fR"
+.Ip "\s-1CAVEATS\s0" 0
+.IX Item "\s-1CAVEATS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "AutoSplit \- split a package for autoloading"
 .IX Subsection "AutoSplit \- split a package for autoloading"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1759,9 +2576,12 @@ is inherited by derived classes
 new, debug
 .Ip "Standard Exports" 5
 .IX Item "Standard Exports"
-\fItimeit\fR\|(\s-1COUNT\s0, \s-1CODE\s0), timethis, timethese, timediff, timestr
+\fItimeit\fR\|(\s-1COUNT\s0, \s-1CODE\s0), timethis ( \s-1COUNT\s0, \s-1CODE\s0, [ \s-1TITLE\s0, [ \s-1STYLE\s0 ]] ),
+timethese ( \s-1COUNT\s0, \s-1CODEHASHREF\s0, [ \s-1STYLE\s0 ] ), timediff ( T1, T2 ), timestr (
+\s-1TIMEDIFF\s0, [ \s-1STYLE\s0, [ \s-1FORMAT\s0 ]] )
 .Ip "Optional Exports" 5
 .IX Item "Optional Exports"
+clearcache ( \s-1COUNT\s0 ), clearallcache ( ), disablecache ( ), enablecache ( )
 .Ip "\s-1NOTES\s0" 0
 .IX Item "\s-1NOTES\s0"
 .Ip "\s-1INHERITANCE\s0" 0
@@ -1782,6 +2602,241 @@ new, debug
 .IX Item "\s-1DESCRIPTION\s0"
 .Ip "\s-1AUTHOR\s0" 0
 .IX Item "\s-1AUTHOR\s0"
+.Sh "\s-1CGI\s0 \- Simple Common Gateway Interface Class"
+.IX Subsection "\s-1CGI\s0 \- Simple Common Gateway Interface Class"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1ABSTRACT\s0" 0
+.IX Item "\s-1ABSTRACT\s0"
+.Ip "\s-1INSTALLATION\s0" 0
+.IX Item "\s-1INSTALLATION\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0:" 5
+.IX Item "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0:"
+.Ip "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 \s-1FROM\s0 \s-1AN\s0 \s-1INPUT\s0 \s-1FILE\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 \s-1FROM\s0 \s-1AN\s0 \s-1INPUT\s0 \s-1FILE\s0"
+.Ip "\s-1FETCHING\s0 A \s-1LIST\s0 \s-1OF\s0 \s-1KEYWORDS\s0 \s-1FROM\s0 \s-1THE\s0 \s-1QUERY\s0:" 5
+.IX Item "\s-1FETCHING\s0 A \s-1LIST\s0 \s-1OF\s0 \s-1KEYWORDS\s0 \s-1FROM\s0 \s-1THE\s0 \s-1QUERY\s0:"
+.Ip "\s-1FETCHING\s0 \s-1THE\s0 \s-1NAMES\s0 \s-1OF\s0 \s-1ALL\s0 \s-1THE\s0 \s-1PARAMETERS\s0 \s-1PASSED\s0 \s-1TO\s0 \s-1YOUR\s0 \s-1SCRIPT\s0:" 5
+.IX Item "\s-1FETCHING\s0 \s-1THE\s0 \s-1NAMES\s0 \s-1OF\s0 \s-1ALL\s0 \s-1THE\s0 \s-1PARAMETERS\s0 \s-1PASSED\s0 \s-1TO\s0 \s-1YOUR\s0 \s-1SCRIPT\s0:"
+.Ip "\s-1FETCHING\s0 \s-1THE\s0 \s-1VALUE\s0 \s-1OR\s0 \s-1VALUES\s0 \s-1OF\s0 A \s-1SINGLE\s0 \s-1NAMED\s0 \s-1PARAMETER\s0:" 5
+.IX Item "\s-1FETCHING\s0 \s-1THE\s0 \s-1VALUE\s0 \s-1OR\s0 \s-1VALUES\s0 \s-1OF\s0 A \s-1SINGLE\s0 \s-1NAMED\s0 \s-1PARAMETER\s0:"
+.Ip "\s-1SETTING\s0 \s-1THE\s0 \s-1VALUE\s0(S) \s-1OF\s0 A \s-1NAMED\s0 \s-1PARAMETER\s0:" 5
+.IX Item "\s-1SETTING\s0 \s-1THE\s0 \s-1VALUE\s0(S) \s-1OF\s0 A \s-1NAMED\s0 \s-1PARAMETER\s0:"
+.Ip "\s-1APPENDING\s0 \s-1ADDITIONAL\s0 \s-1VALUES\s0 \s-1TO\s0 A \s-1NAMED\s0 \s-1PARAMETER\s0:" 5
+.IX Item "\s-1APPENDING\s0 \s-1ADDITIONAL\s0 \s-1VALUES\s0 \s-1TO\s0 A \s-1NAMED\s0 \s-1PARAMETER\s0:"
+.Ip "\s-1IMPORTING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0 \s-1INTO\s0 A \s-1NAMESPACE\s0:" 5
+.IX Item "\s-1IMPORTING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0 \s-1INTO\s0 A \s-1NAMESPACE\s0:"
+.Ip "\s-1DELETING\s0 A \s-1PARAMETER\s0 \s-1COMPLETELY\s0:" 5
+.IX Item "\s-1DELETING\s0 A \s-1PARAMETER\s0 \s-1COMPLETELY\s0:"
+.Ip "\s-1DELETING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0:" 5
+.IX Item "\s-1DELETING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0:"
+.Ip "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1FORM\s0 \s-1TO\s0 A \s-1FILE\s0:" 5
+.IX Item "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1FORM\s0 \s-1TO\s0 A \s-1FILE\s0:"
+.Ip "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:" 5
+.IX Item "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:"
+.Ip "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0" 5
+.IX Item "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0"
+.Ip "\s-1CALLING\s0 \s-1CGI\s0 \s-1FUNCTIONS\s0 \s-1THAT\s0 \s-1TAKE\s0 \s-1MULTIPLE\s0 \s-1ARGUMENTS\s0" 5
+.IX Item "\s-1CALLING\s0 \s-1CGI\s0 \s-1FUNCTIONS\s0 \s-1THAT\s0 \s-1TAKE\s0 \s-1MULTIPLE\s0 \s-1ARGUMENTS\s0"
+.Ip "\s-1CREATING\s0 \s-1THE\s0 \s-1HTTP\s0 \s-1HEADER\s0:" 5
+.IX Item "\s-1CREATING\s0 \s-1THE\s0 \s-1HTTP\s0 \s-1HEADER\s0:"
+.Ip "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1INSTRUCTION\s0" 5
+.IX Item "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1INSTRUCTION\s0"
+.Ip "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1HEADER\s0:" 5
+.IX Item "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1HEADER\s0:"
+\fBParameters:\fR, 4, 5, 6..
+.Ip "\s-1ENDING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0:" 5
+.IX Item "\s-1ENDING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0:"
+.Ip "\s-1CREATING\s0 \s-1FORMS\s0" 0
+.IX Item "\s-1CREATING\s0 \s-1FORMS\s0"
+.Ip "\s-1CREATING\s0 \s-1AN\s0 \s-1ISINDEX\s0 \s-1TAG\s0" 5
+.IX Item "\s-1CREATING\s0 \s-1AN\s0 \s-1ISINDEX\s0 \s-1TAG\s0"
+.Ip "\s-1STARTING\s0 \s-1AND\s0 \s-1ENDING\s0 A \s-1FORM\s0" 5
+.IX Item "\s-1STARTING\s0 \s-1AND\s0 \s-1ENDING\s0 A \s-1FORM\s0"
+\fBapplication/x-www-form-urlencoded\fR, \fBmultipart/form-data\fR
+.Ip "\s-1CREATING\s0 A \s-1TEXT\s0 \s-1FIELD\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1TEXT\s0 \s-1FIELD\s0"
+\fBParameters\fR
+.Ip "\s-1CREATING\s0 A \s-1BIG\s0 \s-1TEXT\s0 \s-1FIELD\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1BIG\s0 \s-1TEXT\s0 \s-1FIELD\s0"
+.Ip "\s-1CREATING\s0 A \s-1PASSWORD\s0 \s-1FIELD\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1PASSWORD\s0 \s-1FIELD\s0"
+.Ip "\s-1CREATING\s0 A \s-1FILE\s0 \s-1UPLOAD\s0 \s-1FIELD\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1FILE\s0 \s-1UPLOAD\s0 \s-1FIELD\s0"
+\fBParameters\fR
+.Ip "\s-1CREATING\s0 A \s-1POPUP\s0 \s-1MENU\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1POPUP\s0 \s-1MENU\s0"
+.Ip "\s-1CREATING\s0 A \s-1SCROLLING\s0 \s-1LIST\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1SCROLLING\s0 \s-1LIST\s0"
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1GROUP\s0 \s-1OF\s0 \s-1RELATED\s0 \s-1CHECKBOXES\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1GROUP\s0 \s-1OF\s0 \s-1RELATED\s0 \s-1CHECKBOXES\s0"
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1STANDALONE\s0 \s-1CHECKBOX\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1STANDALONE\s0 \s-1CHECKBOX\s0"
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1RADIO\s0 \s-1BUTTON\s0 \s-1GROUP\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1RADIO\s0 \s-1BUTTON\s0 \s-1GROUP\s0"
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1SUBMIT\s0 \s-1BUTTON\s0 " 5
+.IX Item "\s-1CREATING\s0 A \s-1SUBMIT\s0 \s-1BUTTON\s0 "
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1RESET\s0 \s-1BUTTON\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1RESET\s0 \s-1BUTTON\s0"
+.Ip "\s-1CREATING\s0 A \s-1DEFAULT\s0 \s-1BUTTON\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1DEFAULT\s0 \s-1BUTTON\s0"
+.Ip "\s-1CREATING\s0 A \s-1HIDDEN\s0 \s-1FIELD\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1HIDDEN\s0 \s-1FIELD\s0"
+\fBParameters:\fR
+.Ip "\s-1CREATING\s0 A \s-1CLICKABLE\s0 \s-1IMAGE\s0 \s-1BUTTON\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1CLICKABLE\s0 \s-1IMAGE\s0 \s-1BUTTON\s0"
+\fBParameters:\fR, 3.The third option (\-align, optional) is an alignment type,
+and may be
+\s-1TOP\s0, \s-1BOTTOM\s0 or \s-1MIDDLE\s0
+.Ip "\s-1CREATING\s0 A \s-1JAVASCRIPT\s0 \s-1ACTION\s0 \s-1BUTTON\s0" 5
+.IX Item "\s-1CREATING\s0 A \s-1JAVASCRIPT\s0 \s-1ACTION\s0 \s-1BUTTON\s0"
+.Ip "\s-1NETSCAPE\s0 \s-1COOKIES\s0" 0
+.IX Item "\s-1NETSCAPE\s0 \s-1COOKIES\s0"
+1. an expiration time, 2. a domain, 3. a path, 4. a \*(L"secure\*(R" flag,
+\fB\-name\fR, \fB\-value\fR, \fB\-path\fR, \fB\-domain\fR, \fB\-expires\fR, \fB\-secure\fR
+.Ip "\s-1WORKING\s0 \s-1WITH\s0 \s-1NETSCAPE\s0 \s-1FRAMES\s0" 0
+.IX Item "\s-1WORKING\s0 \s-1WITH\s0 \s-1NETSCAPE\s0 \s-1FRAMES\s0"
+1. Create a <Frameset> document, 2. Specify the destination for the
+document in the \s-1HTTP\s0 header, 3. Specify the destination for the document in
+the <\s-1FORM\s0> tag
+.Ip "\s-1LIMITED\s0 \s-1SUPPORT\s0 \s-1FOR\s0 \s-1CASCADING\s0 \s-1STYLE\s0 \s-1SHEETS\s0" 0
+.IX Item "\s-1LIMITED\s0 \s-1SUPPORT\s0 \s-1FOR\s0 \s-1CASCADING\s0 \s-1STYLE\s0 \s-1SHEETS\s0"
+.Ip "\s-1DEBUGGING\s0" 0
+.IX Item "\s-1DEBUGGING\s0"
+.Ip "\s-1DUMPING\s0 \s-1OUT\s0 \s-1ALL\s0 \s-1THE\s0 \s-1NAME/VALUE\s0 \s-1PAIRS\s0" 5
+.IX Item "\s-1DUMPING\s0 \s-1OUT\s0 \s-1ALL\s0 \s-1THE\s0 \s-1NAME/VALUE\s0 \s-1PAIRS\s0"
+.Ip "\s-1FETCHING\s0 \s-1ENVIRONMENT\s0 \s-1VARIABLES\s0" 0
+.IX Item "\s-1FETCHING\s0 \s-1ENVIRONMENT\s0 \s-1VARIABLES\s0"
+\fBaccept()\fR, \fBraw_cookie()\fR, \fBuser_agent()\fR, \fBpath_info()\fR,
+\fBpath_translated()\fR, \fBremote_host()\fR, \fBscript_name()\fRReturn the script
+name as a partial \s-1URL\s0, for self-refering
+scripts, \fBreferer()\fR, \fBauth_type ()\fR, \fBserver_name ()\fR, \fBvirtual_host
+()\fR, \fBserver_software ()\fR, \fBremote_user ()\fR, \fBuser_name ()\fR,
+\fBrequest_method()\fR
+.Ip "\s-1CREATING\s0 \s-1HTML\s0 \s-1ELEMENTS\s0" 0
+.IX Item "\s-1CREATING\s0 \s-1HTML\s0 \s-1ELEMENTS\s0"
+.Ip "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0" 5
+.IX Item "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0"
+.Ip "Generating new \s-1HTML\s0 tags" 5
+.IX Item "Generating new \s-1HTML\s0 tags"
+.Ip "\s-1IMPORTING\s0 \s-1CGI\s0 \s-1METHOD\s0 \s-1CALLS\s0 \s-1INTO\s0 \s-1YOUR\s0 \s-1NAME\s0 \s-1SPACE\s0" 0
+.IX Item "\s-1IMPORTING\s0 \s-1CGI\s0 \s-1METHOD\s0 \s-1CALLS\s0 \s-1INTO\s0 \s-1YOUR\s0 \s-1NAME\s0 \s-1SPACE\s0"
+\fBcgi\fR, \fBform\fR, \fBhtml2\fR, \fBhtml3\fR, \fBnetscape\fR, \fBshortcuts\fR,
+\fBstandard\fR, \fBall\fR
+.Ip "\s-1USING\s0 \s-1NPH\s0 \s-1SCRIPTS\s0" 0
+.IX Item "\s-1USING\s0 \s-1NPH\s0 \s-1SCRIPTS\s0"
+In the \fBuse\fR statementSimply add \*(L":nph\*(R" to the list of symbols to be
+imported into your script:, By calling the \fBnph()\fR method:, By using
+\fB\-nph\fR parameters in the \fBheader()\fR and \fBredirect()\fR  statements:
+.Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1INFORMATION\s0"
+.Ip "\s-1CREDITS\s0" 0
+.IX Item "\s-1CREDITS\s0"
+Matt Heffron (heffron@falstaff.css.beckman.com), James Taylor
+(james.taylor@srs.gov), Scott Anguish <sanguish@digifix.com>, Mike Jewell
+(mlj3u@virginia.edu), Timothy Shimmin (tes@kbs.citri.edu.au), Joergen Haegg
+(jh@axis.se), Laurent Delfosse (delfosse@csgrad1.cs.wvu.edu), Richard
+Resnick (applepi1@aol.com), Craig Bishop (csb@barwonwater.vic.gov.au), Tony
+Curtis (tc@vcpc.univie.ac.at), Tim Bunce (Tim.Bunce@ig.co.uk), Tom
+Christiansen (tchrist@convex.com), Andreas Koenig
+(k@franz.ww.\s-1TU\s0\-Berlin.\s-1DE\s0), Tim MacKenzie (Tim.MacKenzie@fulcrum.com.au),
+Kevin B. Hendricks (kbhend@dogwood.tyler.wm.edu), Stephen Dahmen
+(joyfire@inxpress.net), Ed Jordan (ed@fidalgo.net), David Alan Pisoni
+(david@cnation.com), ...and many many more..
+.Ip "A \s-1COMPLETE\s0 \s-1EXAMPLE\s0 \s-1OF\s0 A \s-1SIMPLE\s0 \s-1FORM\s0\-\s-1BASED\s0 \s-1SCRIPT\s0" 0
+.IX Item "A \s-1COMPLETE\s0 \s-1EXAMPLE\s0 \s-1OF\s0 A \s-1SIMPLE\s0 \s-1FORM\s0\-\s-1BASED\s0 \s-1SCRIPT\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Sh "\s-1CGI::\s0Apache \- Make things work with \s-1CGI\s0.pm against Perl-Apache \s-1API\s0"
+.IX Subsection "\s-1CGI::\s0Apache \- Make things work with \s-1CGI\s0.pm against Perl-Apache \s-1API\s0"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1NOTE\s0 1" 0
+.IX Item "\s-1NOTE\s0 1"
+.Ip "\s-1NOTE\s0 2" 0
+.IX Item "\s-1NOTE\s0 2"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
+.Sh "\s-1CGI::\s0Carp, \fB\s-1CGI::\s0Carp\fR \- \s-1CGI\s0 routines for writing to the \s-1HTTPD\s0 (or other) error log"
+.IX Subsection "\s-1CGI::\s0Carp, \fB\s-1CGI::\s0Carp\fR \- \s-1CGI\s0 routines for writing to the \s-1HTTPD\s0 (or other) error log"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1REDIRECTING\s0 \s-1ERROR\s0 \s-1MESSAGES\s0" 0
+.IX Item "\s-1REDIRECTING\s0 \s-1ERROR\s0 \s-1MESSAGES\s0"
+.Ip "\s-1MAKING\s0 \s-1PERL\s0 \s-1ERRORS\s0 \s-1APPEAR\s0 \s-1IN\s0 \s-1THE\s0 \s-1BROWSER\s0 \s-1WINDOW\s0" 0
+.IX Item "\s-1MAKING\s0 \s-1PERL\s0 \s-1ERRORS\s0 \s-1APPEAR\s0 \s-1IN\s0 \s-1THE\s0 \s-1BROWSER\s0 \s-1WINDOW\s0"
+.Ip "\s-1CHANGE\s0 \s-1LOG\s0" 0
+.IX Item "\s-1CHANGE\s0 \s-1LOG\s0"
+.Ip "\s-1AUTHORS\s0" 0
+.IX Item "\s-1AUTHORS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Sh "\s-1CGI::\s0Fast \- \s-1CGI\s0 Interface for Fast \s-1CGI\s0"
+.IX Subsection "\s-1CGI::\s0Fast \- \s-1CGI\s0 Interface for Fast \s-1CGI\s0"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1OTHER\s0 \s-1PIECES\s0 \s-1OF\s0 \s-1THE\s0 \s-1PUZZLE\s0" 0
+.IX Item "\s-1OTHER\s0 \s-1PIECES\s0 \s-1OF\s0 \s-1THE\s0 \s-1PUZZLE\s0"
+.Ip "\s-1WRITING\s0 \s-1FASTCGI\s0 \s-1PERL\s0 \s-1SCRIPTS\s0" 0
+.IX Item "\s-1WRITING\s0 \s-1FASTCGI\s0 \s-1PERL\s0 \s-1SCRIPTS\s0"
+.Ip "\s-1INSTALLING\s0 \s-1FASTCGI\s0 \s-1SCRIPTS\s0" 0
+.IX Item "\s-1INSTALLING\s0 \s-1FASTCGI\s0 \s-1SCRIPTS\s0"
+.Ip "\s-1USING\s0 \s-1FASTCGI\s0 \s-1SCRIPTS\s0 \s-1AS\s0 \s-1CGI\s0 \s-1SCRIPTS\s0" 0
+.IX Item "\s-1USING\s0 \s-1FASTCGI\s0 \s-1SCRIPTS\s0 \s-1AS\s0 \s-1CGI\s0 \s-1SCRIPTS\s0"
+.Ip "\s-1CAVEATS\s0" 0
+.IX Item "\s-1CAVEATS\s0"
+.Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1INFORMATION\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Sh "\s-1CGI::\s0Push \- Simple Interface to Server Push"
+.IX Subsection "\s-1CGI::\s0Push \- Simple Interface to Server Push"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1USING\s0 \s-1CGI::\s0Push" 0
+.IX Item "\s-1USING\s0 \s-1CGI::\s0Push"
+-last_page, \-type, \-delay, \-cookie, \-target, \-expires
+.Ip "\s-1INSTALLING\s0 \s-1CGI::\s0Push \s-1SCRIPTS\s0" 0
+.IX Item "\s-1INSTALLING\s0 \s-1CGI::\s0Push \s-1SCRIPTS\s0"
+.Ip "\s-1CAVEATS\s0" 0
+.IX Item "\s-1CAVEATS\s0"
+.Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
+.IX Item "\s-1AUTHOR\s0 \s-1INFORMATION\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Sh "\s-1CGI::\s0Switch \- Try more than one constructors and return the first object available"
+.IX Subsection "\s-1CGI::\s0Switch \- Try more than one constructors and return the first object available"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
 .Sh "\s-1CPAN\s0 \- query, download and build perl modules from \s-1CPAN\s0 sites"
 .IX Subsection "\s-1CPAN\s0 \- query, download and build perl modules from \s-1CPAN\s0 sites"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1799,8 +2854,11 @@ distribution
 .IX Item "autobundle"
 .Ip "recompile" 5
 .IX Item "recompile"
+.Ip "The 4 Classes: Authors, Bundles, Modules, Distributions" 5
+.IX Item "The 4 Classes: Authors, Bundles, Modules, Distributions"
 .Ip "Programmer's interface" 5
 .IX Item "Programmer's interface"
+\fIexpand\fR\|($type,@things), Programming Examples
 .Ip "Cache Manager" 5
 .IX Item "Cache Manager"
 .Ip "Bundles" 5
@@ -1847,17 +2905,23 @@ o conf <scalar option>, o conf <scalar option>
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
-.Sh "Class::Template \- struct/member template builder"
-.IX Subsection "Class::Template \- struct/member template builder"
+.Sh "Class::Struct \- declare struct-like datatypes as Perl classes"
+.IX Subsection "Class::Struct \- declare struct-like datatypes as Perl classes"
 .Ip "\s-1SYNOPSIS\s0" 0
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
+.Ip "The \f(CWstruct()\fR function" 5
+.IX Item "The \f(CWstruct()\fR function"
+.Ip "Element Types and Accessor Methods" 5
+.IX Item "Element Types and Accessor Methods"
+Scalar (\f(CW'$'\fR or \f(CW'*$'\fR), Array (\f(CW'@'\fR or \f(CW'*@'\fR), Hash (\f(CW'%'\fR or
+\&\f(CW'*%'\fR), Class (\f(CW'Class_Name'\fR or \f(CW'*Class_Name'\fR)
 .Ip "\s-1EXAMPLES\s0" 0
 .IX Item "\s-1EXAMPLES\s0"
 Example 1, Example 2
-.Ip "\s-1NOTES\s0" 0
-.IX Item "\s-1NOTES\s0"
+.Ip "Author and Modification History" 0
+.IX Item "Author and Modification History"
 .Sh "Config \- access Perl configuration information"
 .IX Subsection "Config \- access Perl configuration information"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1884,8 +2948,8 @@ Example 1, Example 2
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
 \fB\s-1DB_HASH\s0\fR, \fB\s-1DB_BTREE\s0\fR, \fB\s-1DB_RECNO\s0\fR
-.Ip "How does DB_File interface to Berkeley \s-1DB\s0?" 5
-.IX Item "How does DB_File interface to Berkeley \s-1DB\s0?"
+.Ip "Interface to Berkeley \s-1DB\s0" 5
+.IX Item "Interface to Berkeley \s-1DB\s0"
 .Ip "Opening a Berkeley \s-1DB\s0 Database File" 5
 .IX Item "Opening a Berkeley \s-1DB\s0 Database File"
 .Ip "Default Parameters" 5
@@ -1894,22 +2958,22 @@ Example 1, Example 2
 .IX Item "In Memory Databases"
 .Ip "\s-1DB_HASH\s0" 0
 .IX Item "\s-1DB_HASH\s0"
-.Ip "A Simple Example." 5
-.IX Item "A Simple Example."
+.Ip "A Simple Example" 5
+.IX Item "A Simple Example"
 .Ip "\s-1DB_BTREE\s0" 0
 .IX Item "\s-1DB_BTREE\s0"
 .Ip "Changing the \s-1BTREE\s0 sort order" 5
 .IX Item "Changing the \s-1BTREE\s0 sort order"
-.Ip "Handling duplicate keys " 5
-.IX Item "Handling duplicate keys "
-.Ip "The get_dup method." 5
-.IX Item "The get_dup method."
+.Ip "Handling Duplicate Keys " 5
+.IX Item "Handling Duplicate Keys "
+.Ip "The get_dup() Method" 5
+.IX Item "The get_dup() Method"
 .Ip "Matching Partial Keys " 5
 .IX Item "Matching Partial Keys "
 .Ip "\s-1DB_RECNO\s0" 0
 .IX Item "\s-1DB_RECNO\s0"
-.Ip "The bval option" 5
-.IX Item "The bval option"
+.Ip "The \*(N'bval\*(T' Option" 5
+.IX Item "The \*(N'bval\*(T' Option"
 .Ip "A Simple Example" 5
 .IX Item "A Simple Example"
 .Ip "Extra Methods" 5
@@ -1928,20 +2992,20 @@ Example 1, Example 2
 .IX Item "\s-1HINTS\s0 \s-1AND\s0 \s-1TIPS\s0 "
 .Ip "Locking Databases" 5
 .IX Item "Locking Databases"
-.Ip "Sharing databases with C applications" 5
-.IX Item "Sharing databases with C applications"
-.Ip "The untie gotcha" 5
-.IX Item "The untie gotcha"
+.Ip "Sharing Databases With C Applications" 5
+.IX Item "Sharing Databases With C Applications"
+.Ip "The untie() Gotcha" 5
+.IX Item "The untie() Gotcha"
 .Ip "\s-1COMMON\s0 \s-1QUESTIONS\s0" 0
 .IX Item "\s-1COMMON\s0 \s-1QUESTIONS\s0"
 .Ip "Why is there Perl source in my database?" 5
 .IX Item "Why is there Perl source in my database?"
 .Ip "How do I store complex data structures with DB_File?" 5
 .IX Item "How do I store complex data structures with DB_File?"
-.Ip "What does 'Invalid Argument' mean?" 5
-.IX Item "What does 'Invalid Argument' mean?"
-.Ip "What does 'Bareword \*(L'DB_File\*(R' not allowed' mean? " 5
-.IX Item "What does 'Bareword \*(L'DB_File\*(R' not allowed' mean? "
+.Ip "What does \*(N"Invalid Argument\*(T" mean?" 5
+.IX Item "What does \*(N"Invalid Argument\*(T" mean?"
+.Ip "What does \*(N"Bareword \*(N'DB_File\*(T' not allowed\*(T" mean? " 5
+.IX Item "What does \*(N"Bareword \*(N'DB_File\*(T' not allowed\*(T" mean? "
 .Ip "\s-1HISTORY\s0" 0
 .IX Item "\s-1HISTORY\s0"
 .Ip "\s-1BUGS\s0" 0
@@ -2007,6 +3071,21 @@ Example 1, Example 2
 .IX Item "Managing Unknown Symbols"
 .Ip "Tag Handling Utility Functions" 5
 .IX Item "Tag Handling Utility Functions"
+.Sh "ExtUtils::Command \- utilities to replace common \s-1UNIX\s0 commands in Makefiles etc."
+.IX Subsection "ExtUtils::Command \- utilities to replace common \s-1UNIX\s0 commands in Makefiles etc."
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+cat, eqtime src dst, rm_f files..., rm_f files..., touch files .., mv
+source... destination, cp source... destination, chmod mode files.., mkpath
+directory.., test_f file
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0 " 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0 "
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
 .Sh "ExtUtils::Embed \- Utilities for embedding Perl in C/\*(C+ applications"
 .IX Subsection "ExtUtils::Embed \- Utilities for embedding Perl in C/\*(C+ applications"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2048,6 +3127,8 @@ For static extensions, For dynamic extensions, For dynamic extensions
 .IX Item "\s-1PORTABILITY\s0"
 .Ip "\s-1VMS\s0 implementation" 5
 .IX Item "\s-1VMS\s0 implementation"
+.Ip "Win32 implementation" 5
+.IX Item "Win32 implementation"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "ExtUtils::\s-1MM_OS2\s0 \- methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker"
@@ -2085,7 +3166,7 @@ post_initialize (o), postamble (o), prefixify, processPL (o), realclean
 (o), replace_manpage_separator, static (o), static_lib (o), staticmake (o),
 subdir_x (o), subdirs (o), test (o), test_via_harness (o), test_via_script
 (o), tool_autosplit (o), tools_other (o), tool_xsubpp (o), top_targets (o),
-writedoc, xs_c (o), xs_o (o)
+writedoc, xs_c (o), xs_o (o), perl_archive, export_list
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "ExtUtils::\s-1MM_VMS\s0 \- methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker"
@@ -2115,6 +3196,16 @@ dist_dir (override), dist_test (override), install (override), perldepend
 (override), makefile (override), test (override), test_via_harness
 (override), test_via_script (override), makeaperl (override), nicetext
 (override)
+.Sh "ExtUtils::MM_Win32 \- methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker"
+.IX Subsection "ExtUtils::MM_Win32 \- methods to override \s-1UN\s0*X behaviour in ExtUtils::MakeMaker"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+catfile, constants (o), static_lib (o), dynamic_bs (o), dynamic_lib (o),
+canonpath, perl_script, pm_to_blib, test_via_harness (o), tool_autosplit
+(override), tools_other (o), xs_o (o), top_targets (o), manifypods (o),
+dist_ci (o), dist_core (o), pasthru (o)
 .Sh "ExtUtils::MakeMaker \- create an extension Makefile"
 .IX Subsection "ExtUtils::MakeMaker \- create an extension Makefile"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2274,6 +3365,22 @@ fileparse_set_fstype, fileparse
 .IX Item "\s-1RETURN\s0"
 .Ip "\s-1AUTHOR\s0" 0
 .IX Item "\s-1AUTHOR\s0"
+.Sh "File::DosGlob \- \s-1DOS\s0 like globbing and then some"
+.IX Subsection "File::DosGlob \- \s-1DOS\s0 like globbing and then some"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1EXPORTS\s0 (by request only)" 0
+.IX Item "\s-1EXPORTS\s0 (by request only)"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
+.Ip "\s-1HISTORY\s0" 0
+.IX Item "\s-1HISTORY\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 .Sh "File::Find, find \- traverse a file tree"
 .IX Subsection "File::Find, find \- traverse a file tree"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2420,8 +3527,9 @@ new ([ \s-1ARGS\s0 ] ), new_tmpfile
 new (), new_from_fd ( \s-1FD\s0, \s-1MODE\s0 )
 .Ip "\s-1METHODS\s0" 0
 .IX Item "\s-1METHODS\s0"
-$fh->getline, \f(CW$fh\fR\->getlines, \f(CW$fh\fR\->fdopen ( \s-1FD\s0, \s-1MODE\s0 ), \f(CW$fh\fR\->write ( \s-1BUF\s0,
-\s-1LEN\s0 [, \s-1OFFSET\s0 }\e] ), \f(CW$fh\fR\->opened, \f(CW$fh\fR\->untaint
+$fh->fdopen ( \s-1FD\s0, \s-1MODE\s0 ), \f(CW$fh\fR\->opened, \f(CW$fh\fR\->getline, \f(CW$fh\fR\->getlines,
+\f(CW$fh\fR\->ungetc ( \s-1ORD\s0 ), \f(CW$fh\fR\->write ( \s-1BUF\s0, \s-1LEN\s0 [, \s-1OFFSET\s0 }\e] ), \f(CW$fh\fR\->flush,
+\f(CW$fh\fR\->error, \f(CW$fh\fR\->clearerr, \f(CW$fh\fR\->untaint
 .Ip "\s-1NOTE\s0" 0
 .IX Item "\s-1NOTE\s0"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -2537,8 +3645,9 @@ new ([ \s-1ARGS\s0 ] ), new_tmpfile
 new (), new_from_fd ( \s-1FD\s0, \s-1MODE\s0 )
 .Ip "\s-1METHODS\s0" 0
 .IX Item "\s-1METHODS\s0"
-$fh->getline, \f(CW$fh\fR\->getlines, \f(CW$fh\fR\->fdopen ( \s-1FD\s0, \s-1MODE\s0 ), \f(CW$fh\fR\->write ( \s-1BUF\s0,
-\s-1LEN\s0 [, \s-1OFFSET\s0 }\e] ), \f(CW$fh\fR\->opened, \f(CW$fh\fR\->untaint
+$fh->fdopen ( \s-1FD\s0, \s-1MODE\s0 ), \f(CW$fh\fR\->opened, \f(CW$fh\fR\->getline, \f(CW$fh\fR\->getlines,
+\f(CW$fh\fR\->ungetc ( \s-1ORD\s0 ), \f(CW$fh\fR\->write ( \s-1BUF\s0, \s-1LEN\s0 [, \s-1OFFSET\s0 }\e] ), \f(CW$fh\fR\->flush,
+\f(CW$fh\fR\->error, \f(CW$fh\fR\->clearerr, \f(CW$fh\fR\->untaint
 .Ip "\s-1NOTE\s0" 0
 .IX Item "\s-1NOTE\s0"
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -2683,10 +3792,30 @@ Canonical notation, Input, Output
 .IX Item "\s-1STRINGIFICATION\s0"
 .Ip "\s-1USAGE\s0" 0
 .IX Item "\s-1USAGE\s0"
+.Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0" 0
+.IX Item "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0"
 .Ip "\s-1BUGS\s0" 0
 .IX Item "\s-1BUGS\s0"
-.Ip "\s-1AUTHOR\s0" 0
-.IX Item "\s-1AUTHOR\s0"
+.Ip "\s-1AUTHORS\s0" 0
+.IX Item "\s-1AUTHORS\s0"
+.Sh "Math::Trig \- trigonometric functions"
+.IX Subsection "Math::Trig \- trigonometric functions"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1TRIGONOMETRIC\s0 \s-1FUNCTIONS\s0" 0
+.IX Item "\s-1TRIGONOMETRIC\s0 \s-1FUNCTIONS\s0"
+.Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0" 5
+.IX Item "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0"
+.Ip "\s-1SIMPLE\s0 (\s-1REAL\s0) \s-1ARGUMENTS\s0, \s-1COMPLEX\s0 \s-1RESULTS\s0" 5
+.IX Item "\s-1SIMPLE\s0 (\s-1REAL\s0) \s-1ARGUMENTS\s0, \s-1COMPLEX\s0 \s-1RESULTS\s0"
+.Ip "\s-1ANGLE\s0 \s-1CONVERSIONS\s0" 0
+.IX Item "\s-1ANGLE\s0 \s-1CONVERSIONS\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1AUTHORS\s0" 0
+.IX Item "\s-1AUTHORS\s0"
 .Sh "NDBM_File \- Tied access to ndbm files"
 .IX Subsection "NDBM_File \- Tied access to ndbm files"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2806,7 +3935,7 @@ a new namespace, an operator mask
 .Ip "Methods in class Safe" 5
 .IX Item "Methods in class Safe"
 permit (\s-1OP\s0, ...), permit_only (\s-1OP\s0, ...), deny (\s-1OP\s0, ...), deny_only (\s-1OP\s0,
-...), trap (\s-1OP\s0, ...), untrap (\s-1OP\s0, ...), share (\s-1NAME\s0, ...), share_from
+\&...), trap (\s-1OP\s0, ...), untrap (\s-1OP\s0, ...), share (\s-1NAME\s0, ...), share_from
 (\s-1PACKAGE\s0, \s-1ARRAYREF\s0), varglob (\s-1VARNAME\s0), reval (\s-1STRING\s0), rdo (\s-1FILENAME\s0),
 root (\s-1NAMESPACE\s0), mask (\s-1MASK\s0)
 .Ip "Some Safety Issues" 5
@@ -2925,6 +4054,26 @@ Constants
 Constants, Macros
 .Ip "\s-1CREATION\s0" 0
 .IX Item "\s-1CREATION\s0"
+.Sh "Pod::Html, Pod::\s-1HTML\s0 \- module to convert pod files to \s-1HTML\s0"
+.IX Subsection "Pod::Html, Pod::\s-1HTML\s0 \- module to convert pod files to \s-1HTML\s0"
+.Ip "\s-1SYNOPSIS\s0" 0
+.IX Item "\s-1SYNOPSIS\s0"
+.Ip "\s-1DESCRIPTION\s0" 0
+.IX Item "\s-1DESCRIPTION\s0"
+.Ip "\s-1ARGUMENTS\s0" 0
+.IX Item "\s-1ARGUMENTS\s0"
+help, htmlroot, infile, outfile, podroot, podpath, libpods, netscape,
+nonetscape, index, noindex, recurse, norecurse, title, verbose
+.Ip "\s-1EXAMPLE\s0" 0
+.IX Item "\s-1EXAMPLE\s0"
+.Ip "\s-1AUTHOR\s0" 0
+.IX Item "\s-1AUTHOR\s0"
+.Ip "\s-1BUGS\s0" 0
+.IX Item "\s-1BUGS\s0"
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+.Ip "\s-1COPYRIGHT\s0" 0
+.IX Item "\s-1COPYRIGHT\s0"
 .Sh "Pod::Text \- convert \s-1POD\s0 data to formatted \s-1ASCII\s0 text"
 .IX Subsection "Pod::Text \- convert \s-1POD\s0 data to formatted \s-1ASCII\s0 text"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2955,7 +4104,7 @@ a new namespace, an operator mask
 .Ip "Methods in class Safe" 5
 .IX Item "Methods in class Safe"
 permit (\s-1OP\s0, ...), permit_only (\s-1OP\s0, ...), deny (\s-1OP\s0, ...), deny_only (\s-1OP\s0,
-...), trap (\s-1OP\s0, ...), untrap (\s-1OP\s0, ...), share (\s-1NAME\s0, ...), share_from
+\&...), trap (\s-1OP\s0, ...), untrap (\s-1OP\s0, ...), share (\s-1NAME\s0, ...), share_from
 (\s-1PACKAGE\s0, \s-1ARRAYREF\s0), varglob (\s-1VARNAME\s0), reval (\s-1STRING\s0), rdo (\s-1FILENAME\s0),
 root (\s-1NAMESPACE\s0), mask (\s-1MASK\s0)
 .Ip "Some Safety Issues" 5
@@ -3058,8 +4207,7 @@ setlogmask \f(CW$mask_priority\fR, closelog
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
-<tab>Attempts word completion.
-Cannot be changed, ^D, ^U, <del>, <bs>
+<tab>, ^D, ^U, <del>, <bs>
 .Ip "\s-1DIAGNOSTICS\s0" 0
 .IX Item "\s-1DIAGNOSTICS\s0"
 .Ip "\s-1BUGS\s0" 0
@@ -3237,7 +4385,8 @@ this, \s-1NEXTKEY\s0 this, lastkey, \s-1EXISTS\s0 this, key, \s-1DELETE\s0 this,
 .IX Item "\s-1SYNOPSIS\s0"
 .Ip "\s-1DESCRIPTION\s0" 0
 .IX Item "\s-1DESCRIPTION\s0"
-isa ( \s-1TYPE\s0 ), can ( \s-1METHOD\s0 ), \s-1VERSION\s0 ( [ \s-1REQUIRE\s0 ] ), isa ( \s-1REF\s0, \s-1TYPE\s0 )
+isa ( \s-1TYPE\s0 ), can ( \s-1METHOD\s0 ), \s-1VERSION\s0 ( [ \s-1REQUIRE\s0 ] ), isa ( \s-1VAL\s0, \s-1TYPE\s0 ),
+can ( \s-1VAL\s0, \s-1METHOD\s0 )
 .Sh "User::grent \- by-name interface to Perl's built-in getgr*() functions"
 .IX Subsection "User::grent \- by-name interface to Perl's built-in getgr*() functions"
 .Ip "\s-1SYNOPSIS\s0" 0

@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLGUTS 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLGUTS 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLGUTS 1"
 .UC
 .IX Name "perlguts - Perl's Internal Functions"
@@ -189,34 +209,36 @@ Perl has three typedefs that handle Perl's three main data types:
 \&    HV  Hash Value
 .Ve
 Each typedef has specific routines that manipulate the various data types.
-.Sh "What is an \*(L"\s-1IV\s0\*(R"?"
-.IX Subsection "What is an \*(L"\s-1IV\s0\*(R"?"
+.Sh "What is an \*(M"\s-1IV\s0\*(S"?"
+.IX Subsection "What is an \*(M"\s-1IV\s0\*(S"?"
 Perl uses a special typedef \s-1IV\s0 which is a simple integer type that is
 guaranteed to be large enough to hold a pointer (as well as an integer).
 .PP
 Perl also uses two special typedefs, I32 and I16, which will always be at
 least 32-bits and 16-bits long, respectively.
-.Sh "Working with \s-1SV\s0's"
-.IX Subsection "Working with \s-1SV\s0's"
+.Sh "Working with SVs"
+.IX Subsection "Working with SVs"
 An \s-1SV\s0 can be created and loaded with one command.  There are four types of
 values that can be loaded: an integer value (\s-1IV\s0), a double (\s-1NV\s0), a string,
 (\s-1PV\s0), and another scalar (\s-1SV\s0).
 .PP
-The four routines are:
+The five routines are:
 .PP
-.Vb 4
+.Vb 5
 \&    SV*  newSViv(IV);
 \&    SV*  newSVnv(double);
 \&    SV*  newSVpv(char*, int);
+\&    SV*  newSVpvf(const char*, ...);
 \&    SV*  newSVsv(SV*);
 .Ve
-To change the value of an *already-existing* \s-1SV\s0, there are five routines:
+To change the value of an *already-existing* \s-1SV\s0, there are six routines:
 .PP
-.Vb 5
+.Vb 6
 \&    void  sv_setiv(SV*, IV);
 \&    void  sv_setnv(SV*, double);
-\&    void  sv_setpvn(SV*, char*, int)
 \&    void  sv_setpv(SV*, char*);
+\&    void  sv_setpvn(SV*, char*, int)
+\&    void  sv_setpvf(SV*, const char*, ...);
 \&    void  sv_setsv(SV*, SV*);
 .Ve
 Notice that you can choose to specify the length of the string to be
@@ -224,9 +246,10 @@ assigned by using \f(CWsv_setpvn\fR or \f(CWnewSVpv\fR, or you may allow Perl to
 calculate the length by using \f(CWsv_setpv\fR or by specifying 0 as the second
 argument to \f(CWnewSVpv\fR.  Be warned, though, that Perl will determine the
 string's length by using \f(CWstrlen\fR, which depends on the string terminating
-with a \s-1NUL\s0 character.
+with a \s-1NUL\s0 character.  The arguments of \f(CWsv_setpvf\fR are processed like
+\f(CWsprintf\fR, and the formatted output becomes the value.
 .PP
-All \s-1SV\s0's that will contain strings should, but need not, be terminated
+All SVs that will contain strings should, but need not, be terminated
 with a \s-1NUL\s0 character.  If it is not \s-1NUL\s0\-terminated there is a risk of
 core dumps and corruptions from code which passes the string to C
 functions or system calls which expect a \s-1NUL\s0\-terminated string.
@@ -248,7 +271,7 @@ In the \f(CWSvPV\fR macro, the length of the string returned is placed into the
 variable \f(CWlen\fR (this is a macro, so you do \fInot\fR use \f(CW&len\fR).  If you do not
 care what the length of the data is, use the global variable \f(CWna\fR.  Remember,
 however, that Perl allows arbitrary strings of data that may both contain
-\s-1NUL\s0's and might not be terminated by a \s-1NUL\s0.
+NULs and might not be terminated by a \s-1NUL\s0.
 .PP
 If you want to know if the scalar value is \s-1TRUE\s0, you can use:
 .PP
@@ -293,16 +316,18 @@ But note that these last three macros are valid only if \f(CWSvPOK()\fR is true.
 If you want to append something to the end of string stored in an \f(CWSV*\fR,
 you can use the following functions:
 .PP
-.Vb 3
+.Vb 4
 \&    void  sv_catpv(SV*, char*);
 \&    void  sv_catpvn(SV*, char*, int);
+\&    void  sv_catpvf(SV*, const char*, ...);
 \&    void  sv_catsv(SV*, SV*);
 .Ve
 The first function calculates the length of the string to be appended by
 using \f(CWstrlen\fR.  In the second, you specify the length of the string
-yourself.  The third function extends the string stored in the first \s-1SV\s0
-with the string stored in the second \s-1SV\s0.  It also forces the second \s-1SV\s0 to
-be interpreted as a string.
+yourself.  The third function processes its arguments like \f(CWsprintf\fR and
+appends the formatted output.  The fourth function extends the string
+stored in the first \s-1SV\s0 with the string stored in the second \s-1SV\s0.  It also
+forces the second \s-1SV\s0 to be interpreted as a string.
 .PP
 If you know the name of a scalar variable, you can get a pointer to its \s-1SV\s0
 by using the following:
@@ -336,13 +361,13 @@ Take this code:
 \&    sv_setsv(ST(0), sv);
 .Ve
 This code tries to return a new \s-1SV\s0 (which contains the value 42) if it should
-return a real value, or undef otherwise.  Instead it has returned a null
+return a real value, or undef otherwise.  Instead it has returned a \s-1NULL\s0
 pointer which, somewhere down the line, will cause a segmentation violation,
 bus error, or just weird results.  Change the zero to \f(CW&sv_undef\fR in the first
 line and all will be well.
 .PP
 To free an \s-1SV\s0 that you've created, call \f(CWSvREFCNT_dec(SV*)\fR.  Normally this
-call is not necessary (see the section on the section on \fIReference Counts and Mortality\fR).
+call is not necessary (see the section on \fIReference Counts and Mortality\fR).
 .Sh "What's Really Stored in an \s-1SV\s0?"
 .IX Subsection "What's Really Stored in an \s-1SV\s0?"
 Recall that the usual method of determining the type of scalar you have is
@@ -363,23 +388,23 @@ These will tell you if you truly have an integer, double, or string pointer
 stored in your \s-1SV\s0.  The \*(L"p\*(R" stands for private.
 .PP
 In general, though, it's best to use the \f(CWSv*V\fR macros.
-.Sh "Working with \s-1AV\s0's"
-.IX Subsection "Working with \s-1AV\s0's"
+.Sh "Working with AVs"
+.IX Subsection "Working with AVs"
 There are two ways to create and load an \s-1AV\s0.  The first method creates an
 empty \s-1AV\s0:
 .PP
 .Vb 1
 \&    AV*  newAV();
 .Ve
-The second method both creates the \s-1AV\s0 and initially populates it with \s-1SV\s0's:
+The second method both creates the \s-1AV\s0 and initially populates it with SVs:
 .PP
 .Vb 1
 \&    AV*  av_make(I32 num, SV **ptr);
 .Ve
 The second argument points to an array containing \f(CWnum\fR \f(CWSV*\fR's.  Once the
-\s-1AV\s0 has been created, the \s-1SV\s0's can be destroyed, if so desired.
+\s-1AV\s0 has been created, the SVs can be destroyed, if so desired.
 .PP
-Once the \s-1AV\s0 has been created, the following operations are possible on \s-1AV\s0's:
+Once the \s-1AV\s0 has been created, the following operations are possible on AVs:
 .PP
 .Vb 4
 \&    void  av_push(AV*, SV*);
@@ -403,9 +428,12 @@ The \f(CWav_len\fR function returns the highest index value in array (just
 like $#array in Perl).  If the array is empty, \-1 is returned.  The
 \f(CWav_fetch\fR function returns the value at index \f(CWkey\fR, but if \f(CWlval\fR
 is non-zero, then \f(CWav_fetch\fR will store an undef value at that index.
-The \f(CWav_store\fR function stores the value \f(CWval\fR at index \f(CWkey\fR.
-note that \f(CWav_fetch\fR and \f(CWav_store\fR both return \f(CWSV**\fR's, not \f(CWSV*\fR's
-as their return value.
+The \f(CWav_store\fR function stores the value \f(CWval\fR at index \f(CWkey\fR, and does
+not increment the reference count of \f(CWval\fR.  Thus the caller is responsible
+for taking care of that, and if \f(CWav_store\fR returns \s-1NULL\s0, the caller will
+have to decrement the reference count to avoid a memory leak.  Note that
+\f(CWav_fetch\fR and \f(CWav_store\fR both return \f(CWSV**\fR's, not \f(CWSV*\fR's as their
+return value.
 .PP
 .Vb 3
 \&    void  av_clear(AV*);
@@ -426,14 +454,17 @@ by using the following:
 \&    AV*  perl_get_av("package::varname", FALSE);
 .Ve
 This returns \s-1NULL\s0 if the variable does not exist.
-.Sh "Working with \s-1HV\s0's"
-.IX Subsection "Working with \s-1HV\s0's"
+.PP
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use the array access functions on tied arrays.
+.Sh "Working with HVs"
+.IX Subsection "Working with HVs"
 To create an \s-1HV\s0, you use the following routine:
 .PP
 .Vb 1
 \&    HV*  newHV();
 .Ve
-Once the \s-1HV\s0 has been created, the following operations are possible on \s-1HV\s0's:
+Once the \s-1HV\s0 has been created, the following operations are possible on HVs:
 .PP
 .Vb 2
 \&    SV**  hv_store(HV*, char* key, U32 klen, SV* val, U32 hash);
@@ -442,7 +473,7 @@ Once the \s-1HV\s0 has been created, the following operations are possible on \s
 The \f(CWklen\fR parameter is the length of the key being passed in (Note that
 you cannot pass 0 in as a value of \f(CWklen\fR to tell Perl to measure the
 length of the key).  The \f(CWval\fR argument contains the \s-1SV\s0 pointer to the
-scalar being stored, and \f(CWhash\fR is the pre-computed hash value (zero if
+scalar being stored, and \f(CWhash\fR is the precomputed hash value (zero if
 you want \f(CWhv_store\fR to calculate it for you).  The \f(CWlval\fR parameter
 indicates whether this fetch is actually a part of a store operation, in
 which case a new undefined value will be added to the \s-1HV\s0 with the supplied
@@ -513,6 +544,8 @@ The hash algorithm is defined in the \f(CWPERL_HASH(hash, key, klen)\fR macro:
 \&    while (i--)
 \&        hash = hash * 33 + *s++;
 .Ve
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use the hash access functions on tied hashes.
 .Sh "Hash \s-1API\s0 Extensions"
 .IX Subsection "Hash \s-1API\s0 Extensions"
 Beginning with version 5.004, the following functions are also supported:
@@ -557,6 +590,10 @@ dealing with keys that are not \f(CWSV*\fRs:
 \&    HeKEY(HE* he)
 \&    HeKLEN(HE* he)
 .Ve
+Note that both \f(CWhv_store\fR and \f(CWhv_store_ent\fR do not increment the
+reference count of the stored \f(CWval\fR, which is the caller's responsibility.
+If these functions return a \s-1NULL\s0 value, the caller will usually have to
+decrement the reference count of \f(CWval\fR to avoid a memory leak.
 .Sh "References"
 .IX Subsection "References"
 References are a special type of scalar that point to other data types
@@ -622,7 +659,7 @@ A reference can be blessed into a package with the following function:
 \&    SV* sv_bless(SV* sv, HV* stash);
 .Ve
 The \f(CWsv\fR argument must be a reference.  The \f(CWstash\fR argument specifies
-which class the reference will belong to.  See the section on 
+which class the reference will belong to.  See
 the section on \fIStashes and Globs\fR for information on converting class names into stashes.
 .PP
 /* Still under construction */
@@ -675,7 +712,7 @@ There are additional macros whose values may be bitwise \s-1OR\s0'ed with the
 .PP
 .Vb 4
 \&    GV_ADDMULTI Marks the variable as multiply defined, thus preventing the
-\&                "Indentifier <varname> used only once: possible typo" warning.
+\&                "Name <varname> used only once: possible typo" warning.
 \&    GV_ADDWARN  Issues the warning "Had to create <varname> unexpectedly" if
 \&                the variable did not exist before the function was called.
 .Ve
@@ -683,8 +720,8 @@ If you do not specify a package name, the variable is created in the current
 package.
 .Sh "Reference Counts and Mortality"
 .IX Subsection "Reference Counts and Mortality"
-Perl uses an reference count-driven garbage collection mechanism. \s-1SV\s0's,
-\s-1AV\s0's, or \s-1HV\s0's (xV for short in the following) start their life with a
+Perl uses an reference count-driven garbage collection mechanism. SVs,
+AVs, or HVs (xV for short in the following) start their life with a
 reference count of 1.  If the reference count of an xV ever drops to 0,
 then it will be destroyed and its memory made available for reuse.
 .PP
@@ -721,11 +758,11 @@ the reference count of the \s-1SV\s0 will go to zero and it will be destroyed,
 stopping any memory leak.
 .PP
 There are some convenience functions available that can help with the
-destruction of xV's.  These functions introduce the concept of \*(L"mortality\*(R".
+destruction of xVs.  These functions introduce the concept of \*(L"mortality\*(R".
 An xV that is mortal has had its reference count marked to be decremented,
 but not actually decremented, until \*(L"a short time later\*(R".  Generally the
 term \*(L"short time later\*(R" means a single Perl statement, such as a call to
-an \s-1XSUB\s0 function.  The actual determinant for when mortal xV's have their
+an \s-1XSUB\s0 function.  The actual determinant for when mortal xVs have their
 reference count decremented depends on two macros, \s-1SAVETMPS\s0 and \s-1FREETMPS\s0.
 See the \fIperlcall\fR manpage and the \fIperlxs\fR manpage for more details on these macros.
 .PP
@@ -748,7 +785,7 @@ The first call creates a mortal \s-1SV\s0, the second converts an existing
 \s-1SV\s0 to a mortal \s-1SV\s0 (and thus defers a call to \f(CWSvREFCNT_dec\fR), and the
 third creates a mortal copy of an existing \s-1SV\s0.
 .PP
-The mortal routines are not just for \s-1SV\s0's -- \s-1AV\s0's and \s-1HV\s0's can be
+The mortal routines are not just for SVs -- AVs and HVs can be
 made mortal by passing their address (type-casted to \f(CWSV*\fR) to the
 \f(CWsv_2mortal\fR or \f(CWsv_mortalcopy\fR routines.
 .Sh "Stashes and Globs"
@@ -812,8 +849,8 @@ argument is a stash.  The returned \f(CWSV*\fR can now be used in the same way
 as any other \s-1SV\s0.
 .PP
 For more information on references and blessings, consult the \fIperlref\fR manpage.
-.Sh "Double-Typed \s-1SV\s0's"
-.IX Subsection "Double-Typed \s-1SV\s0's"
+.Sh "Double-Typed SVs"
+.IX Subsection "Double-Typed SVs"
 Scalar variables normally contain only one type of value, an integer,
 double, pointer, or reference.  Perl will automatically convert the
 actual scalar data from the stored type into the requested type.
@@ -893,9 +930,9 @@ entry of the same type of magic is deleted.  Note that this can be
 overridden, and multiple instances of the same type of magic can be
 associated with an \s-1SV\s0.
 .PP
-The \f(CWname\fR and \f(CWnamlem\fR arguments are used to associate a string with
-the magic, typically the name of a variable. \f(CWnamlem\fR is stored in the
-\f(CWmg_len\fR field and if \f(CWname\fR is non-null and \f(CWnamlem\fR >= 0 a malloc'd
+The \f(CWname\fR and \f(CWnamlen\fR arguments are used to associate a string with
+the magic, typically the name of a variable. \f(CWnamlen\fR is stored in the
+\f(CWmg_len\fR field and if \f(CWname\fR is non-null and \f(CWnamlen\fR >= 0 a malloc'd
 copy of the name is stored in \f(CWmg_ptr\fR field.
 .PP
 The sv_magic function uses \f(CWhow\fR to determine which, if any, predefined
@@ -906,7 +943,7 @@ stored in the \f(CWmg_type\fR field.
 The \f(CWobj\fR argument is stored in the \f(CWmg_obj\fR field of the \f(CWMAGIC\fR
 structure.  If it is not the same as the \f(CWsv\fR argument, the reference
 count of the \f(CWobj\fR object is incremented.  If it is the same, or if
-the \f(CWhow\fR argument is \*(L"#\*(R", or if it is a null pointer, then \f(CWobj\fR is
+the \f(CWhow\fR argument is \*(L"#\*(R", or if it is a \s-1NULL\s0 pointer, then \f(CWobj\fR is
 merely stored, without the reference count being incremented.
 .PP
 There is also a function to add magic to an \f(CWHV\fR:
@@ -996,9 +1033,9 @@ The current kinds of Magic Virtual Tables are:
 \&    .        vtbl_pos            $. scalar variable
 \&    ~        None                Used by certain extensions
 .Ve
-When an upper-case and lower-case letter both exist in the table, then the
-upper-case letter is used to represent some kind of composite type (a list
-or a hash), and the lower-case letter is used to represent an element of
+When an uppercase and lowercase letter both exist in the table, then the
+uppercase letter is used to represent some kind of composite type (a list
+or a hash), and the lowercase letter is used to represent an element of
 that composite type.
 .PP
 The \*(L'~\*(R' magic type is defined specifically for use by extensions and
@@ -1020,18 +1057,76 @@ at the top of the private data area and check that.
 .Ve
 This routine returns a pointer to the \f(CWMAGIC\fR structure stored in the \s-1SV\s0.
 If the \s-1SV\s0 does not have that magical feature, \f(CWNULL\fR is returned.  Also,
-if the \s-1SV\s0 is not of type SVt_PVMG, Perl may core-dump.
+if the \s-1SV\s0 is not of type SVt_PVMG, Perl may core dump.
 .PP
 .Vb 1
 \&    int mg_copy(SV* sv, SV* nsv, char* key, STRLEN klen);
 .Ve
 This routine checks to see what types of magic \f(CWsv\fR has.  If the mg_type
-field is an upper-case letter, then the mg_obj is copied to \f(CWnsv\fR, but
-the mg_type field is changed to be the lower-case letter.
+field is an uppercase letter, then the mg_obj is copied to \f(CWnsv\fR, but
+the mg_type field is changed to be the lowercase letter.
+.Sh "Understanding the Magic of Tied Hashes and Arrays"
+.IX Subsection "Understanding the Magic of Tied Hashes and Arrays"
+Tied hashes and arrays are magical beasts of the \*(L'P\*(R' magic type.
+.PP
+\s-1WARNING\s0: As of the 5.004 release, proper usage of the array and hash
+access functions requires understanding a few caveats.  Some
+of these caveats are actually considered bugs in the \s-1API\s0, to be fixed
+in later releases, and are bracketed with [\s-1MAYCHANGE\s0] below. If
+you find yourself actually applying such information in this section, be
+aware that the behavior may change in the future, umm, without warning.
+.PP
+The \f(CWav_store\fR function, when given a tied array argument, merely
+copies the magic of the array onto the value to be \*(L"stored\*(R", using
+\f(CWmg_copy\fR.  It may also return \s-1NULL\s0, indicating that the value did not
+actually need to be stored in the array.  [\s-1MAYCHANGE\s0] After a call to
+\f(CWav_store\fR on a tied array, the caller will usually need to call
+\f(CWmg_set(val)\fR to actually invoke the perl level \*(L"\s-1STORE\s0\*(R" method on the
+\s-1TIEARRAY\s0 object.  If \f(CWav_store\fR did return \s-1NULL\s0, a call to
+\f(CWSvREFCNT_dec(val)\fR will also be usually necessary to avoid a memory
+leak. [/\s-1MAYCHANGE\s0]
+.PP
+The previous paragraph is applicable verbatim to tied hash access using the
+\f(CWhv_store\fR and \f(CWhv_store_ent\fR functions as well.
+.PP
+\f(CWav_fetch\fR and the corresponding hash functions \f(CWhv_fetch\fR and
+\f(CWhv_fetch_ent\fR actually return an undefined mortal value whose magic
+has been initialized using \f(CWmg_copy\fR.  Note the value so returned does not
+need to be deallocated, as it is already mortal.  [\s-1MAYCHANGE\s0] But you will
+need to call \f(CWmg_get()\fR on the returned value in order to actually invoke
+the perl level \*(L"\s-1FETCH\s0\*(R" method on the underlying \s-1TIE\s0 object.  Similarly,
+you may also call \f(CWmg_set()\fR on the return value after possibly assigning
+a suitable value to it using \f(CWsv_setsv\fR,  which will invoke the \*(L"\s-1STORE\s0\*(R"
+method on the \s-1TIE\s0 object. [/\s-1MAYCHANGE\s0]
+.PP
+[\s-1MAYCHANGE\s0]
+In other words, the array or hash fetch/store functions don't really
+fetch and store actual values in the case of tied arrays and hashes.  They
+merely call \f(CWmg_copy\fR to attach magic to the values that were meant to be
+\*(L"stored\*(R" or \*(L"fetched\*(R".  Later calls to \f(CWmg_get\fR and \f(CWmg_set\fR actually
+do the job of invoking the \s-1TIE\s0 methods on the underlying objects.  Thus
+the magic mechanism currently implements a kind of lazy access to arrays
+and hashes.
+.PP
+Currently (as of perl version 5.004), use of the hash and array access
+functions requires the user to be aware of whether they are operating on
+\*(L"normal\*(R" hashes and arrays, or on their tied variants.  The \s-1API\s0 may be
+changed to provide more transparent access to both tied and normal data
+types in future versions.
+[/\s-1MAYCHANGE\s0]
+.PP
+You would do well to understand that the \s-1TIEARRAY\s0 and \s-1TIEHASH\s0 interfaces
+are mere sugar to invoke some perl method calls while using the uniform hash
+and array syntax.  The use of this sugar imposes some overhead (typically
+about two to four extra opcodes per \s-1FETCH/STORE\s0 operation, in addition to
+the creation of all the mortal variables required to invoke the methods).
+This overhead will be comparatively small if the \s-1TIE\s0 methods are themselves
+substantial, but if they are only a few statements long, the overhead
+will not be insignificant.
 .SH "Subroutines"
 .IX Header "Subroutines"
-.Sh "\s-1XSUB\s0's and the Argument Stack"
-.IX Subsection "\s-1XSUB\s0's and the Argument Stack"
+.Sh "XSUBs and the Argument Stack"
+.IX Subsection "XSUBs and the Argument Stack"
 The \s-1XSUB\s0 mechanism is a simple way for Perl programs to access C subroutines.
 An \s-1XSUB\s0 routine will have a stack that contains the arguments from the Perl
 program, and a way to map from the Perl data structures to a C equivalent.
@@ -1057,7 +1152,7 @@ where \f(CWsp\fR is the stack pointer, and \f(CWnum\fR is the number of elements
 stack should be extended by.
 .PP
 Now that there is room on the stack, values can be pushed on it using the
-macros to push \s-1IV\s0's, doubles, strings, and \s-1SV\s0 pointers respectively:
+macros to push IVs, doubles, strings, and \s-1SV\s0 pointers respectively:
 .PP
 .Vb 4
 \&    PUSHi(IV)
@@ -1180,7 +1275,7 @@ The most recent development releases of Perl has been experimenting with
 removing Perl's dependency on the \*(L"normal\*(R" standard I/O suite and allowing
 other stdio implementations to be used.  This involves creating a new
 abstraction layer that then calls whichever implementation of stdio Perl
-was compiled with.  All \s-1XSUB\s0's should now use the functions in the PerlIO
+was compiled with.  All XSUBs should now use the functions in the PerlIO
 abstraction layer and not make any assumptions about what kind of stdio
 is being used.
 .PP
@@ -1203,20 +1298,20 @@ directly used in some opcodes, as well as indirectly in zillions of
 others, which use it via \f(CW(X)PUSH[pni]\fR.
 .Sh "Scratchpads"
 .IX Subsection "Scratchpads"
-The question remains on when the \s-1SV\s0's which are \fItarget\fRs for opcodes
+The question remains on when the SVs which are \fItarget\fRs for opcodes
 are created. The answer is that they are created when the current unit --
 a subroutine or a file (for opcodes for statements outside of
 subroutines) -- is compiled. During this time a special anonymous Perl
 array is created, which is called a scratchpad for the current
 unit.
 .PP
-A scratchpad keeps \s-1SV\s0's which are lexicals for the current unit and are
+A scratchpad keeps SVs which are lexicals for the current unit and are
 targets for opcodes. One can deduce that an \s-1SV\s0 lives on a scratchpad
 by looking on its flags: lexicals have \f(CWSVs_PADMY\fR set, and
 \fItarget\fRs have \f(CWSVs_PADTMP\fR set.
 .PP
-The correspondence between \s-1OP\s0's and \fItarget\fRs is not 1-to-1. Different
-\s-1OP\s0's in the compile tree of the unit can use the same target, if this
+The correspondence between OPs and \fItarget\fRs is not 1-to-1. Different
+OPs in the compile tree of the unit can use the same target, if this
 would not conflict with the expected life of the temporary.
 .Sh "Scratchpads and recursion"
 .IX Subsection "Scratchpads and recursion"
@@ -1385,7 +1480,8 @@ extensions.
 See \f(CWav_len\fR.
 .Ip "av_clear" 8
 .IX Item "av_clear"
-Clears an array, making it empty.
+Clears an array, making it empty.  Does not free the memory used by the
+array itself.
 .Sp
 .Vb 1
 \&        void    av_clear _((AV* ar));
@@ -1403,6 +1499,9 @@ extended.
 Returns the \s-1SV\s0 at the specified index in the array.  The \f(CWkey\fR is the
 index.  If \f(CWlval\fR is set then the fetch will be part of a store.  Check
 that the return value is non-null before dereferencing it to a \f(CWSV*\fR.
+.Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied arrays.
 .Sp
 .Vb 1
 \&        SV**    av_fetch _((AV* ar, I32 key, I32 lval));
@@ -1449,23 +1548,30 @@ Shifts an \s-1SV\s0 off the beginning of the array.
 .Ip "av_store" 8
 .IX Item "av_store"
 Stores an \s-1SV\s0 in an array.  The array index is specified as \f(CWkey\fR.  The
-return value will be null if the operation failed, otherwise it can be
-dereferenced to get the original \f(CWSV*\fR.
+return value will be \s-1NULL\s0 if the operation failed or if the value did not
+need to be actually stored within the array (as in the case of tied arrays).
+Otherwise it can be dereferenced to get the original \f(CWSV*\fR.  Note that the
+caller is responsible for suitably incrementing the reference count of \f(CWval\fR
+before the call, and decrementing it if the function returned \s-1NULL\s0.
+.Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied arrays.
 .Sp
 .Vb 1
 \&        SV**    av_store _((AV* ar, I32 key, SV* val));
 .Ve
 .Ip "av_undef" 8
 .IX Item "av_undef"
-Undefines the array.
+Undefines the array.  Frees the memory used by the array itself.
 .Sp
 .Vb 1
 \&        void    av_undef _((AV* ar));
 .Ve
 .Ip "av_unshift" 8
 .IX Item "av_unshift"
-Unshift an \s-1SV\s0 onto the beginning of the array.  The array will grow
-automatically to accommodate the addition.
+Unshift the given number of \f(CWundef\fR values onto the beginning of the
+array.  The array will grow automatically to accommodate the addition.
+You must then use \f(CWav_store\fR to assign values to these new elements.
 .Sp
 .Vb 1
 \&        void    av_unshift _((AV* ar, I32 num));
@@ -1479,7 +1585,7 @@ the section on \fIUsing \s-1XS\s0 With \*(C+\fR in the \fIperlxs\fR manpage.
 .IX Item "Copy"
 The \s-1XSUB\s0\-writer's interface to the C \f(CWmemcpy\fR function.  The \f(CWs\fR is the
 source, \f(CWd\fR is the destination, \f(CWn\fR is the number of items, and \f(CWt\fR is
-the type.
+the type.  May fail on overlapping copies.  See also \f(CWMove\fR.
 .Sp
 .Vb 1
 \&        (void) Copy( s, d, n, t );
@@ -1566,7 +1672,7 @@ the \fIperlcall\fR manpage.
 .Ve
 .Ip "G_ARRAY" 8
 .IX Item "G_ARRAY"
-Used to indicate array context.  See \f(CWGIMME\fR and the \fIperlcall\fR manpage.
+Used to indicate array context.  See \f(CWGIMME_V\fR, \f(CWGIMME\fR and the \fIperlcall\fR manpage.
 .Ip "G_DISCARD" 8
 .IX Item "G_DISCARD"
 Indicates that arguments returned from a callback should be discarded.  See
@@ -1576,14 +1682,22 @@ the \fIperlcall\fR manpage.
 Used to force a Perl \f(CWeval\fR wrapper around a callback.  See the \fIperlcall\fR manpage.
 .Ip "\s-1GIMME\s0" 8
 .IX Item "\s-1GIMME\s0"
-The \s-1XSUB\s0\-writer's equivalent to Perl's \f(CWwantarray\fR.  Returns \f(CWG_SCALAR\fR or
-\f(CWG_ARRAY\fR for scalar or array context.
+A backward-compatible version of \f(CWGIMME_V\fR which can only return
+\f(CWG_SCALAR\fR or \f(CWG_ARRAY\fR; in a void context, it returns \f(CWG_SCALAR\fR.
+.Ip "\s-1GIMME_V\s0" 8
+.IX Item "\s-1GIMME_V\s0"
+The \s-1XSUB\s0\-writer's equivalent to Perl's \f(CWwantarray\fR.  Returns
+\f(CWG_VOID\fR, \f(CWG_SCALAR\fR or \f(CWG_ARRAY\fR for void, scalar or array
+context, respectively.
 .Ip "G_NOARGS" 8
 .IX Item "G_NOARGS"
 Indicates that no arguments are being sent to a callback.  See the \fIperlcall\fR manpage.
 .Ip "G_SCALAR" 8
 .IX Item "G_SCALAR"
-Used to indicate scalar context.  See \f(CWGIMME\fR and the \fIperlcall\fR manpage.
+Used to indicate scalar context.  See \f(CWGIMME_V\fR, \f(CWGIMME\fR, and the \fIperlcall\fR manpage.
+.Ip "G_VOID" 8
+.IX Item "G_VOID"
+Used to indicate void context.  See \f(CWGIMME_V\fR and the \fIperlcall\fR manpage.
 .Ip "gv_fetchmeth" 8
 .IX Item "gv_fetchmeth"
 Returns the glob with the given \f(CWname\fR and a defined subroutine or
@@ -1608,25 +1722,35 @@ method's \s-1CV\s0, which can be obtained from the \s-1GV\s0 with the \f(CWGvCV\
 .Ve
 .Ip "gv_fetchmethod" 8
 .IX Item "gv_fetchmethod"
+.Ip "gv_fetchmethod_autoload" 8
+.IX Item "gv_fetchmethod_autoload"
 Returns the glob which contains the subroutine to call to invoke the
-method on the \f(CWstash\fR. In fact in the presense of autoloading this may
-be the glob for \*(L"\s-1AUTOLOAD\s0\*(R".  In this case the corresponing variable
+method on the \f(CWstash\fR.  In fact in the presense of autoloading this may
+be the glob for \*(L"\s-1AUTOLOAD\s0\*(R".  In this case the corresponding variable
 \f(CW$AUTOLOAD\fR is already setup.
 .Sp
-Note that if you want to keep this glob for a long time, you need to
-check for it being \*(L"\s-1AUTOLOAD\s0\*(R", since at the later time the the call
+The third parameter of \f(CWgv_fetchmethod_autoload\fR determines whether \s-1AUTOLOAD\s0
+lookup is performed if the given method is not present: non-zero means
+yes, look for \s-1AUTOLOAD\s0; zero means no, don't look for \s-1AUTOLOAD\s0.  Calling
+\f(CWgv_fetchmethod\fR is equivalent to calling \f(CWgv_fetchmethod_autoload\fR with a
+non-zero \f(CWautoload\fR parameter.
+.Sp
+These functions grant \f(CW"SUPER"\fR token as a prefix of the method name.
+.Sp
+Note that if you want to keep the returned glob for a long time, you
+need to check for it being \*(L"\s-1AUTOLOAD\s0\*(R", since at the later time the call
 may load a different subroutine due to \f(CW$AUTOLOAD\fR changing its value.
 Use the glob created via a side effect to do this.
 .Sp
-This function grants \f(CW"SUPER"\fR token as a prefix of the method name.
-.Sp
-Has the same side-effects and as \f(CWgv_fetchmeth\fR with \f(CWlevel==0\fR.
-\f(CWname\fR should be writable if contains \f(CW':'\fR or \f(CW'\e''\fR.
+These functions have the same side-effects and as \f(CWgv_fetchmeth\fR with
+\f(CWlevel==0\fR.  \f(CWname\fR should be writable if contains \f(CW':'\fR or \f(CW'\e''\fR.
 The warning against passing the \s-1GV\s0 returned by \f(CWgv_fetchmeth\fR to
-\f(CWperl_call_sv\fR apply equally to \f(CWgv_fetchmethod\fR.
+\f(CWperl_call_sv\fR apply equally to these functions.
 .Sp
-.Vb 1
+.Vb 3
 \&        GV*     gv_fetchmethod _((HV* stash, char* name));
+\&        GV*     gv_fetchmethod_autoload _((HV* stash, char* name,
+\&                                           I32 autoload));
 .Ve
 .Ip "gv_stashpv" 8
 .IX Item "gv_stashpv"
@@ -1647,28 +1771,11 @@ Returns a pointer to the stash for a specified package.  See \f(CWgv_stashpv\fR.
 .Ip "GvSV" 8
 .IX Item "GvSV"
 Return the \s-1SV\s0 from the \s-1GV\s0.
-.Ip "he_delayfree" 8
-.IX Item "he_delayfree"
-Releases a hash entry, such as while iterating though the hash, but
-delays actual freeing of key and value until the end of the current
-statement (or thereabouts) with \f(CWsv_2mortal\fR.  See \f(CWhv_iternext\fR.
-.Sp
-.Vb 1
-\&        void    he_delayfree _((HV* hv, HE* hent));
-.Ve
 .Ip "HEf_SVKEY" 8
 .IX Item "HEf_SVKEY"
 This flag, used in the length slot of hash entries and magic
 structures, specifies the structure contains a \f(CWSV*\fR pointer where a
 \f(CWchar*\fR pointer is to be expected. (For information only\*(--not to be used).
-.Ip "he_free" 8
-.IX Item "he_free"
-Releases a hash entry, such as while iterating though the hash.  See
-\f(CWhv_iternext\fR.
-.Sp
-.Vb 1
-\&        void    he_free _((HV* hv, HE* hent));
-.Ve
 .Ip "HeHASH" 8
 .IX Item "HeHASH"
 Returns the computed hash (type \f(CWU32\fR) stored in the hash entry.
@@ -1749,11 +1856,21 @@ Clears a hash, making it empty.
 .Vb 1
 \&        void    hv_clear _((HV* tb));
 .Ve
+.Ip "hv_delayfree_ent" 8
+.IX Item "hv_delayfree_ent"
+Releases a hash entry, such as while iterating though the hash, but
+delays actual freeing of key and value until the end of the current
+statement (or thereabouts) with \f(CWsv_2mortal\fR.  See \f(CWhv_iternext\fR
+and \f(CWhv_free_ent\fR.
+.Sp
+.Vb 1
+\&        void    hv_delayfree_ent _((HV* hv, HE* entry));
+.Ve
 .Ip "hv_delete" 8
 .IX Item "hv_delete"
 Deletes a key/value pair in the hash.  The value \s-1SV\s0 is removed from the hash
 and returned to the caller.  The \f(CWklen\fR is the length of the key.  The
-\f(CWflags\fR value will normally be zero; if set to G_DISCARD then null will be
+\f(CWflags\fR value will normally be zero; if set to G_DISCARD then \s-1NULL\s0 will be
 returned.
 .Sp
 .Vb 1
@@ -1763,7 +1880,7 @@ returned.
 .IX Item "hv_delete_ent"
 Deletes a key/value pair in the hash.  The value \s-1SV\s0 is removed from the hash
 and returned to the caller.  The \f(CWflags\fR value will normally be zero; if set
-to G_DISCARD then null will be returned.  \f(CWhash\fR can be a valid pre-computed
+to G_DISCARD then \s-1NULL\s0 will be returned.  \f(CWhash\fR can be a valid precomputed
 hash value, or 0 to ask for it to be computed.
 .Sp
 .Vb 1
@@ -1780,7 +1897,7 @@ Returns a boolean indicating whether the specified hash key exists.  The
 .Ip "hv_exists_ent" 8
 .IX Item "hv_exists_ent"
 Returns a boolean indicating whether the specified hash key exists. \f(CWhash\fR
-can be a valid pre-computed hash value, or 0 to ask for it to be computed.
+can be a valid precomputed hash value, or 0 to ask for it to be computed.
 .Sp
 .Vb 1
 \&        bool    hv_exists_ent _((HV* tb, SV* key, U32 hash));
@@ -1792,21 +1909,35 @@ Returns the \s-1SV\s0 which corresponds to the specified key in the hash.  The
 part of a store.  Check that the return value is non-null before
 dereferencing it to a \f(CWSV*\fR.
 .Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied hashes.
+.Sp
 .Vb 1
 \&        SV**    hv_fetch _((HV* tb, char* key, U32 klen, I32 lval));
 .Ve
 .Ip "hv_fetch_ent" 8
 .IX Item "hv_fetch_ent"
 Returns the hash entry which corresponds to the specified key in the hash.
-\f(CWhash\fR must be a valid pre-computed hash number for the given \f(CWkey\fR, or
+\f(CWhash\fR must be a valid precomputed hash number for the given \f(CWkey\fR, or
 0 if you want the function to compute it.  \s-1IF\s0 \f(CWlval\fR is set then the
 fetch will be part of a store.  Make sure the return value is non-null
 before accessing it.  The return value when \f(CWtb\fR is a tied hash
 is a pointer to a static location, so be sure to make a copy of the
 structure if you need to store it somewhere.
 .Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied hashes.
+.Sp
 .Vb 1
 \&        HE*     hv_fetch_ent  _((HV* tb, SV* key, I32 lval, U32 hash));
+.Ve
+.Ip "hv_free_ent" 8
+.IX Item "hv_free_ent"
+Releases a hash entry, such as while iterating though the hash.  See
+\f(CWhv_iternext\fR and \f(CWhv_delayfree_ent\fR.
+.Sp
+.Vb 1
+\&        void    hv_free_ent _((HV* hv, HE* entry));
 .Ve
 .Ip "hv_iterinit" 8
 .IX Item "hv_iterinit"
@@ -1823,8 +1954,11 @@ Returns the key from the current position of the hash iterator.  See
 .Vb 1
 \&        char*   hv_iterkey _((HE* entry, I32* retlen));
 .Ve
-.Ip "hv_iterkeysv 	 Returns the key as an \f(CWSV*\fR from the current position of the hash iterator.  The return value will always be a mortal copy of the key.  Also see \f(CWhv_iterinit\fR." 8
-.IX Item "hv_iterkeysv 	 Returns the key as an \f(CWSV*\fR from the current position of the hash iterator.  The return value will always be a mortal copy of the key.  Also see \f(CWhv_iterinit\fR."
+.Ip "hv_iterkeysv" 8
+.IX Item "hv_iterkeysv"
+Returns the key as an \f(CWSV*\fR from the current position of the hash
+iterator.  The return value will always be a mortal copy of the
+key.  Also see \f(CWhv_iterinit\fR.
 .Sp
 .Vb 1
 \&        SV*     hv_iterkeysv  _((HE* entry));
@@ -1869,10 +2003,16 @@ Returns the package name of a stash.  See \f(CWSvSTASH\fR, \f(CWCvSTASH\fR.
 .Ip "hv_store" 8
 .IX Item "hv_store"
 Stores an \s-1SV\s0 in a hash.  The hash key is specified as \f(CWkey\fR and \f(CWklen\fR is
-the length of the key.  The \f(CWhash\fR parameter is the pre-computed hash
+the length of the key.  The \f(CWhash\fR parameter is the precomputed hash
 value; if it is zero then Perl will compute it.  The return value will be
-null if the operation failed, otherwise it can be dereferenced to get the
-original \f(CWSV*\fR.
+\s-1NULL\s0 if the operation failed or if the value did not need to be actually
+stored within the hash (as in the case of tied hashes).  Otherwise it can
+be dereferenced to get the original \f(CWSV*\fR.  Note that the caller is
+responsible for suitably incrementing the reference count of \f(CWval\fR
+before the call, and decrementing it if the function returned \s-1NULL\s0.
+.Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied hashes.
 .Sp
 .Vb 1
 \&        SV**    hv_store _((HV* tb, char* key, U32 klen, SV* val, U32 hash));
@@ -1880,11 +2020,17 @@ original \f(CWSV*\fR.
 .Ip "hv_store_ent" 8
 .IX Item "hv_store_ent"
 Stores \f(CWval\fR in a hash.  The hash key is specified as \f(CWkey\fR.  The \f(CWhash\fR
-parameter is the pre-computed hash value; if it is zero then Perl will
+parameter is the precomputed hash value; if it is zero then Perl will
 compute it.  The return value is the new hash entry so created.  It will be
-null if the operation failed or if the entry was stored in a tied hash.
-Otherwise the contents of the return value can be accessed using the
-\f(CWHe???\fR macros described here.
+\s-1NULL\s0 if the operation failed or if the value did not need to be actually
+stored within the hash (as in the case of tied hashes).  Otherwise the
+contents of the return value can be accessed using the \f(CWHe???\fR macros
+described here.  Note that the caller is responsible for suitably
+incrementing the reference count of \f(CWval\fR before the call, and decrementing
+it if the function returned \s-1NULL\s0.
+.Sp
+See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for more
+information on how to use this function on tied hashes.
 .Sp
 .Vb 1
 \&        HE*     hv_store_ent  _((HV* tb, SV* key, SV* val, U32 hash));
@@ -2018,7 +2164,7 @@ Do magic after a value is assigned to the \s-1SV\s0.  See \f(CWsv_magic\fR.
 .IX Item "Move"
 The \s-1XSUB\s0\-writer's interface to the C \f(CWmemmove\fR function.  The \f(CWs\fR is the
 source, \f(CWd\fR is the destination, \f(CWn\fR is the number of items, and \f(CWt\fR is
-the type.
+the type.  Can do overlapping moves.  See also \f(CWCopy\fR.
 .Sp
 .Vb 1
 \&        (void) Move( s, d, n, t );
@@ -2083,7 +2229,7 @@ Creates an \s-1RV\s0 wrapper for an \s-1SV\s0.  The reference count for the orig
 .Ip "newSV" 8
 .IX Item "newSV"
 Creates a new \s-1SV\s0.  The \f(CWlen\fR parameter indicates the number of bytes of
-pre-allocated string space the \s-1SV\s0 should have.  The reference count for the
+preallocated string space the \s-1SV\s0 should have.  The reference count for the
 new \s-1SV\s0 is set to 1.
 .Sp
 .Vb 1
@@ -2201,6 +2347,13 @@ Tells Perl to \f(CWeval\fR the string in the \s-1SV\s0.
 .Vb 1
 \&        I32     perl_eval_sv _((SV* sv, I32 flags));
 .Ve
+.Ip "perl_eval_pv" 8
+.IX Item "perl_eval_pv"
+Tells Perl to \f(CWeval\fR the given string and return an \s-1SV\s0* result.
+.Sp
+.Vb 1
+\&        SV*     perl_eval_pv _((char* p, I32 croak_on_error));
+.Ve
 .Ip "perl_free" 8
 .IX Item "perl_free"
 Releases a Perl interpreter.  See the \fIperlembed\fR manpage.
@@ -2208,7 +2361,7 @@ Releases a Perl interpreter.  See the \fIperlembed\fR manpage.
 .IX Item "perl_get_av"
 Returns the \s-1AV\s0 of the specified Perl array.  If \f(CWcreate\fR is set and the
 Perl variable does not exist then it will be created.  If \f(CWcreate\fR is not
-set and the variable does not exist then null is returned.
+set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
 \&        AV*     perl_get_av _((char* name, I32 create));
@@ -2217,7 +2370,7 @@ set and the variable does not exist then null is returned.
 .IX Item "perl_get_cv"
 Returns the \s-1CV\s0 of the specified Perl sub.  If \f(CWcreate\fR is set and the Perl
 variable does not exist then it will be created.  If \f(CWcreate\fR is not
-set and the variable does not exist then null is returned.
+set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
 \&        CV*     perl_get_cv _((char* name, I32 create));
@@ -2226,7 +2379,7 @@ set and the variable does not exist then null is returned.
 .IX Item "perl_get_hv"
 Returns the \s-1HV\s0 of the specified Perl hash.  If \f(CWcreate\fR is set and the Perl
 variable does not exist then it will be created.  If \f(CWcreate\fR is not
-set and the variable does not exist then null is returned.
+set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
 \&        HV*     perl_get_hv _((char* name, I32 create));
@@ -2235,7 +2388,7 @@ set and the variable does not exist then null is returned.
 .IX Item "perl_get_sv"
 Returns the \s-1SV\s0 of the specified Perl scalar.  If \f(CWcreate\fR is set and the
 Perl variable does not exist then it will be created.  If \f(CWcreate\fR is not
-set and the variable does not exist then null is returned.
+set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
 \&        SV*     perl_get_sv _((char* name, I32 create));
@@ -2392,7 +2545,7 @@ Stack pointer.  This is usually handled by \f(CWxsubpp\fR.  See \f(CWdSP\fR and
 \f(CWSPAGAIN\fR.
 .Ip "\s-1SPAGAIN\s0" 8
 .IX Item "\s-1SPAGAIN\s0"
-Re-fetch the stack pointer.  Used after a callback.  See the \fIperlcall\fR manpage.
+Refetch the stack pointer.  Used after a callback.  See the \fIperlcall\fR manpage.
 .Sp
 .Vb 1
 \&        SPAGAIN;
@@ -2497,6 +2650,14 @@ Concatenates the string onto the end of the string which is in the \s-1SV\s0.  T
 .Sp
 .Vb 1
 \&        void    sv_catpvn _((SV* sv, char* ptr, STRLEN len));
+.Ve
+.Ip "sv_catpvf" 8
+.IX Item "sv_catpvf"
+Processes its arguments like \f(CWsprintf\fR and appends the formatted output
+to an \s-1SV\s0.
+.Sp
+.Vb 1
+\&        void    sv_catpvf _((SV* sv, const char* pat, ...));
 .Ve
 .Ip "sv_catsv" 8
 .IX Item "sv_catsv"
@@ -2933,6 +3094,14 @@ bytes to be copied.
 .Vb 1
 \&        void    sv_setpvn _((SV* sv, char* ptr, STRLEN len));
 .Ve
+.Ip "sv_setpvf" 8
+.IX Item "sv_setpvf"
+Processes its arguments like \f(CWsprintf\fR and sets an \s-1SV\s0 to the formatted
+output.
+.Sp
+.Vb 1
+\&        void    sv_setpvf _((SV* sv, const char* pat, ...));
+.Ve
 .Ip "sv_setref_iv" 8
 .IX Item "sv_setref_iv"
 Copies an integer into a new \s-1SV\s0, optionally blessing the \s-1SV\s0.  The \f(CWrv\fR
@@ -3265,6 +3434,6 @@ Bowers, Matthew Green, Tim Bunce, Spider Boardman, and Ulrich Pfeifer.
 API Listing by Dean Roehrich <\fIroehrich@cray.com\fR>.
 .SH "DATE"
 .IX Header "DATE"
-Version 31.2: 1997/3/5
+Version 31.8: 1997/5/17
 
 .rn }` ''

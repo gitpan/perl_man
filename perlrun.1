@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLRUN 1 "perl 5.003, patch 93" "26/Feb/97" "Perl Programmers Reference Guide"
+.TH PERLRUN 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLRUN 1"
 .UC
 .IX Name "perlrun - how to execute the Perl interpreter"
@@ -206,7 +226,7 @@ beginning, unless you've specified a \fB\-x\fR switch, in which case it
 scans for the first line starting with #! and containing the word
 \*(L"perl\*(R", and starts there instead.  This is useful for running a script
 embedded in a larger message.  (In this case you would indicate the end
-of the script using the _\|_END_\|_ token.)
+of the script using the \f(CW__END__\fR token.)
 .PP
 The #! line is always examined for switches as the line is being
 parsed.  Thus, if you're on a machine that allows only one argument
@@ -244,11 +264,86 @@ dispatch the program to the correct interpreter for them.
 After locating your script, Perl compiles the entire script to an
 internal form.  If there are any compilation errors, execution of the
 script is not attempted.  (This is unlike the typical shell script,
-which might run partway through before finding a syntax error.)
+which might run part-way through before finding a syntax error.)
 .PP
 If the script is syntactically correct, it is executed.  If the script
 runs off the end without hitting an \fIexit()\fR or \fIdie()\fR operator, an implicit
 \f(CWexit(0)\fR is provided to indicate successful completion.
+.Sh "#! and quoting on non-Unix systems"
+.IX Subsection "#! and quoting on non-Unix systems"
+Unix's #! technique can be simulated on other systems:
+.Ip "\s-1OS/2\s0" 4
+.IX Item "\s-1OS/2\s0"
+Put
+.Sp
+.Vb 1
+\&    extproc perl -S -your_switches
+.Ve
+as the first line in \f(CW*.cmd\fR file (\f(CW-S\fR due to a bug in cmd.exe's
+`extproc\*(R' handling).
+.Ip "\s-1MS\s0\-\s-1DOS\s0" 4
+.IX Item "\s-1MS\s0\-\s-1DOS\s0"
+Create a batch file to run your script, and codify it in
+\f(CWALTERNATIVE_SHEBANG\fR (see the \fIdosish.h\fR file in the source
+distribution for more information).
+.Ip "Win95/\s-1NT\s0" 4
+.IX Item "Win95/\s-1NT\s0"
+The Win95/\s-1NT\s0 installation, when using the Activeware port of Perl,
+will modify the Registry to associate the .pl extension with the perl
+interpreter.  If you install another port of Perl, including the one
+in the Win32 directory of the Perl distribution, then you'll have to
+modify the Registry yourself.
+.Ip "Macintosh" 4
+.IX Item "Macintosh"
+Macintosh perl scripts will have the appropriate Creator and
+Type, so that double-clicking them will invoke the perl application.
+.PP
+Command-interpreters on non-Unix systems have rather different ideas
+on quoting than Unix shells.  You'll need to learn the special
+characters in your command-interpreter (\f(CW*\fR, \f(CW\e\fR and \f(CW"\fR are
+common) and how to protect whitespace and these characters to run
+one-liners (see \f(CW-e\fR below).
+.PP
+On some systems, you may have to change single-quotes to double ones,
+which you must \fI\s-1NOT\s0\fR do on Unix or Plan9 systems.  You might also
+have to change a single % to a %%.
+.PP
+For example:
+.PP
+.Vb 2
+\&    # Unix
+\&    perl -e 'print "Hello world\en"'
+.Ve
+.Vb 2
+\&    # MS-DOS, etc.
+\&    perl -e "print \e"Hello world\en\e""
+.Ve
+.Vb 3
+\&    # Macintosh
+\&    print "Hello world\en"
+\&     (then Run "Myscript" or Shift-Command-R)
+.Ve
+.Vb 2
+\&    # VMS
+\&    perl -e "print ""Hello world\en"""
+.Ve
+The problem is that none of this is reliable: it depends on the command
+and it is entirely possible neither works.  If 4DOS was the command shell, this would
+probably work better:
+.PP
+.Vb 1
+\&    perl -e "print <Ctrl-x>"Hello world\en<Ctrl-x>""
+.Ve
+\s-1CMD\s0.\s-1EXE\s0 in Windows \s-1NT\s0 slipped a lot of standard Unix functionality in
+when nobody was looking, but just try to find documentation for its
+quoting rules.
+.PP
+Under the Macintosh, it depends which environment you are using.  The MacPerl
+shell, or \s-1MPW\s0, is much like Unix shells in its support for several
+quoting variants, except that it makes free use of the Macintosh's non-\s-1ASCII\s0
+characters as control characters.
+.PP
+There is no general solution to all of this.  It's just a mess.
 .Sh "Switches"
 .IX Subsection "Switches"
 A single-character switch may be combined with the following switch, if
@@ -294,7 +389,7 @@ An alternate delimiter may be specified using \fB\-F\fR.
 .IX Item "\fB\-c\fR"
 causes Perl to check the syntax of the script and then exit without
 executing it.  Actually, it \fIwill\fR execute \f(CWBEGIN\fR, \f(CWEND\fR, and \f(CWuse\fR blocks,
-because these are considered as occurring outside the execution of 
+because these are considered as occurring outside the execution of
 your program.
 .Ip "\fB\-d\fR" 5
 .IX Item "\fB\-d\fR"
@@ -335,11 +430,11 @@ equivalent to \fB\-Dtls\fR):
 .Ve
 .Ip "\fB\-e\fR \fIcommandline\fR" 5
 .IX Item "\fB\-e\fR \fIcommandline\fR"
-may be used to enter one line of script.  
+may be used to enter one line of script.
 If \fB\-e\fR is given, Perl
-will not look for a script filename in the argument list.  
+will not look for a script filename in the argument list.
 Multiple \fB\-e\fR commands may
-be given to build up a multi-line script.  
+be given to build up a multi-line script.
 Make sure to use semicolons where you would in a normal program.
 .Ip "\fB\-F\fR\fIpattern\fR" 5
 .IX Item "\fB\-F\fR\fIpattern\fR"
@@ -390,8 +485,8 @@ know when the filename has changed.  It does, however, use \s-1ARGVOUT\s0 for
 the selected filehandle.  Note that \s-1STDOUT\s0 is restored as the
 default output filehandle after the loop.
 .Sp
-You can use \f(CWeof\fR without parenthesis to locate the end of each input file, 
-in case you want to append to each file, or reset line numbering (see 
+You can use \f(CWeof\fR without parenthesis to locate the end of each input file,
+in case you want to append to each file, or reset line numbering (see
 example in the \f(CWeof\fR entry in the \fIperlfunc\fR manpage).
 .Ip "\fB\-I\fR\fIdirectory\fR" 5
 .IX Item "\fB\-I\fR\fIdirectory\fR"
@@ -424,8 +519,8 @@ This sets \f(CW$\e\fR to newline and then sets \f(CW$/\fR to the null character.
 .IX Item "\fB\-m\fR[\fB\-\fR]\fImodule\fR"
 .Ip "\fB\-M\fR[\fB\-\fR]\fImodule\fR" 5
 .IX Item "\fB\-M\fR[\fB\-\fR]\fImodule\fR"
-.Ip "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(R'\fR" 5
-.IX Item "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(R'\fR"
+.Ip "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(T'\fR" 5
+.IX Item "\fB\-M\fR[\fB\-\fR]\fI'module ...\*(T'\fR"
 .Ip "\fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR" 5
 .IX Item "\fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR"
 \f(CW-m\fR\fImodule\fR executes \f(CWuse\fR \fImodule\fR \f(CW();\fR before executing your
@@ -438,7 +533,7 @@ e.g., \f(CW-M'module qw(foo bar)'\fR.
 If the first character after the \f(CW-M\fR or \f(CW-m\fR is a dash (\f(CW-\fR)
 then the \*(L'use\*(R' is replaced with \*(L'no\*(R'.
 .Sp
-A little built-in syntactic sugar means you can also say
+A little builtin syntactic sugar means you can also say
 \f(CW-mmodule=foo,bar\fR or \f(CW-Mmodule=foo,bar\fR as a shortcut for
 \f(CW-M'module qw(foo bar)'\fR.  This avoids the need to use quotes when
 importing symbols.  The actual code generated by \f(CW-Mmodule=foo,bar\fR is
@@ -614,6 +709,13 @@ instead say
 .Vb 1
 \&    use lib "/my/directory";
 .Ve
+.Ip "\s-1PERL5OPT\s0" 12
+.IX Item "\s-1PERL5OPT\s0"
+Command-line options (switches).  Switches in this variable are taken
+as if they were on every Perl command line.  Only the \fB\-[DIMUdmw]\fR
+switches are allowed.  When running taint checks (because the script
+was running setuid or setgid, or the \fB\-T\fR switch was used), this
+variable is ignored.
 .Ip "\s-1PERLLIB\s0" 12
 .IX Item "\s-1PERLLIB\s0"
 A colon-separated list of directories in which to look for Perl library
@@ -626,6 +728,16 @@ The command used to load the debugger code.  The default is:
 .Vb 1
 \&        BEGIN { require 'perl5db.pl' }
 .Ve
+.Ip "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)" 12
+.IX Item "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)"
+May be set to an alternative shell that perl must use internally for
+executing \*(L"backtick\*(R" commands or \fIsystem()\fR.  Perl doesn't use \s-1COMSPEC\s0
+for this purpose because \s-1COMSPEC\s0 has a high degree of variability
+among users, leading to portability concerns.  Besides, perl can use
+a shell that may not be fit for interactive use, and setting \s-1COMSPEC\s0
+to such a shell may interfere with the proper functioning of other
+programs (which usually look in \s-1COMSPEC\s0 to find a shell fit for
+interactive use).
 .Ip "\s-1PERL_DEBUG_MSTATS\s0" 12
 .IX Item "\s-1PERL_DEBUG_MSTATS\s0"
 Relevant only if your perl executable was built with \fB\-\s-1DDEBUGGING_MSTATS\s0\fR,
@@ -648,9 +760,9 @@ the following lines before doing anything else, just to keep people
 honest:
 .PP
 .Vb 3
-\&    $ENV{'PATH'} = '/bin:/usr/bin';    # or whatever you need
-\&    $ENV{'SHELL'} = '/bin/sh' if defined $ENV{'SHELL'};
-\&    $ENV{'IFS'} = ''          if defined $ENV{'IFS'};
+\&    $ENV{PATH} = '/bin:/usr/bin';    # or whatever you need
+\&    $ENV{SHELL} = '/bin/sh' if exists $ENV{SHELL};
+\&    delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};
 .Ve
 
 .rn }` ''

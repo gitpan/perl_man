@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH XSUBPP 1 "perl 5.003, patch 93" "20/Feb/97" "Perl Programmers Reference Guide"
+.TH XSUBPP 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "XSUBPP 1"
 .UC
 .IX Name "xsubpp - compiler to convert Perl XS code into C code"
@@ -225,6 +245,6 @@ Larry Wall
 See the file \fIchanges.pod\fR.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-\fIperl\fR\|(1), \fIperlxs\fR\|(1), \fIperlxstut\fR\|(1), \fIperlxs\fR\|(1)
+\fIperl\fR\|(1), \fIperlxs\fR\|(1), \fIperlxstut\fR\|(1)
 
 .rn }` ''

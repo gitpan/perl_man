@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLEMBED 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLEMBED 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLEMBED 1"
 .UC
 .IX Name "perlembed - how to embed perl in your C program"
@@ -180,8 +200,8 @@ Do you want to:
 .Ip "\fBUse C from Perl?\fR" 5
 .IX Item "\fBUse C from Perl?\fR"
 Read the \fIperlcall\fR manpage and the \fIperlxs\fR manpage.
-.Ip "\fBUse a \s-1UNIX\s0 program from Perl?\fR" 5
-.IX Item "\fBUse a \s-1UNIX\s0 program from Perl?\fR"
+.Ip "\fBUse a Unix program from Perl?\fR" 5
+.IX Item "\fBUse a Unix program from Perl?\fR"
 Read about back-quotes and about \f(CWsystem\fR and \f(CWexec\fR in the \fIperlfunc\fR manpage.
 .Ip "\fBUse Perl from Perl?\fR" 5
 .IX Item "\fBUse Perl from Perl?\fR"
@@ -197,7 +217,7 @@ Read on...
 .IX Subsection "\s-1ROADMAP\s0"
 the section on \fICompiling your C program\fR
 .PP
-There's one example in each of the eight sections:
+There's one example in each of the nine sections:
 .PP
 the section on \fIAdding a Perl interpreter to your C program\fR
 .PP
@@ -215,8 +235,7 @@ the section on \fIMaintaining multiple interpreter instances\fR
 .PP
 the section on \fIUsing Perl modules, which themselves use C libraries, from your C program\fR
 .PP
-This documentation is Unix specific; if you have information about how
-to embed Perl on other platforms, please send e-mail to <\fIorwant@tpj.com\fR>.
+the section on \fIEmbedding Perl under Win32\fR
 .Sh "Compiling your C program"
 .IX Subsection "Compiling your C program"
 If you have trouble compiling the scripts in this documentation,
@@ -259,31 +278,31 @@ Execute this statement for a hint about where to find \s-1CORE\s0:
 .Vb 1
 \&    perl -MConfig -e 'print $Config{archlib}'
 .Ve
-Here's how you'd compile the example in the next section, 
+Here's how you'd compile the example in the next section,
 the section on \fIAdding a Perl interpreter to your C program\fR, on my Linux box:
 .PP
 .Vb 4
-\&    % gcc -O2 -Dbool=char -DHAS_BOOL -I/usr/local/include 
+\&    % gcc -O2 -Dbool=char -DHAS_BOOL -I/usr/local/include
 \&    -I/usr/local/lib/perl5/i586-linux/5.003/CORE
-\&    -L/usr/local/lib/perl5/i586-linux/5.003/CORE 
+\&    -L/usr/local/lib/perl5/i586-linux/5.003/CORE
 \&    -o interp interp.c -lperl -lm
 .Ve
-(That's all one line.)  On my \s-1DEC\s0 Alpha running 5.00305, the incantation 
+(That's all one line.)  On my \s-1DEC\s0 Alpha running 5.003_05, the incantation
 is a bit different:
 .PP
 .Vb 4
-\&    % cc -O2 -Olimit 2900 -DSTANDARD_C -I/usr/local/include 
-\&    -I/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE 
-\&    -L/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE -L/usr/local/lib 
+\&    % cc -O2 -Olimit 2900 -DSTANDARD_C -I/usr/local/include
+\&    -I/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE
+\&    -L/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE -L/usr/local/lib
 \&    -D__LANGUAGE_C__ -D_NO_PROTO -o interp interp.c -lperl -lm
 .Ve
 How can you figure out what to add?  Assuming your Perl is post-5.001,
 execute a \f(CWperl -V\fR command and pay special attention to the \*(L"cc\*(R" and
-\*(L"ccflags\*(R" information.  
+\*(L"ccflags\*(R" information.
 .PP
-You'll have to choose the appropriate compiler (\fIcc\fR, \fIgcc\fR, et al.) for 
+You'll have to choose the appropriate compiler (\fIcc\fR, \fIgcc\fR, et al.) for
 your machine: \f(CWperl -MConfig -e 'print $Config{cc}'\fR will tell you what
-to use.  
+to use.
 .PP
 You'll also have to choose the appropriate library directory
 (\fI/usr/local/lib/...\fR) for your machine.  If your compiler complains
@@ -298,7 +317,7 @@ Perhaps those printed by
 .Vb 1
 \&   perl -MConfig -e 'print $Config{libs}'
 .Ve
-Provided your perl binary was properly configured and installed the 
+Provided your perl binary was properly configured and installed the
 \fBExtUtils::Embed\fR module will determine all of this information for
 you:
 .PP
@@ -312,13 +331,13 @@ this documentation came from your Perl distribution, then you're
 running 5.004 or better and you already have it.)
 .PP
 The \fBExtUtils::Embed\fR kit on \s-1CPAN\s0 also contains all source code for
-the examples in this document, tests, additional examples and other 
+the examples in this document, tests, additional examples and other
 information you may find useful.
 .Sh "Adding a Perl interpreter to your C program"
 .IX Subsection "Adding a Perl interpreter to your C program"
 In a sense, perl (the C program) is a good example of embedding Perl
 (the language), so I'll demonstrate embedding with \fIminiperlmain.c\fR,
-from the source distribution.  Here's a bastardized, non-portable
+from the source distribution.  Here's a bastardized, nonportable
 version of \fIminiperlmain.c\fR containing the essentials of embedding:
 .PP
 .Vb 2
@@ -371,7 +390,7 @@ calling \fIperl_run()\fR.
 .Sh "Calling a Perl subroutine from your C program"
 .IX Subsection "Calling a Perl subroutine from your C program"
 To call individual Perl subroutines, you can use any of the \fBperl_call_*\fR
-functions documented in the the \fIperlcall\fR manpage man page.
+functions documented in the the \fIperlcall\fR manpage manpage.
 In this example we'll use \fIperl_call_argv\fR.
 .PP
 That's shown below, in a program I'll call \fIshowtime.c\fR.
@@ -444,66 +463,50 @@ last section of this document: the section on \fIFiddling with the Perl stack fr
 your C program\fR.
 .Sh "Evaluating a Perl statement from your C program"
 .IX Subsection "Evaluating a Perl statement from your C program"
-One way to evaluate pieces of Perl code is to use
-the \f(CWperl_eval_sv()\fR entry in the \fIperlguts\fR manpage.  We've wrapped this inside our own
-\fIperl_eval()\fR function, which converts a command string to an \s-1SV\s0,
-passing this and the the \f(CWG_DISCARD\fR entry in the \fIperlcall\fR manpage flag to
-the \f(CWperl_eval_sv()\fR entry in the \fIperlguts\fR manpage.
+Perl provides two \s-1API\s0 functions to evaluate pieces of Perl code.
+These are the \f(CWperl_eval_sv()\fR entry in the \fIperlguts\fR manpage and the \f(CWperl_eval_pv()\fR entry in the \fIperlguts\fR manpage.
 .PP
-Arguably, this is the only routine you'll ever need to execute
-snippets of Perl code from within your C program.  Your string can be
+Arguably, these are the only routines you'll ever need to execute
+snippets of Perl code from within your C program.  Your code can be
 as long as you wish; it can contain multiple statements; it can employ
 the \f(CWuse\fR entry in the \fIperlfunc\fR manpage, the \f(CWrequire\fR entry in the \fIperlfunc\fR manpage and the \f(CWdo\fR entry in the \fIperlfunc\fR manpage to include
 external Perl files.
 .PP
-Our \fIperl_eval()\fR lets us evaluate individual Perl strings, and then
+\fIperl_eval_pv()\fR lets us evaluate individual Perl strings, and then
 extract variables for coercion into C types.  The following program,
 \fIstring.c\fR, executes three Perl strings, extracting an \f(CWint\fR from
 the first, a \f(CWfloat\fR from the second, and a \f(CWchar *\fR from the third.
 .PP
-.Vb 2
+.Vb 30
 \&   #include <EXTERN.h>
 \&   #include <perl.h>
-.Ve
-.Vb 1
+\&   
 \&   static PerlInterpreter *my_perl;
-.Ve
-.Vb 4
-\&   I32 perl_eval(char *string)
-\&   {
-\&     return perl_eval_sv(newSVpv(string,0), G_DISCARD);
-\&   }
-.Ve
-.Vb 4
+\&   
 \&   main (int argc, char **argv, char **env)
 \&   {
-\&     char *embedding[] = { "", "-e", "0" };
-\&     STRLEN length;
-.Ve
-.Vb 2
-\&     my_perl = perl_alloc();
-\&     perl_construct( my_perl );
-.Ve
-.Vb 5
-\&     perl_parse(my_perl, NULL, 3, embedding, NULL);
-\&     perl_run(my_perl);
-\&                                       /** Treat $a as an integer **/
-\&     perl_eval("$a = 3; $a **= 2");
-\&     printf("a = %d\en", SvIV(perl_get_sv("a", FALSE)));
-.Ve
-.Vb 3
-\&                                       /** Treat $a as a float **/
-\&     perl_eval("$a = 3.14; $a **= 2");
-\&     printf("a = %f\en", SvNV(perl_get_sv("a", FALSE)));
-.Ve
-.Vb 3
-\&                                       /** Treat $a as a string **/
-\&     perl_eval("$a = 'rekcaH lreP rehtonA tsuJ'; $a = reverse($a); ");
-\&     printf("a = %s\en", SvPV(perl_get_sv("a", FALSE), length));
-.Ve
-.Vb 3
-\&     perl_destruct(my_perl);
-\&     perl_free(my_perl);
+\&       char *embedding[] = { "", "-e", "0" };
+\&   
+\&       my_perl = perl_alloc();
+\&       perl_construct( my_perl );
+\&   
+\&       perl_parse(my_perl, NULL, 3, embedding, NULL);
+\&       perl_run(my_perl);
+\&   
+\&       /** Treat $a as an integer **/
+\&       perl_eval_pv("$a = 3; $a **= 2", TRUE);
+\&       printf("a = %d\en", SvIV(perl_get_sv("a", FALSE)));
+\&   
+\&       /** Treat $a as a float **/
+\&       perl_eval_pv("$a = 3.14; $a **= 2", TRUE);
+\&       printf("a = %f\en", SvNV(perl_get_sv("a", FALSE)));
+\&   
+\&       /** Treat $a as a string **/
+\&       perl_eval_pv("$a = 'rekcaH lreP rehtonA tsuJ'; $a = reverse($a);", TRUE);
+\&       printf("a = %s\en", SvPV(perl_get_sv("a", FALSE), na));
+\&   
+\&       perl_destruct(my_perl);
+\&       perl_free(my_perl);
 \&   }
 .Ve
 All of those strange functions with \fIsv\fR in their names help convert Perl scalars to C types.  They're described in the \fIperlguts\fR manpage.
@@ -517,9 +520,22 @@ If you compile and run \fIstring.c\fR, you'll see the results of using
 \&   a = 9.859600
 \&   a = Just Another Perl Hacker
 .Ve
+In the example above, we've created a global variable to temporarily
+store the computed value of our eval'd expression.  It is also
+possible and in most cases a better strategy to fetch the return value
+from the \fIperl_eval_pv\fR manpage instead.  Example:
+.PP
+.Vb 4
+\&   ...
+\&   SV *val = perl_eval_pv("reverse 'rekcaH lreP rehtonA tsuJ'", TRUE);
+\&   printf("%s\en", SvPV(val,na));
+\&   ...
+.Ve
+This way, we avoid namespace pollution by not creating global
+variables and we've simplified our code as well.
 .Sh "Performing Perl pattern matches and substitutions from your C program"
 .IX Subsection "Performing Perl pattern matches and substitutions from your C program"
-Our \fIperl_eval()\fR lets us evaluate strings of Perl code, so we can
+The \fIperl_eval_pv()\fR function lets us evaluate strings of Perl code, so we can
 define some functions that use it to \*(L"specialize\*(R" in matches and
 substitutions: \fImatch()\fR, \fIsubstitute()\fR, and \fImatches()\fR.
 .PP
@@ -553,12 +569,10 @@ been wrapped here):
 \&   #include <EXTERN.h>
 \&   #include <perl.h>
 .Ve
-.Vb 79
+.Vb 1
 \&   static PerlInterpreter *my_perl;
-\&   I32 perl_eval(char *string)
-\&   {
-\&      return perl_eval_sv(newSVpv(string,0), G_DISCARD);
-\&   }
+.Ve
+.Vb 74
 \&   /** match(string, pattern)
 \&   **
 \&   ** Used for matches in a scalar context.
@@ -571,7 +585,7 @@ been wrapped here):
 \&     command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 37);
 \&     sprintf(command, "$string = '%s'; $return = $string =~ %s",
 \&                      string, pattern);
-\&     perl_eval(command);
+\&     perl_eval_pv(command, TRUE);
 \&     free(command);
 \&     return SvIV(perl_get_sv("return", FALSE));
 \&   }
@@ -589,7 +603,7 @@ been wrapped here):
 \&     command = malloc(sizeof(char) * strlen(*string) + strlen(pattern) + 35);
 \&     sprintf(command, "$string = '%s'; $ret = ($string =~ %s)",
 \&                      *string, pattern);
-\&     perl_eval(command);
+\&     perl_eval_pv(command, TRUE);
 \&     free(command);
 \&     *string = SvPV(perl_get_sv("string", FALSE), length);
 \&     return SvIV(perl_get_sv("ret", FALSE));
@@ -612,7 +626,7 @@ been wrapped here):
 \&     command = malloc(sizeof(char) * strlen(string) + strlen(pattern) + 38);
 \&     sprintf(command, "$string = '%s'; @array = ($string =~ %s)",
 \&                      string, pattern);
-\&     perl_eval(command);
+\&     perl_eval_pv(command, TRUE);
 \&     free(command);
 \&     array = perl_get_av("array", FALSE);
 \&     num_matches = av_len(array) + 1; /** assume $[ is 0 **/
@@ -693,7 +707,7 @@ which produces the output (again, long lines have been wrapped here)
 .Ve
 .Vb 6
 \&   substitute: s/[aeiou]//gi...139 substitutions made.
-\&   Now text is: Whn h s t  cnvnnc str nd th bll cms t sm mnt lk 76 cnts, 
+\&   Now text is: Whn h s t  cnvnnc str nd th bll cms t sm mnt lk 76 cnts,
 \&   Mynrd s wr tht thr s smthng h *shld* d, smthng tht wll nbl hm t gt bck
 \&   qrtr, bt h hs n d *wht*.  H fmbls thrgh hs rd sqzy chngprs nd gvs th by
 \&   thr xtr pnns wth hs dllr, hpng tht h mght lck nt th crrct mnt.  Th by gvs
@@ -720,7 +734,7 @@ described in the \fIperlcall\fR manpage.
 .PP
 Once you've understood those, embedding Perl in C is easy.
 .PP
-Because C has no built-in function for integer exponentiation, let's
+Because C has no builtin function for integer exponentiation, let's
 make Perl's ** operator available to it (this is less useful than it
 sounds, because Perl implements ** with C's \fIpow()\fR function).  First
 I'll create a stub exponentiation function in \fIpower.pl\fR:
@@ -803,7 +817,7 @@ When developing interactive and/or potentially long-running
 applications, it's a good idea to maintain a persistent interpreter
 rather than allocating and constructing a new interpreter multiple
 times.  The major reason is speed: since Perl will only be loaded into
-memory once.  
+memory once.
 .PP
 However, you have to be more cautious with namespace and variable
 scoping when using a persistent interpreter.  In previous examples
@@ -838,48 +852,55 @@ itself after a certain number of requests, to ensure that memory
 consumption is minimized.  You'll also want to scope your variables
 with the \f(CWmy\fR entry in the \fIperlfunc\fR manpage whenever possible.
 .PP
-.Vb 76
-\& 
+.Vb 2
 \& package Embed::Persistent;
 \& #persistent.pl
-\& 
+.Ve
+.Vb 2
 \& use strict;
 \& use vars '%Cache';
-\& 
+.Ve
+.Vb 5
 \& sub valid_package_name {
 \&     my($string) = @_;
 \&     $string =~ s/([^A-Za-z0-9\e/])/sprintf("_%2x",unpack("C",$1))/eg;
 \&     # second pass only for words starting with a digit
 \&     $string =~ s|/(\ed)|sprintf("/_%2x",unpack("C",$1))|eg;
-\& 
+.Ve
+.Vb 4
 \&     # Dress it up as a real package name
 \&     $string =~ s|/|::|g;
 \&     return "Embed" . $string;
 \& }
-\& 
+.Ve
+.Vb 4
 \& #borrowed from Safe.pm
 \& sub delete_package {
 \&     my $pkg = shift;
 \&     my ($stem, $leaf);
-\& 
+.Ve
+.Vb 3
 \&     no strict 'refs';
 \&     $pkg = "main::$pkg\e::";    # expand to full symbol table name
 \&     ($stem, $leaf) = $pkg =~ m/(.*::)(\ew+::)$/;
-\& 
+.Ve
+.Vb 1
 \&     my $stem_symtab = *{$stem}{HASH};
-\& 
+.Ve
+.Vb 2
 \&     delete $stem_symtab->{$leaf};
 \& }
-\& 
+.Ve
+.Vb 18
 \& sub eval_file {
 \&     my($filename, $delete) = @_;
 \&     my $package = valid_package_name($filename);
 \&     my $mtime = -M $filename;
 \&     if(defined $Cache{$package}{mtime}
 \&        &&
-\&        $Cache{$package}{mtime} <= $mtime) 
+\&        $Cache{$package}{mtime} <= $mtime)
 \&     {
-\&        # we have compiled this subroutine already, 
+\&        # we have compiled this subroutine already,
 \&        # it has not been updated on disk, nothing left to do
 \&        print STDERR "already compiled $package->handler\en";
 \&     }
@@ -889,7 +910,8 @@ with the \f(CWmy\fR entry in the \fIperlfunc\fR manpage whenever possible.
 \&        local($/) = undef;
 \&        my $sub = <FH>;
 \&        close FH;
-\& 
+.Ve
+.Vb 8
 \&        #wrap the code into a subroutine inside our unique package
 \&        my $eval = qq{package $package; sub handler { $sub; }};
 \&        {
@@ -898,36 +920,45 @@ with the \f(CWmy\fR entry in the \fIperlfunc\fR manpage whenever possible.
 \&            eval $eval;
 \&        }
 \&        die $@ if $@;
-\& 
+.Ve
+.Vb 3
 \&        #cache it unless we're cleaning out each time
 \&        $Cache{$package}{mtime} = $mtime unless $delete;
 \&     }
-\& 
+.Ve
+.Vb 2
 \&     eval {$package->handler;};
 \&     die $@ if $@;
-\& 
+.Ve
+.Vb 1
 \&     delete_package($package) if $delete;
-\& 
+.Ve
+.Vb 3
 \&     #take a look if you want
 \&     #print Devel::Symdump->rnew($package)->as_string, $/;
 \& }
-\& 
+.Ve
+.Vb 1
 \& 1;
-\& 
+.Ve
+.Vb 1
 \& __END__
 .Ve
-.Vb 48
+.Vb 3
 \& /* persistent.c */
-\& #include <EXTERN.h> 
-\& #include <perl.h> 
-\& 
+\& #include <EXTERN.h>
+\& #include <perl.h>
+.Ve
+.Vb 4
 \& /* 1 = clean out filename's symbol table after each request, 0 = don't */
 \& #ifndef DO_CLEAN
 \& #define DO_CLEAN 0
 \& #endif
-\&  
+.Ve
+.Vb 1
 \& static PerlInterpreter *perl = NULL;
-\&  
+.Ve
+.Vb 7
 \& int
 \& main(int argc, char **argv, char **env)
 \& {
@@ -935,43 +966,48 @@ with the \f(CWmy\fR entry in the \fIperlfunc\fR manpage whenever possible.
 \&     char *args[] = { "", DO_CLEAN, NULL };
 \&     char filename [1024];
 \&     int exitstatus = 0;
-\& 
+.Ve
+.Vb 5
 \&     if((perl = perl_alloc()) == NULL) {
 \&        fprintf(stderr, "no memory!");
 \&        exit(1);
 \&     }
-\&     perl_construct(perl); 
-\&     
+\&     perl_construct(perl);
+.Ve
+.Vb 1
 \&     exitstatus = perl_parse(perl, NULL, 2, embedding, NULL);
-\& 
-\&     if(!exitstatus) { 
+.Ve
+.Vb 2
+\&     if(!exitstatus) {
 \&        exitstatus = perl_run(perl);
-\&   
+.Ve
+.Vb 1
 \&        while(printf("Enter file name: ") && gets(filename)) {
-\& 
+.Ve
+.Vb 4
 \&            /* call the subroutine, passing it the filename as an argument */
 \&            args[0] = filename;
-\&            perl_call_argv("Embed::Persistent::eval_file", 
+\&            perl_call_argv("Embed::Persistent::eval_file",
 \&                           G_DISCARD | G_EVAL, args);
-\& 
+.Ve
+.Vb 5
 \&            /* check $@ */
-\&            if(SvTRUE(GvSV(errgv))) 
+\&            if(SvTRUE(GvSV(errgv)))
 \&                fprintf(stderr, "eval error: %s\en", SvPV(GvSV(errgv),na));
 \&        }
 \&     }
-\&     
+.Ve
+.Vb 5
 \&     perl_destruct_level = 0;
-\&     perl_destruct(perl); 
-\&     perl_free(perl); 
+\&     perl_destruct(perl);
+\&     perl_free(perl);
 \&     exit(exitstatus);
 \& }
 .Ve
-.Vb 2
-\& 
-\&Now compile:
-.Ve
+Now compile:
+.PP
 .Vb 1
-\& % cc -o persistent persistent.c `perl -MExtUtils::Embed -e ccopts -e ldopts` 
+\& % cc -o persistent persistent.c `perl -MExtUtils::Embed -e ccopts -e ldopts`
 .Ve
 Here's a example script file:
 .PP
@@ -1000,7 +1036,7 @@ Now run:
 .IX Subsection "Maintaining multiple interpreter instances"
 Some rare applications will need to create more than one interpreter
 during a session.  Such an application might sporadically decide to
-release any resources associated with the interpreter.  
+release any resources associated with the interpreter.
 .PP
 The program must take care to ensure that this takes place \fIbefore\fR
 the next interpreter is constructed.  By default, the global variable
@@ -1010,23 +1046,23 @@ needed when a program has only one interpreter.
 Setting \f(CWperl_destruct_level\fR to \f(CW1\fR makes everything squeaky clean:
 .PP
 .Vb 1
-\& perl_destruct_level = 1; 
+\& perl_destruct_level = 1;
 .Ve
 .Vb 11
 \& while(1) {
 \&     ...
 \&     /* reset global variables here with perl_destruct_level = 1 */
-\&     perl_construct(my_perl); 
+\&     perl_construct(my_perl);
 \&     ...
 \&     /* clean and reset _everything_ during perl_destruct */
-\&     perl_destruct(my_perl); 
-\&     perl_free(my_perl);      
+\&     perl_destruct(my_perl);
+\&     perl_free(my_perl);
 \&     ...
 \&     /* let's go do it again! */
 \& }
 .Ve
-When \fIperl_destruct()\fR is called, the interpreter's syntax parse tree 
-and symbol tables are cleaned up, and global variables are reset.  
+When \fIperl_destruct()\fR is called, the interpreter's syntax parse tree
+and symbol tables are cleaned up, and global variables are reset.
 .PP
 Now suppose we have more than one interpreter instance running at the
 same time.  This is feasible, but only if you used the
@@ -1049,9 +1085,9 @@ Let's give it a try:
 .Vb 7
 \& int main(int argc, char **argv, char **env)
 \& {
-\&     PerlInterpreter 
+\&     PerlInterpreter
 \&         *one_perl = perl_alloc(),
-\&         *two_perl = perl_alloc();  
+\&         *two_perl = perl_alloc();
 \&     char *one_args[] = { "one_perl", SAY_HELLO };
 \&     char *two_args[] = { "two_perl", SAY_HELLO };
 .Ve
@@ -1176,6 +1212,43 @@ Then compile:
 \& % cc -o interp perlxsi.o interp.o `perl -MExtUtils::Embed -e ldopts`
 .Ve
 Consult the \fIperlxs\fR manpage and the \fIperlguts\fR manpage for more details.
+.SH "Embedding Perl under Win32"
+.IX Header "Embedding Perl under Win32"
+At the time of this writing, there are two versions of Perl which run
+under Win32.  Interfacing to Activeware's Perl library is quite
+different from the examples in this documentation, as significant
+changes were made to the internal Perl API.  However, it is possible
+to embed Activeware's Perl runtime, see the Perl for Win32 FAQ:
+http://www.perl.com/perl/faq/win32/Perl_for_Win32_FAQ.html
+.PP
+With the \*(L"official\*(R" Perl version 5.004 or higher, all the examples
+within this documentation will compile and run untouched, although,
+the build process is slightly different between Unix and Win32.  
+.PP
+For starters, backticks don't work under the Win32 native command shell!
+The ExtUtils::Embed kit on CPAN ships with a script called
+\fBgenmake\fR, which generates a simple makefile to build a program from
+a single C source file.  It can be used like so:
+.PP
+.Vb 3
+\& C:\eExtUtils-Embed\eeg> perl genmake interp.c
+\& C:\eExtUtils-Embed\eeg> nmake
+\& C:\eExtUtils-Embed\eeg> interp -e "print qq{I'm embedded in Win32!\en}"
+.Ve
+You may wish to use a more robust environment such as the MS Developer
+stdio.  In this case, to generate perlxsi.c run:
+.PP
+.Vb 1
+\& perl -MExtUtils::Embed -e xsinit
+.Ve
+Create a new project, Insert \-> Files into Project: perlxsi.c, perl.lib,
+and your own source files, e.g. interp.c.  Typically you'll find
+perl.lib in \fBC:\eperl\elib\eCORE\fR, if not, you should see the \fBCORE\fR
+directory relative to \f(CWperl -V:archlib\fR.
+The studio will also need this path so it knows where to find Perl
+include files.  This path can be added via the Tools \-> Options \->
+Directories menu.  Finnally, select Build \-> Build interp.exe and
+you're ready to go!
 .SH "MORAL"
 .IX Header "MORAL"
 You can sometimes \fIwrite faster code\fR in C, but
@@ -1190,7 +1263,7 @@ Dov Grobgeld, and Ilya Zakharevich.
 Check out Doug's article on embedding in Volume 1, Issue 4 of The Perl
 Journal.  Info about TPJ is available from http://tpj.com.
 .PP
-February 1, 1997
+April 14, 1997
 .PP
 Some of this material is excerpted from Jon Orwant's book: \fIPerl 5
 Interactive\fR, Waite Group Press, 1996 (ISBN 1-57169-064-6) and appears

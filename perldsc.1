@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDSC 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLDSC 1 "perl 5.004, patch 01" "29/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLDSC 1"
 .UC
 .IX Name "perldsc - Perl Data Structures Cookbook"
@@ -302,7 +322,7 @@ might do well to consider being a tad more explicit about it, like this:
 .Vb 4
 \&    for $i (1..10) {
 \&        @list = somefunc($i);
-\&        $counts[$i] = scalar @list;     
+\&        $counts[$i] = scalar @list;
 \&    }
 .Ve
 Here's the case of taking a reference to the same memory location
@@ -506,10 +526,10 @@ example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
 \&          2  'elroy'
 \&          3  'judy'
 .Ve
-There's also a lower-case \fBx\fR command which is nearly the same.
+There's also a lowercase \fBx\fR command which is nearly the same.
 .SH "CODE EXAMPLES"
 .IX Header "CODE EXAMPLES"
-Presented with little comment (these will get their own man pages someday)
+Presented with little comment (these will get their own manpages someday)
 here are short code examples illustrating access of various
 types of data structures.
 .SH "LISTS OF LISTS"
@@ -665,7 +685,7 @@ types of data structures.
 .Ve
 .Vb 9
 \& # print the whole thing sorted by number of members and name
-\& foreach $family ( sort { 
+\& foreach $family ( sort {
 \&                            @{$HoL{$b}} <=> @{$HoL{$a}}
 \&                                        ||
 \&                                    $a cmp $b
@@ -938,8 +958,8 @@ many different sorts:
 \&     ($first_k, $first_v) = each %{ $rec->{LOOKUP} };
 .Ve
 .Vb 2
-\&     $answer = &{ $rec->{THATCODE} }($arg);
-\&     $answer = &{ $rec->{THISCODE} }($arg1, $arg2);
+\&     $answer = $rec->{THATCODE}->($arg);
+\&     $answer = $rec->{THISCODE}->($arg1, $arg2);
 .Ve
 .Vb 2
 \&     # careful of extra block braces on fh ref
@@ -1076,7 +1096,7 @@ hashes) to a dbm file.  The first problem is that all but GDBM and
 Berkeley DB have size limitations, but beyond that, you also have problems
 with how references are to be represented on disk.  One experimental
 module that does partially attempt to address this need is the MLDBM
-module.  Check your nearest CPAN site as described in the \fIperlmod\fR manpage for
+module.  Check your nearest CPAN site as described in the \fIperlmodlib\fR manpage for
 source code to MLDBM.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"

@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSUB 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLSUB 1 "perl 5.004, patch 01" "10/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLSUB 1"
 .UC
 .IX Name "perlsub - Perl subroutines"
@@ -198,7 +218,7 @@ To call subroutines:
 .PP
 .Vb 3
 \&    NAME(LIST);    # & is optional with parentheses.
-\&    NAME LIST;     # Parentheses optional if pre-declared/imported.
+\&    NAME LIST;     # Parentheses optional if predeclared/imported.
 \&    &NAME;         # Passes current @_ to subroutine.
 .Ve
 .SH "DESCRIPTION"
@@ -222,13 +242,25 @@ there's really no difference from the language's perspective.)
 .PP
 Any arguments passed to the routine come in as the array \f(CW@_\fR.  Thus if you
 called a function with two arguments, those would be stored in \f(CW$_[0]\fR
-and \f(CW$_[1]\fR.  The array \f(CW@_\fR is a local array, but its values are implicit
-references (predating the \fIperlref\fR manpage) to the actual scalar parameters.  The
-return value of the subroutine is the value of the last expression
-evaluated.  Alternatively, a return statement may be used to specify the
-returned value and exit the subroutine.  If you return one or more arrays
-and/or hashes, these will be flattened together into one large
-indistinguishable list.
+and \f(CW$_[1]\fR.  The array \f(CW@_\fR is a local array, but its elements are
+aliases for the actual scalar parameters.  In particular, if an element
+\f(CW$_[0]\fR is updated, the corresponding argument is updated (or an error
+occurs if it is not updatable).  If an argument is an array or hash
+element which did not exist when the function was called, that element is
+created only when (and if) it is modified or if a reference to it is
+taken.  (Some earlier versions of Perl created the element whether or not
+it was assigned to.)  Note that assigning to the whole array \f(CW@_\fR removes
+the aliasing, and does not update any arguments.
+.PP
+The return value of the subroutine is the value of the last expression
+evaluated.  Alternatively, a return statement may be used to exit the
+subroutine, optionally specifying the returned value, which will be
+evaluated in the appropriate context (list, scalar, or void) depending
+on the context of the subroutine call.  If you specify no return value,
+the subroutine will return an empty list in a list context, an undefined
+value in a scalar context, or nothing in a void context.  If you return
+one or more arrays and/or hashes, these will be flattened together into
+one large indistinguishable list.
 .PP
 Perl does not have named formal parameters, but in practice all you do is
 assign to a \fImy()\fR list of these.  Any variables you use in the function
@@ -259,7 +291,7 @@ Example:
 .Vb 12
 \&    sub get_line {
 \&        $thisline = $lookahead;  # GLOBAL VARIABLES!!
-\&        LINE: while ($lookahead = <STDIN>) {
+\&        LINE: while (defined($lookahead = <STDIN>)) {
 \&            if ($lookahead =~ /^[ \et]/) {
 \&                $thisline .= $lookahead;
 \&            }
@@ -291,8 +323,8 @@ do in-place modifications of \f(CW@_\fR and change its caller's values.
 .Vb 4
 \&    upcase_in($v1, $v2);  # this changes $v1 and $v2
 \&    sub upcase_in {
-\&        for (@_) { tr/a-z/A-Z/ } 
-\&    } 
+\&        for (@_) { tr/a-z/A-Z/ }
+\&    }
 .Ve
 You aren't allowed to modify constants in this way, of course.  If an
 argument were actually literal and you tried to change it, you'd take a
@@ -301,18 +333,18 @@ argument were actually literal and you tried to change it, you'd take a
 .Vb 1
 \&    upcase_in("frederick");
 .Ve
-It would be much safer if the \fIupcase_in()\fR function 
+It would be much safer if the \fIupcase_in()\fR function
 were written to return a copy of its parameters instead
 of changing them in place:
 .PP
 .Vb 7
 \&    ($v3, $v4) = upcase($v1, $v2);  # this doesn't
 \&    sub upcase {
+\&        return unless defined wantarray;  # void context, do nothing
 \&        my @parms = @_;
-\&        for (@parms) { tr/a-z/A-Z/ } 
-\&        # wantarray checks if we were called in list context
+\&        for (@parms) { tr/a-z/A-Z/ }
 \&        return wantarray ? @parms : $parms[0];
-\&    } 
+\&    }
 .Ve
 Notice how this (unprototyped) function doesn't care whether it was passed
 real scalars or arrays.  Perl will see everything as one big long flat \f(CW@_\fR
@@ -336,7 +368,7 @@ made \f(CW@b\fR an empty list.  See the section on \fI/"Pass by Reference\fR for
 .PP
 A subroutine may be called using the \*(L"&\*(R" prefix.  The \*(L"&\*(R" is optional
 in modern Perls, and so are the parentheses if the subroutine has been
-pre-declared.  (Note, however, that the \*(L"&\*(R" is \fINOT\fR optional when
+predeclared.  (Note, however, that the \*(L"&\*(R" is \fINOT\fR optional when
 you're just naming the subroutine, such as when it's used as an
 argument to \fIdefined()\fR or \fIundef()\fR.  Nor is it optional when you want to
 do an indirect subroutine call with a subroutine name or reference
@@ -359,7 +391,7 @@ new users may wish to avoid.
 .Ve
 .Vb 2
 \&    &foo;               # foo() get current args, like foo(@_) !!
-\&    foo;                # like foo() IFF sub foo pre-declared, else "foo"
+\&    foo;                # like foo() IFF sub foo predeclared, else "foo"
 .Ve
 Not only does the \*(L"&\*(R" form make the argument list optional, but it also
 disables any prototype checking on the arguments you do provide.  This
@@ -408,7 +440,7 @@ this is used to name the parameters to a subroutine.  Examples:
 \&        my $arg = shift;  # name doesn't matter
 \&        $arg **= 1/3;
 \&        return $arg;
-\&    }                   
+\&    }
 .Ve
 The \*(L"my\*(R" is simply a modifier on something you might assign to.  So when
 you do assign to the variables in its argument list, the \*(L"my\*(R" doesn't
@@ -440,7 +472,7 @@ the current statement.  Thus,
 .Vb 1
 \&    my $x = $x;
 .Ve
-can be used to initialize the new \f(CW$x\fR with the value of the old \f(CW$x\fR, and 
+can be used to initialize the new \f(CW$x\fR with the value of the old \f(CW$x\fR, and
 the expression
 .PP
 .Vb 1
@@ -453,7 +485,7 @@ braces that delimit their controlled blocks; control expressions are
 part of the scope, too.  Thus in the loop
 .PP
 .Vb 5
-\&    while (my $line = <>) {
+\&    while (defined(my $line = <>)) {
 \&        $line = lc $line;
 \&    } continue {
 \&        print $line;
@@ -508,8 +540,9 @@ otherwise.  An inner block may countermand this with \*(L"no\ strict\ \*(L'vars'
 .PP
 A \fImy()\fR has both a compile-time and a run-time effect.  At compile time,
 the compiler takes notice of it; the principle usefulness of this is to
-quiet \f(CWuse strict 'vars'\fR.  The actual initialization doesn't happen
-until run time, so gets executed every time through a loop.
+quiet \f(CWuse strict 'vars'\fR.  The actual initialization is delayed until
+run time, so it gets executed appropriately; every time through a loop,
+for example.
 .PP
 Variables declared with \*(L"my\*(R" are not part of any package and are therefore
 never fully qualified with the package name.  In particular, you're not
@@ -563,29 +596,29 @@ static variable outside the function but in the block.
 .PP
 .Vb 8
 \&    {
-\&        my $secret_val = 0; 
+\&        my $secret_val = 0;
 \&        sub gimme_another {
 \&            return ++$secret_val;
-\&        } 
-\&    } 
+\&        }
+\&    }
 \&    # $secret_val now becomes unreachable by the outside
 \&    # world, but retains its value between calls to gimme_another
 .Ve
-If this function is being sourced in from a separate file 
+If this function is being sourced in from a separate file
 via \f(CWrequire\fR or \f(CWuse\fR, then this is probably just fine.  If it's
-all in the main program, you'll need to arrange for the \fImy()\fR 
+all in the main program, you'll need to arrange for the \fImy()\fR
 to be executed early, either by putting the whole block above
-your pain program, or more likely, placing merely a \s-1BEGIN\s0 
+your main program, or more likely, placing merely a \s-1BEGIN\s0
 sub around it to make sure it gets executed before your program
 starts to run:
 .PP
 .Vb 6
 \&    sub BEGIN {
-\&        my $secret_val = 0; 
+\&        my $secret_val = 0;
 \&        sub gimme_another {
 \&            return ++$secret_val;
-\&        } 
-\&    } 
+\&        }
+\&    }
 .Ve
 See the \fIperlrun\fR manpage about the \s-1BEGIN\s0 function.
 .Sh "Temporary Values via \fIlocal()\fR"
@@ -610,7 +643,7 @@ Synopsis:
 \&    local *merlyn = *randal;    # now $merlyn is really $randal, plus
 \&                                #     @merlyn is really @randal, etc
 \&    local *merlyn = 'randal';   # SAME THING: promote 'randal' to *randal
-\&    local *merlyn = \e$randal;   # just alias $merlyn, not @merlyn etc 
+\&    local *merlyn = \e$randal;   # just alias $merlyn, not @merlyn etc
 .Ve
 A \fIlocal()\fR modifies its listed variables to be local to the enclosing
 block, (or subroutine, \f(CWeval{}\fR, or \f(CWdo\fR) and \fIany called from
@@ -632,9 +665,9 @@ subroutine.  Examples:
 .Vb 5
 \&    for $i ( 0 .. 9 ) {
 \&        $digits{$i} = $i;
-\&    } 
+\&    }
 \&    # assume this function uses global %digits hash
-\&    parse_num();  
+\&    parse_num();
 .Ve
 .Vb 7
 \&    # now temporarily add to %digits hash
@@ -665,6 +698,44 @@ both supply a list context to the right-hand side, while
 \&    local $foo = <STDIN>;
 .Ve
 supplies a scalar context.
+.PP
+A note about \f(CWlocal()\fR and composite types is in order.  Something
+like \f(CWlocal(%foo)\fR works by temporarily placing a brand new hash in
+the symbol table.  The old hash is left alone, but is hidden \*(L"behind\*(R"
+the new one.
+.PP
+This means the old variable is completely invisible via the symbol
+table (i.e. the hash entry in the \f(CW*foo\fR typeglob) for the duration
+of the dynamic scope within which the \f(CWlocal()\fR was seen.  This
+has the effect of allowing one to temporarily occlude any magic on
+composite types.  For instance, this will briefly alter a tied
+hash to some other implementation:
+.PP
+.Vb 12
+\&    tie %ahash, 'APackage';
+\&    [...]
+\&    {
+\&       local %ahash;
+\&       tie %ahash, 'BPackage';
+\&       [..called code will see %ahash tied to 'BPackage'..]
+\&       {
+\&          local %ahash;
+\&          [..%ahash is a normal (untied) hash here..]
+\&       }
+\&    }
+\&    [..%ahash back to its initial tied self again..]
+.Ve
+As another example, a custom implementation of \f(CW%ENV\fR might look
+like this:
+.PP
+.Vb 6
+\&    {
+\&        local %ENV;
+\&        tie %ENV, 'MyOwnEnv';
+\&        [..do your own fancy %ENV manipulation here..]
+\&    }
+\&    [..normal %ENV behavior here..]
+.Ve
 .Sh "Passing Symbol Table Entries (typeglobs)"
 .IX Subsection "Passing Symbol Table Entries (typeglobs)"
 [Note:  The mechanism described in this section was originally the only
@@ -728,30 +799,30 @@ list of all their former last elements:
 \&        my @retlist = ();
 \&        foreach $aref ( @_ ) {
 \&            push @retlist, pop @$aref;
-\&        } 
+\&        }
 \&        return @retlist;
-\&    } 
+\&    }
 .Ve
-Here's how you might write a function that returns a 
+Here's how you might write a function that returns a
 list of keys occurring in all the hashes passed to it:
 .PP
 .Vb 10
-\&    @common = inter( \e%foo, \e%bar, \e%joe ); 
+\&    @common = inter( \e%foo, \e%bar, \e%joe );
 \&    sub inter {
 \&        my ($k, $href, %seen); # locals
 \&        foreach $href (@_) {
 \&            while ( $k = each %$href ) {
 \&                $seen{$k}++;
-\&            } 
-\&        } 
+\&            }
+\&        }
 \&        return grep { $seen{$_} == @_ } keys %seen;
-\&    } 
+\&    }
 .Ve
 So far, we're using just the normal list return mechanism.
-What happens if you want to pass or return a hash?  Well, 
-if you're using only one of them, or you don't mind them 
+What happens if you want to pass or return a hash?  Well,
+if you're using only one of them, or you don't mind them
 concatenating, then the normal calling convention is ok, although
-a little expensive.  
+a little expensive.
 .PP
 Where people get into trouble is here:
 .PP
@@ -778,8 +849,8 @@ in order of how many elements they have in them:
 \&            return ($cref, $dref);
 \&        } else {
 \&            return ($dref, $cref);
-\&        } 
-\&    } 
+\&        }
+\&    }
 .Ve
 It turns out that you can actually do this also:
 .PP
@@ -792,8 +863,8 @@ It turns out that you can actually do this also:
 \&            return (\e@c, \e@d);
 \&        } else {
 \&            return (\e@d, \e@c);
-\&        } 
-\&    } 
+\&        }
+\&    }
 .Ve
 Here we're using the typeglobs to do symbol table aliasing.  It's
 a tad subtle, though, and also won't work if you're using \fImy()\fR
@@ -827,7 +898,7 @@ If you're planning on generating new filehandles, you could do this:
 \&        my $name = shift;
 \&        local *FH;
 \&        return open (FH, $path) ? *FH : undef;
-\&    } 
+\&    }
 .Ve
 Although that will actually produce a small memory leak.  See the bottom
 of the \f(CWopen()\fR entry in the \fIperlfunc\fR manpage for a somewhat cleaner way using the \s-1IO::\s0Handle
@@ -961,7 +1032,7 @@ if you decide that a function should take just one parameter, like this:
 \&    sub func ($) {
 \&        my $n = shift;
 \&        print "you gave me $n\en";
-\&    } 
+\&    }
 .Ve
 and someone has been calling it with an array or expression
 returning a list:
@@ -978,28 +1049,33 @@ in \f(CW@foo\fR.  And the \fIsplit()\fR gets called in a scalar context and
 starts scribbling on your \f(CW@_\fR parameter list.
 .PP
 This is all very powerful, of course, and should be used only in moderation
-to make the world a better place.  
+to make the world a better place.
 .Sh "Constant Functions"
 .IX Subsection "Constant Functions"
 Functions with a prototype of \f(CW()\fR are potential candidates for
-inlining.  If the result after optimization and constant folding is a
-constant then it will be used in place of new-style calls to the
-function.  Old-style calls (that is, calls made using \f(CW&\fR) are not
-affected.
+inlining.  If the result after optimization and constant folding is
+either a constant or a lexically-scoped scalar which has no other
+references, then it will be used in place of function calls made
+without \f(CW&\fR or \f(CWdo\fR. Calls made using \f(CW&\fR or \f(CWdo\fR are never
+inlined.  (See constant.pm for an easy way to declare most
+constants.)
 .PP
 All of the following functions would be inlined.
 .PP
-.Vb 3
-\&    sub PI ()           { 3.14159 }
+.Vb 5
+\&    sub pi ()           { 3.14159 }             # Not exact, but close.
+\&    sub PI ()           { 4 * atan2 1, 1 }      # As good as it gets,
+\&                                                # and it's inlined, too!
 \&    sub ST_DEV ()       { 0 }
 \&    sub ST_INO ()       { 1 }
 .Ve
-.Vb 13
+.Vb 3
 \&    sub FLAG_FOO ()     { 1 << 8 }
 \&    sub FLAG_BAR ()     { 1 << 9 }
 \&    sub FLAG_MASK ()    { FLAG_FOO | FLAG_BAR }
-\&    
-\&    sub OPT_BAZ ()      { 1 }
+.Ve
+.Vb 9
+\&    sub OPT_BAZ ()      { not (0x1B58 & FLAG_MASK) }
 \&    sub BAZ_VAL () {
 \&        if (OPT_BAZ) {
 \&            return 23;
@@ -1007,6 +1083,14 @@ All of the following functions would be inlined.
 \&        else {
 \&            return 42;
 \&        }
+\&    }
+.Ve
+.Vb 6
+\&    sub N () { int(BAZ_VAL) / 3 }
+\&    BEGIN {
+\&        my $prod = 1;
+\&        for (1..N) { $prod *= $_ }
+\&        sub N_FACTORIAL () { $prod }
 \&    }
 .Ve
 If you redefine a subroutine which was eligible for inlining you'll get
@@ -1019,10 +1103,9 @@ ensure that it isn't inlined, either by dropping the \f(CW()\fR prototype
 (which changes the calling semantics, so beware) or by thwarting the
 inlining mechanism in some other way, such as
 .PP
-.Vb 4
-\&    my $dummy;
+.Vb 3
 \&    sub not_inlined () {
-\&        $dummy || 23
+\&        23 if $];
 \&    }
 .Ve
 .Sh "Overriding Builtin Functions"
@@ -1034,7 +1117,7 @@ on a non-Unix system.
 .PP
 Overriding may be done only by importing the name from a
 module\*(--ordinary predeclaration isn't good enough.  However, the
-\f(CWsubs\fR pragma (compiler directive) lets you, in effect, pre-declare subs
+\f(CWsubs\fR pragma (compiler directive) lets you, in effect, predeclare subs
 via the import syntax, and these names may then override the builtin ones:
 .PP
 .Vb 3
@@ -1085,12 +1168,12 @@ should just call \fIsystem()\fR with those arguments.  All you'd do is this:
 \&        my $program = $AUTOLOAD;
 \&        $program =~ s/.*:://;
 \&        system($program, @_);
-\&    } 
+\&    }
 \&    date();
 \&    who('am', 'i');
 \&    ls('-l');
 .Ve
-In fact, if you pre-declare the functions you want to call that way, you don't
+In fact, if you predeclare the functions you want to call that way, you don't
 even need the parentheses:
 .PP
 .Vb 4
@@ -1110,8 +1193,8 @@ functions to perl code in the \fIperlxs\fR manpage.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
 See the \fIperlref\fR manpage for more on references.  See the \fIperlxs\fR manpage if you'd
-like to learn about calling C subroutines from perl.  See 
-the \fIperlmod\fR manpage to learn about bundling up your functions in 
+like to learn about calling C subroutines from perl.  See
+the \fIperlmod\fR manpage to learn about bundling up your functions in
 separate files.
 
 .rn }` ''

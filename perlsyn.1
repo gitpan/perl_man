@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSYN 1 "perl 5.003, patch 93" "28/Jan/97" "Perl Programmers Reference Guide"
+.TH PERLSYN 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLSYN 1"
 .UC
 .IX Name "perlsyn - Perl syntax"
@@ -201,21 +221,24 @@ that.
 A declaration can be put anywhere a statement can, but has no effect on
 the execution of the primary sequence of statements\*(--declarations all
 take effect at compile time.  Typically all the declarations are put at
-the beginning or the end of the script.  However, if you're using 
+the beginning or the end of the script.  However, if you're using
 lexically-scoped private variables created with \fImy()\fR, you'll have to make sure
 your format or subroutine definition is within the same block scope
 as the my if you expect to be able to access those private variables.
 .PP
 Declaring a subroutine allows a subroutine name to be used as if it were a
 list operator from that point forward in the program.  You can declare a
-subroutine (prototyped to take one scalar parameter) without defining it by saying just:
+subroutine without defining it by saying \f(CWsub name\fR, thus:
 .PP
 .Vb 2
-\&    sub myname ($);
+\&    sub myname;
 \&    $me = myname $0             or die "can't get myname";
 .Ve
-Note that it functions as a list operator though, not as a unary
-operator, so be careful to use \f(CWor\fR instead of \f(CW||\fR there.
+Note that it functions as a list operator, not as a unary operator; so
+be careful to use \f(CWor\fR instead of \f(CW||\fR in this case.  However, if
+you were to declare the subroutine as \f(CWsub myname ($)\fR, then
+\f(CWmyname\fR would functonion as a unary operator, so either \f(CWor\fR or
+\f(CW||\fR would work.
 .PP
 Subroutines declarations can also be loaded up with the \f(CWrequire\fR statement
 or both loaded and imported into your namespace with a \f(CWuse\fR statement.
@@ -234,7 +257,7 @@ semicolon, unless it is the final statement in a block, in which case
 the semicolon is optional.  (A semicolon is still encouraged there if the
 block takes up more than one line, because you may eventually add another line.)
 Note that there are some operators like \f(CWeval {}\fR and \f(CWdo {}\fR that look
-like compound statements, but aren't (they're just TERMs in an expression), 
+like compound statements, but aren't (they're just TERMs in an expression),
 and thus need an explicit termination if used as the last item in a statement.
 .PP
 Any simple statement may optionally be followed by a \fI\s-1SINGLE\s0\fR modifier,
@@ -352,26 +375,27 @@ want to skip ahead and get the next record.
 .Vb 8
 \&    while (<>) {
 \&        chomp;
-\&        if (s/\e\e$//) { 
-\&            $_ .= <>; 
+\&        if (s/\e\e$//) {
+\&            $_ .= <>;
 \&            redo unless eof();
 \&        }
 \&        # now process $_
-\&    } 
+\&    }
 .Ve
 which is Perl short-hand for the more explicitly written version:
 .PP
 .Vb 8
-\&    LINE: while ($line = <ARGV>) {
+\&    LINE: while (defined($line = <ARGV>)) {
 \&        chomp($line);
-\&        if ($line =~ s/\e\e$//) { 
-\&            $line .= <ARGV>; 
+\&        if ($line =~ s/\e\e$//) {
+\&            $line .= <ARGV>;
 \&            redo LINE unless eof(); # not eof(ARGV)!
 \&        }
 \&        # now process $line
-\&    } 
+\&    }
 .Ve
-Or here's a simpleminded Pascal comment stripper (warning: assumes no { or } in strings).
+Or here's a simpleminded Pascal comment stripper (warning: assumes no
+{ or } in strings).
 .PP
 .Vb 14
 \&    LINE: while (<STDIN>) {
@@ -423,8 +447,8 @@ for variables declared with \f(CWmy\fR in the initialization expression.)
 .PP
 Besides the normal array index looping, \f(CWfor\fR can lend itself
 to many other interesting applications.  Here's one that avoids the
-problem you get into if you explicitly test for end-of-file on 
-an interactive file descriptor causing your program to appear to 
+problem you get into if you explicitly test for end-of-file on
+an interactive file descriptor causing your program to appear to
 hang.
 .PP
 .Vb 5
@@ -432,7 +456,7 @@ hang.
 \&    sub prompt { print "yes? " if $on_a_tty }
 \&    for ( prompt(); <STDIN>; prompt() ) {
 \&        # do something
-\&    } 
+\&    }
 .Ve
 .Sh "Foreach Loops"
 .IX Subsection "Foreach Loops"
@@ -494,12 +518,12 @@ Whereas here's how a Perl programmer more comfortable with the idiom might
 do it:
 .PP
 .Vb 6
-\&    OUTER: foreach my $wid (@ary1) { 
+\&    OUTER: foreach my $wid (@ary1) {
 \&    INNER:   foreach my $jet (@ary2) {
 \&                next OUTER if $wid > $jet;
 \&                $wid += $jet;
-\&             } 
-\&          } 
+\&             }
+\&          }
 .Ve
 See how much easier this is?  It's cleaner, safer, and faster.  It's
 cleaner because it's less noisy.  It's safer because if code gets added
@@ -558,21 +582,21 @@ or formatted so it stands out more as a \*(L"proper\*(R" switch statement:
 .PP
 .Vb 5
 \&    SWITCH: {
-\&        /^abc/      && do { 
-\&                            $abc = 1; 
-\&                            last SWITCH; 
+\&        /^abc/      && do {
+\&                            $abc = 1;
+\&                            last SWITCH;
 \&                       };
 .Ve
 .Vb 4
-\&        /^def/      && do { 
-\&                            $def = 1; 
-\&                            last SWITCH; 
+\&        /^def/      && do {
+\&                            $def = 1;
+\&                            last SWITCH;
 \&                       };
 .Ve
 .Vb 6
-\&        /^xyz/      && do { 
-\&                            $xyz = 1; 
-\&                            last SWITCH; 
+\&        /^xyz/      && do {
+\&                            $xyz = 1;
+\&                            last SWITCH;
 \&                        };
 \&        $nothing = 1;
 \&    }
@@ -608,15 +632,15 @@ a temporary assignment to \f(CW$_\fR for convenient matching:
 \&                /Anywhere/          && do { push @flags, '-h'; last; };
 \&                /In Rulings/        && do {                    last; };
 \&                die "unknown value for form variable where: `$where'";
-\&            } 
+\&            }
 .Ve
 Another interesting approach to a switch statement is arrange
 for a \f(CWdo\fR block to return the proper value:
 .PP
 .Vb 8
 \&    $amode = do {
-\&        if     ($flag & O_RDONLY) { "r" } 
-\&        elsif  ($flag & O_WRONLY) { ($flag & O_APPEND) ? "a" : "w" } 
+\&        if     ($flag & O_RDONLY) { "r" }
+\&        elsif  ($flag & O_WRONLY) { ($flag & O_APPEND) ? "a" : "w" }
 \&        elsif  ($flag & O_RDWR)   {
 \&            if ($flag & O_CREAT)  { "w+" }
 \&            else                  { ($flag & O_APPEND) ? "a+" : "r+" }
@@ -669,7 +693,7 @@ encounters a line that begins with an equal sign and a word, like this
 .Ve
 Then that text and all remaining text up through and including a line
 beginning with \f(CW=cut\fR will be ignored.  The format of the intervening
-text is described in the \fIperlpod\fR manpage. 
+text is described in the \fIperlpod\fR manpage.
 .PP
 This allows you to intermix your source code
 and your documentation text freely, as in
@@ -678,7 +702,7 @@ and your documentation text freely, as in
 \&    =item snazzle($)
 .Ve
 .Vb 3
-\&    The snazzle() function will behave in the most spectacular 
+\&    The snazzle() function will behave in the most spectacular
 \&    form that you can possibly imagine, not even excepting
 \&    cybernetic pyrotechnics.
 .Ve
@@ -689,11 +713,11 @@ and your documentation text freely, as in
 \&    sub snazzle($) {
 \&        my $thingie = shift;
 \&        .........
-\&    } 
+\&    }
 .Ve
-Note that pod translators should look at only paragraphs beginning 
+Note that pod translators should look at only paragraphs beginning
 with a pod directive (it makes parsing easier), whereas the compiler
-actually knows to look for pod escapes even in the middle of a 
+actually knows to look for pod escapes even in the middle of a
 paragraph.  This means that the following secret stuff will be
 ignored by both the compiler and the translators.
 .PP
@@ -724,25 +748,28 @@ number for the next line, and \f(CW$2\fR being the optional filename
 Here are some examples that you should be able to type into your command
 shell:
 .PP
-.Vb 24
+.Vb 6
 \&    % perl
 \&    # line 200 "bzzzt"
 \&    # the `#' on the previous line must be the first char on line
 \&    die 'foo';
 \&    __END__
 \&    foo at bzzzt line 201.
-\&    
+.Ve
+.Vb 5
 \&    % perl
 \&    # line 200 "bzzzt"
 \&    eval qq[\en#line 2001 ""\endie 'foo']; print $@;
 \&    __END__
 \&    foo at - line 2001.
-\&    
+.Ve
+.Vb 4
 \&    % perl
 \&    eval qq[\en#line 200 "foo bar"\endie 'foo']; print $@;
 \&    __END__
 \&    foo at foo bar line 200.
-\&    
+.Ve
+.Vb 6
 \&    % perl
 \&    # line 345 "goop"
 \&    eval "\en#line " . __LINE__ . ' "' . __FILE__ ."\e"\endie 'foo'";

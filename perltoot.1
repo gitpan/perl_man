@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTOOT 1 "perl 5.003, patch 93" "28/Jan/97" "Perl Programmers Reference Guide"
+.TH PERLTOOT 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLTOOT 1"
 .UC
 .IX Name "perltoot - Tom's object-oriented tutorial for perl"
@@ -257,7 +277,7 @@ the same name as the class as the constructor.
 .Sh "Object Representation"
 .IX Subsection "Object Representation"
 By far the most common mechanism used in Perl to represent a Pascal
-record, a C struct, or a \*(C+ class an anonymous hash.  That's because a
+record, a C struct, or a \*(C+ class is an anonymous hash.  That's because a
 hash has an arbitrary number of data fields, each conveniently accessed by
 an arbitrary name of your own devising.
 .PP
@@ -447,8 +467,11 @@ Because while a constructor is explicitly called, a destructor is not.
 Destruction happens automatically via Perl's garbage collection (\s-1GC\s0)
 system, which is a quick but somewhat lazy reference-based \s-1GC\s0 system.
 To know what to call, Perl insists that the destructor be named \s-1DESTROY\s0.
+Perl's notion of the right time to call a destructor is not well-defined
+currently, which is why your destructors should not rely on when they are
+called.
 .PP
-Why is \s-1DESTROY\s0 in all caps?  Perl on occasion uses purely upper-case
+Why is \s-1DESTROY\s0 in all caps?  Perl on occasion uses purely uppercase
 function names as a convention to indicate that the function will
 be automatically called by Perl in some way.  Others that are called
 implicitly include \s-1BEGIN\s0, \s-1END\s0, \s-1AUTOLOAD\s0, plus all methods used by
@@ -491,7 +514,7 @@ be made through methods.
 .PP
 Perl doesn't impose restrictions on who gets to use which methods.
 The public-versus-private distinction is by convention, not syntax.
-(Well, unless you use the Alias module described below in 
+(Well, unless you use the Alias module described below in
 the section on \fI/"Data Members as Variables\fR.)  Occasionally you'll see method names beginning or ending
 with an underscore or two.  This marking is a convention indicating
 that the methods are private to that class alone and sometimes to its
@@ -534,7 +557,7 @@ Some might argue that one should go at these this way:
 \&    }
 .Ve
 But since these methods are all executing in the class itself, this
-may not be critical.  There are trade-offs to be made.  Using direct
+may not be critical.  There are tradeoffs to be made.  Using direct
 hash access is faster (about an order of magnitude faster, in fact), and
 it's more convenient when you want to interpolate in strings.  But using
 methods (the external interface) internally shields not just the users of
@@ -1023,7 +1046,7 @@ then the new derived class can be used as a drop-in replacement for the
 old one.  This means you should be able to write a program like this:
 .PP
 .Vb 5
-\&    use Employee
+\&    use Employee;
 \&    my $empl = Employee->new();
 \&    $empl->name("Jason");
 \&    $empl->age(23);
@@ -1120,7 +1143,7 @@ This is a form of Laziness.  (Getting polymorphed is also what happens
 when the wizard decides you'd look better as a frog.)
 .PP
 Every now and then you'll want to have a method call trigger both its
-derived class (also know as \*(L"subclass") version as well as its base class
+derived class (also known as \*(L"subclass") version as well as its base class
 (also known as \*(L"superclass") version.  In practice, constructors and
 destructors are likely to want to do this, and it probably also makes
 sense in the \fIdebug()\fR method we showed previously.
@@ -1340,7 +1363,7 @@ In version 5.003, there were no predefined methods there, but you could put
 whatever you felt like into it.
 .PP
 However, as of version 5.004 (or some subversive releases, like 5.003_08),
-\s-1UNIVERSAL\s0 has some methods in it already.  These are built-in to your Perl
+\s-1UNIVERSAL\s0 has some methods in it already.  These are builtin to your Perl
 binary, so they don't take any extra time to load.  Predefined methods
 include \fIisa()\fR, \fIcan()\fR, and \fI\s-1VERSION\s0()\fR.  \fIisa()\fR tells you whether an object or
 class \*(L"is\*(R" another one without having to traverse the hierarchy yourself:
@@ -1364,7 +1387,7 @@ class) has a package global called \f(CW$VERSION\fR that's high enough, as in:
 \&    $his_vers = $ob->VERSION();
 .Ve
 However, we don't usually call \s-1VERSION\s0 ourselves.  (Remember that an all
-upper-case function name is a Perl convention that indicates that the
+uppercase function name is a Perl convention that indicates that the
 function will be automatically used by Perl in some way.)  In this case,
 it happens when you say
 .PP
@@ -1419,7 +1442,7 @@ instead of a hash reference to represent the object.
 \&    sub new {
 \&        my $self = [];
 \&        $self->[$NAME]   = undef;  # this is unnecessary
-\&        $self->[$AGE]    = undef;  # as it this
+\&        $self->[$AGE]    = undef;  # as is this
 \&        $self->[$PEERS]  = [];     # but this isn't, really
 \&        bless($self);
 \&        return $self;
@@ -1686,7 +1709,7 @@ is modify \f(CW%fields\fR.  No new functions need be written.
 .PP
 I could have avoided the \f(CW_permitted\fR field entirely, but I
 wanted to demonstrate how to store a reference to class data on the
-object so you wouldn't have to access that class data 
+object so you wouldn't have to access that class data
 directly from an object method.
 .Sh "Inherited Autoloaded Data Methods"
 .IX Subsection "Inherited Autoloaded Data Methods"
@@ -1737,11 +1760,11 @@ as detailed above.
 Perl programmers have responded to this by creating several different
 class construction classes.  These metaclasses are classes
 that create other classes.  A couple worth looking at are
-Class::Template and Alias.  These and other related metaclasses can be
+Class::Struct and Alias.  These and other related metaclasses can be
 found in the modules directory on CPAN.
-.Sh "Class::Template"
-.IX Subsection "Class::Template"
-One of the older ones is Class::Template.  In fact, its syntax and
+.Sh "Class::Struct"
+.IX Subsection "Class::Struct"
+One of the older ones is Class::Struct.  In fact, its syntax and
 interface were sketched out long before perl5 even solidified into a
 real thing.  What it does is provide you a way to \*(L"declare\*(R" a class
 as having objects whose fields are of a specific type.  The function
@@ -1750,12 +1773,12 @@ structures or records are not base types in Perl, each time you want to
 create a class to provide a record-like data object, you yourself have
 to define a \fInew()\fR method, plus separate data-access methods for each of
 that record's fields.  You'll quickly become bored with this process.
-The \fIClass::Template::struct()\fR function alleviates this tedium.
+The \fIClass::Struct::struct()\fR function alleviates this tedium.
 .PP
 Here's a simple example of using it:
 .PP
 .Vb 2
-\&    use Class::Template qw(struct);
+\&    use Class::Struct qw(struct);
 \&    use Jobbie;  # user-defined; see below
 .Ve
 .Vb 5
@@ -1795,7 +1818,7 @@ act like structs in the C sense.
 \&    printf "perl.com's real name is %s, address %s\en",
 \&        $h->name, inet_ntoa($h->addr);
 .Ve
-Here's how to do this using the Class::Template module.
+Here's how to do this using the Class::Struct module.
 The crux is going to be this call:
 .PP
 .Vb 7
@@ -1821,7 +1844,7 @@ We could also have implemented our object this way:
 \&        addr_list  => '@',
 \&     };
 .Ve
-and then Class::Template would have used an anonymous hash as the object
+and then Class::Struct would have used an anonymous hash as the object
 type, instead of an anonymous array.  The array is faster and smaller,
 but the hash works out better if you eventually want to do inheritance.
 Since for this struct-like object we aren't planning on inheritance,
@@ -1833,11 +1856,10 @@ Here's the whole implementation:
 \&    package Net::hostent;
 \&    use strict;
 .Ve
-.Vb 13
+.Vb 12
 \&    BEGIN {
 \&        use Exporter   ();
-\&        use vars       qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-\&        @ISA         = qw(Exporter);
+\&        use vars       qw(@EXPORT @EXPORT_OK %EXPORT_TAGS);
 \&        @EXPORT      = qw(gethostbyname gethostbyaddr gethost);
 \&        @EXPORT_OK   = qw(
 \&                           $h_name         @h_aliases
@@ -1848,8 +1870,12 @@ Here's the whole implementation:
 \&    }
 \&    use vars      @EXPORT_OK;
 .Ve
+.Vb 2
+\&    # Class::Struct forbids use of @ISA
+\&    sub import { goto &Exporter::import }
+.Ve
 .Vb 8
-\&    use Class::Template qw(struct);
+\&    use Class::Struct qw(struct);
 \&    struct 'Net::hostent' => [
 \&       name        => '$',
 \&       aliases     => '@',
@@ -1864,7 +1890,7 @@ Here's the whole implementation:
 .Vb 11
 \&    sub populate (@) {
 \&        return unless @_;
-\&        my $hob = new();  # Class::Template made this!
+\&        my $hob = new();  # Class::Struct made this!
 \&        $h_name     =    $hob->[0]              = $_[0];
 \&        @h_aliases  = @{ $hob->[1] } = split ' ', $_[1];
 \&        $h_addrtype =    $hob->[2]              = $_[2];
@@ -1901,16 +1927,17 @@ Here's the whole implementation:
 .Ve
 We've snuck in quite a fair bit of other concepts besides just dynamic
 class creation, like overriding core functions, import/export bits,
-function prototyping, and short-cut function call via \f(CW&whatever\fR.
-These all mostly make sense from the perspective of a traditional module,
-but as you can see, we can also use them in an object module.
+function prototyping, short-cut function call via \f(CW&whatever\fR, and
+function replacement with \f(CWgoto &whatever\fR.  These all mostly make
+sense from the perspective of a traditional module, but as you can see,
+we can also use them in an object module.
 .PP
 You can look at other object-based, struct-like overrides of core
 functions in the 5.004 release of Perl in File::stat, Net::hostent,
 Net::netent, Net::protoent, Net::servent, Time::gmtime, Time::localtime,
 User::grent, and User::pwent.  These modules have a final component
-that's all lower-case, by convention reserved for compiler pragmas,
-because they affect the compilation and change a built-in function.
+that's all lowercase, by convention reserved for compiler pragmas,
+because they affect the compilation and change a builtin function.
 They also have the type names that a C programmer would most expect.
 .Sh "Data Members as Variables"
 .IX Subsection "Data Members as Variables"
@@ -1981,14 +2008,14 @@ update value fields in the hash.  Convenient, eh?
 .Ve
 The need for the \f(CWuse vars\fR declaration is because what Alias does
 is play with package globals with the same name as the fields.  To use
-globals while \f(CWuse strict\fR is in effect, you have to pre-declare them.
+globals while \f(CWuse strict\fR is in effect, you have to predeclare them.
 These package variables are localized to the block enclosing the \fIattr()\fR
 call just as if you'd used a \fIlocal()\fR on them.  However, that means that
 they're still considered global variables with temporary values, just
 as with any other \fIlocal()\fR.
 .PP
 It would be nice to combine Alias with
-something like Class::Template or Class::MethodMaker.
+something like Class::Struct or Class::MethodMaker.
 .Sh "\s-1NOTES\s0"
 .IX Subsection "\s-1NOTES\s0"
 .Sh "Object Terminology"
@@ -2018,7 +2045,7 @@ object (one expecting a reference), or vice versa.
 .PP
 \&From the \*(C+ perspective, all methods in Perl are virtual.
 This, by the way, is why they are never checked for function
-prototypes in the argument list as regular built-in and user-defined
+prototypes in the argument list as regular builtin and user-defined
 functions can be.
 .PP
 Because a class is itself something of an object, Perl's classes can be
@@ -2028,7 +2055,7 @@ behaviour, not \fIdefining\fR mechanism) idea.  \*(C+ supports the latter
 notion, but not the former.
 .SH "SEE ALSO"
 .IX Header "SEE ALSO"
-The following man pages will doubtless provide more
+The following manpages will doubtless provide more
 background for this one:
 the \fIperlmod\fR manpage,
 the \fIperlref\fR manpage,
@@ -2046,7 +2073,7 @@ experiences have mandated its inclusion:
 \&    Copyright 1996 Tom Christiansen.  All Rights Reserved.
 .Ve
 This work derives in part from the second edition of \fIProgramming Perl\fR.
-Although destined for release as a man page with the standard Perl
+Although destined for release as a manpage with the standard Perl
 distribution, it is not public domain (nor is any of Perl and its docset:
 publishers beware).  It's expected to someday make its way into a revision
 of the Camel Book.  While it is copyright by me with all rights reserved,

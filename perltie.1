@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTIE 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLTIE 1 "perl 5.004, patch 01" "28/Apr/97" "Perl Programmers Reference Guide"
 .IX Title "PERLTIE 1"
 .UC
 .IX Name "perltie - how to hide an object class in a simple variable"
@@ -234,10 +254,10 @@ And now whenever either of those variables is accessed, its current
 system priority is retrieved and returned.  If those variables are set,
 then the process's priority is changed!
 .PP
-We'll use Jarkko Hietaniemi <\fIJarkko.Hietaniemi@hut.fi\fR>'s
-\s-1BSD::\s0Resource class (not included) to access the \s-1PRIO_PROCESS\s0, \s-1PRIO_MIN\s0,
-and \s-1PRIO_MAX\s0 constants from your system, as well as the \fIgetpriority()\fR and
-\fIsetpriority()\fR system calls.  Here's the preamble of the class.
+We'll use Jarkko Hietaniemi <\fIjhi@iki.fi\fR>'s \s-1BSD::\s0Resource class (not
+included) to access the \s-1PRIO_PROCESS\s0, \s-1PRIO_MIN\s0, and \s-1PRIO_MAX\s0 constants
+from your system, as well as the \fIgetpriority()\fR and \fIsetpriority()\fR system
+calls.  Here's the preamble of the class.
 .PP
 .Vb 5
 \&    package Nice;
@@ -799,7 +819,7 @@ use the \fIeach()\fR function to iterate over such.  Example:
 This is partially implemented now.
 .PP
 A class implementing a tied filehandle should define the following
-methods: \s-1TIEHANDLE\s0, at least one of \s-1PRINT\s0, \s-1READLINE\s0, \s-1GETC\s0, or \s-1READ\s0,
+methods: \s-1TIEHANDLE\s0, at least one of \s-1PRINT\s0, \s-1PRINTF\s0, \s-1READLINE\s0, \s-1GETC\s0, or \s-1READ\s0,
 and possibly \s-1DESTROY\s0.
 .PP
 It is especially useful when perl is embedded in some other program,
@@ -822,12 +842,27 @@ hold some internal information.
 .Ve
 .Ip "\s-1PRINT\s0 this, \s-1LIST\s0" 5
 .IX Item "\s-1PRINT\s0 this, \s-1LIST\s0"
-This method will be triggered every time the tied handle is printed to.
+This method will be triggered every time the tied handle is printed to
+with the \f(CWprint()\fR function.
 Beyond its self reference it also expects the list that was passed to
 the print function.
 .Sp
 .Vb 1
 \&    sub PRINT { $r = shift; $$r++; print join($,,map(uc($_),@_)),$\e }
+.Ve
+.Ip "\s-1PRINTF\s0 this, \s-1LIST\s0" 5
+.IX Item "\s-1PRINTF\s0 this, \s-1LIST\s0"
+This method will be triggered every time the tied handle is printed to
+with the \f(CWprintf()\fR function.
+Beyond its self reference it also expects the format and list that was
+passed to the printf function.
+.Sp
+.Vb 5
+\&    sub PRINTF {
+\&        shift;
+\&        my $fmt = shift;
+\&        print sprintf($fmt, @_)."\en";
+\&    }
 .Ve
 .Ip "\s-1READ\s0 this \s-1LIST\s0" 5
 .IX Item "\s-1READ\s0 this \s-1LIST\s0"
@@ -1033,12 +1068,12 @@ hashes) to a dbm file.  The first problem is that all but GDBM and
 Berkeley DB have size limitations, but beyond that, you also have problems
 with how references are to be represented on disk.  One experimental
 module that does attempt to address this need partially is the MLDBM
-module.  Check your nearest CPAN site as described in the \fIperlmod\fR manpage for
+module.  Check your nearest CPAN site as described in the \fIperlmodlib\fR manpage for
 source code to MLDBM.
 .SH "AUTHOR"
 .IX Header "AUTHOR"
 Tom Christiansen
 .PP
-TIEHANDLE by Sven Verdoolaege <\fIskimo@dns.ufsia.ac.be\fR>
+TIEHANDLE by Sven Verdoolaege <\fIskimo@dns.ufsia.ac.be\fR> and Doug MacEachern <\fIdougm@osf.org\fR>
 
 .rn }` ''

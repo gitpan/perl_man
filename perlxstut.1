@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXSTUT 1 "perl 5.003, patch 93" "4/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLXSTUT 1 "perl 5.004, patch 01" "29/Mar/97" "Perl Programmers Reference Guide"
 .IX Title "PERLXSTUT 1"
 .UC
 .IX Name "perlXStut - Tutorial for XSUBs"
@@ -223,7 +243,7 @@ to use the following line:
 .Ve
 .Ip "\(bu" 4
 .IX Item "\(bu"
-This document assumes that the executable named \*(L"perl\*(R" is Perl version 5.  
+This document assumes that the executable named \*(L"perl\*(R" is Perl version 5.
 Some systems may have installed Perl version 5 as \*(L"perl5\*(R".
 .Sh "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
 .IX Subsection "\s-1DYNAMIC\s0 \s-1VERSUS\s0 \s-1STATIC\s0"
@@ -309,7 +329,7 @@ The file Mytest.pm should start with something like this:
 .Ve
 And the Mytest.xs file should look something like this:
 .PP
-.Vb 11
+.Vb 9
 \&        #ifdef __cplusplus
 \&        extern "C" {
 \&        #endif
@@ -319,7 +339,8 @@ And the Mytest.xs file should look something like this:
 \&        #ifdef __cplusplus
 \&        }
 \&        #endif
-\&        
+.Ve
+.Vb 1
 \&        PROTOTYPES: DISABLE
 .Ve
 .Vb 1
@@ -362,13 +383,16 @@ Now, although there is already a test.pl template ready for us, for this
 example only, we'll create a special test script.  Create a file called hello
 that looks like this:
 .PP
-.Vb 7
+.Vb 1
 \&        #! /opt/perl5/bin/perl
-\&        
+.Ve
+.Vb 1
 \&        use ExtUtils::testlib;
-\&        
+.Ve
+.Vb 1
 \&        use Mytest;
-\&        
+.Ve
+.Vb 1
 \&        Mytest::hello();
 .Ve
 Now we run the script and we should see the following output:
@@ -403,7 +427,7 @@ the four lines starting at the \*(L"\s-1CODE\s0:\*(R" line to not be indented.  
 for readability purposes, it is suggested that you indent them 8 spaces
 (or one normal tab stop).
 .PP
-Now re-run make to rebuild our new shared library.
+Now rerun make to rebuild our new shared library.
 .PP
 Now perform the same steps as before, generating a Makefile from the
 Makefile.\s-1PL\s0 file, and running make.
@@ -631,8 +655,8 @@ pre-existing C routines, which often do modify their input parameters,
 this behavior is tolerated.  The next example will show how to do this.
 .Sh "\s-1EXAMPLE\s0 4"
 .IX Subsection "\s-1EXAMPLE\s0 4"
-In this example, we'll now begin to write \s-1XSUB\s0's that will interact with
-pre-defined C libraries.  To begin with, we will build a small library of
+In this example, we'll now begin to write XSUBs that will interact with
+predefined C libraries.  To begin with, we will build a small library of
 our own, then let h2xs write our .pm and .xs files for us.
 .PP
 Create a new directory called Mytest2 at the same level as the directory
@@ -654,10 +678,11 @@ In the testlib directory, create a file mylib.h that looks like this:
 .Ve
 Also create a file mylib.c that looks like this:
 .PP
-.Vb 11
+.Vb 2
 \&        #include <stdlib.h>
 \&        #include "./mylib.h"
-\&        
+.Ve
+.Vb 8
 \&        double
 \&        foo(a, b, c)
 \&        int             a;
@@ -738,7 +763,7 @@ the following three lines:
 To keep our namespace nice and unpolluted, edit the .pm file and change
 the lines setting \f(CW@EXPORT\fR to \f(CW@EXPORT_OK\fR (there are two: one in the line
 beginning \*(L"use vars\*(R" and one setting the array itself).  Finally, in the
-.xs file, edit the #include line to read:
+\&.xs file, edit the #include line to read:
 .PP
 .Vb 1
 \&        #include "mylib/mylib.h"
@@ -889,7 +914,7 @@ definition is placed.
 .IX Subsection "\s-1DOCUMENTING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 There is absolutely no excuse for not documenting your extension.
 Documentation belongs in the .pm file.  This file will be fed to pod2man,
-and the embedded documentation will be converted to the man page format,
+and the embedded documentation will be converted to the manpage format,
 then placed in the blib directory.  It will be copied to Perl's man
 page directory when the extension is installed.
 .PP
@@ -901,7 +926,7 @@ See the \fIperlpod\fR manpage for more information about the pod format.
 .Sh "\s-1INSTALLING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 .IX Subsection "\s-1INSTALLING\s0 \s-1YOUR\s0 \s-1EXTENSION\s0"
 Once your extension is complete and passes all its tests, installing it
-is quite simple: you simply run \*(L"make install\*(R".  You will either need 
+is quite simple: you simply run \*(L"make install\*(R".  You will either need
 to have write permission into the directories where Perl is installed,
 or ask your system administrator to run the make for you.
 .Sh "\s-1SEE\s0 \s-1ALSO\s0"

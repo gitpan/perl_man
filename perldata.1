@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDATA 1 "perl 5.003, patch 93" "10/Feb/97" "Perl Programmers Reference Guide"
+.TH PERLDATA 1 "perl 5.004, patch 01" "6/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLDATA 1"
 .UC
 .IX Name "perldata - Perl data types"
@@ -318,12 +338,12 @@ type \*(L"filehandle\*(R", or anything else.  Perl is a contextually polymorphic
 language whose scalars can be strings, numbers, or references (which
 includes objects).  While strings and numbers are considered pretty
 much the same thing for nearly all purposes, references are strongly-typed
-uncastable pointers with built-in reference-counting and destructor
+uncastable pointers with builtin reference-counting and destructor
 invocation.
 .PP
 A scalar value is interpreted as \s-1TRUE\s0 in the Boolean sense if it is not
 the null string or the number 0 (or its string equivalent, \*(L"0").  The
-Boolean context is just a special kind of scalar context.  
+Boolean context is just a special kind of scalar context.
 .PP
 There are actually two varieties of null scalars: defined and
 undefined.  Undefined null scalars are returned when there is no real
@@ -333,7 +353,7 @@ array.  An undefined null scalar may become defined the first time you
 use it as if it were defined, but prior to that you can use the
 \fIdefined()\fR operator to determine whether the value is defined or not.
 .PP
-To find out whether a given string is a valid non-zero number, it's usually
+To find out whether a given string is a valid nonzero number, it's usually
 enough to test it against both numeric 0 and also lexical \*(L"0\*(R" (although
 this will cause \fB\-w\fR noises).  That's because strings that aren't
 numbers count as 0, just as they do in \fBawk\fR:
@@ -341,7 +361,7 @@ numbers count as 0, just as they do in \fBawk\fR:
 .Vb 3
 \&    if ($str == 0 && $str ne "0")  {
 \&        warn "That doesn't look like a number";
-\&    } 
+\&    }
 .Ve
 That's usually preferable because otherwise you won't treat \s-1IEEE\s0 notations
 like \f(CWNaN\fR or \f(CWInfinity\fR properly.  At other times you might prefer to
@@ -351,9 +371,9 @@ for details on regular expressions.
 .Vb 6
 \&    warn "has nondigits"        if     /\eD/;
 \&    warn "not a whole number"   unless /^\ed+$/;
-\&    warn "not an integer"       unless /^[+-]?\ed+$/     
-\&    warn "not a decimal number" unless /^[+-]?\ed+\e.?\ed*$/ 
-\&    warn "not a C float" 
+\&    warn "not an integer"       unless /^[+-]?\ed+$/
+\&    warn "not a decimal number" unless /^[+-]?\ed+\e.?\ed*$/
+\&    warn "not a C float"
 \&        unless /^([+-]?)(?=\ed|\e.\ed)\ed*(\e.\ed*)?([Ee]([+-]?\ed+))?$/;
 .Ve
 The length of an array is a scalar value.  You may find the length of
@@ -365,14 +385,14 @@ intervening values.  Lengthening an array that was previously shortened
 \fI\s-1NO\s0 \s-1LONGER\s0\fR recovers the values that were in those elements.  (It used to
 in Perl 4, but we had to break this to make sure destructors were
 called when expected.)  You can also gain some measure of efficiency by
-preextending an array that is going to get big.  (You can also extend
+pre-extending an array that is going to get big.  (You can also extend
 an array by assigning to an element that is off the end of the array.)
 You can truncate an array down to nothing by assigning the null list ()
 to it.  The following are equivalent:
 .PP
 .Vb 2
 \&    @whatever = ();
-\&    $#whatever = $[ - 1;
+\&    $#whatever = -1;
 .Ve
 If you evaluate a named array in a scalar context, it returns the length of
 the array.  (Note that this is not true of lists, which return the
@@ -426,6 +446,11 @@ The usual Unix backslash rules apply for making characters such as
 newline, tab, etc., as well as some more exotic forms.  See
 the section on \fIQuote and Quotelike Operators\fR in the \fIperlop\fR manpage for a list.
 .PP
+Octal or hex representations in string literals (e.g. \*(L'0xffff') are not
+automatically converted to their integer representation.  The \fIhex()\fR and
+\fIoct()\fR functions make these conversions for you.  See the \f(CWhex\fR entry in the \fIperlfunc\fR manpage and
+the \f(CWoct\fR entry in the \fIperlfunc\fR manpage for more details.
+.PP
 You can also embed newlines directly in your strings, i.e., they can end
 on a different line than they begin.  This is nice, but if you forget
 your trailing quote, the error will not be reported until Perl finds
@@ -461,16 +486,22 @@ single-quoted string must be separated from a preceding word by a
 space, because single quote is a valid (though deprecated) character in
 a variable name (see the \f(CWPackages\fR entry in the \fIperlmod\fR manpage).
 .PP
-Two special literals are _\|_LINE_\|_ and _\|_FILE_\|_, which represent the
-current line number and filename at that point in your program.  They
-may be used only as separate tokens; they will not be interpolated into
-strings.  In addition, the token _\|_END_\|_ may be used to indicate the
-logical end of the script before the actual end of file.  Any following
-text is ignored, but may be read via the \s-1DATA\s0 filehandle.  (The \s-1DATA\s0
-filehandle may read data from only the main script, but not from any
-required file or evaluated string.)  The two control characters ^D and
-^Z are synonyms for _\|_END_\|_ (or _\|_DATA_\|_ in a module; see the \fISelfLoader\fR manpage for 
-details on _\|_DATA_\|_).
+Three special literals are _\|_FILE_\|_, _\|_LINE_\|_, and _\|_PACKAGE_\|_, which
+represent the current filename, line number, and package name at that
+point in your program.  They may be used only as separate tokens; they
+will not be interpolated into strings.  If there is no current package
+(due to a \f(CWpackage;\fR directive), _\|_PACKAGE_\|_ is the undefined value.
+.PP
+The tokens _\|_END_\|_ and _\|_DATA_\|_ may be used to indicate the logical end
+of the script before the actual end of file.  Any following text is
+ignored, but may be read via a \s-1DATA\s0 filehandle: main::\s-1DATA\s0 for _\|_END_\|_,
+or \s-1PACKNAME::DATA\s0 (where \s-1PACKNAME\s0 is the current package) for _\|_DATA_\|_.
+The two control characters ^D and ^Z are synonyms for _\|_END_\|_ (or
+_\|_DATA_\|_ in a module).  See the \fISelfLoader\fR manpage for more description of
+_\|_DATA_\|_, and an example of its use.  Note that you cannot read from the
+\s-1DATA\s0 filehandle in a \s-1BEGIN\s0 block: the \s-1BEGIN\s0 block is executed as soon as
+it is seen (during compilation), at which point the corresponding
+_\|_DATA_\|_ (or _\|_END_\|_) token has not yet been seen.
 .PP
 A word that has no other interpretation in the grammar will
 be treated as if it were a quoted string.  These are known as
@@ -485,7 +516,7 @@ say
 .Ve
 then any bareword that would \s-1NOT\s0 be interpreted as a subroutine call
 produces a compile-time error instead.  The restriction lasts to the
-end of the enclosing block.  An inner block may countermand this 
+end of the enclosing block.  An inner block may countermand this
 by saying \f(CWno strict 'subs'\fR.
 .PP
 Array variables are interpolated into double-quoted strings by joining all
@@ -519,12 +550,12 @@ quoted, the type of quotes you use determines the treatment of the
 text, just as in regular quoting.  An unquoted identifier works like
 double quotes.  There must be no space between the \f(CW<<\fR and
 the identifier.  (If you put a space it will be treated as a null
-identifier, which is valid, and matches the first blank line.)  The
+identifier, which is valid, and matches the first empty line.)  The
 terminating string must appear by itself (unquoted and with no
 surrounding whitespace) on the terminating line.
 .PP
 .Vb 3
-\&        print <<EOF;    
+\&        print <<EOF;
 \&    The price is $Price.
 \&    EOF
 .Ve
@@ -551,11 +582,11 @@ surrounding whitespace) on the terminating line.
 \&    Here's a line
 \&    or two.
 \&    THIS
-\&    and here another.
+\&    and here's another.
 \&    THAT
 .Ve
-Just don't forget that you have to put a semicolon on the end 
-to finish the statement, as Perl doesn't know you're not going to 
+Just don't forget that you have to put a semicolon on the end
+to finish the statement, as Perl doesn't know you're not going to
 try to do this:
 .PP
 .Vb 4
@@ -586,13 +617,13 @@ assigns the entire list value to array foo, but
 .Ve
 assigns the value of variable bar to variable foo.  Note that the value
 of an actual array in a scalar context is the length of the array; the
-following assigns to \f(CW$foo\fR the value 3:
+following assigns the value 3 to \f(CW$foo:\fR
 .PP
 .Vb 2
 \&    @foo = ('cc', '-E', $bar);
 \&    $foo = @foo;                # $foo gets 3
 .Ve
-You may have an optional comma before the closing parenthesis of an
+You may have an optional comma before the closing parenthesis of a
 list literal, so that you can say:
 .PP
 .Vb 5
@@ -622,7 +653,7 @@ interpolating an array with no elements is the same as if no
 array had been interpolated at that point.
 .PP
 A list value may also be subscripted like a normal array.  You must
-put the list in parentheses to avoid ambiguity.  Examples:
+put the list in parentheses to avoid ambiguity.  For example:
 .PP
 .Vb 2
 \&    # Stat returns list value.
@@ -639,6 +670,12 @@ put the list in parentheses to avoid ambiguity.  Examples:
 .Vb 2
 \&    # A "reverse comma operator".
 \&    return (pop(@foo),pop(@foo))[0];
+.Ve
+You may assign to \f(CWundef\fR in a list.  This is useful for throwing
+away some of the return values of a function:
+.PP
+.Vb 1
+\&    ($dev, $ino, undef, undef, $uid, $gid) = stat($file);
 .Ve
 Lists may be assigned to if and only if each element of the list
 is legal to assign to:
@@ -709,7 +746,7 @@ or for initializing hash references to be used as records:
 or for using call-by-named-parameter to complicated functions:
 .PP
 .Vb 7
-\&   $field = $query->radio_group( 
+\&   $field = $query->radio_group(
 \&               name      => 'group_name',
 \&               values    => ['eenie','meenie','minie'],
 \&               default   => 'meenie',
@@ -724,7 +761,7 @@ of how to arrange for an output ordering.
 .IX Subsection "Typeglobs and Filehandles"
 Perl uses an internal type called a \fItypeglob\fR to hold an entire
 symbol table entry.  The type prefix of a typeglob is a \f(CW*\fR, because
-it represents all types.  This used to be the preferred way to 
+it represents all types.  This used to be the preferred way to
 pass arrays and hashes by reference into a function, but now that
 we have real references, this is seldom needed.  It also used to be the
 preferred way to pass filehandles into a function, but now

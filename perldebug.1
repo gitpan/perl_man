@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDEBUG 1 "perl 5.003, patch 93" "8/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLDEBUG 1 "perl 5.004, patch 01" "11/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLDEBUG 1"
 .UC
 .IX Name "perldebug - Perl debugging"
@@ -180,9 +200,9 @@ First of all, have you tried using the \fB\-w\fR switch?
 If you invoke Perl with the \fB\-d\fR switch, your script runs under the
 Perl source debugger.  This works like an interactive Perl
 environment, prompting for debugger commands that let you examine
-source code, set breakpoints, get stack back-traces, change the values of
+source code, set breakpoints, get stack backtraces, change the values of
 variables, etc.  This is so convenient that you often fire up
-the debugger all by itself just to test out Perl constructs 
+the debugger all by itself just to test out Perl constructs
 interactively to see what they do.  For example:
 .PP
 .Vb 1
@@ -193,7 +213,7 @@ typical compiled environment.  Instead, the \fB\-d\fR flag tells the compiler
 to insert source information into the parse trees it's about to hand off
 to the interpreter.  That means your code must first compile correctly
 for the debugger to work on it.  Then when the interpreter starts up, it
-pre-loads a Perl library file containing the debugger itself.  
+preloads a Perl library file containing the debugger itself.
 .PP
 The program will halt \fIright before\fR the first run-time executable
 statement (but see below regarding compile-time statements) and ask you
@@ -213,7 +233,7 @@ that.
 The debugger understands the following commands:
 .Ip "h [command]" 12
 .IX Item "h [command]"
-Prints out a help message.  
+Prints out a help message.
 .Sp
 If you supply another debugger command as an argument to the \f(CWh\fR command,
 it prints out the description for just that command.  The special
@@ -238,7 +258,7 @@ The \f(CWDB::OUT\fR filehandle is opened to \fI/dev/tty\fR, regardless of
 where \s-1STDOUT\s0 may be redirected to.
 .Ip "x expr" 12
 .IX Item "x expr"
-Evaluates its expression in list context and dumps out the result 
+Evaluates its expression in list context and dumps out the result
 in a pretty-printed fashion.  Nested data structures are printed out
 recursively, unlike the \f(CWprint\fR function.
 .Sp
@@ -265,7 +285,7 @@ The details of printout are governed by multiple \f(CWO\fRptions.
 Same as \f(CWV currentpackage [vars]\fR.
 .Ip "T" 12
 .IX Item "T"
-Produce a stack back-trace.  See below for details on its output.
+Produce a stack backtrace.  See below for details on its output.
 .Ip "s [expr]" 12
 .IX Item "s [expr]"
 Single step.  Executes until it reaches the beginning of another
@@ -449,7 +469,7 @@ Run Tk while prompting (with ReadLine).
 Level of verbosity.  By default the debugger is in a sane verbose mode,
 thus it will print backtraces on all the warnings and die-messages
 which are going to be printed out, and will print a message when
-interesting uncaught signals arrive. 
+interesting uncaught signals arrive.
 .Sp
 To disable this behaviour, set these values to 0.  If \f(CWdieLevel\fR is 2,
 then the messages which will be caught by surrounding \f(CWeval\fR are also
@@ -465,19 +485,25 @@ File or pipe to print line number info to.  If it is a pipe (say,
 .Ip "\f(CWinhibit_exit\fR" 24
 .IX Item "\f(CWinhibit_exit\fR"
 If 0, allows \fIstepping off\fR the end of the script.
-.Ip "\f(CWPrintRet\fR " 24
-.IX Item "\f(CWPrintRet\fR "
+.Ip "\f(CWPrintRet\fR" 24
+.IX Item "\f(CWPrintRet\fR"
 affects printing of return value after \f(CWr\fR command.
-.Ip "\f(CWframe\fR " 24
-.IX Item "\f(CWframe\fR "
+.Ip "\f(CWornaments\fR" 24
+.IX Item "\f(CWornaments\fR"
+affects screen appearance of the command line (see the \fITerm::ReadLine\fR manpage).
+.Ip "\f(CWframe\fR" 24
+.IX Item "\f(CWframe\fR"
 affects printing messages on entry and exit from subroutines.  If
 \f(CWframe & 2\fR is false, messages are printed on entry only. (Printing
 on exit may be useful if \fIinter\fR\|(di)spersed with other messages.)
 .Sp
 If \f(CWframe & 4\fR, arguments to functions are printed as well as the
 context and caller info.  If \f(CWframe & 8\fR, overloaded \f(CWstringify\fR and
-\f(CWtie\fRd \f(CWFETCH\fR are enabled on the printed arguments.  The length at
-which the argument list is truncated is governed by the next option:
+\f(CWtie\fRd \f(CWFETCH\fR are enabled on the printed arguments. If \f(CWframe &
+16\fR, the return value from the subroutine is printed as well.
+.Sp
+The length at which the argument list is truncated is governed by the
+next option:
 .Ip "\f(CWmaxTraceLen\fR" 24
 .IX Item "\f(CWmaxTraceLen\fR"
 length at which the argument list is truncated when \f(CWframe\fR option's
@@ -507,8 +533,8 @@ Change style of string dump.  Default value of \f(CWquote\fR is \f(CWauto\fR, on
 can enable either double-quotish dump, or single-quotish by setting it
 to \f(CW"\fR or \f(CW'\fR.  By default, characters with high bit set are printed
 \fIas is\fR.
-.Ip "\f(CWUsageOnly\fR " 24
-.IX Item "\f(CWUsageOnly\fR "
+.Ip "\f(CWUsageOnly\fR" 24
+.IX Item "\f(CWUsageOnly\fR"
 \fIvery\fR rudimentally per-package memory usage dump.  Calculates total
 size of strings in variables in the package.
 .Sp
@@ -546,7 +572,7 @@ If false, readline support in debugger is disabled, so you can debug
 ReadLine applications.
 .Ip "\f(CWNonStop\fR" 24
 .IX Item "\f(CWNonStop\fR"
-If set, debugger goes into non-interactive mode until interrupted, or
+If set, debugger goes into noninteractive mode until interrupted, or
 programmatically by setting \f(CW$DB::signal\fR or \f(CW$DB::single\fR.
 .Sp
 Here's an example of using the \f(CW$ENV{PERLDB_OPTS}\fR variable:
@@ -566,7 +592,7 @@ Other examples may include
 .Vb 1
 \&  $ PERLDB_OPTS="N f A L=listing" perl -d myprogram
 .Ve
-- runs script non-interactively, printing info on each entry into a
+- runs script noninteractively, printing info on each entry into a
 subroutine and each executed line into the file \fIlisting\fR. (If you
 interrupt it, you would better reset \f(CWLineInfo\fR to something
 \*(L"interactive\*(R"!)
@@ -644,7 +670,7 @@ your history across this, but internal settings and command line options
 may be lost.
 .Sp
 Currently the following setting are preserved: history, breakpoints,
-actions, debugger \f(CWO\fRptions, and the following command-line
+actions, debugger \f(CWO\fRptions, and the following command line
 options: \fB\-w\fR, \fB\-I\fR, and \fB\-e\fR.
 .Ip "|dbcmd" 12
 .IX Item "|dbcmd"
@@ -692,14 +718,14 @@ or even
 \&    DB<<17>>
 .Ve
 where that number is the command number, which you'd use to access with
-the built-in \fBcsh\fR\-like history mechanism, e.g., \f(CW!17\fR would repeat
+the builtin \fBcsh\fR\-like history mechanism, e.g., \f(CW!17\fR would repeat
 command number 17.  The number of angle brackets indicates the depth of
 the debugger.  You could get more than one set of brackets, for example, if
 you'd already at a breakpoint and then printed out the result of a
 function call that itself also has a breakpoint, or you step into an
 expression via \f(CWs/n/t expression\fR command.
-.Ip "Multi-line commands" 8
-.IX Item "Multi-line commands"
+.Ip "Multiline commands" 8
+.IX Item "Multiline commands"
 If you want to enter a multi-line command, such as a subroutine
 definition with several statements, or a format, you may escape the
 newline that would normally end the debugger command with a backslash.
@@ -718,7 +744,7 @@ Note that this business of escaping a newline is specific to interactive
 commands typed into the debugger.
 .Ip "Stack backtrace" 8
 .IX Item "Stack backtrace"
-Here's an example of what a stack back-trace via \f(CWT\fR command might
+Here's an example of what a stack backtrace via \f(CWT\fR command might
 look like:
 .Sp
 .Vb 3
@@ -765,11 +791,12 @@ next executed line is marked by \f(CW==>\fR.
 When \f(CWframe\fR option is set, debugger would print entered (and
 optionally exited) subroutines in different styles.
 .Sp
-What follows is the start of the listing of 
+What follows is the start of the listing of
 .Sp
 .Vb 1
-\&  env "PERLDB_OPTS=f=1 N" perl -d -V
+\&  env "PERLDB_OPTS=f=n N" perl -d -V
 .Ve
+for different values of \f(CWn\fR:
 .Ip "1" 12
 .IX Item "1"
 .Sp
@@ -881,12 +908,33 @@ What follows is the start of the listing of
 \&   in  $=Config::FETCH('Config=HASH(0x1aa444)', 'baserev') from lib/Config.pm:574
 \&   out $=Config::FETCH('Config=HASH(0x1aa444)', 'baserev') from lib/Config.pm:574
 .Ve
+.Ip "30" 12
+.IX Item "30"
+.Sp
+.Vb 15
+\&  in  $=CODE(0x15eca4)() from /dev/null:0
+\&   in  $=CODE(0x182528)() from lib/Config.pm:2
+\&    Package lib/Exporter.pm.
+\&   out $=CODE(0x182528)() from lib/Config.pm:0
+\&   scalar context return from CODE(0x182528): undef
+\&   Package lib/Config.pm.
+\&   in  $=Config::TIEHASH('Config') from lib/Config.pm:628
+\&   out $=Config::TIEHASH('Config') from lib/Config.pm:628
+\&   scalar context return from Config::TIEHASH:   empty hash
+\&   in  $=Exporter::import('Config', 'myconfig', 'config_vars') from /dev/null:0
+\&    in  $=Exporter::export('Config', 'main', 'myconfig', 'config_vars') from lib/Exporter.pm:171
+\&    out $=Exporter::export('Config', 'main', 'myconfig', 'config_vars') from lib/Exporter.pm:171
+\&    scalar context return from Exporter::export: ''
+\&   out $=Exporter::import('Config', 'myconfig', 'config_vars') from /dev/null:0
+\&   scalar context return from Exporter::import: ''
+.Ve
 .Sp
 In all the cases indentation of lines shows the call tree, if bit 2 of
 \f(CWframe\fR is set, then a line is printed on exit from a subroutine as
 well, if bit 4 is set, then the arguments are printed as well as the
 caller info, if bit 8 is set, the arguments are printed even if they
-are tied or references.
+are tied or references, if bit 16 is set, the return value is printed
+as well.
 .Sp
 When a package is compiled, a line like this
 .Sp
@@ -899,7 +947,7 @@ is printed with proper indentation.
 If you have any compile-time executable statements (code within a \s-1BEGIN\s0
 block or a \f(CWuse\fR statement), these will \f(CWNOT\fR be stopped by debugger,
 although \f(CWrequire\fRs will (and compile-time statements can be traced
-with \f(CWAutoTrace\fR option set in \f(CWPERLDB_OPTS\fR).  From your own Perl 
+with \f(CWAutoTrace\fR option set in \f(CWPERLDB_OPTS\fR).  From your own Perl
 code, however, you can
 transfer control back to the debugger using the following statement,
 which is harmless if the debugger is not running:
@@ -966,7 +1014,7 @@ the Term::ReadKey and Term::ReadLine modules from \s-1CPAN\s0, you will
 have full editing capabilities much like \s-1GNU\s0 \fIreadline\fR(3) provides.
 Look for these in the \fImodules/by-module/Term\fR directory on \s-1CPAN\s0.
 .PP
-A rudimentary command-line completion is also available.
+A rudimentary command line completion is also available.
 Unfortunately, the names of lexical variables are not available for
 completion.
 .Sh "Editor Support for Debugging"
@@ -1006,14 +1054,14 @@ in that profile.
 .IX Subsection "Debugger support in perl"
 When you call the \fBcaller\fR function (see the \f(CWcaller\fR entry in the \fIperlfunc\fR manpage) from the
 package \s-1DB\s0, Perl sets the array \f(CW@DB::args\fR to contain the arguments the
-corresponding stack frame was called with.  
+corresponding stack frame was called with.
 .PP
 If perl is run with \fB\-d\fR option, the following additional features
 are enabled:
 .Ip "\(bu" 5
 .IX Item "\(bu"
 Perl inserts the contents of \f(CW$ENV{PERL5DB}\fR (or \f(CWBEGIN {require
-'perl5db.pl'}\fR if not present) before the first line of the
+\&'perl5db.pl'}\fR if not present) before the first line of the
 application.
 .Ip "\(bu" 5
 .IX Item "\(bu"
@@ -1103,9 +1151,9 @@ statement, and would wait for your \f(CWCR\fR to continue.
 The following debugger is quite functional:
 .PP
 .Vb 5
-\&  { 
-\&    package DB; 
-\&    sub DB  {} 
+\&  {
+\&    package DB;
+\&    sub DB  {}
 \&    sub sub {print ++$i, " $sub\en"; &$sub}
 \&  }
 .Ve
@@ -1115,7 +1163,7 @@ package \f(CWDB\fR.
 .Sh "Debugger Internals"
 .IX Subsection "Debugger Internals"
 At the start, the debugger reads your rc file (\fI./.perldb\fR or
-\fI~/.perldb\fR under \s-1UNIX\s0), which can set important options.  This file may
+\fI~/.perldb\fR under Unix), which can set important options.  This file may
 define a subroutine \f(CW&afterinit\fR to be executed after the debugger is
 initialized.
 .PP
@@ -1137,7 +1185,7 @@ frames (all if \f(CWcount\fR is missing).  Each entry is a hash with keys
 eval), \f(CWargs\fR (\f(CWundef\fR or a reference to an array), \f(CWfile\fR, and
 \f(CWline\fR.
 .PP
-The function \f(CWDB::print_trace(FH, skip[, count[, short]])\fR prints 
+The function \f(CWDB::print_trace(FH, skip[, count[, short]])\fR prints
 formatted info about caller frames.  The last two functions may be
 convenient as arguments to \f(CW<\fR, \f(CW<<\fR commands.
 .Sh "Other resources"
@@ -1149,6 +1197,6 @@ You cannot get the stack frame information or otherwise debug functions
 that were not compiled by Perl, such as C or \*(C+ extensions.
 .PP
 If you alter your \f(CW@_\fR arguments in a subroutine (such as with \fBshift\fR
-or \fBpop\fR, the stack back-trace will not show the original values.
+or \fBpop\fR, the stack backtrace will not show the original values.
 
 .rn }` ''

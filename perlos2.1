@@ -45,16 +45,36 @@
 .if (\n(.H=4u)&(1m=20u) .ds -- \(*W\h'-12u'\(*W\h'-8u'-\" diablo 12 pitch
 .ds L" ""
 .ds R" ""
+'''   \*(M", \*(S", \*(N" and \*(T" are the equivalent of
+'''   \*(L" and \*(R", except that they are used on ".xx" lines,
+'''   such as .IP and .SH, which do another additional levels of
+'''   double-quote interpretation
+.ds M" """
+.ds S" """
+.ds N" """""
+.ds T" """""
 .ds L' '
 .ds R' '
+.ds M' '
+.ds S' '
+.ds N' '
+.ds T' '
 'br\}
 .el\{\
 .ds -- \(em\|
 .tr \*(Tr
 .ds L" ``
 .ds R" ''
+.ds M" ``
+.ds S" ''
+.ds N" ``
+.ds T" ''
 .ds L' `
 .ds R' '
+.ds M' `
+.ds S' '
+.ds N' `
+.ds T' '
 .ds PI \(*p
 'br\}
 .\"	If the F register is turned on, we'll generate
@@ -73,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOS2 1 "perl 5.003, patch 93" "13/Mar/97" "Perl Programmers Reference Guide"
+.TH PERLOS2 1 "perl 5.004, patch 01" "16/Jun/97" "Perl Programmers Reference Guide"
 .IX Title "PERLOS2 1"
 .UC
 .IX Name "perlos2 - Perl under OS/2, DOS, Win0.3*, Win0.95 and WinNT."
@@ -196,7 +216,7 @@ A copy of a Win* viewer is contained in the \*(L"Just add OS/2 Warp\*(R" package
 \&  ftp://ftp.software.ibm.com/ps/products/os2/tools/jaow/jaow.zip
 .Ve
 in \fI?:\eJUST_ADD\eview.exe\fR. This gives one an access to EMX's 
-\fI.INF\fR docs as well (text form is available in \fI/emx/doc\fR in 
+\&\fI.INF\fR docs as well (text form is available in \fI/emx/doc\fR in 
 EMX's distribution).
 .PP
 Note that if you have \fIlynx.exe\fR installed, you can follow WWW links
@@ -736,6 +756,14 @@ Possible locations to get this from are
 \&  ftp://ftp.cdrom.com/pub/os2/dev32/
 \&  ftp://ftp.cdrom.com/pub/os2/emx09c/
 .Ve
+It is reported that the following archives contain enough utils to
+build perl: gnufutil.zip, gnusutil.zip, gnututil.zip, gnused.zip,
+gnupatch.zip, gnuawk.zip, gnumake.zip and ksh527rt.zip.  Note that
+all these utilities are known to be available from \s-1LEO\s0:
+.PP
+.Vb 1
+\&  ftp://ftp.leo.org/pub/comp/os/os2/leo/gnu
+.Ve
 Make sure that no copies or perl are currently running.  Later steps
 of the build may fail since an older version of perl.dll loaded into
 memory may be found. 
@@ -795,7 +823,7 @@ Change to the directory of extraction.
 .Sh "Application of the patches"
 .IX Subsection "Application of the patches"
 You need to apply the patches in \fI./os2/diff.*\fR and
-\fI./os2/\s-1POSIX\s0.mkfifo\fR like this:
+\&\fI./os2/\s-1POSIX\s0.mkfifo\fR like this:
 .PP
 .Vb 2
 \&  gnupatch -p0 < os2\ePOSIX.mkfifo
@@ -925,8 +953,8 @@ Needs \fI/usr/bin\fR.
 Checks \f(CW-t\fR of \fI/dev/null\fR. Should not fail!
 .PP
 In addition to errors, you should get a lot of warnings. 
-.Ip "A lot of `bad free\*(R'" 4
-.IX Item "A lot of `bad free\*(R'"
+.Ip "A lot of `bad free\*(T'" 4
+.IX Item "A lot of `bad free\*(T'"
 in databases related to Berkeley \s-1DB\s0. This is a confirmed bug of
 \s-1DB\s0. You may disable this warnings, see the section on \fI\s-1PERL_BADFREE\s0\fR.
 .Ip "Process terminated by \s-1SIGTERM/SIGINT\s0" 4
@@ -1099,8 +1127,12 @@ eventually).
 .IX Subsection "Misfeatures"
 .Ip "" 4
 .IX Item ""
-Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not functional, the same is
-true for perl. Here is the list of things which may be \*(L"broken\*(R" on
+Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not functional, it is 
+emulated by perl.  To disable the emulations, set environment variable
+\f(CWUSE_PERL_FLOCK=0\fR.
+.Ip "" 4
+.IX Item ""
+Here is the list of things which may be \*(L"broken\*(R" on
 \s-1EMX\s0 (from \s-1EMX\s0 docs):
 .Ip "\(bu" 9
 .IX Item "\(bu"
@@ -1111,7 +1143,7 @@ implemented.
 the \fIsock_init(3)\fR manpage is not required and not implemented.
 .Ip "\(bu" 9
 .IX Item "\(bu"
-the \fIflock(3)\fR manpage is not yet implemented (dummy function).
+the \fIflock(3)\fR manpage is not yet implemented (dummy function).  (Perl has a workaround.)
 .Ip "\(bu" 9
 .IX Item "\(bu"
 the \fIkill(3)\fR manpage:  Special treatment of \s-1PID\s0=0, \s-1PID\s0=1 and \s-1PID\s0=\-1 is not implemented.
@@ -1153,6 +1185,11 @@ a dummy implementation.
 .Ip "\f(CWstat\fR" 9
 .IX Item "\f(CWstat\fR"
 \f(CWos2_stat\fR special-cases \fI/dev/tty\fR and \fI/dev/con\fR.
+.Ip "\f(CWflock\fR" 9
+.IX Item "\f(CWflock\fR"
+Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not functional, it is 
+emulated by perl.  To disable the emulations, set environment variable
+\f(CWUSE_PERL_FLOCK=0\fR.
 .SH "Perl flavors"
 .IX Header "Perl flavors"
 Because of idiosyncrasies of OS/2 one cannot have all the eggs in the
@@ -1264,10 +1301,10 @@ operations:
 .Ip "explicit fork()" 4
 .IX Item "explicit fork()"
 in the script, and
-.Ip "open \s-1FH\s0, '|\-'" 4
-.IX Item "open \s-1FH\s0, '|\-'"
-.Ip "open \s-1FH\s0, '\-|'" 4
-.IX Item "open \s-1FH\s0, '\-|'"
+.Ip "open \s-1FH\s0, \*(N"|\-\*(T"" 4
+.IX Item "open \s-1FH\s0, \*(N"|\-\*(T""
+.Ip "open \s-1FH\s0, \*(N"\-|\*(T"" 4
+.IX Item "open \s-1FH\s0, \*(N"\-|\*(T""
 opening pipes to itself.
 .PP
 While these operations are not questions of life and death, a lot of
@@ -1294,7 +1331,13 @@ substituted with \fIpath2\fR.
 .PP
 Should be used if the perl library is moved from the default
 location in preference to \f(CWPERL(5)LIB\fR, since this would not leave wrong
-entries in <@\s-1INC\s0>. 
+entries in \f(CW@INC\fR.  Say, if the compiled version of perl looks for \f(CW@INC\fR
+in \fIf:/perllib/lib\fR, and you want to install the library in
+\fIh:/opt/gnu\fR, do
+.PP
+.Vb 1
+\&  set PERLLIB_PREFIX=f:/perllib/lib;h:/opt/gnu
+.Ve
 .Sh "\f(CWPERL_BADLANG\fR"
 .IX Subsection "\f(CWPERL_BADLANG\fR"
 If 1, perl ignores \fIsetlocale()\fR failing. May be useful with some
@@ -1308,6 +1351,11 @@ memory handling code is buggy.
 .IX Subsection "\f(CWPERL_SH_DIR\fR"
 Specific for \s-1EMX\s0 port. Gives the directory part of the location for
 \fIsh.exe\fR.
+.Sh "\f(CWUSE_PERL_FLOCK\fR"
+.IX Subsection "\f(CWUSE_PERL_FLOCK\fR"
+Specific for \s-1EMX\s0 port. Since the \fIflock(3)\fR manpage is present in \s-1EMX\s0, but is not 
+functional, it is emulated by perl.  To disable the emulations, set 
+environment variable \f(CWUSE_PERL_FLOCK=0\fR.
 .Sh "\f(CWTMP\fR or \f(CWTEMP\fR"
 .IX Subsection "\f(CWTMP\fR or \f(CWTEMP\fR"
 Specific for \s-1EMX\s0 port. Used as storage place for temporary files, most
