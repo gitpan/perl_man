@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLCALL 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLCALL 1 "perl 5.005, patch 53" "8/Aug/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -405,8 +405,8 @@ belongs to \f(CWjoe\fR.
 .Sh "G_EVAL"
 It is possible for the Perl subroutine you are calling to terminate
 abnormally, e.g., by calling \fIdie\fR explicitly or by not actually
-existing.  By default, when either of these of events occurs, the
-process will terminate immediately.  If though, you want to trap this
+existing.  By default, when either of these events occurs, the
+process will terminate immediately.  If you want to trap this
 type of event, specify the G_EVAL flag.  It will put an \fIeval { }\fR
 around the subroutine call.
 .PP
@@ -507,7 +507,7 @@ via this \s-1XSUB\s0
 \&    void
 \&    Call_fred()
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_pv("fred", G_DISCARD|G_NOARGS) ;
 \&        fprintf(stderr, "back in Call_fred\en") ;
 .Ve
@@ -526,7 +526,7 @@ higher, or use the G_EVAL flag with \fIperl_call_*\fR as shown below
 \&    void
 \&    Call_fred()
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_pv("fred", G_EVAL|G_DISCARD|G_NOARGS) ;
 \&        fprintf(stderr, "back in Call_fred\en") ;
 .Ve
@@ -563,7 +563,7 @@ and here is a C function to call it
 \&        dSP ;
 .Ve
 .Vb 3
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_pv("PrintUID", G_DISCARD|G_NOARGS) ;
 \&    }
 .Ve
@@ -571,7 +571,7 @@ Simple, eh.
 .PP
 A few points to note about this example.
 .Ip "1." 5
-Ignore \f(CWdSP\fR and \f(CWPUSHMARK(sp)\fR for now. They will be discussed in
+Ignore \f(CWdSP\fR and \f(CWPUSHMARK(SP)\fR for now. They will be discussed in
 the next example.
 .Ip "2." 5
 We aren't passing any parameters to \fIPrintUID\fR so G_NOARGS can be
@@ -613,21 +613,31 @@ The C function required to call \fILeftString\fR would look like this.
 \&    {
 \&        dSP ;
 .Ve
+.Vb 2
+\&        ENTER ;
+\&        SAVETMPS ;
+.Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSVpv(a, 0)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
 .Ve
-.Vb 2
+.Vb 1
 \&        perl_call_pv("LeftString", G_DISCARD);
+.Ve
+.Vb 3
+\&        FREETMPS ;
+\&        LEAVE ;
 \&    }
 .Ve
 Here are a few notes on the C function \fIcall_LeftString\fR.
 .Ip "1." 5
 Parameters are passed to the Perl subroutine using the Perl stack.
 This is the purpose of the code beginning with the line \f(CWdSP\fR and
-ending with the line \f(CWPUTBACK\fR.
+ending with the line \f(CWPUTBACK\fR.  The \f(CWdSP\fR declares a local copy
+of the stack pointer.  This local copy should \fBalways\fR be accessed
+as \f(CWSP\fR.
 .Ip "2." 5
 If you are going to put something onto the Perl stack, you need to know
 where to put it. This is the purpose of the macro \f(CWdSP\fR \- it declares
@@ -671,6 +681,36 @@ integer.
 See the section on \fIXSUBs and the Argument Stack\fR in the \fIperlguts\fR manpage for details
 on how the \s-1XPUSH\s0 macros work.
 .Ip "6." 5
+Because we created temporary values (by means of \fIsv_2mortal()\fR calls)
+we will have to tidy up the Perl stack and dispose of mortal SVs.
+.Sp
+This is the purpose of
+.Sp
+.Vb 2
+\&    ENTER ;
+\&    SAVETMPS ;
+.Ve
+at the start of the function, and
+.Sp
+.Vb 2
+\&    FREETMPS ;
+\&    LEAVE ;
+.Ve
+at the end. The \f(CWENTER\fR/\f(CWSAVETMPS\fR pair creates a boundary for any
+temporaries we create.  This means that the temporaries we get rid of
+will be limited to those which were created after these calls.
+.Sp
+The \f(CWFREETMPS\fR/\f(CWLEAVE\fR pair will get rid of any values returned by
+the Perl subroutine (see next example), plus it will also dump the
+mortal SVs we have created.  Having \f(CWENTER\fR/\f(CWSAVETMPS\fR at the
+beginning of the code makes sure that no other mortals are destroyed.
+.Sp
+Think of these macros as working a bit like using \f(CW{\fR and \f(CW}\fR in Perl
+to limit the scope of local variables.
+.Sp
+See the section \fIUsing Perl to dispose of temporaries\fR for details of
+an alternative to using these macros.
+.Ip "7." 5
 Finally, \fILeftString\fR can now be called via the \fIperl_call_pv\fR
 function.
 .Sh "Returning a Scalar"
@@ -704,7 +744,7 @@ function required to call it is now a bit more complex.
 \&        SAVETMPS;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(a)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
@@ -734,36 +774,6 @@ The only flag specified this time was G_SCALAR. That means the \f(CW@_\fR
 array will be created and that the value returned by \fIAdder\fR will
 still exist after the call to \fIperl_call_pv\fR.
 .Ip "2." 5
-Because we are interested in what is returned from \fIAdder\fR we cannot
-specify G_DISCARD. This means that we will have to tidy up the Perl
-stack and dispose of any temporary values ourselves. This is the
-purpose of
-.Sp
-.Vb 2
-\&    ENTER ;
-\&    SAVETMPS ;
-.Ve
-at the start of the function, and
-.Sp
-.Vb 2
-\&    FREETMPS ;
-\&    LEAVE ;
-.Ve
-at the end. The \f(CWENTER\fR/\f(CWSAVETMPS\fR pair creates a boundary for any
-temporaries we create.  This means that the temporaries we get rid of
-will be limited to those which were created after these calls.
-.Sp
-The \f(CWFREETMPS\fR/\f(CWLEAVE\fR pair will get rid of any values returned by
-the Perl subroutine, plus it will also dump the mortal SVs we have
-created.  Having \f(CWENTER\fR/\f(CWSAVETMPS\fR at the beginning of the code
-makes sure that no other mortals are destroyed.
-.Sp
-Think of these macros as working a bit like using \f(CW{\fR and \f(CW}\fR in Perl
-to limit the scope of local variables.
-.Sp
-See the section \fIUsing Perl to dispose of temporaries\fR for details of
-an alternative to using these macros.
-.Ip "3." 5
 The purpose of the macro \f(CWSPAGAIN\fR is to refresh the local copy of the
 stack pointer. This is necessary because it is possible that the memory
 allocated to the Perl stack has been reallocated whilst in the
@@ -772,7 +782,7 @@ allocated to the Perl stack has been reallocated whilst in the
 If you are making use of the Perl stack pointer in your code you must
 always refresh the local copy using \s-1SPAGAIN\s0 whenever you make use
 of the \fIperl_call_*\fR functions or any other Perl internal function.
-.Ip "4." 5
+.Ip "3." 5
 Although only a single value was expected to be returned from \fIAdder\fR,
 it is still good practice to check the return code from \fIperl_call_pv\fR
 anyway.
@@ -782,7 +792,7 @@ will be one. If someone modified \fIAdder\fR to return a list and we
 didn't check for that possibility and take appropriate action the Perl
 stack would end up in an inconsistent state. That is something you
 \fIreally\fR don't want to happen ever.
-.Ip "5." 5
+.Ip "4." 5
 The \f(CWPOPi\fR macro is used here to pop the return value from the stack.
 In this case we wanted an integer, so \f(CWPOPi\fR was used.
 .Sp
@@ -796,7 +806,7 @@ they return.
 \&    POPi        integer
 \&    POPl        long
 .Ve
-.Ip "6." 5
+.Ip "5." 5
 The final \f(CWPUTBACK\fR is used to leave the Perl stack in a consistent
 state before exiting the function.  This is necessary because when we
 popped the return value from the stack with \f(CWPOPi\fR it updated only our
@@ -831,7 +841,7 @@ and this is the C function
 \&        SAVETMPS;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(a)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
@@ -894,7 +904,7 @@ context, like this
 \&        SAVETMPS;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(a)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
@@ -971,7 +981,7 @@ and here is a C function to call it.
 \&        svb = sv_2mortal(newSViv(b)) ;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sva);
 \&        XPUSHs(svb);
 \&        PUTBACK ;
@@ -1033,7 +1043,7 @@ and some C to call it
 \&        SAVETMPS;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(a)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
@@ -1046,9 +1056,9 @@ and some C to call it
 .Ve
 .Vb 11
 \&        /* Check the eval first */
-\&        if (SvTRUE(GvSV(errgv)))
+\&        if (SvTRUE(ERRSV))
 \&        {
-\&            printf ("Uh oh - %s\en", SvPV(GvSV(errgv), na)) ;
+\&            printf ("Uh oh - %s\en", SvPV(ERRSV, PL_na)) ;
 \&            POPs ;
 \&        }
 \&        else
@@ -1087,9 +1097,9 @@ terminate immediately at the \fIdie\fR statement in the subroutine
 The code
 .Sp
 .Vb 5
-\&    if (SvTRUE(GvSV(errgv)))
+\&    if (SvTRUE(ERRSV))
 \&    {
-\&        printf ("Uh oh - %s\en", SvPV(GvSV(errgv), na)) ;
+\&        printf ("Uh oh - %s\en", SvPV(ERRSV, PL_na)) ;
 \&        POPs ;
 \&    }
 .Ve
@@ -1098,12 +1108,12 @@ is the direct equivalent of this bit of Perl
 .Vb 1
 \&    print "Uh oh - $@\en" if $@ ;
 .Ve
-\f(CWerrgv\fR is a perl global of type \f(CWGV *\fR that points to the
-symbol table entry containing the error.  \f(CWGvSV(errgv)\fR therefore
+\f(CWPL_errgv\fR is a perl global of type \f(CWGV *\fR that points to the
+symbol table entry containing the error.  \f(CWERRSV\fR therefore
 refers to the C equivalent of \f(CW$@\fR.
 .Ip "3." 5
 Note that the stack is popped using \f(CWPOPs\fR in the block where
-\f(CWSvTRUE(GvSV(errgv))\fR is true.  This is necessary because whenever a
+\f(CWSvTRUE(ERRSV)\fR is true.  This is necessary because whenever a
 \fIperl_call_*\fR function invoked with G_EVAL|G_SCALAR returns an error,
 the top of the stack holds the value \fIundef\fR. Because we want the
 program to continue after detecting this error, it is essential that
@@ -1166,7 +1176,7 @@ Here is a snippet of \s-1XSUB\s0 which defines \fICallSubPV\fR.
 \&    CallSubPV(name)
 \&        char *  name
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_pv(name, G_DISCARD|G_NOARGS) ;
 .Ve
 That is fine as far as it goes. The thing is, the Perl subroutine
@@ -1183,7 +1193,7 @@ that the \f(CWname\fR parameter is now defined as an \s-1SV\s0* and we use
 \&    CallSubSV(name)
 \&        SV *    name
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_sv(name, G_DISCARD|G_NOARGS) ;
 .Ve
 Because we are using an \s-1SV\s0 to call \fIfred\fR the following can all be used
@@ -1217,7 +1227,7 @@ pointer to the \s-1SV\s0. Say the code above had been like this
 \&    void
 \&    CallSavedSub1()
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_sv(rememberSub, G_DISCARD|G_NOARGS) ;
 .Ve
 The reason this is wrong is that by the time you come to use the
@@ -1302,7 +1312,7 @@ To get around these problems it is necessary to take a full copy of the
 \&    void
 \&    CallSavedSub2()
 \&        CODE:
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        perl_call_sv(keepSub, G_DISCARD|G_NOARGS) ;
 .Ve
 To avoid creating a new \s-1SV\s0 every time \f(CWSaveSub2\fR is called,
@@ -1409,7 +1419,7 @@ the \f(CWPrintID\fR and \f(CWDisplay\fR methods from C.
 \&        char *  method
 \&        int             index
 \&        CODE:
-\&        PUSHMARK(sp);
+\&        PUSHMARK(SP);
 \&        XPUSHs(ref);
 \&        XPUSHs(sv_2mortal(newSViv(index))) ;
 \&        PUTBACK;
@@ -1423,7 +1433,7 @@ the \f(CWPrintID\fR and \f(CWDisplay\fR methods from C.
 \&        char *  class
 \&        char *  method
 \&        CODE:
-\&        PUSHMARK(sp);
+\&        PUSHMARK(SP);
 \&        XPUSHs(sv_2mortal(newSVpv(class, 0))) ;
 \&        PUTBACK;
 .Ve
@@ -1614,7 +1624,7 @@ Now change that to call a Perl subroutine instead
 \&        dSP ;
 .Ve
 .Vb 1
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 .Ve
 .Vb 3
 \&        /* Call the Perl sub to process the callback */
@@ -1730,7 +1740,7 @@ and \f(CWasynch_read_if\fR could look like this
 \&            croak("Internal error...\en") ;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(fh))) ;
 \&        XPUSHs(sv_2mortal(newSVpv(buffer, 0))) ;
 \&        PUTBACK ;
@@ -1827,7 +1837,7 @@ series of C functions to act as the interface to Perl, thus
 \&        dSP ;
 .Ve
 .Vb 3
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSVpv(buffer, 0))) ;
 \&        PUTBACK ;
 .Ve
@@ -1987,7 +1997,7 @@ of values\fR recoded to use \f(CWST\fR instead of \f(CWPOP*\fR.
 \&        SAVETMPS;
 .Ve
 .Vb 4
-\&        PUSHMARK(sp) ;
+\&        PUSHMARK(SP) ;
 \&        XPUSHs(sv_2mortal(newSViv(a)));
 \&        XPUSHs(sv_2mortal(newSViv(b)));
 \&        PUTBACK ;
@@ -1997,8 +2007,8 @@ of values\fR recoded to use \f(CWST\fR instead of \f(CWPOP*\fR.
 .Ve
 .Vb 3
 \&        SPAGAIN ;
-\&        sp -= count ;
-\&        ax = (sp - stack_base) + 1 ;
+\&        SP -= count ;
+\&        ax = (SP - PL_stack_base) + 1 ;
 .Ve
 .Vb 2
 \&        if (count != 2)
@@ -2025,8 +2035,8 @@ The code
 .Sp
 .Vb 3
 \&        SPAGAIN ;
-\&        sp -= count ;
-\&        ax = (sp - stack_base) + 1 ;
+\&        SP -= count ;
+\&        ax = (SP - PL_stack_base) + 1 ;
 .Ve
 sets the stack up so that we can use the \f(CWST\fR macro.
 .Ip "3." 5
@@ -2035,7 +2045,7 @@ values are not accessed in reverse order.  So \f(CWST(0)\fR refers to the
 first value returned by the Perl subroutine and \f(CWST(count-1)\fR
 refers to the last.
 .Sh "Creating and calling an anonymous subroutine in C"
-As we've already shown, the \fIperl_call_sv\fR manpage can be used to invoke an
+As we've already shown, \f(CWperl_call_sv\fR can be used to invoke an
 anonymous subroutine.  However, our example showed how Perl script
 invoking an \s-1XSUB\s0 to preform this operation.  Let's see how it can be
 done inside our C code:
@@ -2052,8 +2062,9 @@ done inside our C code:
 .Vb 1
 \& perl_call_sv(cvrv, G_VOID|G_NOARGS);
 .Ve
-the \f(CWperl_eval_pv\fR entry in the \fIperlguts\fR manpage is used to compile the anonymous subroutine, which
-will be the return value as well.  Once this code reference is in hand, it
+\f(CWperl_eval_pv\fR is used to compile the anonymous subroutine, which
+will be the return value as well (read more about \f(CWperl_eval_pv\fR in
+the \f(CWperl_eval_pv\fR entry in the \fIperlguts\fR manpage).  Once this code reference is in hand, it
 can be mixed in with all the previous examples we've shown.
 .SH "SEE ALSO"
 the \fIperlxs\fR manpage, the \fIperlguts\fR manpage, the \fIperlembed\fR manpage
@@ -2162,6 +2173,8 @@ Version 1.3, 14th Apr 1997
 
 .IX Item "6."
 
+.IX Item "7."
+
 .IX Subsection "Returning a Scalar"
 
 .IX Item "1."
@@ -2173,8 +2186,6 @@ Version 1.3, 14th Apr 1997
 .IX Item "4."
 
 .IX Item "5."
-
-.IX Item "6."
 
 .IX Subsection "Returning a list of values"
 

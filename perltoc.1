@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTOC 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLTOC 1 "perl 5.005, patch 53" "25/Jul/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -210,7 +210,7 @@ expression enhancements, Innumerable Unbundled Modules, Compilability
 .Ip "\s-1DIAGNOSTICS\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1NOTES\s0" 0
-.Sh "perlfaq \- frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
+.Sh "perlfaq \- frequently asked questions about Perl ($Date: 1998/07/20 23:12:17 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 perlfaq: Structural overview of the \s-1FAQ\s0, the \fIperlfaq1\fR manpage: General Questions
 About Perl, the \fIperlfaq2\fR manpage: Obtaining and Learning about Perl, the \fIperlfaq3\fR manpage:
@@ -222,13 +222,12 @@ the \fIperlfaq8\fR manpage: System Interaction, the \fIperlfaq9\fR manpage: Netw
 .Ip "What will happen if you mail your Perl programming problems to the authors" 5
 .Ip "Credits" 0
 .Ip "Author and Copyright Information" 0
-.Ip "Noncommercial Reproduction" 5
-.Ip "Commercial Reproduction" 5
+.Ip "Bundled Distributions" 5
 .Ip "Disclaimer" 5
 .Ip "Changes" 0
 24/April/97, 23/April/97, 25/March/97, 18/March/97, 17/March/97 Version,
 Initial Release: 11/March/97
-.Sh "perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)"
+.Sh "perlfaq1 \- General Questions About Perl ($Revision: 1.14 $, \f(CW$Date:\fR 1998/06/14 22:15:25 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "What is Perl?" 5
 .Ip "Who supports Perl?  Who develops it?  Why is it free?" 5
@@ -245,31 +244,33 @@ Initial Release: 11/March/97
 .Ip "Where can I get a list of Larry Wall witticisms?" 5
 .Ip "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.16 $, \f(CW$Date:\fR 1997/04/23 18:04:09 $)"
+.Sh "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.24 $, \f(CW$Date:\fR 1998/07/20 23:40:28 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "What machines support Perl?  Where do I get it?" 5
 .Ip "How can I get a binary version of Perl?" 5
 .Ip "I don't have a C compiler on my system.  How can I compile perl?" 5
 .Ip "I copied the Perl binary from one machine to another, but scripts don't work." 5
 .Ip "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?" 5
-.Ip "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?" 5
+.Ip "What modules and extensions are available for Perl?  What is \s-1CPAN\s0? What does \s-1CPAN/\s0src/... mean?" 5
 .Ip "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?" 5
 .Ip "Where can I get information on Perl?" 5
 .Ip "What are the Perl newsgroups on \s-1USENET\s0?  Where do I post questions?" 5
 .Ip "Where should I post source code?" 5
 .Ip "Perl Books" 5
+References, Tutorials           
+*Learning Perl [2nd edition]
+by Randal L. Schwartz and Tom Christiansen, Task-Oriented, Special Topics
 .Ip "Perl in Magazines" 5
 .Ip "Perl on the Net: \s-1FTP\s0 and \s-1WWW\s0 Access" 5
 .Ip "What mailing lists are there for perl?" 5
 MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
 .Ip "Archives of comp.lang.perl.misc" 5
-.Ip "Perl Training" 5
 .Ip "Where can I buy a commercial version of Perl?" 5
 .Ip "Where do I send bug reports?" 5
 .Ip "What is perl.com?  perl.org?  The Perl Institute?" 5
 .Ip "How do I learn about object-oriented Perl programming?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq3 \- Programming Tools ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:43:42 $)"
+.Sh "perlfaq3 \- Programming Tools ($Revision: 1.28 $, \f(CW$Date:\fR 1998/07/16 22:08:49 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "How do I do (anything)?" 5
 .Ip "How can I use Perl interactively?" 5
@@ -284,7 +285,6 @@ MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
 .Ip "How can I use curses with Perl?" 5
 .Ip "How can I use X or Tk with Perl?" 5
 .Ip "How can I generate simple menus without using \s-1CGI\s0 or Tk?" 5
-.Ip "Can I dynamically load C routines into Perl?" 5
 .Ip "What is undump?" 5
 .Ip "How can I make my Perl program run faster?" 5
 .Ip "How can I make my Perl program take less memory?" 5
@@ -293,7 +293,7 @@ MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
 .Ip "How can I make my \s-1CGI\s0 script more efficient?" 5
 .Ip "How can I hide the source for my Perl program?" 5
 .Ip "How can I compile my Perl program into byte code or C?" 5
-.Ip "How can I get \*(N'#!perl\*(T' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?" 5
+.Ip "How can I get \f(CW#!perl\fR to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?" 5
 .Ip "Can I write useful perl programs on the command line?" 5
 .Ip "Why don't perl one-liners work on my \s-1DOS/\s0Mac/\s-1VMS\s0 system?" 5
 .Ip "Where can I learn about \s-1CGI\s0 or Web programming in Perl?" 5
@@ -303,7 +303,7 @@ MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
 .Ip "When I tried to run my script, I got this message. What does it mean?" 5
 .Ip "What's MakeMaker?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq4 \- Data Manipulation ($Revision: 1.19 $, \f(CW$Date:\fR 1997/04/24 22:43:57 $)"
+.Sh "perlfaq4 \- Data Manipulation ($Revision: 1.25 $, \f(CW$Date:\fR 1998/07/16 22:49:55 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Data: Numbers" 0
 .Ip "Why am I getting long decimals (eg, 19.9499999999999) instead of the numbers I should be getting (eg, 19.95)?" 5
@@ -316,10 +316,10 @@ MacPerl, Perl5-Porters, NTPerl, Perl-Packrats
 .Ip "Why aren't my random numbers random?" 5
 .Ip "Data: Dates" 0
 .Ip "How do I find the week-of-the-year/day-of-the-year?" 5
-.Ip "How can I compare two date strings?" 5
+.Ip "How can I compare two dates and find the difference?" 5
 .Ip "How can I take a string and turn it into epoch seconds?" 5
 .Ip "How can I find the Julian Day?" 5
-.Ip "Does Perl have a year 2000 problem?" 5
+.Ip "Does Perl have a year 2000 problem?  Is Perl Y2K compliant?" 5
 .Ip "Data: Strings" 0
 .Ip "How do I validate input?" 5
 .Ip "How do I unescape a string?" 5
@@ -346,11 +346,12 @@ the tag
 .Ip "Data: Arrays" 0
 .Ip "What is the difference between $array[1] and @array[1]?" 5
 .Ip "How can I extract just the unique elements of an array?" 5
-a) If \f(CW@in\fR is sorted, and you want \f(CW@out\fR to be sorted:, b) If you don't know
-whether \f(CW@in\fR is sorted:, c) Like (b), but \f(CW@in\fR contains only small integers:,
-d) A way to do (b) without any loops or greps:, e) Like (d), but \f(CW@in\fR
-contains only small positive integers:
-.Ip "How can I tell whether an array contains a certain element?" 5
+a) If \f(CW@in\fR is sorted, and you want \f(CW@out\fR to be \fIsorted:\fR\|(this assumes all true
+values in the array), b) If you don't know whether \f(CW@in\fR is sorted:, c) Like
+(b), but \f(CW@in\fR contains only small integers:, d) A way to do (b) without any
+loops or greps:, e) Like (d), but \f(CW@in\fR contains only small positive
+integers:
+.Ip "How can I tell whether a list or array contains a certain element?" 5
 .Ip "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?" 5
 .Ip "How do I find the first array element for which a condition is true?" 5
 .Ip "How do I handle linked lists?" 5
@@ -386,19 +387,20 @@ contains only small positive integers:
 .Ip "How do I define methods for every class/object?" 5
 .Ip "How do I verify a credit card checksum?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq5 \- Files and Formats ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:44:02 $)"
+.Sh "perlfaq5 \- Files and Formats ($Revision: 1.24 $, \f(CW$Date:\fR 1998/07/05 15:07:20 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "How do I flush/unbuffer a filehandle?  Why must I do this?" 5
+.Ip "How do I flush/unbuffer an output filehandle?  Why must I do this?" 5
 .Ip "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?" 5
 .Ip "How do I count the number of lines in a file?" 5
 .Ip "How do I make a temporary file name?" 5
 .Ip "How can I manipulate fixed-record-length files?" 5
 .Ip "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?" 5
+.Ip "How can I use a filehandle indirectly?" 5
 .Ip "How can I set up a footer format to be used with write()?" 5
 .Ip "How can I write() into a string?" 5
 .Ip "How can I output my numbers with commas added?" 5
 .Ip "How can I translate tildes (~) in a filename?" 5
-.Ip "How come when I open the file read-write it wipes it out?" 5
+.Ip "How come when I open a file read-write it wipes it out?" 5
 .Ip "Why do I sometimes get an \*(N"Argument list too long\*(T" when I use <*>?" 5
 .Ip "Is there a leak/bug in glob()?" 5
 .Ip "How can I open a file with a leading \*(N">\*(T" or trailing blanks?" 5
@@ -413,8 +415,6 @@ contains only small positive integers:
 .Ip "How can I read in a file by paragraphs?" 5
 .Ip "How can I read a single character from a file?  From the keyboard?" 5
 .Ip "How can I tell if there's a character waiting on a filehandle?" 5
-.Ip "How do I open a file without blocking?" 5
-.Ip "How do I create a file only if it doesn't exist?" 5
 .Ip "How do I do a \f(CWtail -f\fR in perl?" 5
 .Ip "How do I dup() a filehandle in Perl?" 5
 .Ip "How do I close a file descriptor by number?" 5
@@ -423,7 +423,7 @@ contains only small positive integers:
 .Ip "Why does Perl let me delete read-only files?  Why does \f(CW-i\fR clobber protected files?  Isn't this a bug in Perl?" 5
 .Ip "How do I select a random line from a file?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq6 \- Regexps ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:10 $)"
+.Sh "perlfaq6 \- Regexps ($Revision: 1.22 $, \f(CW$Date:\fR 1998/07/16 14:01:07 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "How can I hope to use regular expressions without creating illegible and unmaintainable code?" 5
 Comments Outside the Regexp, Comments Inside the Regexp, Different
@@ -432,7 +432,7 @@ Delimiters
 .Ip "How can I pull out lines between two patterns that are themselves on different lines?" 5
 .Ip "I put a regular expression into $/ but it didn't work. What's wrong?" 5
 .Ip "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?" 5
-.Ip "How can I make \f(CW\ew\fR match accented characters?" 5
+.Ip "How can I make \f(CW\ew\fR match national character sets?" 5
 .Ip "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?" 5
 .Ip "How can I quote a variable to use in a regexp?" 5
 .Ip "What is \f(CW/o\fR really for?" 5
@@ -450,7 +450,7 @@ Delimiters
 .Ip "What's wrong with using grep or map in a void context?" 5
 .Ip "How can I match strings with multibyte characters?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq7 \- Perl Language Issues ($Revision: 1.18 $, \f(CW$Date:\fR 1997/04/24 22:44:14 $)"
+.Sh "perlfaq7 \- Perl Language Issues ($Revision: 1.21 $, \f(CW$Date:\fR 1998/06/22 15:20:07 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Can I get a \s-1BNF/\s0yacc/\s-1RE\s0 for the Perl language?" 5
 .Ip "What are all these $@%* punctuation signs, and how do I know when to use them?" 5
@@ -469,10 +469,10 @@ Delimiters
 Passing Variables and Functions, Passing Filehandles, Passing Regexps,
 Passing Methods
 .Ip "How do I create a static variable?" 5
-.Ip "What's the difference between dynamic and lexical (static) scoping?  Between local() and my()?" 5
+.Ip "What's the difference between dynamic and lexical (static) scoping? Between local() and my()?" 5
 .Ip "How can I access a dynamic variable while a similarly named lexical is in scope?" 5
 .Ip "What's the difference between deep and shallow binding?" 5
-.Ip "Why doesn't \*(N"local($foo) = <\s-1FILE\s0>;\*(T" work right?" 5
+.Ip "Why doesn't \*(N"my($foo) = <\s-1FILE\s0>;\*(T" work right?" 5
 .Ip "How do I redefine a builtin function, operator, or method?" 5
 .Ip "What's the difference between calling a function as &foo and foo()?" 5
 .Ip "How do I create a switch or case statement?" 5
@@ -481,18 +481,23 @@ Passing Methods
 .Ip "How can I find out my current package?" 5
 .Ip "How can I comment out a large block of perl code?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq8 \- System Interaction ($Revision: 1.21 $, \f(CW$Date:\fR 1997/04/24 22:44:19 $)"
+.Sh "perlfaq8 \- System Interaction ($Revision: 1.25 $, \f(CW$Date:\fR 1998/07/05 15:07:20 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "How do I find out which operating system I'm running under?" 5
 .Ip "How come exec() doesn't return?" 5
 .Ip "How do I do fancy stuff with the keyboard/screen/mouse?" 5
 Keyboard, Screen, Mouse
+.Ip "How do I print something out in color?" 5
+.Ip "How do I read just one key without waiting for a return key?" 5
+.Ip "How do I check whether input is ready on the keyboard?" 5
+.Ip "How do I clear the screen?" 5
+.Ip "How do I get the screen size?" 5
 .Ip "How do I ask the user for a password?" 5
 .Ip "How do I read and write the serial port?" 5
 lockfiles, open mode, end of line, flushing output, non-blocking input
 .Ip "How do I decode encrypted password files?" 5
 .Ip "How do I start a process in the background?" 5
-\s-1STDIN\s0, \s-1STDOUT\s0 and \s-1STDERR\s0 are shared, Signals, Zombies
+\s-1STDIN\s0, \s-1STDOUT\s0, and \s-1STDERR\s0 are shared, Signals, Zombies
 .Ip "How do I trap control characters/signals?" 5
 .Ip "How do I modify the shadow password file on a Unix system?" 5
 .Ip "How do I set the time and date?" 5
@@ -515,7 +520,7 @@ lockfiles, open mode, end of line, flushing output, non-blocking input
 .Ip "How can I write expect in Perl?" 5
 .Ip "Is there a way to hide perl's command line from programs such as \*(N"ps\*(T"?" 5
 .Ip "I {changed directory, modified my environment} in a perl script.	How come the change disappeared when I exited the script?  How do I get my changes to be visible?" 5
-Unix, \s-1VMS\s0
+Unix
 .Ip "How do I close a process's filehandle without waiting for it to complete?" 5
 .Ip "How do I fork a daemon process?" 5
 .Ip "How do I make my program run with sh and csh?" 5
@@ -527,135 +532,125 @@ Unix, \s-1VMS\s0
 .Ip "How do I make a system() exit on control-C?" 5
 .Ip "How do I open a file without blocking?" 5
 .Ip "How do I install a \s-1CPAN\s0 module?" 5
+.Ip "What's the difference between require and use?" 5
 .Ip "How do I keep my own module/library directory?" 5
 .Ip "How do I add the directory my program lives in to the module/library search path?" 5
 .Ip "How do I add a directory to my include path at runtime?" 5
-.Ip "How do I get one key from the terminal at a time, under \s-1POSIX\s0?" 0
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)"
+.Sh "perlfaq9 \- Networking ($Revision: 1.20 $, \f(CW$Date:\fR 1998/06/22 18:31:09 $)"
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?" 5
+.Ip "My \s-1CGI\s0 script runs from the command line but not the browser.   (500 Server Error)" 5
+.Ip "How can I get better error messages from a \s-1CGI\s0 program?" 5
 .Ip "How do I remove \s-1HTML\s0 from a string?" 5
 .Ip "How do I extract URLs?" 5
 .Ip "How do I download a file from the user's machine?  How do I open a file on another machine?" 5
 .Ip "How do I make a pop-up menu in \s-1HTML\s0?" 5
 .Ip "How do I fetch an \s-1HTML\s0 file?" 5
-.Ip "how do I decode or create those %\-encodings on the web?" 5
+.Ip "How do I automate an \s-1HTML\s0 form submission?" 5
+.Ip "How do I decode or create those %\-encodings on the web?" 5
 .Ip "How do I redirect to another page?" 5
 .Ip "How do I put a password on my web pages?" 5
 .Ip "How do I edit my .htpasswd and .htgroup files with Perl?" 5
 .Ip "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?" 5
-.Ip "How do I parse an email header?" 5
+.Ip "How do I parse a mail header?" 5
 .Ip "How do I decode a \s-1CGI\s0 form?" 5
-.Ip "How do I check a valid email address?" 5
+.Ip "How do I check a valid mail address?" 5
 .Ip "How do I decode a \s-1MIME/BASE64\s0 string?" 5
-.Ip "How do I return the user's email address?" 5
-.Ip "How do I send/read mail?" 5
+.Ip "How do I return the user's mail address?" 5
+.Ip "How do I send mail?" 5
+.Ip "How do I read mail?" 5
 .Ip "How do I find out my hostname/domainname/\s-1IP\s0 address?" 5
 .Ip "How do I fetch a news article or the active newsgroups?" 5
 .Ip "How do I fetch/put an \s-1FTP\s0 file?" 5
 .Ip "How can I do \s-1RPC\s0 in Perl?" 5
 .Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
-.Sh "perldelta \- what's new for perl5.004"
+.Sh "perldelta \- what's new for perl5.005"
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "Supported Environments" 0
+.Ip "About the new versioning system" 0
+.Ip "Incompatible Changes" 0
+.Ip "\s-1WARNING\s0:  This version is not binary compatible with Perl 5.004." 5
+.Ip "Default installation structure has changed" 5
+.Ip "Perl Source Compatibility" 5
+.Ip "C Source Compatibility" 5
+Core sources now require \s-1ANSI\s0 C compiler, All Perl global variables must
+now be referenced with an explicit prefix, Enabling threads has source
+compatibility issues
+.Ip "Binary Compatibility" 5
+.Ip "Security fixes may affect compatibility" 5
+.Ip "Relaxed new mandatory warnings introduced in 5.004" 5
+.Ip "Licensing" 5
 .Ip "Core Changes" 0
-.Ip "List assignment to %\s-1ENV\s0 works" 5
-.Ip "\*(N"Can't locate Foo.pm in @\s-1INC\s0\*(T" error now lists @\s-1INC\s0" 5
-.Ip "Compilation option: Binary compatibility with 5.003" 5
-.Ip "$\s-1PERL5OPT\s0 environment variable" 5
-.Ip "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options" 5
-.Ip "More precise warnings" 5
-.Ip "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods" 5
-.Ip "Previously deprecated %\s-1OVERLOAD\s0 is no longer usable" 5
-.Ip "Subroutine arguments created only when they're modified" 5
-.Ip "Group vector changeable with \f(CW$)\fR" 5
-.Ip "Fixed parsing of $$<digit>, &$<digit>, etc." 5
-.Ip "No resetting of $. on implicit close" 5
-.Ip "\f(CWwantarray\fR may return undef" 5
-.Ip "Changes to tainting checks" 5
-No \fIglob()\fR or <*>, No spawning if tainted \f(CW$CDPATH\fR, \f(CW$ENV\fR, \f(CW$BASH_ENV\fR, No
-spawning if tainted \f(CW$TERM\fR doesn't look like a terminal name
-.Ip "New Opcode module and revised Safe module" 5
-.Ip "Embedding improvements" 5
-.Ip "Internal change: FileHandle class based on \s-1IO\s0::* classes" 5
-.Ip "Internal change: PerlIO abstraction interface" 5
-.Ip "New and changed syntax" 5
-$coderef->(\s-1PARAMS\s0)
-.Ip "New and changed builtin constants" 5
-_\|_PACKAGE_\|_
-.Ip "New and changed builtin variables" 5
-$^E, $^H, $^M
-.Ip "New and changed builtin functions" 5
-delete on slices, flock, printf and sprintf, keys as an lvalue, \fImy()\fR in
-Control Structures, \fIpack()\fR and \fIunpack()\fR, \fIsysseek()\fR, use \s-1VERSION\s0, use Module
-\s-1VERSION\s0 \s-1LIST\s0, \fIprototype\fR\|(\s-1FUNCTION\s0), srand, \f(CW$_\fR as Default, \f(CWm//gc\fR does not
-reset search position on failure, \f(CWm//x\fR ignores whitespace before ?*+{},
-nested \f(CWsub{}\fR closures work now, formats work right on changing lexicals
-.Ip "New builtin methods" 5
-\fIisa\fR\|(\s-1CLASS\s0), \fIcan\fR\|(\s-1METHOD\s0), \fI\s-1VERSION\s0\fR\|( [\s-1NEED\s0] )
-.Ip "\s-1TIEHANDLE\s0 now supported" 5
-\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1PRINTF\s0 this, \s-1LIST\s0, \s-1READ\s0 this
-\s-1LIST\s0, \s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1DESTROY\s0 this
-.Ip "Malloc enhancements" 5
--\s-1DDEBUGGING_MSTATS\s0, \-\s-1DPERL_EMERGENCY_SBRK\s0, \-\s-1DPACK_MALLOC\s0, \-\s-1DTWO_POT_OPTIMIZE\s0
-.Ip "Miscellaneous efficiency enhancements" 5
-.Ip "Support for More Operating Systems" 0
-.Ip "Win32" 5
-.Ip "Plan 9" 5
-.Ip "\s-1QNX\s0" 5
-.Ip "AmigaOS" 5
-.Ip "Pragmata" 0
-use autouse \s-1MODULE\s0 => \fIqw\fR\|(sub1 sub2 sub3), use blib, use blib \*(L'dir\*(R', use
-constant \s-1NAME\s0 => \s-1VALUE\s0, use locale, use ops, use vmsish
-.Ip "Modules" 0
-.Ip "Required Updates" 5
-.Ip "Installation directories" 5
-.Ip "Module information summary" 5
-.Ip "Fcntl" 5
-.Ip "\s-1IO\s0" 5
-.Ip "Math::Complex" 5
-.Ip "Math::Trig" 5
-.Ip "DB_File" 5
-.Ip "Net::Ping" 5
-.Ip "Object-oriented overrides for builtin operators" 5
+.Ip "Threads" 5
+.Ip "Compiler" 5
+.Ip "Regular Expressions" 5
+Many new and improved optimizations, Many bug fixes, New regular expression
+constructs, New operator for precompiled regular expressions, Other
+improvements, Incompatible changes
+.Ip "Improved malloc()" 5
+.Ip "Quicksort is internally implemented" 5
+.Ip "Reliable signals" 5
+.Ip "Reliable stack pointers" 5
+.Ip "More generous treatment of carriage returns" 5
+.Ip "Memory leaks" 5
+.Ip "Better support for multiple interpreters" 5
+.Ip "Behavior of local() on array and hash elements is now well-defined" 5
+.Ip "\f(CW%!\fR is transparently tied to the the \fIErrno\fR manpage module" 5
+.Ip "Pseudo-hashes are supported" 5
+.Ip "\f(CWEXPR foreach EXPR\fR is supported" 5
+.Ip "Keywords can be globally overridden" 5
+.Ip "\f(CW$^E\fR is meaningful on Win32" 5
+.Ip "\f(CWforeach (1..1000000)\fR optimized" 5
+.Ip "\f(CWFoo::\fR can be used as implicitly quoted package name" 5
+.Ip "\f(CWexists $Foo::{Bar::}\fR tests existence of a package" 5
+.Ip "Better locale support" 5
+.Ip "Experimental support for 64-bit platforms" 5
+.Ip "prototype() returns useful results on builtins" 5
+.Ip "Extended support for exception handling" 5
+.Ip "Re-blessing in \s-1DESTROY\s0() supported for chaining \s-1DESTROY\s0() methods" 5
+.Ip "All \f(CWprintf\fR format conversions are handled internally" 5
+.Ip "New \f(CWINIT\fR keyword" 5
+.Ip "New \f(CWlock\fR keyword" 5
+.Ip "New \f(CWqr//\fR operator" 5
+.Ip "\f(CWour\fR is now a reserved word" 5
+.Ip "Tied arrays are now fully supported" 5
+.Ip "Tied handles support is better" 5
+.Ip "4th argument to substr" 5
+.Ip "Negative \s-1LENGTH\s0 argument to splice" 5
+.Ip "Magic lvalues are now more magical" 5
+.Ip "<> now reads in records" 5
+.Ip "Supported Platforms" 0
+.Ip "New Platforms" 5
+.Ip "Changes in existing support" 5
+.Ip "Modules and Pragmata" 0
+.Ip "New Modules" 5
+B, Data::Dumper, Errno, File::Spec, ExtUtils::Installed,
+ExtUtils::Packlist, Fatal, \s-1IPC::\s0SysV, Test, Tie::Array, Tie::Handle,
+Thread, attrs, fields, re
+.Ip "Changes in existing modules" 5
+\s-1CGI\s0, \s-1POSIX\s0, DB_File, MakeMaker, \s-1CPAN\s0, Cwd, Benchmark
 .Ip "Utility Changes" 0
-.Ip "pod2html" 5
-Sends converted \s-1HTML\s0 to standard output
-.Ip "xsubpp" 5
-\f(CWvoid\fR XSUBs now default to returning nothing
-.Ip "C Language \s-1API\s0 Changes" 0
-\f(CWgv_fetchmethod\fR and \f(CWperl_call_sv\fR, \f(CWperl_eval_pv\fR, Extended \s-1API\s0 for
-manipulating hashes
 .Ip "Documentation Changes" 0
-the \fIperldelta\fR manpage, the \fIperlfaq\fR manpage, the \fIperllocale\fR manpage, the \fIperltoot\fR manpage, the \fIperlapio\fR manpage,
-the \fIperlmodlib\fR manpage, the \fIperldebug\fR manpage, the \fIperlsec\fR manpage
 .Ip "New Diagnostics" 0
-\*(L"my\*(R" variable \f(CW%s\fR masks earlier declaration in same scope, \f(CW%s\fR argument is
-not a \s-1HASH\s0 element or slice, Allocation too large: \f(CW%lx\fR, Allocation too
-large, Applying \f(CW%s\fR to \f(CW%s\fR will act on \fIscalar\fR\|(%s), Attempt to free
-nonexistent shared string, Attempt to use reference as lvalue in substr,
-Can't redefine active sort subroutine \f(CW%s\fR, Can't use bareword ("%s") as \f(CW%s\fR
-ref while \*(L"strict refs\*(R" in use, Cannot resolve method `%s\*(R' overloading `%s\*(R'
-in package `%s\*(R', Constant subroutine \f(CW%s\fR redefined, Constant subroutine \f(CW%s\fR
-undefined, Copy method did not return a reference, Died, Exiting
-pseudo-block via \f(CW%s\fR, Identifier too long, Illegal character \f(CW%s\fR (carriage
-return), Illegal switch in \s-1PERL5OPT\s0: \f(CW%s\fR, Integer overflow in hex number,
-Integer overflow in octal number, internal error: glob failed, Invalid
-conversion in \f(CW%s:\fR \*(L"%s\*(R", Invalid type in pack: \*(L'%s\*(R', Invalid type in unpack:
-\&'%s\*(R', Name \*(L"%s::%s\*(R" used only once: possible typo, Null picture in
-formline, Offset outside string, Out of memory!, Out of memory during
-request for \f(CW%s\fR, panic: frexp, Possible attempt to put comments in \fIqw()\fR
-list, Possible attempt to separate words with commas, Scalar value @%s{%s}
-better written as $%s{%s}, Stub found while resolving method `%s\*(R'
-overloading `%s\*(R' in package `%s\*(R', Too late for \*(L"\fB\-T\fR\*(R" option, untie
-attempted while \f(CW%d\fR inner references still exist, Unrecognized character \f(CW%s\fR,
-Unsupported function fork, Use of \*(L"$$<digit>\*(R" to mean \*(L"${$}<digit>\*(R" is
-deprecated, Value of \f(CW%s\fR can be \*(L"0\*(R"; test with \fIdefined()\fR, Variable \*(L"%s\*(R" may
-be unavailable, Variable \*(L"%s\*(R" will not stay shared, Warning: something's
-wrong, Ill-formed logical name |%s| in prime_env_iter, Got an error from
-DosAllocMem, Malformed \s-1PERLLIB_PREFIX\s0, \s-1PERL_SH_DIR\s0 too long, Process
-terminated by \s-1SIG\s0%s
+Ambiguous call resolved as \s-1CORE\s0::%\fIs()\fR, qualify as such or use &, Bad index
+while coercing array into hash, Bareword \*(L"%s\*(R" refers to nonexistent
+package, Can't call method \*(L"%s\*(R" on an undefined value, Can't coerce array
+into hash, Can't goto subroutine from an eval-string, Can't localize
+pseudo-hash element, Can't use %%! because Errno.pm is not available,
+Cannot find an opnumber for \*(L"%s\*(R", Character class syntax [. .] is reserved
+for future extensions, Character class syntax [: :] is reserved for future
+extensions, Character class syntax [= =] is reserved for future extensions,
+\f(CW%s:\fR Eval-group in insecure regular expression, \f(CW%s:\fR Eval-group not allowed,
+use re \*(L'eval\*(R', \f(CW%s:\fR Eval-group not allowed at run time, Explicit blessing to
+\&'\*(R' (assuming package main), Illegal hex digit ignored, No such array field,
+No such field \*(L"%s\*(R" in variable \f(CW%s\fR of type \f(CW%s\fR, Out of memory during
+ridiculously large request, Range iterator outside integer range, Recursive
+inheritance detected while looking for method \*(L'%s\*(R' in package \*(L'%s\*(R',
+Reference found where even-sized list expected, Undefined value assigned to
+typeglob, Use of reserved word \*(L"%s\*(R" is deprecated, perl: warning: Setting
+locale failed
+.Ip "Obsolete Diagnostics" 0
+Can't \fImktemp()\fR, Can't write to temp file for \fB\-e\fR: \f(CW%s\fR, Cannot open
+temporary file
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1HISTORY\s0" 0
@@ -698,7 +693,7 @@ terminated by \s-1SIG\s0%s
 .Ip "Bitwise Or and Exclusive Or" 5
 .Ip "C\-style Logical And" 5
 .Ip "C\-style Logical Or" 5
-.Ip "Range Operator" 5
+.Ip "Range Operators" 5
 .Ip "Conditional Operator" 5
 .Ip "Assignment Operators" 5
 .Ip "Comma Operator" 5
@@ -710,31 +705,45 @@ terminated by \s-1SIG\s0%s
 unary &, unary *, (\s-1TYPE\s0)
 .Ip "Quote and Quote-like Operators" 5
 .Ip "Regexp Quote-Like Operators" 5
-?\s-1PATTERN\s0?, m/\s-1PATTERN/\s0gimosx, /\s-1PATTERN/\s0gimosx, q/\s-1STRING\s0/, \f(CW'STRING'\fR,
-qq/\s-1STRING\s0/, \*(L"\s-1STRING\s0\*(R", qx/\s-1STRING\s0/, `\s-1STRING\s0`, qw/\s-1STRING\s0/,
+?\s-1PATTERN\s0?, m/\s-1PATTERN/\s0cgimosx, /\s-1PATTERN/\s0cgimosx, q/\s-1STRING\s0/, \f(CW'STRING'\fR,
+qq/\s-1STRING\s0/, \*(L"\s-1STRING\s0\*(R", qr/\s-1STRING/\s0imosx, qx/\s-1STRING\s0/, `\s-1STRING\s0`, qw/\s-1STRING\s0/,
 s/\s-1PATTERN/REPLACEMENT/\s0egimosx, tr/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds,
 y/\s-1SEARCHLIST/REPLACEMENTLIST/\s0cds
+.Ip "Gory details of parsing quoted constructs" 5
+Finding the end, Removal of backslashes before delimiters, Interpolation,
+\f(CW<<'EOF'\fR, \f(CWm''\fR, \f(CWs'''\fR, \f(CWtr///\fR, \f(CWy///\fR, \f(CW''\fR, \f(CWq//\fR, \f(CW""\fR,
+\f(CW``\fR, \f(CWqq//\fR, \f(CWqx//\fR, \f(CW<file*glob>\fR, \f(CW?RE?\fR, \f(CW/RE/\fR, \f(CWm/RE/\fR,
+\f(CWs/RE/foo/\fR,, Interpolation of regular expressions, Optimization of
+regular expressions
 .Ip "I/O Operators" 5
 .Ip "Constant Folding" 5
+.Ip "Bitwise String Operators" 5
 .Ip "Integer Arithmetic" 5
 .Ip "Floating-point Arithmetic" 5
+.Ip "Bigger Numbers" 5
 .Sh "perlre \- Perl regular expressions"
 .Ip "\s-1DESCRIPTION\s0" 0
 i, m, s, x
 .Ip "Regular Expressions" 5
-(?#text), (?:regexp), (?=regexp), (?!regexp), (?imsx)
+\f(CW(?#text)\fR, \f(CW(?:pattern)\fR, \f(CW(?imsx-imsx:pattern)\fR, \f(CW(?=pattern)\fR,
+\f(CW(?!pattern)\fR, \f(CW(?<=pattern)\fR, \f(CW(?<!pattern)\fR, \f(CW(?{ code })\fR,
+\f(CW(?>pattern)\fR, \f(CW(?(condition)yes-pattern|no-pattern)\fR,
+\f(CW(?(condition)yes-pattern)\fR, \f(CW(?imsx-imsx)\fR
 .Ip "Backtracking" 5
 .Ip "Version 8 Regular Expressions" 5
 .Ip "\s-1WARNING\s0 on \e1 vs $1" 5
+.Ip "Repeated patterns matching zero-length substring" 5
+.Ip "Creating custom \s-1RE\s0 engines" 5
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 5
 .Sh "perlrun \- how to execute the Perl interpreter"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "#! and quoting on non-Unix systems" 5
 \s-1OS/2\s0, \s-1MS\s0\-\s-1DOS\s0, Win95/\s-1NT\s0, Macintosh
+.Ip "Location of Perl" 5
 .Ip "Switches" 5
-\fB\-0\fR[\fIdigits\fR], \fB\-a\fR, \fB\-c\fR, \fB\-d\fR, \fB\-d:\fR\fIfoo\fR, \fB\-D\fR\fInumber\fR,
-\fB\-D\fR\fIlist\fR, \fB\-e\fR \fIcommandline\fR, \fB\-F\fR\fIpattern\fR, \fB\-h\fR,
+\fB\-0\fR[\fIdigits\fR], \fB\-a\fR, \fB\-c\fR, \fB\-d\fR, \fB\-d:\fR\fIfoo\fR, \fB\-D\fR\fIletters\fR,
+\fB\-D\fR\fInumber\fR, \fB\-e\fR \fIcommandline\fR, \fB\-F\fR\fIpattern\fR, \fB\-h\fR,
 \fB\-i\fR[\fIextension\fR], \fB\-I\fR\fIdirectory\fR, \fB\-l\fR[\fIoctnum\fR],
 \fB\-m\fR[\fB\-\fR]\fImodule\fR, \fB\-M\fR[\fB\-\fR]\fImodule\fR, \fB\-M\fR[\fB\-\fR]\fI'module ...\*(R'\fR,
 \fB\-[mM]\fR[\fB\-\fR]\fImodule=arg[,arg]...\fR, \fB\-n\fR, \fB\-p\fR, \fB\-P\fR, \fB\-s\fR, \fB\-S\fR,
@@ -744,10 +753,6 @@ i, m, s, x
 (specific to \s-1WIN32\s0 port), \s-1PERL_DEBUG_MSTATS\s0, \s-1PERL_DESTRUCT_LEVEL\s0
 .Sh "perlfunc \- Perl builtin functions"
 .Ip "\s-1DESCRIPTION\s0" 0
-.PP
-.Vb 1
-\& I<THERE IS NO GENERAL RULE FOR CONVERTING A LIST INTO A SCALAR!>
-.Ve
 .Ip "Perl Functions by Category" 5
 Functions for SCALARs or strings, Regular expressions and pattern matching,
 Numeric functions, Functions for real \f(CW@ARRAYs\fR, Functions for list data,
@@ -761,48 +766,49 @@ communication functions, Fetching user and group info, Fetching network
 info, Time-related functions, Functions new in perl5, Functions obsoleted
 in perl5
 .Ip "Alphabetical Listing of Perl Functions" 5
--\fIX\fR \s-1FILEHANDLE\s0, \-\fIX\fR \s-1EXPR\s0, \-\fIX\fR, abs \s-1VALUE\s0, abs, accept
+\fI\-X\fR \s-1FILEHANDLE\s0, \fI\-X\fR \s-1EXPR\s0, \fI\-X\fR, abs \s-1VALUE\s0, abs, accept
 \s-1NEWSOCKET\s0,\s-1GENERICSOCKET\s0, alarm \s-1SECONDS\s0, alarm, atan2 Y,X, bind \s-1SOCKET\s0,\s-1NAME\s0,
 binmode \s-1FILEHANDLE\s0, bless \s-1REF\s0,\s-1CLASSNAME\s0, bless \s-1REF\s0, caller \s-1EXPR\s0, caller,
 chdir \s-1EXPR\s0, chmod \s-1LIST\s0, chomp \s-1VARIABLE\s0, chomp \s-1LIST\s0, chomp, chop \s-1VARIABLE\s0,
 chop \s-1LIST\s0, chop, chown \s-1LIST\s0, chr \s-1NUMBER\s0, chr, chroot \s-1FILENAME\s0, chroot,
-close \s-1FILEHANDLE\s0, closedir \s-1DIRHANDLE\s0, connect \s-1SOCKET\s0,\s-1NAME\s0, continue \s-1BLOCK\s0,
-cos \s-1EXPR\s0, crypt \s-1PLAINTEXT\s0,\s-1SALT\s0, dbmclose \s-1HASH\s0, dbmopen \s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0,
-defined \s-1EXPR\s0, defined, delete \s-1EXPR\s0, die \s-1LIST\s0, do \s-1BLOCK\s0, do
-\fI\s-1SUBROUTINE\s0\fR\|(\s-1LIST\s0), do \s-1EXPR\s0, dump \s-1LABEL\s0, each \s-1HASH\s0, eof \s-1FILEHANDLE\s0, eof (),
-eof, eval \s-1EXPR\s0, eval \s-1BLOCK\s0, exec \s-1LIST\s0, exists \s-1EXPR\s0, exit \s-1EXPR\s0, exp \s-1EXPR\s0,
-exp, fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, fileno \s-1FILEHANDLE\s0, flock
-\s-1FILEHANDLE\s0,\s-1OPERATION\s0, fork, format, formline \s-1PICTURE\s0,\s-1LIST\s0, getc \s-1FILEHANDLE\s0,
-getc, getlogin, getpeername \s-1SOCKET\s0, getpgrp \s-1PID\s0, getppid, getpriority
-\s-1WHICH\s0,\s-1WHO\s0, getpwnam \s-1NAME\s0, getgrnam \s-1NAME\s0, gethostbyname \s-1NAME\s0, getnetbyname
-\s-1NAME\s0, getprotobyname \s-1NAME\s0, getpwuid \s-1UID\s0, getgrgid \s-1GID\s0, getservbyname
-\s-1NAME\s0,\s-1PROTO\s0, gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0, getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0,
-getprotobynumber \s-1NUMBER\s0, getservbyport \s-1PORT\s0,\s-1PROTO\s0, getpwent, getgrent,
-gethostent, getnetent, getprotoent, getservent, setpwent, setgrent,
-sethostent \s-1STAYOPEN\s0, setnetent \s-1STAYOPEN\s0, setprotoent \s-1STAYOPEN\s0, setservent
-\s-1STAYOPEN\s0, endpwent, endgrent, endhostent, endnetent, endprotoent,
-endservent, getsockname \s-1SOCKET\s0, getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0, glob \s-1EXPR\s0,
-glob, gmtime \s-1EXPR\s0, goto \s-1LABEL\s0, goto \s-1EXPR\s0, goto &\s-1NAME\s0, grep \s-1BLOCK\s0 \s-1LIST\s0, grep
-\s-1EXPR\s0,\s-1LIST\s0, hex \s-1EXPR\s0, hex, import, index \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, index
-\s-1STR\s0,\s-1SUBSTR\s0, int \s-1EXPR\s0, int, ioctl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, join
-\s-1EXPR\s0,\s-1LIST\s0, keys \s-1HASH\s0, kill \s-1LIST\s0, last \s-1LABEL\s0, last, lc \s-1EXPR\s0, lc, lcfirst
-\s-1EXPR\s0, lcfirst, length \s-1EXPR\s0, length, link \s-1OLDFILE\s0,\s-1NEWFILE\s0, listen
-\s-1SOCKET\s0,\s-1QUEUESIZE\s0, local \s-1EXPR\s0, localtime \s-1EXPR\s0, log \s-1EXPR\s0, log, lstat
-\s-1FILEHANDLE\s0, lstat \s-1EXPR\s0, lstat, m//, map \s-1BLOCK\s0 \s-1LIST\s0, map \s-1EXPR\s0,\s-1LIST\s0, mkdir
-\s-1FILENAME\s0,\s-1MODE\s0, msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, msgget \s-1KEY\s0,\s-1FLAGS\s0, msgsnd \s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0,
-msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0, my \s-1EXPR\s0, next \s-1LABEL\s0, next, no Module \s-1LIST\s0,
-oct \s-1EXPR\s0, oct, open \s-1FILEHANDLE\s0,\s-1EXPR\s0, open \s-1FILEHANDLE\s0, opendir
-\s-1DIRHANDLE\s0,\s-1EXPR\s0, ord \s-1EXPR\s0, ord, pack \s-1TEMPLATE\s0,\s-1LIST\s0, package \s-1NAMESPACE\s0, pipe
-\s-1READHANDLE\s0,\s-1WRITEHANDLE\s0, pop \s-1ARRAY\s0, pop, pos \s-1SCALAR\s0, pos, print \s-1FILEHANDLE\s0
-\s-1LIST\s0, print \s-1LIST\s0, print, printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0, printf \s-1FORMAT\s0,
-\s-1LIST\s0, prototype \s-1FUNCTION\s0, push \s-1ARRAY\s0,\s-1LIST\s0, q/\s-1STRING\s0/, qq/\s-1STRING\s0/,
-qx/\s-1STRING\s0/, qw/\s-1STRING\s0/, quotemeta \s-1EXPR\s0, quotemeta, rand \s-1EXPR\s0, rand, read
-\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, readdir
-\s-1DIRHANDLE\s0, readlink \s-1EXPR\s0, readlink, recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0, redo
-\s-1LABEL\s0, redo, ref \s-1EXPR\s0, ref, rename \s-1OLDNAME\s0,\s-1NEWNAME\s0, require \s-1EXPR\s0, require,
-reset \s-1EXPR\s0, reset, return \s-1EXPR\s0, return, reverse \s-1LIST\s0, rewinddir \s-1DIRHANDLE\s0,
-rindex \s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, rindex \s-1STR\s0,\s-1SUBSTR\s0, rmdir \s-1FILENAME\s0, rmdir, s///,
-scalar \s-1EXPR\s0, seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, seekdir \s-1DIRHANDLE\s0,\s-1POS\s0, select
+close \s-1FILEHANDLE\s0, close, closedir \s-1DIRHANDLE\s0, connect \s-1SOCKET\s0,\s-1NAME\s0, continue
+\s-1BLOCK\s0, cos \s-1EXPR\s0, crypt \s-1PLAINTEXT\s0,\s-1SALT\s0, dbmclose \s-1HASH\s0, dbmopen
+\s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0, defined \s-1EXPR\s0, defined, delete \s-1EXPR\s0, die \s-1LIST\s0, do \s-1BLOCK\s0,
+do \fI\s-1SUBROUTINE\s0\fR\|(\s-1LIST\s0), do \s-1EXPR\s0, dump \s-1LABEL\s0, each \s-1HASH\s0, eof \s-1FILEHANDLE\s0, eof
+(), eof, eval \s-1EXPR\s0, eval \s-1BLOCK\s0, exec \s-1LIST\s0, exec \s-1PROGRAM\s0 \s-1LIST\s0, exists \s-1EXPR\s0,
+exit \s-1EXPR\s0, exp \s-1EXPR\s0, exp, fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, fileno
+\s-1FILEHANDLE\s0, flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0, fork, format, formline
+\s-1PICTURE\s0,\s-1LIST\s0, getc \s-1FILEHANDLE\s0, getc, getlogin, getpeername \s-1SOCKET\s0, getpgrp
+\s-1PID\s0, getppid, getpriority \s-1WHICH\s0,\s-1WHO\s0, getpwnam \s-1NAME\s0, getgrnam \s-1NAME\s0,
+gethostbyname \s-1NAME\s0, getnetbyname \s-1NAME\s0, getprotobyname \s-1NAME\s0, getpwuid \s-1UID\s0,
+getgrgid \s-1GID\s0, getservbyname \s-1NAME\s0,\s-1PROTO\s0, gethostbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0,
+getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0, getprotobynumber \s-1NUMBER\s0, getservbyport
+\s-1PORT\s0,\s-1PROTO\s0, getpwent, getgrent, gethostent, getnetent, getprotoent,
+getservent, setpwent, setgrent, sethostent \s-1STAYOPEN\s0, setnetent \s-1STAYOPEN\s0,
+setprotoent \s-1STAYOPEN\s0, setservent \s-1STAYOPEN\s0, endpwent, endgrent, endhostent,
+endnetent, endprotoent, endservent, getsockname \s-1SOCKET\s0, getsockopt
+\s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0, glob \s-1EXPR\s0, glob, gmtime \s-1EXPR\s0, goto \s-1LABEL\s0, goto \s-1EXPR\s0,
+goto &\s-1NAME\s0, grep \s-1BLOCK\s0 \s-1LIST\s0, grep \s-1EXPR\s0,\s-1LIST\s0, hex \s-1EXPR\s0, hex, import, index
+\s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, index \s-1STR\s0,\s-1SUBSTR\s0, int \s-1EXPR\s0, int, ioctl
+\s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, join \s-1EXPR\s0,\s-1LIST\s0, keys \s-1HASH\s0, kill \s-1LIST\s0, last
+\s-1LABEL\s0, last, lc \s-1EXPR\s0, lc, lcfirst \s-1EXPR\s0, lcfirst, length \s-1EXPR\s0, length, link
+\s-1OLDFILE\s0,\s-1NEWFILE\s0, listen \s-1SOCKET\s0,\s-1QUEUESIZE\s0, local \s-1EXPR\s0, localtime \s-1EXPR\s0, log
+\s-1EXPR\s0, log, lstat \s-1FILEHANDLE\s0, lstat \s-1EXPR\s0, lstat, m//, map \s-1BLOCK\s0 \s-1LIST\s0, map
+\s-1EXPR\s0,\s-1LIST\s0, mkdir \s-1FILENAME\s0,\s-1MODE\s0, msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, msgget \s-1KEY\s0,\s-1FLAGS\s0, msgsnd
+\s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0, msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0, my \s-1EXPR\s0, next \s-1LABEL\s0, next, no
+Module \s-1LIST\s0, oct \s-1EXPR\s0, oct, open \s-1FILEHANDLE\s0,\s-1EXPR\s0, open \s-1FILEHANDLE\s0, opendir
+\s-1DIRHANDLE\s0,\s-1EXPR\s0, ord \s-1EXPR\s0, ord, pack \s-1TEMPLATE\s0,\s-1LIST\s0, package, package
+\s-1NAMESPACE\s0, pipe \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0, pop \s-1ARRAY\s0, pop, pos \s-1SCALAR\s0, pos,
+print \s-1FILEHANDLE\s0 \s-1LIST\s0, print \s-1LIST\s0, print, printf \s-1FILEHANDLE\s0 \s-1FORMAT\s0, \s-1LIST\s0,
+printf \s-1FORMAT\s0, \s-1LIST\s0, prototype \s-1FUNCTION\s0, push \s-1ARRAY\s0,\s-1LIST\s0, q/\s-1STRING\s0/,
+qq/\s-1STRING\s0/, qr/\s-1STRING\s0/, qx/\s-1STRING\s0/, qw/\s-1STRING\s0/, quotemeta \s-1EXPR\s0, quotemeta,
+rand \s-1EXPR\s0, rand, read \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, read
+\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, readdir \s-1DIRHANDLE\s0, readline \s-1EXPR\s0, readlink \s-1EXPR\s0,
+readlink, readpipe \s-1EXPR\s0, recv \s-1SOCKET\s0,\s-1SCALAR\s0,\s-1LEN\s0,\s-1FLAGS\s0, redo \s-1LABEL\s0, redo,
+ref \s-1EXPR\s0, ref, rename \s-1OLDNAME\s0,\s-1NEWNAME\s0, require \s-1EXPR\s0, require, reset \s-1EXPR\s0,
+reset, return \s-1EXPR\s0, return, reverse \s-1LIST\s0, rewinddir \s-1DIRHANDLE\s0, rindex
+\s-1STR\s0,\s-1SUBSTR\s0,\s-1POSITION\s0, rindex \s-1STR\s0,\s-1SUBSTR\s0, rmdir \s-1FILENAME\s0, rmdir, s///, scalar
+\s-1EXPR\s0, seek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, seekdir \s-1DIRHANDLE\s0,\s-1POS\s0, select
 \s-1FILEHANDLE\s0, select, select \s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0, semctl
 \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0, semget \s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0, semop \s-1KEY\s0,\s-1OPSTRING\s0, send
 \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0,\s-1TO\s0, send \s-1SOCKET\s0,\s-1MSG\s0,\s-1FLAGS\s0, setpgrp \s-1PID\s0,\s-1PGRP\s0, setpriority
@@ -815,23 +821,24 @@ sort \s-1LIST\s0, splice \s-1ARRAY\s0,\s-1OFFSET\s0,\s-1LENGTH\s0,\s-1LIST\s0, s
 splice \s-1ARRAY\s0,\s-1OFFSET\s0, split /\s-1PATTERN\s0/,\s-1EXPR\s0,\s-1LIMIT\s0, split /\s-1PATTERN\s0/,\s-1EXPR\s0,
 split /\s-1PATTERN\s0/, split, sprintf \s-1FORMAT\s0, \s-1LIST\s0, sqrt \s-1EXPR\s0, sqrt, srand \s-1EXPR\s0,
 srand, stat \s-1FILEHANDLE\s0, stat \s-1EXPR\s0, stat, study \s-1SCALAR\s0, study, sub \s-1BLOCK\s0,
-sub \s-1NAME\s0, sub \s-1NAME\s0 \s-1BLOCK\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0,
-symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0, syscall \s-1LIST\s0, sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,
-sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0, sysread
-\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, sysseek
-\s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, system \s-1LIST\s0, syswrite
-\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, tell
-\s-1FILEHANDLE\s0, tell, telldir \s-1DIRHANDLE\s0, tie \s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0, tied
-\s-1VARIABLE\s0, time, times, tr///, truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0, truncate
-\s-1EXPR\s0,\s-1LENGTH\s0, uc \s-1EXPR\s0, uc, ucfirst \s-1EXPR\s0, ucfirst, umask \s-1EXPR\s0, umask, undef
-\s-1EXPR\s0, undef, unlink \s-1LIST\s0, unlink, unpack \s-1TEMPLATE\s0,\s-1EXPR\s0, untie \s-1VARIABLE\s0,
-unshift \s-1ARRAY\s0,\s-1LIST\s0, use Module \s-1LIST\s0, use Module, use Module \s-1VERSION\s0 \s-1LIST\s0,
-use \s-1VERSION\s0, utime \s-1LIST\s0, values \s-1HASH\s0, vec \s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0, wait, waitpid
-\s-1PID\s0,\s-1FLAGS\s0, wantarray, warn \s-1LIST\s0, write \s-1FILEHANDLE\s0, write \s-1EXPR\s0, write, y///
+sub \s-1NAME\s0, sub \s-1NAME\s0 \s-1BLOCK\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0,\s-1REPLACEMENT\s0, substr
+\s-1EXPR\s0,\s-1OFFSET\s0,\s-1LEN\s0, substr \s-1EXPR\s0,\s-1OFFSET\s0, symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0, syscall \s-1LIST\s0,
+sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0, sysopen \s-1FILEHANDLE\s0,\s-1FILENAME\s0,\s-1MODE\s0,\s-1PERMS\s0,
+sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, sysread \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,
+sysseek \s-1FILEHANDLE\s0,\s-1POSITION\s0,\s-1WHENCE\s0, system \s-1LIST\s0, system \s-1PROGRAM\s0 \s-1LIST\s0,
+syswrite \s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0,\s-1OFFSET\s0, syswrite
+\s-1FILEHANDLE\s0,\s-1SCALAR\s0,\s-1LENGTH\s0, tell \s-1FILEHANDLE\s0, tell, telldir \s-1DIRHANDLE\s0, tie
+\s-1VARIABLE\s0,\s-1CLASSNAME\s0,\s-1LIST\s0, tied \s-1VARIABLE\s0, time, times, tr///, truncate
+\s-1FILEHANDLE\s0,\s-1LENGTH\s0, truncate \s-1EXPR\s0,\s-1LENGTH\s0, uc \s-1EXPR\s0, uc, ucfirst \s-1EXPR\s0,
+ucfirst, umask \s-1EXPR\s0, umask, undef \s-1EXPR\s0, undef, unlink \s-1LIST\s0, unlink, unpack
+\s-1TEMPLATE\s0,\s-1EXPR\s0, untie \s-1VARIABLE\s0, unshift \s-1ARRAY\s0,\s-1LIST\s0, use Module \s-1LIST\s0, use
+Module, use Module \s-1VERSION\s0 \s-1LIST\s0, use \s-1VERSION\s0, utime \s-1LIST\s0, values \s-1HASH\s0, vec
+\s-1EXPR\s0,\s-1OFFSET\s0,\s-1BITS\s0, wait, waitpid \s-1PID\s0,\s-1FLAGS\s0, wantarray, warn \s-1LIST\s0, write
+\s-1FILEHANDLE\s0, write \s-1EXPR\s0, write, y///
 .Sh "perlvar \- Perl predefined variables"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Predefined Names" 5
-$\s-1ARG\s0, \f(CW$_\fR, $<\fIdigit\fR>, \f(CW$MATCH\fR, $&, \f(CW$PREMATCH\fR, $`, \f(CW$POSTMATCH\fR, $\*(R',
+$\s-1ARG\s0, \f(CW$_\fR, $<\fIdigits\fR>, \f(CW$MATCH\fR, $&, \f(CW$PREMATCH\fR, $`, \f(CW$POSTMATCH\fR, $\*(R',
 \f(CW$LAST_PAREN_MATCH\fR, $+, \f(CW$MULTILINE_MATCHING\fR, $*, input_line_number \s-1HANDLE\s0
 \s-1EXPR\s0, \f(CW$INPUT_LINE_NUMBER\fR, \f(CW$NR\fR, $, input_record_separator \s-1HANDLE\s0 \s-1EXPR\s0,
 \f(CW$INPUT_RECORD_SEPARATOR\fR, \f(CW$RS\fR, $/, autoflush \s-1HANDLE\s0 \s-1EXPR\s0, \f(CW$OUTPUT_AUTOFLUSH\fR,
@@ -848,15 +855,22 @@ format_line_break_characters \s-1HANDLE\s0 \s-1EXPR\s0, \f(CW$FORMAT_LINE_BREAK_
 \f(CW$EVAL_ERROR\fR, $@, \f(CW$PROCESS_ID\fR, \f(CW$PID\fR, $$, \f(CW$REAL_USER_ID\fR, \f(CW$UID\fR, $<,
 \f(CW$EFFECTIVE_USER_ID\fR, \f(CW$EUID\fR, $>, \f(CW$REAL_GROUP_ID\fR, \f(CW$GID\fR, $(,
 \f(CW$EFFECTIVE_GROUP_ID\fR, \f(CW$EGID\fR, $), \f(CW$PROGRAM_NAME\fR, \f(CW$0\fR, $[, \f(CW$PERL_VERSION\fR, $],
-\f(CW$DEBUGGING\fR, $^D, \f(CW$SYSTEM_FD_MAX\fR, $^F, $^H, \f(CW$INPLACE_EDIT\fR, $^I, \f(CW$OSNAME\fR,
-$^O, \f(CW$PERLDB\fR, $^P, \f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$EXECUTABLE_NAME\fR, $^X,
-\f(CW$ARGV\fR, \f(CW@ARGV\fR, \f(CW@INC\fR, \f(CW%INC\fR, \f(CW$ENV\fR{expr}, \f(CW$SIG\fR{expr}, $^M
+\f(CW$DEBUGGING\fR, $^D, \f(CW$SYSTEM_FD_MAX\fR, $^F, $^H, \f(CW$INPLACE_EDIT\fR, $^I, $^M,
+\f(CW$OSNAME\fR, $^O, \f(CW$PERLDB\fR, $^P, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, $^R, $^S,
+\f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$EXECUTABLE_NAME\fR, $^X, \f(CW$ARGV\fR, \f(CW@ARGV\fR, \f(CW@INC\fR,
+\f(CW@_\fR, \f(CW%INC\fR, \f(CW%ENV\fR  \f(CW$ENV\fR{expr}, \f(CW%SIG\fR  \f(CW$SIG\fR{expr}
+.Ip "Error Indicators" 5
 .Sh "perlsub \- Perl subroutines"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "Private Variables via my()" 5
+.Ip "Private Variables via \f(CWmy()\fR" 5
+.Ip "Peristent Private Variables" 5
 .Ip "Temporary Values via local()" 5
 .Ip "Passing Symbol Table Entries (typeglobs)" 5
+.Ip "When to Still Use local()" 5
+1. You need to give a global variable a temporary value, especially \f(CW$_\fR,
+2. You need to create a local file or directory handle or a local function,
+3. You want to temporarily change just one element of an array or hash
 .Ip "Pass by Reference" 5
 .Ip "Prototypes" 5
 .Ip "Constant Functions" 5
@@ -876,23 +890,23 @@ $^O, \f(CW$PERLDB\fR, $^P, \f(CW$BASETIME\fR, $^T, \f(CW$WARNING\fR, $^W, \f(CW$
 .Ip "\s-1THE\s0 \s-1PERL\s0 \s-1MODULE\s0 \s-1LIBRARY\s0" 0
 .Ip "Pragmatic Modules" 5
 use autouse \s-1MODULE\s0 => \fIqw\fR\|(sub1 sub2 sub3), blib, diagnostics, integer, less,
-lib, locale, ops, overload, sigtrap, strict, subs, vmsish, vars
+lib, locale, ops, overload, re, sigtrap, strict, subs, vmsish, vars
 .Ip "Standard Modules" 5
 AnyDBM_File, AutoLoader, AutoSplit, Benchmark, \s-1CPAN\s0, \s-1CPAN::\s0FirstTime,
 \s-1CPAN::\s0Nox, Carp, Class::Struct, Config, Cwd, DB_File, Devel::SelfStubber,
 DirHandle, DynaLoader, English, Env, Exporter, ExtUtils::Embed,
 ExtUtils::Install, ExtUtils::Liblist, ExtUtils::\s-1MM_OS2\s0, ExtUtils::MM_Unix,
 ExtUtils::\s-1MM_VMS\s0, ExtUtils::MakeMaker, ExtUtils::Manifest,
-ExtUtils::Mkbootstrap, ExtUtils::Mksymlists, ExtUtils::testlib, Fcntl,
-File::Basename, File::CheckTree, File::Compare, File::Copy, File::Find,
-File::Path, File::stat, FileCache, FileHandle, FindBin, GDBM_File,
-Getopt::Long, Getopt::Std, I18N::Collate, \s-1IO\s0, \s-1IO::\s0File, \s-1IO::\s0Handle,
-\s-1IO::\s0Pipe, \s-1IO::\s0Seekable, \s-1IO::\s0Select, \s-1IO::\s0Socket, \s-1IPC::\s0Open2, \s-1IPC::\s0Open3,
-Math::BigFloat, Math::BigInt, Math::Complex, Math::Trig, NDBM_File,
-Net::Ping, Net::hostent, Net::netent, Net::protoent, Net::servent, Opcode,
-Pod::Text, \s-1POSIX\s0, SDBM_File, Safe, Search::Dict, SelectSaver, SelfLoader,
-Shell, Socket, Symbol, Sys::Hostname, Sys::Syslog, Term::Cap,
-Term::Complete, Term::ReadLine, Test::Harness, Text::Abbrev,
+ExtUtils::Mkbootstrap, ExtUtils::Mksymlists, ExtUtils::testlib, Fatal,
+Fcntl, File::Basename, File::CheckTree, File::Compare, File::Copy,
+File::Find, File::Path, File::stat, FileCache, FileHandle, FindBin,
+GDBM_File, Getopt::Long, Getopt::Std, I18N::Collate, \s-1IO\s0, \s-1IO::\s0File,
+\s-1IO::\s0Handle, \s-1IO::\s0Pipe, \s-1IO::\s0Seekable, \s-1IO::\s0Select, \s-1IO::\s0Socket, \s-1IPC::\s0Open2,
+\s-1IPC::\s0Open3, Math::BigFloat, Math::BigInt, Math::Complex, Math::Trig,
+NDBM_File, Net::Ping, Net::hostent, Net::netent, Net::protoent,
+Net::servent, Opcode, Pod::Text, \s-1POSIX\s0, SDBM_File, Safe, Search::Dict,
+SelectSaver, SelfLoader, Shell, Socket, Symbol, Sys::Hostname, Sys::Syslog,
+Term::Cap, Term::Complete, Term::ReadLine, Test::Harness, Text::Abbrev,
 Text::ParseWords, Text::Soundex, Text::Tabs, Text::Wrap, Tie::Hash,
 Tie::RefHash, Tie::Scalar, Tie::SubstrHash, Time::Local, Time::gmtime,
 Time::localtime, Time::tm, \s-1UNIVERSAL\s0, User::grent, User::pwent
@@ -932,11 +946,19 @@ Adds the standard Module prologue lines, Converts package specifiers from \*(L'
 to ::, Converts \fIdie\fR\|(...) to \fIcroak\fR\|(...), Several other minor changes
 .Ip "Guidelines for Reusing Application Code" 5
 Complete applications rarely belong in the Perl Module Library, Many
-applications contain some perl code which could be reused, Break-out the
+applications contain some Perl code that could be reused, Break-out the
 reusable code into one or more separate module files, Take the opportunity
 to reconsider and redesign the interfaces, In some cases the \*(L'application\*(R'
 can then be reduced to a small
 .Ip "\s-1NOTE\s0" 0
+.Sh "perlmodinstall \- Installing \s-1CPAN\s0 Modules"
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1PREAMBLE\s0" 5
+\fB\s-1DECOMPRESS\s0\fR the file, \fB\s-1UNPACK\s0\fR the file into a directory, \fB\s-1BUILD\s0\fR the
+module (sometimes unnecessary), \fB\s-1INSTALL\s0\fR the module
+.Ip "\s-1HEY\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1COPYRIGHT\s0" 0
 .Sh "perlform \- Perl formats"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Format Variables" 5
@@ -950,6 +972,12 @@ can then be reduced to a small
 .Ip "\s-1USING\s0 \s-1LOCALES\s0" 0
 .Ip "The use locale pragma" 5
 .Ip "The setlocale function" 5
+.Ip "Finding locales" 5
+.Ip "\s-1LOCALE\s0 \s-1PROBLEMS\s0" 5
+.Ip "Temporarily fixing locale problems" 5
+.Ip "Permanently fixing locale problems" 5
+.Ip "Permanently fixing your locale configuration" 5
+.Ip "Permanently fixing system locale configuration" 5
 .Ip "The localeconv function" 5
 .Ip "\s-1LOCALE\s0 \s-1CATEGORIES\s0" 0
 .Ip "Category \s-1LC_COLLATE\s0: Collation" 5
@@ -960,7 +988,7 @@ can then be reduced to a small
 .Ip "Other categories" 5
 .Ip "\s-1SECURITY\s0" 0
 \fBComparison operators\fR (\f(CWlt\fR, \f(CWle\fR, \f(CWge\fR, \f(CWgt\fR and \f(CWcmp\fR):,
-\fBCase-mapping interpolation\fR (with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or <\eU>),
+\fBCase-mapping interpolation\fR (with \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR or \f(CW\eU\fR),
 \fBMatching operator\fR (\f(CWm//\fR):, \fBSubstitution operator\fR (\f(CWs///\fR):,
 \fBIn-memory formatting function\fR (\fIsprintf()\fR):, \fBOutput formatting
 functions\fR (\fIprintf()\fR and \fIwrite()\fR):, \fBCase-mapping functions\fR (\fIlc()\fR,
@@ -986,8 +1014,12 @@ tests\fR (\fIisalnum()\fR, \fIisalpha()\fR, \fIisdigit()\fR,\fIisgraph()\fR, \fI
 .Ip "\s-1HISTORY\s0" 0
 .Sh "perlref \- Perl references and nested data structures"
 .Ip "\s-1DESCRIPTION\s0" 0
+.Ip "Making References" 5
+.Ip "Using References" 5
 .Ip "Symbolic references" 5
 .Ip "Not-so-symbolic references" 5
+.Ip "Pseudo-hashes: Using an array as a hash" 5
+.Ip "Function Templates" 5
 .Ip "\s-1WARNING\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "perldsc \- Perl Data Structures Cookbook"
@@ -1062,6 +1094,7 @@ more elaborate constructs
 .Ip "\s-1NOTES\s0" 5
 .Ip "Object Terminology" 5
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0" 0
 .Ip "\s-1COPYRIGHT\s0" 0
 .Ip "Acknowledgments" 5
 .Sh "perlobj \- Perl objects"
@@ -1090,8 +1123,8 @@ more elaborate constructs
 this, key, value, \s-1DELETE\s0 this, key, \s-1CLEAR\s0 this, \s-1EXISTS\s0 this, key, \s-1FIRSTKEY\s0
 this, \s-1NEXTKEY\s0 this, lastkey, \s-1DESTROY\s0 this
 .Ip "Tying FileHandles" 5
-\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1PRINTF\s0 this, \s-1LIST\s0, \s-1READ\s0 this
-\s-1LIST\s0, \s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1DESTROY\s0 this
+\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1WRITE\s0 this, \s-1LIST\s0, \s-1PRINT\s0 this, \s-1LIST\s0, \s-1PRINTF\s0 this,
+\s-1LIST\s0, \s-1READ\s0 this, \s-1LIST\s0, \s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1CLOSE\s0 this, \s-1DESTROY\s0 this
 .Ip "The \f(CWuntie\fR Gotcha" 5
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1BUGS\s0" 0
@@ -1113,13 +1146,16 @@ this, \s-1NEXTKEY\s0 this, lastkey, \s-1DESTROY\s0 this
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Signals" 0
 .Ip "Named Pipes" 0
+.Ip "\s-1WARNING\s0" 5
 .Ip "Using open() for \s-1IPC\s0" 0
 .Ip "Filehandles" 5
 .Ip "Background Processes" 5
 .Ip "Complete Dissociation of Child from Parent" 5
 .Ip "Safe Pipe Opens" 5
 .Ip "Bidirectional Communication with Another Process" 5
+.Ip "Bidirectional Communication with Yourself" 5
 .Ip "Sockets: Client/Server Communication" 0
+.Ip "Internet Line Terminators" 5
 .Ip "Internet \s-1TCP\s0 Clients and Servers" 5
 .Ip "Unix-Domain \s-1TCP\s0 Clients and Servers" 5
 .Ip "\s-1TCP\s0 Clients with \s-1IO::\s0Socket" 0
@@ -1144,16 +1180,16 @@ h [command], p expr, x expr, V [pkg [vars]], X [vars], T, s [expr], n
 subname, \-, w [line], f filename, /pattern/, ?pattern?, L, S [[!]pattern],
 t, t expr, b [line] [condition], b subname [condition], b postpone subname
 [condition], b load filename, b compile subname, d [line], D, a [line]
-command, A, O [opt[=val]] [opt"val"] [opt?].., \f(CWrecallCommand\fR,
-\f(CWShellBang\fR, \f(CWpager\fR, \f(CWtkRunning\fR, \f(CWsignalLevel\fR, \f(CWwarnLevel\fR,
-\f(CWdieLevel\fR, \f(CWAutoTrace\fR, \f(CWLineInfo\fR, \f(CWinhibit_exit\fR, \f(CWPrintRet\fR,
-\f(CWornaments\fR, \f(CWframe\fR, \f(CWmaxTraceLen\fR, \f(CWarrayDepth\fR, \f(CWhashDepth\fR,
-\f(CWcompactDump\fR, \f(CWveryCompact\fR, \f(CWglobPrint\fR, \f(CWDumpDBFiles\fR,
-\f(CWDumpPackages\fR, \f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR, \f(CWUsageOnly\fR, \f(CWTTY\fR,
-\f(CWnoTTY\fR, \f(CWReadLine\fR, \f(CWNonStop\fR, < [ command ], << command,
-> command, >> command, { [ command ], {{ command, ! number, !
-\-number, ! pattern, !! cmd, H \-number, q or ^D, R, |dbcmd, ||dbcmd, =
-[alias value], command, m expr, m package
+command, A, W [expr], W, O [opt[=val]] [opt"val"] [opt?]..,
+\f(CWrecallCommand\fR, \f(CWShellBang\fR, \f(CWpager\fR, \f(CWtkRunning\fR, \f(CWsignalLevel\fR,
+\f(CWwarnLevel\fR, \f(CWdieLevel\fR, \f(CWAutoTrace\fR, \f(CWLineInfo\fR, \f(CWinhibit_exit\fR,
+\f(CWPrintRet\fR, \f(CWornaments\fR, \f(CWframe\fR, \f(CWmaxTraceLen\fR, \f(CWarrayDepth\fR,
+\f(CWhashDepth\fR, \f(CWcompactDump\fR, \f(CWveryCompact\fR, \f(CWglobPrint\fR, \f(CWDumpDBFiles\fR,
+\f(CWDumpPackages\fR, \f(CWDumpReused\fR, \f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR,
+\f(CWUsageOnly\fR, \f(CWTTY\fR, \f(CWnoTTY\fR, \f(CWReadLine\fR, \f(CWNonStop\fR, < [ command ],
+<< command, > command, >> command, { [ command ], {{
+command, ! number, ! \-number, ! pattern, !! cmd, H \-number, q or ^D, R,
+|dbcmd, ||dbcmd, command, m expr, m package
 .Ip "Debugger input/output" 5
 Prompt, Multiline commands, Stack backtrace, Listing, Frame listing
 .Ip "Debugging compile-time statements" 5
@@ -1164,7 +1200,25 @@ Prompt, Multiline commands, Stack backtrace, Listing, Frame listing
 .Ip "Debugger support in perl" 5
 .Ip "Debugger Internals" 5
 .Ip "Other resources" 5
-.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1BUGS\s0" 5
+.Ip "Debugging Perl memory usage" 0
+.Ip "Using \f(CW$ENV{PERL_DEBUG_MSTATS}\fR" 5
+\f(CWbuckets SMALLEST(APPROX)..GREATEST(APPROX)\fR, Free/Used, \f(CWTotal sbrk():
+SBRKed/SBRKs:CONTINUOUS\fR, \f(CWpad: 0\fR, \f(CWheads: 2192\fR, \f(CWchain: 0\fR, \f(CWtail:
+6144\fR
+.Ip "Example of using \fB\-\s-1DL\s0\fR switch" 5
+\f(CW717\fR, \f(CW002\fR, \f(CW054\fR, \f(CW602\fR, \f(CW702\fR, \f(CW704\fR
+.Ip "\fB\-\s-1DL\s0\fR details" 5
+\f(CW!!!\fR, \f(CW!!\fR, \f(CW!\fR
+.Ip "Limitations of \fB\-\s-1DL\s0\fR statistic" 5
+.Ip "Debugging regular expressions" 0
+.Ip "Compile-time output" 5
+\f(CWanchored\fR \fI\s-1STRING\s0\fR \f(CWat\fR \fI\s-1POS\s0\fR, \f(CWfloating\fR \fI\s-1STRING\s0\fR \f(CWat\fR
+\fI\s-1POS1\s0..\s-1POS2\s0\fR, \f(CWmatching floating/anchored\fR, \f(CWminlen\fR, \f(CWstclass\fR
+\fI\s-1TYPE\s0\fR, \f(CWnoscan\fR, \f(CWisall\fR, \f(CWGPOS\fR, \f(CWplus\fR, \f(CWimplicit\fR, \f(CWwith eval\fR,
+\f(CWanchored(TYPE)\fR
+.Ip "Types of nodes" 5
+.Ip "Run-time output" 5
 .Sh "perldiag \- various Perl diagnostics"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Sh "perlsec \- Perl security"
@@ -1174,6 +1228,7 @@ Prompt, Multiline commands, Stack backtrace, Listing, Frame listing
 .Ip "Cleaning Up Your Path" 5
 .Ip "Security Bugs" 5
 .Ip "Protecting Your Programs" 5
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "perltrap \- Perl traps for the unwary"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Awk Traps" 5
@@ -1191,12 +1246,12 @@ Discontinuance, Deprecation, BugFix, Discontinuance, Discontinuance,
 Discontinuance, BugFix, Discontinuance, Discontinuance, BugFix,
 Discontinuance, Discontinuance, Deprecation, Discontinuance
 .Ip "Parsing Traps" 5
-Parsing, Parsing, Parsing
+Parsing, Parsing, Parsing, Parsing
 .Ip "Numerical Traps" 5
 Numerical, Numerical, Numerical
 .Ip "General data type traps" 5
-(Arrays), (Arrays), (Hashes), (Globs), (Scalar String), (Constants),
-(Scalars), (Variable Suicide)
+(Arrays), (Arrays), (Hashes), (Globs), (Globs), (Scalar String),
+(Constants), (Scalars), (Variable Suicide)
 .Ip "Context Traps \- scalar, list contexts" 5
 (list context), (scalar context), (scalar context), (list, builtin)
 .Ip "Precedence Traps" 5
@@ -1205,7 +1260,7 @@ Precedence
 .Ip "General Regular Expression Traps using s///, etc." 5
 Regular Expression, Regular Expression, Regular Expression, Regular
 Expression, Regular Expression, Regular Expression, Regular Expression,
-Regular Expression, Regular Expression
+Regular Expression
 .Ip "Subroutine, Signal, Sorting Traps" 5
 (Signals), (Sort Subroutine), \fIwarn()\fR won't let you specify a filehandle
 .Ip "\s-1OS\s0 Traps" 5
@@ -1216,13 +1271,82 @@ Interpolation, Interpolation, Interpolation, Interpolation
 .Ip "\s-1DBM\s0 Traps" 5
 \s-1DBM\s0, \s-1DBM\s0
 .Ip "Unclassified Traps" 5
-Unclassified
+\f(CWrequire\fR/\f(CWdo\fR trap using returned value, \f(CWsplit\fR on empty string with
+\s-1LIMIT\s0 specified
+.Sh "perlport \- Writing portable Perl"
+.Ip "\s-1DESCRIPTION\s0" 0
+Not all Perl programs have to be portable, The vast majority of Perl \fBis\fR
+portable
+.Ip "\s-1ISSUES\s0" 0
+.Ip "Newlines" 5
+.Ip "File Paths" 5
+.Ip "System Interaction" 5
+.Ip "Interprocess Communication (\s-1IPC\s0)" 5
+.Ip "External Subroutines (\s-1XS\s0)" 5
+.Ip "Standard Modules" 5
+.Ip "Time and Date" 5
+.Ip "System Resources" 5
+.Ip "Security" 5
+.Ip "Style" 5
+.Ip "\s-1CPAN\s0 \s-1TESTERS\s0" 0
+Mailing list: cpan-testers@perl.org, Testing results:
+\f(CWhttp://www.connect.net/gbarr/cpan-test/\fR
+.Ip "\s-1PLATFORMS\s0" 0
+.Ip "Unix" 5
+.Ip "\s-1DOS\s0 and Derivatives" 5
+The djgpp environment for \s-1DOS\s0, \f(CWhttp://www.delorie.com/djgpp/\fR, The \s-1EMX\s0
+environment for \s-1DOS\s0, \s-1OS/2\s0, etc.
+\f(CWemx@iaehv.nl\fR,\f(CWhttp://www.juge.com/bbs/Hobb.19.html\fR, Build instructions
+for Win32, the \fIperlwin32\fR manpage, The ActiveState Pages,
+\f(CWhttp://www.activestate.com/\fR
+.Ip "MacPerl" 5
+The MacPerl Pages, \f(CWhttp://www.ptf.com/macperl/\fR, The MacPerl mailing
+list, \f(CWmac-perl-request@iis.ee.ethz.ch\fR
+.Ip "\s-1VMS\s0" 5
+the \fIperlvms.pod\fR manpage, vmsperl list, \f(CWvmsperl-request@newman.upenn.edu\fR, vmsperl
+on the web, \f(CWhttp://www.sidhe.org/vmsperl/index.html\fR
+.Ip "\s-1EBCDIC\s0 Platforms" 5
+perl-mvs list, \s-1AS/400\s0 Perl information at \f(CWhttp://as400.rochester.ibm.com\fR
+.Ip "Other perls" 5
+Atari, Guido Flohr's page \f(CWhttp://stud.uni-sb.de/~gufl0000/\fR, \s-1HP\s0 300
+\s-1MPE/\s0iX  \f(CWhttp://www.cccd.edu/~markb/perlix.html\fR, Novell Netware
+.Ip "\s-1FUNCTION\s0 \s-1IMPLEMENTATIONS\s0" 0
+.Ip "Alphabetical Listing of Perl Functions" 5
+-\fIX\fR \s-1FILEHANDLE\s0, \-\fIX\fR \s-1EXPR\s0, \-\fIX\fR, binmode \s-1FILEHANDLE\s0, chmod \s-1LIST\s0, chown
+\s-1LIST\s0, chroot \s-1FILENAME\s0, chroot, crypt \s-1PLAINTEXT\s0,\s-1SALT\s0, dbmclose \s-1HASH\s0, dbmopen
+\s-1HASH\s0,\s-1DBNAME\s0,\s-1MODE\s0, dump \s-1LABEL\s0, exec \s-1LIST\s0, fcntl \s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0,
+flock \s-1FILEHANDLE\s0,\s-1OPERATION\s0, fork, getlogin, getpgrp \s-1PID\s0, getppid,
+getpriority \s-1WHICH\s0,\s-1WHO\s0, getpwnam \s-1NAME\s0, getgrnam \s-1NAME\s0, getnetbyname \s-1NAME\s0,
+getpwuid \s-1UID\s0, getgrgid \s-1GID\s0, getnetbyaddr \s-1ADDR\s0,\s-1ADDRTYPE\s0, getprotobynumber
+\s-1NUMBER\s0, getservbyport \s-1PORT\s0,\s-1PROTO\s0, getpwent, getgrent, gethostent,
+getnetent, getprotoent, getservent, setpwent, setgrent, sethostent
+\s-1STAYOPEN\s0, setnetent \s-1STAYOPEN\s0, setprotoent \s-1STAYOPEN\s0, setservent \s-1STAYOPEN\s0,
+endpwent, endgrent, endhostent, endnetent, endprotoent, endservent,
+getsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0, glob \s-1EXPR\s0, glob, ioctl
+\s-1FILEHANDLE\s0,\s-1FUNCTION\s0,\s-1SCALAR\s0, kill \s-1LIST\s0, link \s-1OLDFILE\s0,\s-1NEWFILE\s0, lstat
+\s-1FILEHANDLE\s0, lstat \s-1EXPR\s0, lstat, msgctl \s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, msgget \s-1KEY\s0,\s-1FLAGS\s0, msgsnd
+\s-1ID\s0,\s-1MSG\s0,\s-1FLAGS\s0, msgrcv \s-1ID\s0,\s-1VAR\s0,\s-1SIZE\s0,\s-1TYPE\s0,\s-1FLAGS\s0, open \s-1FILEHANDLE\s0,\s-1EXPR\s0, open
+\s-1FILEHANDLE\s0, pipe \s-1READHANDLE\s0,\s-1WRITEHANDLE\s0, readlink \s-1EXPR\s0, readlink, select
+\s-1RBITS\s0,\s-1WBITS\s0,\s-1EBITS\s0,\s-1TIMEOUT\s0, semctl \s-1ID\s0,\s-1SEMNUM\s0,\s-1CMD\s0,\s-1ARG\s0, semget
+\s-1KEY\s0,\s-1NSEMS\s0,\s-1FLAGS\s0, semop \s-1KEY\s0,\s-1OPSTRING\s0, setpgrp \s-1PID\s0,\s-1PGRP\s0, setpriority
+\s-1WHICH\s0,\s-1WHO\s0,\s-1PRIORITY\s0, setsockopt \s-1SOCKET\s0,\s-1LEVEL\s0,\s-1OPTNAME\s0,\s-1OPTVAL\s0, shmctl
+\s-1ID\s0,\s-1CMD\s0,\s-1ARG\s0, shmget \s-1KEY\s0,\s-1SIZE\s0,\s-1FLAGS\s0, shmread \s-1ID\s0,\s-1VAR\s0,\s-1POS\s0,\s-1SIZE\s0, shmwrite
+\s-1ID\s0,\s-1STRING\s0,\s-1POS\s0,\s-1SIZE\s0, socketpair \s-1SOCKET1\s0,\s-1SOCKET2\s0,\s-1DOMAIN\s0,\s-1TYPE\s0,\s-1PROTOCOL\s0, stat
+\s-1FILEHANDLE\s0, stat \s-1EXPR\s0, stat, symlink \s-1OLDFILE\s0,\s-1NEWFILE\s0, syscall \s-1LIST\s0, system
+\s-1LIST\s0, times, truncate \s-1FILEHANDLE\s0,\s-1LENGTH\s0, truncate \s-1EXPR\s0,\s-1LENGTH\s0, umask \s-1EXPR\s0,
+umask, utime \s-1LIST\s0, wait, waitpid \s-1PID\s0,\s-1FLAGS\s0
+.Ip "\s-1AUTHORS\s0 / \s-1CONTRIBUTORS\s0" 0
+.Ip "\s-1VERSION\s0" 0
 .Sh "perlstyle \- Perl style guide"
 .Ip "\s-1DESCRIPTION\s0" 0
 .Sh "perlpod \- plain old documentation"
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "Embedding Pods in Perl Modules" 0
-.Ip "Common Pod Pitfalls" 0
+.Ip "Verbatim Paragraph" 5
+.Ip "Command Paragraph" 5
+.Ip "Ordinary Block of Text" 5
+.Ip "The Intent" 5
+.Ip "Embedding Pods in Perl Modules" 5
+.Ip "Common Pod Pitfalls" 5
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
 .Sh "perlbook \- Perl book information"
@@ -1253,8 +1377,8 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 \fBPerlIO_open(path, mode)\fR, \fBPerlIO_fdopen(fd,mode)\fR,
 \fBPerlIO_printf(f,fmt,...)\fR, \fBPerlIO_vprintf(f,fmt,a)\fR,
 \fBPerlIO_stdoutf(fmt,...)\fR, \fBPerlIO_read(f,buf,count)\fR,
-\fBPerlIO_write(f,buf,count)\fR, \fBPerlIO_close(f)\fR, \fBPerlIO_puts(s,f)\fR,
-\fBPerlIO_putc(c,f)\fR, \fBPerlIO_ungetc(c,f)\fR, \fBPerlIO_getc(f)\fR,
+\fBPerlIO_write(f,buf,count)\fR, \fBPerlIO_close(f)\fR, \fBPerlIO_puts(f,s)\fR,
+\fBPerlIO_putc(f,c)\fR, \fBPerlIO_ungetc(f,c)\fR, \fBPerlIO_getc(f)\fR,
 \fBPerlIO_eof(f)\fR, \fBPerlIO_error(f)\fR, \fBPerlIO_fileno(f)\fR,
 \fBPerlIO_clearerr(f)\fR, \fBPerlIO_flush(f)\fR, \fBPerlIO_tell(f)\fR,
 \fBPerlIO_seek(f,o,w)\fR, \fBPerlIO_getpos(f,p)\fR, \fBPerlIO_setpos(f,p)\fR,
@@ -1286,6 +1410,7 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .Ip "The \s-1SCOPE\s0: Keyword" 5
 .Ip "The \s-1INPUT\s0: Keyword" 5
 .Ip "Variable-length Parameter Lists" 5
+.Ip "The C_ARGS: Keyword" 5
 .Ip "The \s-1PPCODE\s0: Keyword" 5
 .Ip "Returning Undef And Empty Lists" 5
 .Ip "The \s-1REQUIRE\s0: Keyword" 5
@@ -1295,6 +1420,8 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .Ip "The \s-1PROTOTYPES\s0: Keyword" 5
 .Ip "The \s-1PROTOTYPE\s0: Keyword" 5
 .Ip "The \s-1ALIAS\s0: Keyword" 5
+.Ip "The \s-1INTERFACE\s0: Keyword" 5
+.Ip "The \s-1INTERFACE_MACRO\s0: Keyword" 5
 .Ip "The \s-1INCLUDE\s0: Keyword" 5
 .Ip "The \s-1CASE\s0: Keyword" 5
 .Ip "The & Unary Operator" 5
@@ -1351,6 +1478,15 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .Ip "Magic Virtual Tables" 5
 .Ip "Finding Magic" 5
 .Ip "Understanding the Magic of Tied Hashes and Arrays" 5
+.Ip "Localizing changes" 5
+\f(CWSAVEINT(int i)\fR, \f(CWSAVEIV(IV i)\fR, \f(CWSAVEI32(I32 i)\fR, \f(CWSAVELONG(long i)\fR,
+\f(CWSAVESPTR(s)\fR, \f(CWSAVEPPTR(p)\fR, \f(CWSAVEFREESV(SV *sv)\fR, \f(CWSAVEFREEOP(OP
+*op)\fR, \f(CWSAVEFREEPV(p)\fR, \f(CWSAVECLEARSV(SV *sv)\fR, \f(CWSAVEDELETE(HV *hv, char
+*key, I32 length)\fR, \f(CWSAVEDESTRUCTOR(f,p)\fR, \f(CWSAVESTACK_POS()\fR, \f(CWSV*
+save_scalar(GV *gv)\fR, \f(CWAV* save_ary(GV *gv)\fR, \f(CWHV* save_hash(GV *gv)\fR,
+\f(CWvoid save_item(SV *item)\fR, \f(CWvoid save_list(SV **sarg, I32 maxsarg)\fR,
+\f(CWSV* save_svref(SV **sptr)\fR, \f(CWvoid save_aptr(AV **aptr)\fR, \f(CWvoid
+save_hptr(HV **hptr)\fR
 .Ip "Subroutines" 0
 .Ip "XSUBs and the Argument Stack" 5
 .Ip "Calling Perl Routines from within C Programs" 5
@@ -1367,46 +1503,54 @@ Perl?\fR, \fBUse C from C?\fR, \fBUse Perl from C?\fR
 .Ip "Compile pass 2: context propagation" 5
 .Ip "Compile pass 3: peephole optimization" 5
 .Ip "\s-1API\s0 \s-1LISTING\s0" 0
-AvFILL, av_clear, av_extend, av_fetch, av_len, av_make, av_pop, av_push,
+av_clear, av_extend, av_fetch, AvFILL, av_len, av_make, av_pop, av_push,
 av_shift, av_store, av_undef, av_unshift, \s-1CLASS\s0, Copy, croak, CvSTASH,
-DBsingle, DBsub, DBtrace, dMARK, dORIGMARK, dowarn, dSP, dXSARGS, dXSI32,
-dXSI32, \s-1ENTER\s0, \s-1EXTEND\s0, \s-1FREETMPS\s0, G_ARRAY, G_DISCARD, G_EVAL, \s-1GIMME\s0,
-\s-1GIMME_V\s0, G_NOARGS, G_SCALAR, G_VOID, gv_fetchmeth, gv_fetchmethod,
-gv_fetchmethod_autoload, gv_stashpv, gv_stashsv, GvSV, HEf_SVKEY, HeHASH,
-HeKEY, HeKLEN, HePV, HeSVKEY, HeSVKEY_force, HeSVKEY_set, HeVAL, hv_clear,
-hv_delayfree_ent, hv_delete, hv_delete_ent, hv_exists, hv_exists_ent,
-hv_fetch, hv_fetch_ent, hv_free_ent, hv_iterinit, hv_iterkey, hv_iterkeysv,
-hv_iternext, hv_iternextsv, hv_iterval, hv_magic, HvNAME, hv_store,
-hv_store_ent, hv_undef, isALNUM, isALPHA, isDIGIT, isLOWER, isSPACE,
-isUPPER, items, ix, \s-1LEAVE\s0, \s-1MARK\s0, mg_clear, mg_copy, mg_find, mg_free,
-mg_get, mg_len, mg_magical, mg_set, Move, na, New, Newc, Newz, newAV,
-newHV, newRV_inc, newRV_noinc, newSV, newSViv, newSVnv, newSVpv, newSVrv,
-newSVsv, newXS, newXSproto, Nullav, Nullch, Nullcv, Nullhv, Nullsv,
-\s-1ORIGMARK\s0, perl_alloc, perl_call_argv, perl_call_method, perl_call_pv,
-perl_call_sv, perl_construct, perl_destruct, perl_eval_sv, perl_eval_pv,
-perl_free, perl_get_av, perl_get_cv, perl_get_hv, perl_get_sv, perl_parse,
+PL_DBsingle, PL_DBsub, PL_DBtrace, dMARK, dORIGMARK, PL_dowarn, dSP,
+dXSARGS, dXSI32, do_binmode, \s-1ENTER\s0, \s-1EXTEND\s0, fbm_compile, fbm_instr,
+\s-1FREETMPS\s0, G_ARRAY, G_DISCARD, G_EVAL, \s-1GIMME\s0, \s-1GIMME_V\s0, G_NOARGS, G_SCALAR,
+gv_fetchmeth, gv_fetchmethod, gv_fetchmethod_autoload, G_VOID, gv_stashpv,
+gv_stashsv, GvSV, HEf_SVKEY, HeHASH, HeKEY, HeKLEN, HePV, HeSVKEY,
+HeSVKEY_force, HeSVKEY_set, HeVAL, hv_clear, hv_delayfree_ent, hv_delete,
+hv_delete_ent, hv_exists, hv_exists_ent, hv_fetch, hv_fetch_ent,
+hv_free_ent, hv_iterinit, hv_iterkey, hv_iterkeysv, hv_iternext,
+hv_iternextsv, hv_iterval, hv_magic, HvNAME, hv_store, hv_store_ent,
+hv_undef, isALNUM, isALPHA, isDIGIT, isLOWER, isSPACE, isUPPER, items, ix,
+\s-1LEAVE\s0, looks_like_number, \s-1MARK\s0, mg_clear, mg_copy, mg_find, mg_free,
+mg_get, mg_len, mg_magical, mg_set, Move, PL_na, New, newAV, Newc,
+newCONSTSUB, newHV, newRV_inc, newRV_noinc, \s-1NEWSV\s0, newSViv, newSVnv,
+newSVpv, newSVpvf, newSVpvn, newSVrv, newSVsv, newXS, newXSproto, Newz,
+Nullav, Nullch, Nullcv, Nullhv, Nullsv, \s-1ORIGMARK\s0, perl_alloc,
+perl_call_argv, perl_call_method, perl_call_pv, perl_call_sv,
+perl_construct, perl_destruct, perl_eval_sv, perl_eval_pv, perl_free,
+perl_get_av, perl_get_cv, perl_get_hv, perl_get_sv, perl_parse,
 perl_require_pv, perl_run, POPi, POPl, POPp, POPn, POPs, \s-1PUSHMARK\s0, PUSHi,
-PUSHn, PUSHp, PUSHs, \s-1PUTBACK\s0, Renew, Renewc, \s-1RETVAL\s0, safefree, safemalloc,
-saferealloc, savepv, savepvn, \s-1SAVETMPS\s0, \s-1SP\s0, \s-1SPAGAIN\s0, \s-1ST\s0, strEQ, strGE,
-strGT, strLE, strLT, strNE, strnEQ, strnNE, sv_2mortal, sv_bless, sv_catpv,
-sv_catpvn, sv_catpvf, sv_catsv, sv_cmp, sv_cmp, SvCUR, SvCUR_set, sv_dec,
-sv_dec, SvEND, sv_eq, SvGROW, sv_grow, sv_inc, SvIOK, SvIOK_off, SvIOK_on,
-SvIOK_only, SvIOK_only, SvIOKp, sv_isa, SvIV, sv_isobject, SvIVX, SvLEN,
-sv_len, sv_len, sv_magic, sv_mortalcopy, SvOK, sv_newmortal, sv_no, SvNIOK,
-SvNIOK_off, SvNIOKp, SvNOK, SvNOK_off, SvNOK_on, SvNOK_only, SvNOK_only,
-SvNOKp, SvNV, SvNVX, SvPOK, SvPOK_off, SvPOK_on, SvPOK_only, SvPOK_only,
-SvPOKp, SvPV, SvPVX, SvREFCNT, SvREFCNT_dec, SvREFCNT_inc, SvROK,
-SvROK_off, SvROK_on, SvRV, sv_setiv, sv_setnv, sv_setpv, sv_setpvn,
-sv_setpvf, sv_setref_iv, sv_setref_nv, sv_setref_pv, sv_setref_pvn,
-sv_setsv, SvSTASH, SVt_IV, SVt_PV, SVt_PVAV, SVt_PVCV, SVt_PVHV, SVt_PVMG,
-SVt_NV, SvTRUE, SvTYPE, svtype, SvUPGRADE, sv_upgrade, sv_undef, sv_unref,
-sv_usepvn, sv_yes, \s-1THIS\s0, toLOWER, toUPPER, warn, XPUSHi, XPUSHn, XPUSHp,
-XPUSHs, \s-1XS\s0, \s-1XSRETURN\s0, \s-1XSRETURN_EMPTY\s0, \s-1XSRETURN_IV\s0, \s-1XSRETURN_NO\s0,
+PUSHn, PUSHp, PUSHs, PUSHu, \s-1PUTBACK\s0, Renew, Renewc, \s-1RETVAL\s0, safefree,
+safemalloc, saferealloc, savepv, savepvn, \s-1SAVETMPS\s0, \s-1SP\s0, \s-1SPAGAIN\s0, \s-1ST\s0, strEQ,
+strGE, strGT, strLE, strLT, strNE, strnEQ, strnNE, sv_2mortal, sv_bless,
+sv_catpv, sv_catpv_mg, sv_catpvn, sv_catpvn_mg, sv_catpvf, sv_catpvf_mg,
+sv_catsv, sv_catsv_mg, sv_chop, sv_cmp, SvCUR, SvCUR_set, sv_dec,
+sv_derived_from, sv_derived_from, SvEND, sv_eq, SvGETMAGIC, SvGROW,
+sv_grow, sv_inc, sv_insert, SvIOK, SvIOK_off, SvIOK_on, SvIOK_only, SvIOKp,
+sv_isa, sv_isobject, SvIV, SvIVX, SvLEN, sv_len, sv_magic, sv_mortalcopy,
+sv_newmortal, SvNIOK, SvNIOK_off, SvNIOKp, PL_sv_no, SvNOK, SvNOK_off,
+SvNOK_on, SvNOK_only, SvNOKp, SvNV, SvNVX, SvOK, SvOOK, SvPOK, SvPOK_off,
+SvPOK_on, SvPOK_only, SvPOKp, SvPV, SvPV_force, SvPVX, SvREFCNT,
+SvREFCNT_dec, SvREFCNT_inc, SvROK, SvROK_off, SvROK_on, SvRV, SvSETMAGIC,
+sv_setiv, sv_setiv_mg, sv_setnv, sv_setnv_mg, sv_setpv, sv_setpv_mg,
+sv_setpviv, sv_setpviv_mg, sv_setpvn, sv_setpvn_mg, sv_setpvf,
+sv_setpvf_mg, sv_setref_iv, sv_setref_nv, sv_setref_pv, sv_setref_pvn,
+SvSetSV, SvSetSV_nosteal, sv_setsv, sv_setsv_mg, sv_setuv, sv_setuv_mg,
+SvSTASH, SvTAINT, SvTAINTED, SvTAINTED_off, SvTAINTED_on, SVt_IV, SVt_PV,
+SVt_PVAV, SVt_PVCV, SVt_PVHV, SVt_PVMG, SVt_NV, SvTRUE, SvTYPE, svtype,
+PL_sv_undef, sv_unref, SvUPGRADE, sv_upgrade, sv_usepvn, sv_usepvn_mg,
+\fIsv_vcatpvfn\fR\|(sv, pat, patlen, args, svargs, svmax, used_locale),
+\fIsv_vsetpvfn\fR\|(sv, pat, patlen, args, svargs, svmax, used_locale), SvUV,
+SvUVX, PL_sv_yes, \s-1THIS\s0, toLOWER, toUPPER, warn, XPUSHi, XPUSHn, XPUSHp,
+XPUSHs, XPUSHu, \s-1XS\s0, \s-1XSRETURN\s0, \s-1XSRETURN_EMPTY\s0, \s-1XSRETURN_IV\s0, \s-1XSRETURN_NO\s0,
 \s-1XSRETURN_NV\s0, \s-1XSRETURN_PV\s0, \s-1XSRETURN_UNDEF\s0, \s-1XSRETURN_YES\s0, XST_mIV, XST_mNV,
 XST_mNO, XST_mPV, XST_mUNDEF, XST_mYES, \s-1XS_VERSION\s0, \s-1XS_VERSION_BOOTCHECK\s0,
 Zero
-.Ip "\s-1EDITOR\s0" 0
-.Ip "\s-1DATE\s0" 0
+.Ip "\s-1AUTHORS\s0" 0
 .Sh "perlcall \- Perl calling conventions from C"
 .Ip "\s-1DESCRIPTION\s0" 0
 An Error Handler, An Event Driven Program
@@ -1445,13 +1589,32 @@ callback
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
 .Ip "\s-1DATE\s0" 0
+.Sh "perlhist \- the Perl history records"
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1INTRODUCTION\s0" 0
+.Ip "\s-1THE\s0 \s-1KEEPERS\s0 \s-1OF\s0 \s-1THE\s0 \s-1PUMPKIN\s0" 0
+.Ip "\s-1PUMPKIN\s0?" 5
+.Ip "\s-1THE\s0 \s-1RECORDS\s0" 0
+.Ip "\s-1SELECTED\s0 \s-1RELEASE\s0 \s-1SIZES\s0" 5
+.Ip "\s-1SELECTED\s0 \s-1PATCH\s0 \s-1SIZES\s0" 5
+.Ip "\s-1THE\s0 \s-1KEEPERS\s0 \s-1OF\s0 \s-1THE\s0 \s-1RECORDS\s0" 0
 .SH "PRAGMA DOCUMENTATION"
+.Sh "attrs \- set/get attributes of a subroutine"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+method, locked
+.Sh "re \- Perl pragma to alter regular expression behaviour"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
 .Sh "autouse \- postpone load of modules until a function is used"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1WARNING\s0" 0
-.Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "base \- Establish \s-1IS\s0\-A relationship with base class at compile time"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "blib \- Use MakeMaker's uninstalled version of a package"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1475,6 +1638,10 @@ callback
 .Ip "\s-1INTERNALS\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
+.Sh "fields \- compile-time class fields"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "integer \- Perl pragma to compute arithmetic in integer instead of double"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1492,10 +1659,6 @@ callback
 .Sh "locale \- Perl pragma to use and avoid \s-1POSIX\s0 locales for built-in operations"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Sh "ops \- Perl pragma to restrict unsafe operations when compiling"
-.Ip "\s-1SYNOPSIS\s0	" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "overload \- Package for overloading perl operations"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1CAVEAT\s0 \s-1SCRIPTOR\s0" 0
@@ -1525,6 +1688,8 @@ is inherited by derived classes
 .Ip "Run-time Overloading" 0
 .Ip "Public functions" 0
 \fIoverload::StrVal\fR\|(arg), \fIoverload::Overloaded\fR\|(arg), \fIoverload::Method\fR\|(obj,op)
+.Ip "Overloading constants" 0
+integer, float, binary, q, qr
 .Ip "\s-1IMPLEMENTATION\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
 .Ip "\s-1DIAGNOSTICS\s0" 0
@@ -1570,8 +1735,170 @@ is inherited by derived classes
 .Sh "AutoSplit \- split a package for autoloading"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CAVEATS\s0" 0
+$keep, \f(CW$check\fR, \f(CW$modtime\fR
+.Ip "Multiple packages" 5
 .Ip "\s-1DIAGNOSTICS\s0" 0
+.Sh "B \- The Perl Compiler"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OVERVIEW\s0 \s-1OF\s0 \s-1CLASSES\s0" 0
+.Ip "\s-1SV\s0\-\s-1RELATED\s0 \s-1CLASSES\s0" 5
+.Ip "B::\s-1SV\s0 \s-1METHODS\s0" 5
+\s-1REFCNT\s0, \s-1FLAGS\s0
+.Ip "B::\s-1IV\s0 \s-1METHODS\s0" 5
+\s-1IV\s0, \s-1IVX\s0, needs64bits, packiv
+.Ip "B::\s-1NV\s0 \s-1METHODS\s0" 5
+\s-1NV\s0, \s-1NVX\s0
+.Ip "B::\s-1RV\s0 \s-1METHODS\s0" 5
+\s-1RV\s0
+.Ip "B::\s-1PV\s0 \s-1METHODS\s0" 5
+\s-1PV\s0
+.Ip "B::\s-1PVMG\s0 \s-1METHODS\s0" 5
+\s-1MAGIC\s0, SvSTASH
+.Ip "B::\s-1MAGIC\s0 \s-1METHODS\s0" 5
+\s-1MOREMAGIC\s0, \s-1PRIVATE\s0, \s-1TYPE\s0, \s-1FLAGS\s0, \s-1OBJ\s0, \s-1PTR\s0
+.Ip "B::\s-1PVLV\s0 \s-1METHODS\s0" 5
+\s-1TARGOFF\s0, \s-1TARGLEN\s0, \s-1TYPE\s0, \s-1TARG\s0
+.Ip "B::\s-1BM\s0 \s-1METHODS\s0" 5
+\s-1USEFUL\s0, \s-1PREVIOUS\s0, \s-1RARE\s0, \s-1TABLE\s0
+.Ip "B::\s-1GV\s0 \s-1METHODS\s0" 5
+\s-1NAME\s0, \s-1STASH\s0, \s-1SV\s0, \s-1IO\s0, \s-1FORM\s0, \s-1AV\s0, \s-1HV\s0, \s-1EGV\s0, \s-1CV\s0, \s-1CVGEN\s0, \s-1LINE\s0, \s-1FILEGV\s0, GvREFCNT,
+\s-1FLAGS\s0
+.Ip "B::\s-1IO\s0 \s-1METHODS\s0" 5
+\s-1LINES\s0, \s-1PAGE\s0, \s-1PAGE_LEN\s0, \s-1LINES_LEFT\s0, \s-1TOP_NAME\s0, \s-1TOP_GV\s0, \s-1FMT_NAME\s0, \s-1FMT_GV\s0,
+\s-1BOTTOM_NAME\s0, \s-1BOTTOM_GV\s0, \s-1SUBPROCESS\s0, IoTYPE, IoFLAGS
+.Ip "B::\s-1AV\s0 \s-1METHODS\s0" 5
+\s-1FILL\s0, \s-1MAX\s0, \s-1OFF\s0, \s-1ARRAY\s0, AvFLAGS
+.Ip "B::\s-1CV\s0 \s-1METHODS\s0" 5
+\s-1STASH\s0, \s-1START\s0, \s-1ROOT\s0, \s-1GV\s0, \s-1FILEGV\s0, \s-1DEPTH\s0, \s-1PADLIST\s0, \s-1OUTSIDE\s0, \s-1XSUB\s0, \s-1XSUBANY\s0
+.Ip "B::\s-1HV\s0 \s-1METHODS\s0" 5
+\s-1FILL\s0, \s-1MAX\s0, \s-1KEYS\s0, \s-1RITER\s0, \s-1NAME\s0, \s-1PMROOT\s0, \s-1ARRAY\s0
+.Ip "\s-1OP\s0\-\s-1RELATED\s0 \s-1CLASSES\s0" 5
+.Ip "B::\s-1OP\s0 \s-1METHODS\s0" 5
+next, sibling, ppaddr, desc, targ, type, seq, flags, private
+.Ip "B::\s-1UNOP\s0 \s-1METHOD\s0" 5
+first
+.Ip "B::\s-1BINOP\s0 \s-1METHOD\s0" 5
+last
+.Ip "B::\s-1LOGOP\s0 \s-1METHOD\s0" 5
+other
+.Ip "B::\s-1CONDOP\s0 \s-1METHODS\s0" 5
+true, false
+.Ip "B::\s-1LISTOP\s0 \s-1METHOD\s0" 5
+children
+.Ip "B::\s-1PMOP\s0 \s-1METHODS\s0" 5
+pmreplroot, pmreplstart, pmnext, pmregexp, pmflags, pmpermflags, precomp
+.Ip "B::\s-1SVOP\s0 \s-1METHOD\s0" 5
+sv
+.Ip "B::\s-1GVOP\s0 \s-1METHOD\s0" 5
+gv
+.Ip "B::\s-1PVOP\s0 \s-1METHOD\s0" 5
+pv
+.Ip "B::\s-1LOOP\s0 \s-1METHODS\s0" 5
+redoop, nextop, lastop
+.Ip "B::\s-1COP\s0 \s-1METHODS\s0" 5
+label, stash, filegv, cop_seq, arybase, line
+.Ip "\s-1FUNCTIONS\s0 \s-1EXPORTED\s0 \s-1BY\s0 \f(CWB\fR" 0
+main_cv, main_root, main_start, comppadlist, sv_undef, sv_yes, sv_no,
+\fIwalkoptree\fR\|(\s-1OP\s0, \s-1METHOD\s0), \fIwalkoptree_debug\fR\|(\s-1DEBUG\s0), \fIwalksymtable\fR\|(\s-1SYMREF\s0,
+\s-1METHOD\s0, \s-1RECURSE\s0), \fIsvref_2object\fR\|(\s-1SV\s0), \fIppname\fR\|(\s-1OPNUM\s0), \fIhash\fR\|(\s-1STR\s0), \fIcast_I32\fR\|(I),
+minus_c, \fIcstring\fR\|(\s-1STR\s0), \fIclass\fR\|(\s-1OBJ\s0), threadsv_names, \fIbyteload_fh\fR\|(\s-1FILEHANDLE\s0)
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Asmdata \- Autogenerated data about Perl ops, used to generate bytecode"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Assembler \- Assemble Perl bytecode"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Bblock \- Walk basic blocks"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Bytecode \- Perl compiler's bytecode backend"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0" 0
+\fB\-ofilename\fR, \fB--\fR, \fB\-f\fR, \fB\-fcompress-nullops\fR,
+\fB\-fomit-sequence-numbers\fR, \fB\-fbypass-nullops\fR, \fB\-fstrip-syntax-tree\fR,
+\fB\-On\fR, \fB\-D\fR, \fB\-Do\fR, \fB\-Db\fR, \fB\-Da\fR, \fB\-\s-1DC\s0\fR, \fB\-S\fR, \fB\-m\fR
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::C \- Perl compiler's C backend"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0" 0
+\fB\-ofilename\fR, \fB\-v\fR, \fB--\fR, \fB\-uPackname\fR, \fB\-D\fR, \fB\-Do\fR, \fB\-Dc\fR, \fB\-\s-1DA\s0\fR,
+\fB\-\s-1DC\s0\fR, \fB\-\s-1DM\s0\fR, \fB\-f\fR, \fB\-fcog\fR, \fB\-fno-cog\fR, \fB\-On\fR
+.Ip "\s-1EXAMPLES\s0" 0
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::\s-1CC\s0 \- Perl compiler's optimized C translation backend"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0" 0
+\fB\-ofilename\fR, \fB\-v\fR, \fB--\fR, \fB\-uPackname\fR, \fB\-mModulename\fR, \fB\-D\fR, \fB\-Dr\fR,
+\fB\-\s-1DO\s0\fR, \fB\-Ds\fR, \fB\-Dp\fR, \fB\-Dq\fR, \fB\-Dl\fR, \fB\-Dt\fR, \fB\-f\fR,
+\fB\-ffreetmps-each-bblock\fR, \fB\-ffreetmps-each-loop\fR, \fB\-fomit-taint\fR, \fB\-On\fR
+.Ip "\s-1EXAMPLES\s0" 0
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1DIFFERENCES\s0" 0
+.Ip "Loops" 5
+.Ip "Context of \*(N"..\*(T"" 5
+.Ip "Arithmetic" 5
+.Ip "Deprecated features" 5
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Debug \- Walk Perl syntax tree, printing debug info about ops"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Deparse \- Perl compiler backend to produce perl code"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0" 0
+\fB\-p\fR, \fB\-u\fR\fI\s-1PACKAGE\s0\fR, \fB\-l\fR, \fB\-s\fR\fI\s-1LETTERS\s0\fR, \fBC\fR
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Disassembler \- Disassemble Perl bytecode"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Lint \- Perl lint"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0 \s-1AND\s0 \s-1LINT\s0 \s-1CHECKS\s0" 0
+\fBcontext\fR, \fBimplicit-read\fR and \fBimplicit-write\fR, \fBdollar-underscore\fR,
+\fBprivate-names\fR, \fBundefined-subs\fR, \fBregexp-variables\fR, \fBall\fR, \fBnone\fR
+.Ip "\s-1NON\s0 \s-1LINT\s0\-\s-1CHECK\s0 \s-1OPTIONS\s0" 0
+\fB\-u Package\fR
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::O, O \- Generic interface to Perl Compiler backends"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1CONVENTIONS\s0" 0
+.Ip "\s-1IMPLEMENTATION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Showlex \- Show lexical variables used in functions or files"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Stackobj \- Helper module for \s-1CC\s0 backend"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Terse \- Walk Perl syntax tree, printing terse info about ops"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Sh "B::Xref \- Generates cross reference reports for Perl programs"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1OPTIONS\s0" 0
+\f(CW-oFILENAME\fR, \f(CW-r\fR, \f(CW-D[tO]\fR
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
 .Sh "Benchmark \- benchmark running times of code"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1580,7 +1907,7 @@ new, debug
 .Ip "Standard Exports" 5
 \fItimeit\fR\|(\s-1COUNT\s0, \s-1CODE\s0), timethis ( \s-1COUNT\s0, \s-1CODE\s0, [ \s-1TITLE\s0, [ \s-1STYLE\s0 ]] ),
 timethese ( \s-1COUNT\s0, \s-1CODEHASHREF\s0, [ \s-1STYLE\s0 ] ), timediff ( T1, T2 ), timestr (
-\s-1TIMEDIFF\s0, [ \s-1STYLE\s0, [ \s-1FORMAT\s0 ]] )
+\s-1TIMEDIFF\s0, [ \s-1STYLE\s0, [ \s-1FORMAT\s0 ] ] )
 .Ip "Optional Exports" 5
 clearcache ( \s-1COUNT\s0 ), clearallcache ( ), disablecache ( ), enablecache ( )
 .Ip "\s-1NOTES\s0" 0
@@ -1588,17 +1915,16 @@ clearcache ( \s-1COUNT\s0 ), clearallcache ( ), disablecache ( ), enablecache ( 
 .Ip "\s-1CAVEATS\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Ip "\s-1MODIFICATION\s0 \s-1HISTORY\s0" 0
-.Sh "Bundle::\s-1CPAN\s0 \- A bundle to play with all the other modules on \s-1CPAN\s0"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1CONTENTS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1AUTHOR\s0" 0
 .Sh "\s-1CGI\s0 \- Simple Common Gateway Interface Class"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1ABSTRACT\s0" 0
-.Ip "\s-1INSTALLATION\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0:" 5
+.Ip "\s-1PROGRAMMING\s0 \s-1STYLE\s0" 5
+.Ip "\s-1CALLING\s0 \s-1CGI\s0.\s-1PM\s0 \s-1ROUTINES\s0" 5
+1. Use another name for the argument, if one is available.  Forexample,
+\-value is an alias for \-values, 2. Change the capitalization, e.g. \-Values,
+3. Put quotes around the argument name, e.g. \*(L'\-values\*(R'
+.Ip "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 (\s-1OBJECT\s0\-\s-1ORIENTED\s0 \s-1STYLE\s0):" 5
 .Ip "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 \s-1FROM\s0 \s-1AN\s0 \s-1INPUT\s0 \s-1FILE\s0" 5
 .Ip "\s-1FETCHING\s0 A \s-1LIST\s0 \s-1OF\s0 \s-1KEYWORDS\s0 \s-1FROM\s0 \s-1THE\s0 \s-1QUERY\s0:" 5
 .Ip "\s-1FETCHING\s0 \s-1THE\s0 \s-1NAMES\s0 \s-1OF\s0 \s-1ALL\s0 \s-1THE\s0 \s-1PARAMETERS\s0 \s-1PASSED\s0 \s-1TO\s0 \s-1YOUR\s0 \s-1SCRIPT\s0:" 5
@@ -1608,16 +1934,29 @@ clearcache ( \s-1COUNT\s0 ), clearallcache ( ), disablecache ( ), enablecache ( 
 .Ip "\s-1IMPORTING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0 \s-1INTO\s0 A \s-1NAMESPACE\s0:" 5
 .Ip "\s-1DELETING\s0 A \s-1PARAMETER\s0 \s-1COMPLETELY\s0:" 5
 .Ip "\s-1DELETING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0:" 5
-.Ip "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1FORM\s0 \s-1TO\s0 A \s-1FILE\s0:" 5
-.Ip "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:" 5
-.Ip "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0" 5
-.Ip "\s-1CALLING\s0 \s-1CGI\s0 \s-1FUNCTIONS\s0 \s-1THAT\s0 \s-1TAKE\s0 \s-1MULTIPLE\s0 \s-1ARGUMENTS\s0" 5
-.Ip "\s-1CREATING\s0 \s-1THE\s0 \s-1HTTP\s0 \s-1HEADER\s0:" 5
-.Ip "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1INSTRUCTION\s0" 5
-.Ip "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1HEADER\s0:" 5
+.Ip "\s-1DIRECT\s0 \s-1ACCESS\s0 \s-1TO\s0 \s-1THE\s0 \s-1PARAMETER\s0 \s-1LIST\s0:" 5
+.Ip "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1SCRIPT\s0 \s-1TO\s0 A \s-1FILE\s0:" 5
+.Ip "\s-1USING\s0 \s-1THE\s0 \s-1FUNCTION\s0\-\s-1ORIENTED\s0 \s-1INTERFACE\s0" 5
+\fB:cgi\fR, \fB:form\fR, \fB:html2\fR, \fB:html3\fR, \fB:netscape\fR, \fB:html\fR,
+\fB:standard\fR, \fB:all\fR
+.Ip "\s-1PRAGMAS\s0" 5
+-any, \-compile, \-nph, \-autoload, \-no_debug, \-private_tempfiles
+.Ip "\s-1GENERATING\s0 \s-1DYNAMIC\s0 \s-1DOCUMENTS\s0" 0
+.Ip "\s-1CREATING\s0 A \s-1STANDARD\s0 \s-1HTTP\s0 \s-1HEADER\s0:" 5
+.Ip "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1HEADER\s0" 5
+.Ip "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0 \s-1HEADER\s0" 5
 \fBParameters:\fR, 4, 5, 6..
 .Ip "\s-1ENDING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0:" 5
-.Ip "\s-1CREATING\s0 \s-1FORMS\s0" 0
+.Ip "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:" 5
+.Ip "\s-1OBTAINING\s0 \s-1THE\s0 \s-1SCRIPT\s0'S \s-1URL\s0" 5
+\fB\-absolute\fR, \fB\-relative\fR, \fB\-full\fR, \fB\-path\fR (\fB\-path_info\fR), \fB\-query\fR
+(\fB\-query_string\fR)
+.Ip "\s-1CREATING\s0 \s-1STANDARD\s0 \s-1HTML\s0 \s-1ELEMENTS\s0:" 0
+.Ip "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0" 5
+.Ip "\s-1THE\s0 \s-1DISTRIBUTIVE\s0 \s-1PROPERTY\s0 \s-1OF\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0" 5
+.Ip "\s-1HTML\s0 \s-1SHORTCUTS\s0 \s-1AND\s0 \s-1LIST\s0 \s-1INTERPOLATION\s0" 5
+.Ip "\s-1NON\s0\-\s-1STANDARD\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0" 5
+.Ip "\s-1CREATING\s0 \s-1FILL\s0\-\s-1OUT\s0 \s-1FORMS\s0:" 0
 .Ip "\s-1CREATING\s0 \s-1AN\s0 \s-1ISINDEX\s0 \s-1TAG\s0" 5
 .Ip "\s-1STARTING\s0 \s-1AND\s0 \s-1ENDING\s0 A \s-1FORM\s0" 5
 \fBapplication/x-www-form-urlencoded\fR, \fBmultipart/form-data\fR
@@ -1664,16 +2003,16 @@ name as a partial \s-1URL\s0, for self-refering
 scripts, \fBreferer()\fR, \fBauth_type ()\fR, \fBserver_name ()\fR, \fBvirtual_host
 ()\fR, \fBserver_software ()\fR, \fBremote_user ()\fR, \fBuser_name ()\fR,
 \fBrequest_method()\fR
-.Ip "\s-1CREATING\s0 \s-1HTML\s0 \s-1ELEMENTS\s0" 0
-.Ip "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0" 5
-.Ip "Generating new \s-1HTML\s0 tags" 5
-.Ip "\s-1IMPORTING\s0 \s-1CGI\s0 \s-1METHOD\s0 \s-1CALLS\s0 \s-1INTO\s0 \s-1YOUR\s0 \s-1NAME\s0 \s-1SPACE\s0" 0
-\fBcgi\fR, \fBform\fR, \fBhtml2\fR, \fBhtml3\fR, \fBnetscape\fR, \fBshortcuts\fR,
-\fBstandard\fR, \fBall\fR
 .Ip "\s-1USING\s0 \s-1NPH\s0 \s-1SCRIPTS\s0" 0
-In the \fBuse\fR statementSimply add \*(L":nph\*(R" to the list of symbols to be
-imported into your script:, By calling the \fBnph()\fR method:, By using
-\fB\-nph\fR parameters in the \fBheader()\fR and \fBredirect()\fR  statements:
+In the \fBuse\fR statement, By calling the \fBnph()\fR method:, By using \fB\-nph\fR
+parameters in the \fBheader()\fR and \fBredirect()\fR  statements:
+.Ip "Server Push" 0
+\fImultipart_init()\fR     
+\fImultipart_init\fR\|(\-boundary=>$boundary);, \fImultipart_start()\fR, \fImultipart_end()\fR
+.Ip "Avoiding Denial of Service Attacks" 0
+\fB$\s-1CGI::POST_MAX\s0\fR, \fB$\s-1CGI::DISABLE_UPLOADS\s0\fR, \fB1. On a script-by-script
+basis\fR, \fB2. Globally for all scripts\fR
+.Ip "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0" 0
 .Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
 .Ip "\s-1CREDITS\s0" 0
 Matt Heffron (heffron@falstaff.css.beckman.com), James Taylor
@@ -1686,7 +2025,8 @@ Christiansen (tchrist@convex.com), Andreas Koenig
 (k@franz.ww.\s-1TU\s0\-Berlin.\s-1DE\s0), Tim MacKenzie (Tim.MacKenzie@fulcrum.com.au),
 Kevin B. Hendricks (kbhend@dogwood.tyler.wm.edu), Stephen Dahmen
 (joyfire@inxpress.net), Ed Jordan (ed@fidalgo.net), David Alan Pisoni
-(david@cnation.com), ...and many many more..
+(david@cnation.com), Doug MacEachern (dougm@opengroup.org), Robin Houston
+(robin@oneworld.org), ...and many many more..
 .Ip "A \s-1COMPLETE\s0 \s-1EXAMPLE\s0 \s-1OF\s0 A \s-1SIMPLE\s0 \s-1FORM\s0\-\s-1BASED\s0 \s-1SCRIPT\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -1702,8 +2042,22 @@ Kevin B. Hendricks (kbhend@dogwood.tyler.wm.edu), Stephen Dahmen
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1REDIRECTING\s0 \s-1ERROR\s0 \s-1MESSAGES\s0" 0
 .Ip "\s-1MAKING\s0 \s-1PERL\s0 \s-1ERRORS\s0 \s-1APPEAR\s0 \s-1IN\s0 \s-1THE\s0 \s-1BROWSER\s0 \s-1WINDOW\s0" 0
+.Ip "Changing the default message" 5
 .Ip "\s-1CHANGE\s0 \s-1LOG\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "\s-1CGI::\s0Cookie \- Interface to Netscape Cookies"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1USING\s0 \s-1CGI::\s0Cookie" 0
+\fB1. expiration date\fR, \fB2. domain\fR, \fB3. path\fR, \fB4. secure flag\fR
+.Ip "Creating New Cookies" 5
+.Ip "Sending the Cookie to the Browser" 5
+.Ip "Recovering Previous Cookies" 5
+.Ip "Manipulating Cookies" 5
+\fBname()\fR, \fBvalue()\fR, \fBdomain()\fR, \fBpath()\fR, \fBexpires()\fR
+.Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
+.Ip "\s-1BUGS\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "\s-1CGI::\s0Fast \- \s-1CGI\s0 Interface for Fast \s-1CGI\s0"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -1720,7 +2074,9 @@ Kevin B. Hendricks (kbhend@dogwood.tyler.wm.edu), Stephen Dahmen
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1USING\s0 \s-1CGI::\s0Push" 0
--last_page, \-type, \-delay, \-cookie, \-target, \-expires
+-next_page, \-last_page, \-type, \-delay, \-cookie, \-target, \-expires
+.Ip "Heterogeneous Pages" 5
+.Ip "Changing the Page Delay on the Fly" 5
 .Ip "\s-1INSTALLING\s0 \s-1CGI::\s0Push \s-1SCRIPTS\s0" 0
 .Ip "\s-1CAVEATS\s0" 0
 .Ip "\s-1AUTHOR\s0 \s-1INFORMATION\s0" 0
@@ -1737,16 +2093,18 @@ Kevin B. Hendricks (kbhend@dogwood.tyler.wm.edu), Stephen Dahmen
 .Ip "Interactive Mode" 5
 Searching for authors, bundles, distribution files and modules, make, test,
 install, clean	modules or distributions, readme, look module or
-distribution
+distribution, Signals
 .Ip "\s-1CPAN::\s0Shell" 5
 .Ip "autobundle" 5
 .Ip "recompile" 5
-.Ip "The 4 Classes: Authors, Bundles, Modules, Distributions" 5
+.Ip "The four \f(CWCPAN::*\fR Classes: Author, Bundle, Module, Distribution" 5
 .Ip "Programmer's interface" 5
 \fIexpand\fR\|($type,@things), Programming Examples
+.Ip "Methods in the four" 5
 .Ip "Cache Manager" 5
 .Ip "Bundles" 5
 .Ip "Prerequisites" 5
+.Ip "Finding packages and \s-1VERSION\s0" 5
 .Ip "Debugging" 5
 .Ip "Floppy, Zip, and all that Jazz" 5
 .Ip "\s-1CONFIGURATION\s0" 0
@@ -1754,6 +2112,7 @@ o conf <scalar option>, o conf <scalar option>
 <value>, o conf <list option>, o conf <list option>
 [shift|pop], o conf <list option> [unshift|push|splice]
 <list>
+.Ip "\s-1CD\s0\-\s-1ROM\s0 support" 5
 .Ip "\s-1SECURITY\s0" 0
 .Ip "\s-1EXPORT\s0" 0
 .Ip "\s-1BUGS\s0" 0
@@ -1766,9 +2125,10 @@ o conf <scalar option>, o conf <scalar option>
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Sh "Carp, carp \- warn of errors (from perspective of caller)"
+.Sh "Carp, carp    \- warn of errors (from perspective of caller)"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
+.Ip "Forcing a Stack Trace" 5
 .Sh "Class::Struct \- declare struct-like datatypes as Perl classes"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1779,20 +2139,14 @@ Scalar (\f(CW'$'\fR or \f(CW'*$'\fR), Array (\f(CW'@'\fR or \f(CW'*@'\fR), Hash 
 .Ip "\s-1EXAMPLES\s0" 0
 Example 1, Example 2
 .Ip "Author and Modification History" 0
-.Sh "Config \- access Perl configuration information"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-\fImyconfig()\fR, \fIconfig_sh()\fR, \fIconfig_vars\fR\|(@names)
-.Ip "\s-1EXAMPLE\s0" 0
-.Ip "\s-1WARNING\s0" 0
-.Ip "\s-1NOTE\s0" 0
 .Sh "Cwd, getcwd \- get pathname of current working directory"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Sh "DB_File \- Perl5 access to Berkeley \s-1DB\s0"
+.Sh "DB_File \- Perl5 access to Berkeley \s-1DB\s0 version 1.x"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 \fB\s-1DB_HASH\s0\fR, \fB\s-1DB_BTREE\s0\fR, \fB\s-1DB_RECNO\s0\fR
+.Ip "Using DB_File with Berkeley \s-1DB\s0 version 2" 5
 .Ip "Interface to Berkeley \s-1DB\s0" 5
 .Ip "Opening a Berkeley \s-1DB\s0 Database File" 5
 .Ip "Default Parameters" 5
@@ -1808,14 +2162,14 @@ Example 1, Example 2
 .Ip "The \*(N'bval\*(T' Option" 5
 .Ip "A Simple Example" 5
 .Ip "Extra Methods" 5
-\fB$X\->\fIpush\fR\|(list) ;\fR, \fB$value = \f(CW$X\fR\->pop ;\fR, \fB$X\->shift\fR,
-\fB$X\->\fIunshift\fR\|(list) ;\fR, \fB$X\->length\fR
+\fB$X\->push(list) ;\fR, \fB$value = $X\->pop ;\fR, \fB$X\->shift\fR,
+\fB$X\->unshift(list) ;\fR, \fB$X\->length\fR
 .Ip "Another Example" 5
 .Ip "\s-1THE\s0 \s-1API\s0 \s-1INTERFACE\s0" 0
-\fB$status = \f(CW$X\fR\->\fIget\fR\|($key, \f(CW$value\fR [, \f(CW$flags\fR]) ;\fR, \fB$status =
-\f(CW$X\fR\->\fIput\fR\|($key, \f(CW$value\fR [, \f(CW$flags\fR]) ;\fR, \fB$status = \f(CW$X\fR\->\fIdel\fR\|($key [,
-\f(CW$flags\fR]) ;\fR, \fB$status = \f(CW$X\fR\->fd ;\fR, \fB$status = \f(CW$X\fR\->\fIseq\fR\|($key,
-\f(CW$value\fR, \f(CW$flags\fR) ;\fR, \fB$status = \f(CW$X\fR\->\fIsync\fR\|([$flags]) ;\fR
+\fB$status = $X\->get($key, $value [, $flags]) ;\fR, \fB$status =
+$X\->put($key, $value [, $flags]) ;\fR, \fB$status = $X\->del($key [,
+$flags]) ;\fR, \fB$status = $X\->fd ;\fR, \fB$status = $X\->seq($key,
+$value, $flags) ;\fR, \fB$status = $X\->sync([$flags]) ;\fR
 .Ip "\s-1HINTS\s0 \s-1AND\s0 \s-1TIPS\s0 " 0
 .Ip "Locking Databases" 5
 .Ip "Sharing Databases With C Applications" 5
@@ -1828,23 +2182,45 @@ Example 1, Example 2
 .Ip "\s-1HISTORY\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AVAILABILITY\s0" 0
+.Ip "\s-1COPYRIGHT\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
+.Sh "Data::Dumper \- stringified perl data structures, suitable for both printing and \f(CWeval\fR"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "Methods" 5
+\fI\s-1PACKAGE\s0\fR\->\fInew\fR\|(\fI\s-1ARRAYREF\s0 [\fR, \fI\s-1ARRAYREF\s0]\fR), \fI$\s-1OBJ\s0\fR\->Dump  \fIor\fR
+\fI\s-1PACKAGE\s0\fR\->\fIDump\fR\|(\fI\s-1ARRAYREF\s0 [\fR, \fI\s-1ARRAYREF\s0]\fR), \fI$\s-1OBJ\s0\fR\->Dumpxs	\fIor\fR
+\fI\s-1PACKAGE\s0\fR\->\fIDumpxs\fR\|(\fI\s-1ARRAYREF\s0 [\fR, \fI\s-1ARRAYREF\s0]\fR),
+\fI$\s-1OBJ\s0\fR\->\fISeen\fR\|(\fI[\s-1HASHREF\s0]\fR), \fI$\s-1OBJ\s0\fR\->\fIValues\fR\|(\fI[\s-1ARRAYREF\s0]\fR),
+\fI$\s-1OBJ\s0\fR\->\fINames\fR\|(\fI[\s-1ARRAYREF\s0]\fR), \fI$\s-1OBJ\s0\fR\->Reset
+.Ip "Functions" 5
+\fIDumper\fR\|(\fI\s-1LIST\s0\fR), \fIDumperX\fR\|(\fI\s-1LIST\s0\fR)
+.Ip "Configuration Variables or Methods" 5
+$Data::Dumper::Indent  \fIor\fR  \fI$\s-1OBJ\s0\fR\->\fIIndent\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Purity\fR  \fIor\fR  \fI$\s-1OBJ\s0\fR\->\fIPurity\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Pad\fR  \fIor\fR  \fI$\s-1OBJ\s0\fR\->\fIPad\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Varname\fR	\fIor\fR  \fI$\s-1OBJ\s0\fR\->\fIVarname\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Useqq\fR  \fIor\fR  \fI$\s-1OBJ\s0\fR\->\fIUseqq\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Terse\fR  \fIor\fR  \fI$\s-1OBJ\s0\fR\->\fITerse\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Freezer\fR	\fIor\fR  $\fI\s-1OBJ\s0\fR\->\fIFreezer\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Toaster\fR	\fIor\fR  $\fI\s-1OBJ\s0\fR\->\fIToaster\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Deepcopy\fR  \fIor\fR	$\fI\s-1OBJ\s0\fR\->\fIDeepcopy\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Quotekeys\fR  \fIor\fR  $\fI\s-1OBJ\s0\fR\->\fIQuotekeys\fR\|(\fI[\s-1NEWVAL\s0]\fR),
+\f(CW$Data::Dumper::Bless\fR  \fIor\fR  $\fI\s-1OBJ\s0\fR\->\fIBless\fR\|(\fI[\s-1NEWVAL\s0]\fR)
+.Ip "Exports" 5
+Dumper
+.Ip "\s-1EXAMPLES\s0" 0
+.Ip "\s-1BUGS\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1VERSION\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "Devel::SelfStubber \- generate stubs for a SelfLoading module"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Sh "DirHandle \- supply object methods for directory handles"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Sh "DynaLoader \- Dynamically load C libraries into Perl code"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-@dl_library_path, \f(CW@dl_resolve_using\fR, \f(CW@dl_require_symbols\fR, \f(CW@dl_librefs\fR,
-\f(CW@dl_modules\fR, \fIdl_error()\fR, \f(CW$dl_debug\fR, \fIdl_findfile()\fR, \fIdl_expandspec()\fR,
-\fIdl_load_file()\fR, \fIdl_loadflags()\fR, \fIdl_find_symbol()\fR,
-\fIdl_find_symbol_anywhere()\fR, \fIdl_undef_symbols()\fR, \fIdl_install_xsub()\fR,
-\fIbootstrap()\fR
-.Ip "\s-1AUTHOR\s0" 0
 .Sh "English \- use nice English (or awk) names for ugly punctuation variables"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1857,6 +2233,7 @@ Example 1, Example 2
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "Selecting What To Export" 5
 .Ip "Specialised Import Lists" 5
+.Ip "Exporting without using Export's import method" 5
 .Ip "Module Version Checking" 5
 .Ip "Managing Unknown Symbols" 5
 .Ip "Tag Handling Utility Functions" 5
@@ -1882,6 +2259,15 @@ directory.., test_f file
 .Sh "ExtUtils::Install \- install files from here to there"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
+.Sh "ExtUtils::Installed \- Inventory management of installed modules"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1USAGE\s0" 0
+.Ip "\s-1FUNCTIONS\s0" 0
+\fInew()\fR, \fImodules()\fR, \fIfiles()\fR, \fIdirectories()\fR, \fIdirectory_tree()\fR, \fIvalidate()\fR,
+\fIpacklist()\fR, \fIversion()\fR
+.Ip "\s-1EXAMPLE\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
 .Sh "ExtUtils::Liblist \- determine libraries to use and how to use them"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -1909,13 +2295,14 @@ dist_basics (o), dist_ci (o), dist_core (o), dist_dir (o), dist_test (o),
 dlsyms (o), dynamic (o), dynamic_bs (o), dynamic_lib (o), exescan,
 extliblist, file_name_is_absolute, find_perl
 .Ip "Methods to actually produce chunks of text for the Makefile" 5
-force (o), guess_name, has_link_code, init_dirscan, init_main, init_others,
-install (o), installbin (o), libscan (o), linkext (o), lsdir, macro (o),
-makeaperl (o), makefile (o), manifypods (o), maybe_command,
-maybe_command_in_dirs, needs_linking (o), nicetext, parse_version, pasthru
-(o), path, perl_script, perldepend (o), pm_to_blib, post_constants (o),
-post_initialize (o), postamble (o), prefixify, processPL (o), realclean
-(o), replace_manpage_separator, static (o), static_lib (o), staticmake (o),
+fixin, force (o), guess_name, has_link_code, init_dirscan, init_main,
+init_others, install (o), installbin (o), libscan (o), linkext (o), lsdir,
+macro (o), makeaperl (o), makefile (o), manifypods (o), maybe_command,
+maybe_command_in_dirs, needs_linking (o), nicetext, parse_version,
+parse_abstract, pasthru (o), path, perl_script, perldepend (o), ppd,
+perm_rw (o), perm_rwx (o), pm_to_blib, post_constants (o), post_initialize
+(o), postamble (o), prefixify, processPL (o), realclean (o),
+replace_manpage_separator, static (o), static_lib (o), staticmake (o),
 subdir_x (o), subdirs (o), test (o), test_via_harness (o), test_via_script
 (o), tool_autosplit (o), tools_other (o), tool_xsubpp (o), top_targets (o),
 writedoc, xs_c (o), xs_o (o), perl_archive, export_list
@@ -1963,29 +2350,27 @@ dist_ci (o), dist_core (o), pasthru (o)
 .Ip "Determination of Perl Library and Installation Locations" 5
 .Ip "Which architecture dependent directory?" 5
 .Ip "Using Attributes and Parameters" 5
-C, \s-1CONFIG\s0, \s-1CONFIGURE\s0, \s-1DEFINE\s0, \s-1DIR\s0, \s-1DISTNAME\s0, \s-1DL_FUNCS\s0, \s-1DL_VARS\s0,
-\s-1EXCLUDE_EXT\s0, \s-1EXE_FILES\s0, \s-1NO_VC\s0, \s-1FIRST_MAKEFILE\s0, \s-1FULLPERL\s0, H, \s-1INC\s0,
+C, \s-1CCFLAGS\s0, \s-1CONFIG\s0, \s-1CONFIGURE\s0, \s-1DEFINE\s0, \s-1DIR\s0, \s-1DISTNAME\s0, \s-1DL_FUNCS\s0, \s-1DL_VARS\s0,
+\s-1EXCLUDE_EXT\s0, \s-1EXE_FILES\s0, \s-1NO_VC\s0, \s-1FIRST_MAKEFILE\s0, \s-1FULLPERL\s0, H, \s-1IMPORTS\s0, \s-1INC\s0,
 \s-1INCLUDE_EXT\s0, \s-1INSTALLARCHLIB\s0, \s-1INSTALLBIN\s0, \s-1INSTALLDIRS\s0, \s-1INSTALLMAN1DIR\s0,
 \s-1INSTALLMAN3DIR\s0, \s-1INSTALLPRIVLIB\s0, \s-1INSTALLSCRIPT\s0, \s-1INSTALLSITELIB\s0,
 \s-1INSTALLSITEARCH\s0, \s-1INST_ARCHLIB\s0, \s-1INST_BIN\s0, \s-1INST_EXE\s0, \s-1INST_LIB\s0, \s-1INST_MAN1DIR\s0,
 \s-1INST_MAN3DIR\s0, \s-1INST_SCRIPT\s0, \s-1LDFROM\s0, \s-1LIBPERL_A\s0, \s-1LIB\s0, \s-1LIBS\s0, \s-1LINKTYPE\s0,
 \s-1MAKEAPERL\s0, \s-1MAKEFILE\s0, \s-1MAN1PODS\s0, \s-1MAN3PODS\s0, \s-1MAP_TARGET\s0, \s-1MYEXTLIB\s0, \s-1NAME\s0,
 \s-1NEEDS_LINKING\s0, \s-1NOECHO\s0, \s-1NORECURS\s0, \s-1OBJECT\s0, \s-1OPTIMIZE\s0, \s-1PERL\s0, \s-1PERLMAINCC\s0,
-\s-1PERL_ARCHLIB\s0, \s-1PERL_LIB\s0, \s-1PERL_SRC\s0, \s-1PL_FILES\s0, \s-1PM\s0, \s-1PMLIBDIRS\s0, \s-1PREFIX\s0,
-\s-1PREREQ_PM\s0, \s-1SKIP\s0, \s-1TYPEMAPS\s0, \s-1VERSION\s0, \s-1VERSION_FROM\s0, \s-1XS\s0, \s-1XSOPT\s0, \s-1XSPROTOARG\s0,
-\s-1XS_VERSION\s0
+\s-1PERL_ARCHLIB\s0, \s-1PERL_LIB\s0, \s-1PERL_SRC\s0, \s-1PERM_RW\s0, \s-1PERM_RWX\s0, \s-1PL_FILES\s0, \s-1PM\s0,
+\s-1PMLIBDIRS\s0, \s-1PREFIX\s0, \s-1PREREQ_PM\s0, \s-1SKIP\s0, \s-1TYPEMAPS\s0, \s-1VERSION\s0, \s-1VERSION_FROM\s0, \s-1XS\s0,
+\s-1XSOPT\s0, \s-1XSPROTOARG\s0, \s-1XS_VERSION\s0
 .Ip "Additional lowercase attributes" 5
 clean, depend, dist, dynamic_lib, installpm, linkext, macro, realclean,
 tool_autosplit
 .Ip "Overriding MakeMaker Methods" 5
 .Ip "Hintsfile support" 5
 .Ip "Distribution Support" 5
-.Sp
-.Vb 3
-\&   make distcheck,    make skipcheck,    make distclean,    make manifest, 
-\&  make distdir,    make tardist,    make dist,    make uutardist,    make
-\&shdist,    make zipdist,    make ci
-.Ve
+make distcheck,    make skipcheck,    make distclean,	 make manifest,
+make distdir,	 make tardist,	  make dist,	make uutardist,    make
+shdist,    make zipdist,    make ci
+.Ip "Disabling an extension" 5
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Sh "ExtUtils::Manifest \- utilities to write and check a \s-1MANIFEST\s0 file"
@@ -1999,10 +2384,6 @@ tool_autosplit
 \f(CWAdded to MANIFEST:\fR \fIfile\fR
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
-.Sh "ExtUtils::Miniperl, writemain \- write the C code for perlmain.c"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "ExtUtils::Mkbootstrap \- make a bootstrap file for use by DynaLoader"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2012,9 +2393,21 @@ tool_autosplit
 \s-1NAME\s0, \s-1DL_FUNCS\s0, \s-1DL_VARS\s0, \s-1FILE\s0, \s-1FUNCLIST\s0, \s-1DLBASE\s0
 .Ip "\s-1AUTHOR\s0" 0
 .Ip "\s-1REVISION\s0" 0
+.Sh "ExtUtils::Packlist \- manage .packlist files"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1USAGE\s0" 0
+.Ip "\s-1FUNCTIONS\s0" 0
+\fInew()\fR, \fIread()\fR, \fIwrite()\fR, \fIvalidate()\fR, \fIpacklist_file()\fR
+.Ip "\s-1EXAMPLE\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
 .Sh "ExtUtils::testlib \- add blib/* directories to \f(CW@INC\fR"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
+.Sh "Fatal \- replace functions with equivalents which succeed or die"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
 .Sh "Fcntl \- load the C Fcntl.h defines"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2052,11 +2445,44 @@ fileparse_set_fstype, fileparse
 .Sh "File::Find, find \- traverse a file tree"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1BUGS\s0" 0
 .Sh "File::Path \- create or remove a series of directories"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Ip "\s-1REVISION\s0" 0
+.Sh "File::Spec \- portably perform operations on file names"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHORS\s0" 0
+.Sh "File::Spec::Mac \- File::Spec for MacOS"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1METHODS\s0" 0
+canonpath, catdir, catfile, curdir, rootdir, updir, file_name_is_absolute,
+path
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "File::Spec::\s-1OS2\s0 \- methods for \s-1OS/2\s0 file specs"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Sh "File::Spec::Unix \- methods used by File::Spec"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1METHODS\s0" 0
+canonpath, catdir, catfile, curdir, rootdir, updir, no_upwards,
+file_name_is_absolute, path, join, nativename
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "File::Spec::\s-1VMS\s0 \- methods for \s-1VMS\s0 file specs"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "Methods always loaded" 5
+catdir, catfile, curdir (override), rootdir (override), updir (override),
+path (override), file_name_is_absolute (override)
+.Sh "File::Spec::Win32 \- methods for Win32 file specs"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+catfile, canonpath
 .Sh "File::stat \- by-name interface to Perl's built-in \fIstat()\fR functions"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2088,21 +2514,23 @@ $fh->print, \f(CW$fh\fR\->printf, \f(CW$fh\fR\->getline, \f(CW$fh\fR\->getlines
 .Sh "Getopt::Long, GetOptions \- extended processing of command line options"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-<none>, !, =s, :s, =i, :i, =f, :f
+!, +, :s, :i, :f
 .Ip "Linkage specification" 5
 .Ip "Aliases and abbreviations" 5
 .Ip "Non-option call-back routine" 5
 .Ip "Option starters" 5
-.Ip "Return value" 5
+.Ip "Return values and Errors" 5
 .Ip "\s-1COMPATIBILITY\s0" 0
 .Ip "\s-1EXAMPLES\s0" 0
 .Ip "\s-1CONFIGURATION\s0 \s-1OPTIONS\s0" 0
 default, auto_abbrev, getopt_compat, require_order, permute, bundling
-(default: reset), bundling_override (default: reset), ignore_case 
+(default: reset), bundling_override (default: reset), ignore_case
 (default: set), ignore_case_always (default: reset), pass_through (default:
-reset), debug (default: reset)
+reset), prefix, prefix_pattern, debug (default: reset)
 .Ip "\s-1OTHER\s0 \s-1USEFUL\s0 \s-1VARIABLES\s0" 0
 $Getopt::Long::\s-1VERSION\s0, \f(CW$Getopt::Long::error\fR
+.Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1COPYRIGHT\s0 \s-1AND\s0 \s-1DISCLAIMER\s0" 0
 .Sh "Getopt::Std, getopt \- Process single-character switches with switch clustering"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2112,74 +2540,6 @@ $Getopt::Long::\s-1VERSION\s0, \f(CW$Getopt::Long::error\fR
 .Sh "\s-1IO\s0 \- load various \s-1IO\s0 modules"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Sh "\s-1IO::\s0File \- supply object methods for filehandles"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CONSTRUCTOR\s0" 0
-new ([ \s-1ARGS\s0 ] ), new_tmpfile
-.Ip "\s-1METHODS\s0" 0
-\fIopen\fR\|( \s-1FILENAME\s0 [,\s-1MODE\s0 [,\s-1PERMS\s0]] )
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Ip "\s-1HISTORY\s0" 0
-.Sh "\s-1IO::\s0Handle \- supply object methods for I/O handles"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CONSTRUCTOR\s0" 0
-new (), new_from_fd ( \s-1FD\s0, \s-1MODE\s0 )
-.Ip "\s-1METHODS\s0" 0
-$fh->fdopen ( \s-1FD\s0, \s-1MODE\s0 ), \f(CW$fh\fR\->opened, \f(CW$fh\fR\->getline, \f(CW$fh\fR\->getlines,
-\f(CW$fh\fR\->ungetc ( \s-1ORD\s0 ), \f(CW$fh\fR\->write ( \s-1BUF\s0, \s-1LEN\s0 [, \s-1OFFSET\s0 }\e] ), \f(CW$fh\fR\->flush,
-\f(CW$fh\fR\->error, \f(CW$fh\fR\->clearerr, \f(CW$fh\fR\->untaint
-.Ip "\s-1NOTE\s0" 0
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Ip "\s-1BUGS\s0" 0
-.Ip "\s-1HISTORY\s0" 0
-.Sh "\s-1IO::\s0Pipe, \s-1IO::\s0pipe \- supply object methods for pipes"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CONSTRCUTOR\s0" 0
-new ( [\s-1READER\s0, \s-1WRITER\s0] )
-.Ip "\s-1METHODS\s0" 0
-reader ([\s-1ARGS\s0]), writer ([\s-1ARGS\s0]), handles ()
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Ip "\s-1AUTHOR\s0" 0
-.Ip "\s-1COPYRIGHT\s0" 0
-.Sh "\s-1IO::\s0Seekable \- supply seek based methods for I/O objects"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Ip "\s-1HISTORY\s0" 0
-.Sh "\s-1IO::\s0Select \- \s-1OO\s0 interface to the select system call"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CONSTRUCTOR\s0" 0
-new ( [ \s-1HANDLES\s0 ] )
-.Ip "\s-1METHODS\s0" 0
-add ( \s-1HANDLES\s0 ), remove ( \s-1HANDLES\s0 ), exists ( \s-1HANDLE\s0 ), handles, can_read (
-[ \s-1TIMEOUT\s0 ] ), can_write ( [ \s-1TIMEOUT\s0 ] ), has_error ( [ \s-1TIMEOUT\s0 ] ), count
-(), \fIbits()\fR, \fIbits()\fR, select ( \s-1READ\s0, \s-1WRITE\s0, \s-1ERROR\s0 [, \s-1TIMEOUT\s0 ] )
-.Ip "\s-1EXAMPLE\s0" 0
-.Ip "\s-1AUTHOR\s0" 0
-.Ip "\s-1COPYRIGHT\s0" 0
-.Sh "\s-1IO::\s0Socket \- Object interface to socket communications"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-.Ip "\s-1CONSTRUCTOR\s0" 0
-new ( [\s-1ARGS\s0] )
-.Ip "\s-1METHODS\s0" 0
-\fIaccept\fR\|([\s-1PKG\s0]), \fItimeout\fR\|([\s-1VAL\s0]), \fIsockopt\fR\|(\s-1OPT\s0 [, \s-1VAL\s0]), sockdomain, socktype,
-protocol
-.Ip "\s-1SUB\s0\-\s-1CLASSES\s0" 0
-.Ip "\s-1IO::\s0Socket::\s-1INET\s0" 5
-.Ip "\s-1METHODS\s0" 5
-sockaddr (), sockport (), sockhost (), peeraddr (), peerport (), peerhost
-()
-.Ip "\s-1IO::\s0Socket::\s-1UNIX\s0" 5
-.Ip "\s-1METHODS\s0" 5
-\fIhostpath()\fR, \fIpeerpath()\fR
-.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
-.Ip "\s-1AUTHOR\s0" 0
-.Ip "\s-1COPYRIGHT\s0" 0
 .Sh "\s-1IO::\s0lib::\s-1IO::\s0File, \s-1IO::\s0File \- supply object methods for filehandles"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2257,6 +2617,34 @@ sockaddr (), sockport (), sockhost (), peeraddr (), peerport (), peerhost
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1WARNING\s0" 0
+.Sh "\s-1IPC::\s0SysV \- SysV \s-1IPC\s0 constants"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+\fIftok\fR\|( \s-1PATH\s0, \s-1ID\s0 )
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHORS\s0" 0
+.Ip "\s-1COPYRIGHT\s0" 0
+.Sh "\s-1IPC::\s0SysV::Msg, \s-1IPC::\s0Msg \- SysV Msg \s-1IPC\s0 object class"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1METHODS\s0" 0
+new ( \s-1KEY\s0 , \s-1FLAGS\s0 ), id, rcv ( \s-1BUF\s0, \s-1LEN\s0 [, \s-1TYPE\s0 [, \s-1FLAGS\s0 ]] ), remove, set
+( \s-1STAT\s0 ), set ( \s-1NAME\s0 => \s-1VALUE\s0 [, \s-1NAME\s0 => \s-1VALUE\s0 ...] ), snd ( \s-1TYPE\s0, \s-1MSG\s0 [,
+\s-1FLAGS\s0 ] ), stat
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1COPYRIGHT\s0" 0
+.Sh "\s-1IPC::\s0SysV::Semaphore, \s-1IPC::\s0Semaphore \- SysV Semaphore \s-1IPC\s0 object class"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1METHODS\s0" 0
+new ( \s-1KEY\s0 , \s-1NSEMS\s0 , \s-1FLAGS\s0 ), getall, getncnt ( \s-1SEM\s0 ), getpid ( \s-1SEM\s0 ),
+getval ( \s-1SEM\s0 ), getzcnt ( \s-1SEM\s0 ), id, op ( \s-1OPLIST\s0 ), remove, set ( \s-1STAT\s0 ),
+set ( \s-1NAME\s0 => \s-1VALUE\s0 [, \s-1NAME\s0 => \s-1VALUE\s0 ...] ), setall ( \s-1VALUES\s0 ), setval ( N
+, \s-1VALUE\s0 ), stat
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
+.Ip "\s-1COPYRIGHT\s0" 0
 .Sh "Math::BigFloat \- Arbitrary length float math package"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2268,6 +2656,7 @@ number format, Error returns \*(L'NaN\*(R', Division is computed to
 .Ip "\s-1DESCRIPTION\s0" 0
 Canonical notation, Input, Output
 .Ip "\s-1EXAMPLES\s0" 0
+.Ip "Autocreating constants" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
 .Sh "Math::Complex \- complex numbers and associated mathematical functions"
@@ -2277,16 +2666,25 @@ Canonical notation, Input, Output
 .Ip "\s-1CREATION\s0" 0
 .Ip "\s-1STRINGIFICATION\s0" 0
 .Ip "\s-1USAGE\s0" 0
-.Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0" 0
+.Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0 \s-1OR\s0 \s-1LOGARITHM\s0 \s-1OF\s0 \s-1ZERO\s0" 0
+.Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1INDIGESTIBLE\s0 \s-1ARGUMENTS\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Sh "Math::Trig \- trigonometric functions"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1TRIGONOMETRIC\s0 \s-1FUNCTIONS\s0" 0
+\fBtan\fR
 .Ip "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0" 5
 .Ip "\s-1SIMPLE\s0 (\s-1REAL\s0) \s-1ARGUMENTS\s0, \s-1COMPLEX\s0 \s-1RESULTS\s0" 5
-.Ip "\s-1ANGLE\s0 \s-1CONVERSIONS\s0" 0
+.Ip "\s-1PLANE\s0 \s-1ANGLE\s0 \s-1CONVERSIONS\s0" 0
+.Ip "\s-1RADIAL\s0 \s-1COORDINATE\s0 \s-1CONVERSIONS\s0" 0
+.Ip "\s-1COORDINATE\s0 \s-1SYSTEMS\s0" 5
+.Ip "3-D \s-1ANGLE\s0 \s-1CONVERSIONS\s0" 5
+cartesian_to_cylindrical, cartesian_to_spherical, cylindrical_to_cartesian,
+cylindrical_to_spherical, spherical_to_cartesian, spherical_to_cylindrical
+.Ip "\s-1GREAT\s0 \s-1CIRCLE\s0 \s-1DISTANCES\s0" 0
+.Ip "\s-1EXAMPLES\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Sh "NDBM_File \- Tied access to ndbm files"
@@ -2343,8 +2741,9 @@ opdump (\s-1PAT\s0)
 .Ip "\s-1TO\s0 \s-1DO\s0 (maybe)" 0
 .Ip "Predefined Opcode Tags" 0
 :base_core, :base_mem, :base_loop, :base_io, :base_orig, :base_math,
-:default, :filesys_read, :sys_db, :browse, :filesys_open, :filesys_write,
-:subprocess, :ownprocess, :others, :still_to_be_decided, :dangerous
+:base_thread, :default, :filesys_read, :sys_db, :browse, :filesys_open,
+:filesys_write, :subprocess, :ownprocess, :others, :still_to_be_decided,
+:dangerous
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Sh "Opcode::Safe, Safe \- Compile and execute code in restricted compartments"
@@ -2362,7 +2761,7 @@ root (\s-1NAMESPACE\s0), mask (\s-1MASK\s0)
 Memory, \s-1CPU\s0, Snooping, Signals, State Changes
 .Ip "\s-1AUTHOR\s0" 5
 .Sh "Opcode::ops, ops \- Perl pragma to restrict unsafe operations when compiling"
-.Ip "\s-1SYNOPSIS\s0	" 0
+.Ip "\s-1SYNOPSIS\s0  " 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Sh "\s-1POSIX\s0 \- Perl interface to \s-1IEEE\s0 Std 1003.1"
@@ -2441,7 +2840,7 @@ Constants
 .Ip "\s-1WAIT\s0" 0
 Constants, Macros
 .Ip "\s-1CREATION\s0" 0
-.Sh "Pod::Html, Pod::\s-1HTML\s0 \- module to convert pod files to \s-1HTML\s0"
+.Sh "Pod::Html \- module to convert pod files to \s-1HTML\s0"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1ARGUMENTS\s0" 0
@@ -2460,20 +2859,6 @@ nonetscape, index, noindex, recurse, norecurse, title, verbose
 .Sh "SDBM_File \- Tied access to sdbm files"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-.Sh "Safe \- Compile and execute code in restricted compartments"
-.Ip "\s-1SYNOPSIS\s0" 0
-.Ip "\s-1DESCRIPTION\s0" 0
-a new namespace, an operator mask
-.Ip "\s-1WARNING\s0" 0
-.Ip "\s-1RECENT\s0 \s-1CHANGES\s0" 5
-.Ip "Methods in class Safe" 5
-permit (\s-1OP\s0, ...), permit_only (\s-1OP\s0, ...), deny (\s-1OP\s0, ...), deny_only (\s-1OP\s0,
-\&...), trap (\s-1OP\s0, ...), untrap (\s-1OP\s0, ...), share (\s-1NAME\s0, ...), share_from
-(\s-1PACKAGE\s0, \s-1ARRAYREF\s0), varglob (\s-1VARNAME\s0), reval (\s-1STRING\s0), rdo (\s-1FILENAME\s0),
-root (\s-1NAMESPACE\s0), mask (\s-1MASK\s0)
-.Ip "Some Safety Issues" 5
-Memory, \s-1CPU\s0, Snooping, Signals, State Changes
-.Ip "\s-1AUTHOR\s0" 5
 .Sh "Search::Dict, look \- search for key in dictionary file"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2513,7 +2898,8 @@ pack_sockaddr_un \s-1PATH\s0, unpack_sockaddr_un \s-1SOCKADDR_UN\s0
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 openlog \f(CW$ident\fR, \f(CW$logopt\fR, \f(CW$facility\fR, syslog \f(CW$priority\fR, \f(CW$format\fR, \f(CW@args\fR,
-setlogmask \f(CW$mask_priority\fR, closelog
+setlogmask \f(CW$mask_priority\fR, setlogsock \f(CW$sock_type\fR (added in 5.004_02),
+closelog
 .Ip "\s-1EXAMPLES\s0" 0
 .Ip "\s-1DEPENDENCIES\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
@@ -2536,8 +2922,17 @@ setlogmask \f(CW$mask_priority\fR, closelog
 \f(CWReadLine\fR, \f(CWnew\fR, \f(CWreadline\fR, \f(CWaddhistory\fR, \f(CWIN\fR, $\f(CWOUT\fR,
 \f(CWMinLine\fR, \f(CWfindConsole\fR, Attribs, \f(CWFeatures\fR
 .Ip "Additional supported functions" 0
+\f(CWtkRunning\fR, \f(CWornaments\fR, \f(CWnewTTY\fR
 .Ip "\s-1EXPORTS\s0" 0
 .Ip "\s-1ENVIRONMENT\s0" 0
+.Sh "Test \- provides a simple framework for writing test scripts"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1TEST\s0 \s-1TYPES\s0" 0
+\s-1NORMAL\s0 \s-1TESTS\s0, \s-1SKIPPED\s0 \s-1TESTS\s0, \s-1TODO\s0 \s-1TESTS\s0
+.Ip "\s-1ONFAIL\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Ip "\s-1AUTHOR\s0" 0
 .Sh "Test::Harness \- run perl standard test scripts with statistics"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2548,6 +2943,7 @@ setlogmask \f(CW$mask_priority\fR, closelog
 %s\en\etFailed %d/%d tests, %.2f%% okay.\fR, \f(CWTest returned status %d (wstat
 %d)\fR, \f(CWFailed 1 test, %.2f%% okay. %s\fR, \f(CWFailed %d/%d tests, %.2f%% okay.
 %s\fR
+.Ip "\s-1ENVIRONMENT\s0" 0
 .Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
 .Ip "\s-1AUTHORS\s0" 0
 .Ip "\s-1BUGS\s0" 0
@@ -2555,9 +2951,15 @@ setlogmask \f(CW$mask_priority\fR, closelog
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
 .Ip "\s-1EXAMPLE\s0" 0
-.Sh "Text::ParseWords \- parse text into an array of tokens"
+.Sh "Text::ParseWords \- parse text into an array of tokens or array of arrays"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1EXAMPLES\s0" 0
+0a simple word, 1multiple spaces are skipped because of our \f(CW$delim\fR, 2use of
+quotes to include a space in a word, 3use of a backslash to include a space
+in a word, 4use of a backslash to remove the special meaning of a
+double-quote, 5another simple word (note the lack of effect of the
+backslashed double-quote)
 .Ip "\s-1AUTHORS\s0" 0
 .Sh "Text::Soundex \- Implementation of the Soundex Algorithm as Described by Knuth"
 .Ip "\s-1SYNOPSIS\s0" 0
@@ -2576,6 +2978,50 @@ setlogmask \f(CW$mask_priority\fR, closelog
 .Ip "\s-1EXAMPLE\s0" 0
 .Ip "\s-1BUGS\s0" 0
 .Ip "\s-1AUTHOR\s0" 0
+.Sh "Thread \- multithreading"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1FUNCTIONS\s0" 0
+new \e&start_sub, new \e&start_sub, \s-1LIST\s0, lock \s-1VARIABLE\s0, async \s-1BLOCK\s0;,
+Thread->self, Thread->list, cond_wait \s-1VARIABLE\s0, cond_signal \s-1VARIABLE\s0,
+cond_broadcast \s-1VARIABLE\s0
+.Ip "\s-1METHODS\s0" 0
+join, eval, tid
+.Ip "\s-1LIMITATIONS\s0" 0
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "Thread::Queue \- thread-safe queues"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1FUNCTIONS\s0 \s-1AND\s0 \s-1METHODS\s0" 0
+new, enqueue \s-1LIST\s0, dequeue, dequeue_nb, pending
+.Ip "\s-1SEE\s0 \s-1ALSO\s0" 0
+.Sh "Thread::Semaphore \- thread-safe semaphores"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1FUNCTIONS\s0 \s-1AND\s0 \s-1METHODS\s0" 0
+new, new \s-1NUMBER\s0, down, down \s-1NUMBER\s0, up, up \s-1NUMBER\s0
+.Sh "Thread::Signal \- Start a thread which runs signal handlers reliably"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+.Ip "\s-1BUGS\s0" 0
+.Sh "Thread::Specific \- thread-specific keys"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Sh "Tie::Array \- base class for tied arrays"
+.Ip "\s-1SYNOPSIS\s0  " 0
+.Ip "\s-1DESCRIPTION\s0       " 0
+\s-1TIEARRAY\s0 classname, \s-1LIST\s0, \s-1STORE\s0 this, index, value, \s-1FETCH\s0 this, index,
+\s-1FETCHSIZE\s0 this, \s-1STORESIZE\s0 this, count, \s-1EXTEND\s0 this, count, \s-1CLEAR\s0 this,
+\s-1DESTROY\s0 this, \s-1PUSH\s0 this, \s-1LIST\s0, \s-1POP\s0 this, \s-1SHIFT\s0 this, \s-1UNSHIFT\s0 this, \s-1LIST\s0,
+\s-1SPLICE\s0 this, offset, length, \s-1LIST\s0
+.Ip "\s-1CAVEATS\s0" 0
+.Ip "\s-1AUTHOR\s0 " 0
+.Sh "Tie::Handle \- base class definitions for tied handles"
+.Ip "\s-1SYNOPSIS\s0" 0
+.Ip "\s-1DESCRIPTION\s0" 0
+\s-1TIEHANDLE\s0 classname, \s-1LIST\s0, \s-1WRITE\s0 this, scalar, length, offset, \s-1PRINT\s0 this,
+\s-1LIST\s0, \s-1PRINTF\s0 this, format, \s-1LIST\s0, \s-1READ\s0 this, scalar, length, offset,
+\s-1READLINE\s0 this, \s-1GETC\s0 this, \s-1DESTROY\s0 this
+.Ip "\s-1MORE\s0 \s-1INFORMATION\s0" 0
 .Sh "Tie::Hash, Tie::StdHash \- base class definitions for tied hashes"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2619,8 +3065,8 @@ this, \s-1NEXTKEY\s0 this, lastkey, \s-1EXISTS\s0 this, key, \s-1DELETE\s0 this,
 .Sh "\s-1UNIVERSAL\s0 \- base class for \s-1ALL\s0 classes (blessed references)"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
-isa ( \s-1TYPE\s0 ), can ( \s-1METHOD\s0 ), \s-1VERSION\s0 ( [ \s-1REQUIRE\s0 ] ), isa ( \s-1VAL\s0, \s-1TYPE\s0 ),
-can ( \s-1VAL\s0, \s-1METHOD\s0 )
+isa ( \s-1TYPE\s0 ), can ( \s-1METHOD\s0 ), \s-1VERSION\s0 ( [ \s-1REQUIRE\s0 ] ), \s-1UNIVERSAL::\s0isa (
+\s-1VAL\s0, \s-1TYPE\s0 ), \s-1UNIVERSAL::\s0can ( \s-1VAL\s0, \s-1METHOD\s0 )
 .Sh "User::grent \- by-name interface to Perl's built-in getgr*() functions"
 .Ip "\s-1SYNOPSIS\s0" 0
 .Ip "\s-1DESCRIPTION\s0" 0
@@ -2677,7 +3123,7 @@ of other folks.
 
 .IX Item "\s-1NOTES\s0"
 
-.IX Subsection "perlfaq \- frequently asked questions about Perl ($Date: 1997/04/24 22:46:06 $)"
+.IX Subsection "perlfaq \- frequently asked questions about Perl ($Date: 1998/07/20 23:12:17 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -2691,15 +3137,13 @@ of other folks.
 
 .IX Item "Author and Copyright Information"
 
-.IX Item "Noncommercial Reproduction"
-
-.IX Item "Commercial Reproduction"
+.IX Item "Bundled Distributions"
 
 .IX Item "Disclaimer"
 
 .IX Item "Changes"
 
-.IX Subsection "perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)"
+.IX Subsection "perlfaq1 \- General Questions About Perl ($Revision: 1.14 $, \f(CW$Date:\fR 1998/06/14 22:15:25 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -2733,7 +3177,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.16 $, \f(CW$Date:\fR 1997/04/23 18:04:09 $)"
+.IX Subsection "perlfaq2 \- Obtaining and Learning about Perl ($Revision: 1.24 $, \f(CW$Date:\fR 1998/07/20 23:40:28 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -2747,7 +3191,7 @@ of other folks.
 
 .IX Item "I grabbed the sources and tried to compile but gdbm/dynamic loading/malloc/linking/... failed.  How do I make it work?"
 
-.IX Item "What modules and extensions are available for Perl?  What is \s-1CPAN\s0?  What does \s-1CPAN/\s0src/... mean?"
+.IX Item "What modules and extensions are available for Perl?  What is \s-1CPAN\s0? What does \s-1CPAN/\s0src/... mean?"
 
 .IX Item "Is there an \s-1ISO\s0 or \s-1ANSI\s0 certified version of Perl?"
 
@@ -2767,8 +3211,6 @@ of other folks.
 
 .IX Item "Archives of comp.lang.perl.misc"
 
-.IX Item "Perl Training"
-
 .IX Item "Where can I buy a commercial version of Perl?"
 
 .IX Item "Where do I send bug reports?"
@@ -2779,7 +3221,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq3 \- Programming Tools ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:43:42 $)"
+.IX Subsection "perlfaq3 \- Programming Tools ($Revision: 1.28 $, \f(CW$Date:\fR 1998/07/16 22:08:49 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -2809,8 +3251,6 @@ of other folks.
 
 .IX Item "How can I generate simple menus without using \s-1CGI\s0 or Tk?"
 
-.IX Item "Can I dynamically load C routines into Perl?"
-
 .IX Item "What is undump?"
 
 .IX Item "How can I make my Perl program run faster?"
@@ -2827,7 +3267,7 @@ of other folks.
 
 .IX Item "How can I compile my Perl program into byte code or C?"
 
-.IX Item "How can I get \*(N'#!perl\*(T' to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
+.IX Item "How can I get \f(CW#!perl\fR to work on [\s-1MS\s0\-\s-1DOS\s0,\s-1NT\s0,...]?"
 
 .IX Item "Can I write useful perl programs on the command line?"
 
@@ -2847,7 +3287,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq4 \- Data Manipulation ($Revision: 1.19 $, \f(CW$Date:\fR 1997/04/24 22:43:57 $)"
+.IX Subsection "perlfaq4 \- Data Manipulation ($Revision: 1.25 $, \f(CW$Date:\fR 1998/07/16 22:49:55 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -2873,13 +3313,13 @@ of other folks.
 
 .IX Item "How do I find the week-of-the-year/day-of-the-year?"
 
-.IX Item "How can I compare two date strings?"
+.IX Item "How can I compare two dates and find the difference?"
 
 .IX Item "How can I take a string and turn it into epoch seconds?"
 
 .IX Item "How can I find the Julian Day?"
 
-.IX Item "Does Perl have a year 2000 problem?"
+.IX Item "Does Perl have a year 2000 problem?  Is Perl Y2K compliant?"
 
 .IX Item "Data: Strings"
 
@@ -2927,7 +3367,7 @@ of other folks.
 
 .IX Item "How can I extract just the unique elements of an array?"
 
-.IX Item "How can I tell whether an array contains a certain element?"
+.IX Item "How can I tell whether a list or array contains a certain element?"
 
 .IX Item "How do I compute the difference of two arrays?  How do I compute the intersection of two arrays?"
 
@@ -2999,11 +3439,11 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq5 \- Files and Formats ($Revision: 1.22 $, \f(CW$Date:\fR 1997/04/24 22:44:02 $)"
+.IX Subsection "perlfaq5 \- Files and Formats ($Revision: 1.24 $, \f(CW$Date:\fR 1998/07/05 15:07:20 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "How do I flush/unbuffer a filehandle?  Why must I do this?"
+.IX Item "How do I flush/unbuffer an output filehandle?  Why must I do this?"
 
 .IX Item "How do I change one line in a file/delete a line in a file/insert a line in the middle of a file/append to the beginning of a file?"
 
@@ -3015,6 +3455,8 @@ of other folks.
 
 .IX Item "How can I make a filehandle local to a subroutine?  How do I pass filehandles between subroutines?  How do I make an array of filehandles?"
 
+.IX Item "How can I use a filehandle indirectly?"
+
 .IX Item "How can I set up a footer format to be used with write()?"
 
 .IX Item "How can I write() into a string?"
@@ -3023,7 +3465,7 @@ of other folks.
 
 .IX Item "How can I translate tildes (~) in a filename?"
 
-.IX Item "How come when I open the file read-write it wipes it out?"
+.IX Item "How come when I open a file read-write it wipes it out?"
 
 .IX Item "Why do I sometimes get an \*(N"Argument list too long\*(T" when I use <*>?"
 
@@ -3053,10 +3495,6 @@ of other folks.
 
 .IX Item "How can I tell if there's a character waiting on a filehandle?"
 
-.IX Item "How do I open a file without blocking?"
-
-.IX Item "How do I create a file only if it doesn't exist?"
-
 .IX Item "How do I do a \f(CWtail -f\fR in perl?"
 
 .IX Item "How do I dup() a filehandle in Perl?"
@@ -3073,7 +3511,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq6 \- Regexps ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:10 $)"
+.IX Subsection "perlfaq6 \- Regexps ($Revision: 1.22 $, \f(CW$Date:\fR 1998/07/16 14:01:07 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -3087,7 +3525,7 @@ of other folks.
 
 .IX Item "How do I substitute case insensitively on the \s-1LHS\s0, but preserving case on the \s-1RHS\s0?"
 
-.IX Item "How can I make \f(CW\ew\fR match accented characters?"
+.IX Item "How can I make \f(CW\ew\fR match national character sets?"
 
 .IX Item "How can I match a locale-smart version of \f(CW/[a-zA-Z]/\fR?"
 
@@ -3123,7 +3561,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq7 \- Perl Language Issues ($Revision: 1.18 $, \f(CW$Date:\fR 1997/04/24 22:44:14 $)"
+.IX Subsection "perlfaq7 \- Perl Language Issues ($Revision: 1.21 $, \f(CW$Date:\fR 1998/06/22 15:20:07 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -3157,13 +3595,13 @@ of other folks.
 
 .IX Item "How do I create a static variable?"
 
-.IX Item "What's the difference between dynamic and lexical (static) scoping?  Between local() and my()?"
+.IX Item "What's the difference between dynamic and lexical (static) scoping? Between local() and my()?"
 
 .IX Item "How can I access a dynamic variable while a similarly named lexical is in scope?"
 
 .IX Item "What's the difference between deep and shallow binding?"
 
-.IX Item "Why doesn't \*(N"local($foo) = <\s-1FILE\s0>;\*(T" work right?"
+.IX Item "Why doesn't \*(N"my($foo) = <\s-1FILE\s0>;\*(T" work right?"
 
 .IX Item "How do I redefine a builtin function, operator, or method?"
 
@@ -3181,7 +3619,7 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq8 \- System Interaction ($Revision: 1.21 $, \f(CW$Date:\fR 1997/04/24 22:44:19 $)"
+.IX Subsection "perlfaq8 \- System Interaction ($Revision: 1.25 $, \f(CW$Date:\fR 1998/07/05 15:07:20 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -3190,6 +3628,16 @@ of other folks.
 .IX Item "How come exec() doesn't return?"
 
 .IX Item "How do I do fancy stuff with the keyboard/screen/mouse?"
+
+.IX Item "How do I print something out in color?"
+
+.IX Item "How do I read just one key without waiting for a return key?"
+
+.IX Item "How do I check whether input is ready on the keyboard?"
+
+.IX Item "How do I clear the screen?"
+
+.IX Item "How do I get the screen size?"
 
 .IX Item "How do I ask the user for a password?"
 
@@ -3265,21 +3713,23 @@ of other folks.
 
 .IX Item "How do I install a \s-1CPAN\s0 module?"
 
+.IX Item "What's the difference between require and use?"
+
 .IX Item "How do I keep my own module/library directory?"
 
 .IX Item "How do I add the directory my program lives in to the module/library search path?"
 
 .IX Item "How do I add a directory to my include path at runtime?"
 
-.IX Item "How do I get one key from the terminal at a time, under \s-1POSIX\s0?"
-
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)"
+.IX Subsection "perlfaq9 \- Networking ($Revision: 1.20 $, \f(CW$Date:\fR 1998/06/22 18:31:09 $)"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+.IX Item "My \s-1CGI\s0 script runs from the command line but not the browser.   (500 Server Error)"
+
+.IX Item "How can I get better error messages from a \s-1CGI\s0 program?"
 
 .IX Item "How do I remove \s-1HTML\s0 from a string?"
 
@@ -3291,7 +3741,9 @@ of other folks.
 
 .IX Item "How do I fetch an \s-1HTML\s0 file?"
 
-.IX Item "how do I decode or create those %\-encodings on the web?"
+.IX Item "How do I automate an \s-1HTML\s0 form submission?"
+
+.IX Item "How do I decode or create those %\-encodings on the web?"
 
 .IX Item "How do I redirect to another page?"
 
@@ -3301,17 +3753,19 @@ of other folks.
 
 .IX Item "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
 
-.IX Item "How do I parse an email header?"
+.IX Item "How do I parse a mail header?"
 
 .IX Item "How do I decode a \s-1CGI\s0 form?"
 
-.IX Item "How do I check a valid email address?"
+.IX Item "How do I check a valid mail address?"
 
 .IX Item "How do I decode a \s-1MIME/BASE64\s0 string?"
 
-.IX Item "How do I return the user's email address?"
+.IX Item "How do I return the user's mail address?"
 
-.IX Item "How do I send/read mail?"
+.IX Item "How do I send mail?"
+
+.IX Item "How do I read mail?"
 
 .IX Item "How do I find out my hostname/domainname/\s-1IP\s0 address?"
 
@@ -3323,111 +3777,121 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
 
-.IX Subsection "perldelta \- what's new for perl5.004"
+.IX Subsection "perldelta \- what's new for perl5.005"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "Supported Environments"
+.IX Item "About the new versioning system"
+
+.IX Item "Incompatible Changes"
+
+.IX Item "\s-1WARNING\s0:  This version is not binary compatible with Perl 5.004."
+
+.IX Item "Default installation structure has changed"
+
+.IX Item "Perl Source Compatibility"
+
+.IX Item "C Source Compatibility"
+
+.IX Item "Binary Compatibility"
+
+.IX Item "Security fixes may affect compatibility"
+
+.IX Item "Relaxed new mandatory warnings introduced in 5.004"
+
+.IX Item "Licensing"
 
 .IX Item "Core Changes"
 
-.IX Item "List assignment to %\s-1ENV\s0 works"
+.IX Item "Threads"
 
-.IX Item "\*(N"Can't locate Foo.pm in @\s-1INC\s0\*(T" error now lists @\s-1INC\s0"
+.IX Item "Compiler"
 
-.IX Item "Compilation option: Binary compatibility with 5.003"
+.IX Item "Regular Expressions"
 
-.IX Item "$\s-1PERL5OPT\s0 environment variable"
+.IX Item "Improved malloc()"
 
-.IX Item "Limitations on \fB\-M\fR, \fB\-m\fR, and \fB\-T\fR options"
+.IX Item "Quicksort is internally implemented"
 
-.IX Item "More precise warnings"
+.IX Item "Reliable signals"
 
-.IX Item "Deprecated: Inherited \f(CWAUTOLOAD\fR for non-methods"
+.IX Item "Reliable stack pointers"
 
-.IX Item "Previously deprecated %\s-1OVERLOAD\s0 is no longer usable"
+.IX Item "More generous treatment of carriage returns"
 
-.IX Item "Subroutine arguments created only when they're modified"
+.IX Item "Memory leaks"
 
-.IX Item "Group vector changeable with \f(CW$)\fR"
+.IX Item "Better support for multiple interpreters"
 
-.IX Item "Fixed parsing of $$<digit>, &$<digit>, etc."
+.IX Item "Behavior of local() on array and hash elements is now well-defined"
 
-.IX Item "No resetting of $. on implicit close"
+.IX Item "\f(CW%!\fR is transparently tied to the the \fIErrno\fR manpage module"
 
-.IX Item "\f(CWwantarray\fR may return undef"
+.IX Item "Pseudo-hashes are supported"
 
-.IX Item "Changes to tainting checks"
+.IX Item "\f(CWEXPR foreach EXPR\fR is supported"
 
-.IX Item "New Opcode module and revised Safe module"
+.IX Item "Keywords can be globally overridden"
 
-.IX Item "Embedding improvements"
+.IX Item "\f(CW$^E\fR is meaningful on Win32"
 
-.IX Item "Internal change: FileHandle class based on \s-1IO\s0::* classes"
+.IX Item "\f(CWforeach (1..1000000)\fR optimized"
 
-.IX Item "Internal change: PerlIO abstraction interface"
+.IX Item "\f(CWFoo::\fR can be used as implicitly quoted package name"
 
-.IX Item "New and changed syntax"
+.IX Item "\f(CWexists $Foo::{Bar::}\fR tests existence of a package"
 
-.IX Item "New and changed builtin constants"
+.IX Item "Better locale support"
 
-.IX Item "New and changed builtin variables"
+.IX Item "Experimental support for 64-bit platforms"
 
-.IX Item "New and changed builtin functions"
+.IX Item "prototype() returns useful results on builtins"
 
-.IX Item "New builtin methods"
+.IX Item "Extended support for exception handling"
 
-.IX Item "\s-1TIEHANDLE\s0 now supported"
+.IX Item "Re-blessing in \s-1DESTROY\s0() supported for chaining \s-1DESTROY\s0() methods"
 
-.IX Item "Malloc enhancements"
+.IX Item "All \f(CWprintf\fR format conversions are handled internally"
 
-.IX Item "Miscellaneous efficiency enhancements"
+.IX Item "New \f(CWINIT\fR keyword"
 
-.IX Item "Support for More Operating Systems"
+.IX Item "New \f(CWlock\fR keyword"
 
-.IX Item "Win32"
+.IX Item "New \f(CWqr//\fR operator"
 
-.IX Item "Plan 9"
+.IX Item "\f(CWour\fR is now a reserved word"
 
-.IX Item "\s-1QNX\s0"
+.IX Item "Tied arrays are now fully supported"
 
-.IX Item "AmigaOS"
+.IX Item "Tied handles support is better"
 
-.IX Item "Pragmata"
+.IX Item "4th argument to substr"
 
-.IX Item "Modules"
+.IX Item "Negative \s-1LENGTH\s0 argument to splice"
 
-.IX Item "Required Updates"
+.IX Item "Magic lvalues are now more magical"
 
-.IX Item "Installation directories"
+.IX Item "<> now reads in records"
 
-.IX Item "Module information summary"
+.IX Item "Supported Platforms"
 
-.IX Item "Fcntl"
+.IX Item "New Platforms"
 
-.IX Item "\s-1IO\s0"
+.IX Item "Changes in existing support"
 
-.IX Item "Math::Complex"
+.IX Item "Modules and Pragmata"
 
-.IX Item "Math::Trig"
+.IX Item "New Modules"
 
-.IX Item "DB_File"
-
-.IX Item "Net::Ping"
-
-.IX Item "Object-oriented overrides for builtin operators"
+.IX Item "Changes in existing modules"
 
 .IX Item "Utility Changes"
-
-.IX Item "pod2html"
-
-.IX Item "xsubpp"
-
-.IX Item "C Language \s-1API\s0 Changes"
 
 .IX Item "Documentation Changes"
 
 .IX Item "New Diagnostics"
+
+.IX Item "Obsolete Diagnostics"
 
 .IX Item "\s-1BUGS\s0"
 
@@ -3513,7 +3977,7 @@ of other folks.
 
 .IX Item "C\-style Logical Or"
 
-.IX Item "Range Operator"
+.IX Item "Range Operators"
 
 .IX Item "Conditional Operator"
 
@@ -3535,13 +3999,19 @@ of other folks.
 
 .IX Item "Regexp Quote-Like Operators"
 
+.IX Item "Gory details of parsing quoted constructs"
+
 .IX Item "I/O Operators"
 
 .IX Item "Constant Folding"
 
+.IX Item "Bitwise String Operators"
+
 .IX Item "Integer Arithmetic"
 
 .IX Item "Floating-point Arithmetic"
+
+.IX Item "Bigger Numbers"
 
 .IX Subsection "perlre \- Perl regular expressions"
 
@@ -3555,6 +4025,10 @@ of other folks.
 
 .IX Item "\s-1WARNING\s0 on \e1 vs $1"
 
+.IX Item "Repeated patterns matching zero-length substring"
+
+.IX Item "Creating custom \s-1RE\s0 engines"
+
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
 .IX Subsection "perlrun \- how to execute the Perl interpreter"
@@ -3564,6 +4038,8 @@ of other folks.
 .IX Item "\s-1DESCRIPTION\s0"
 
 .IX Item "#! and quoting on non-Unix systems"
+
+.IX Item "Location of Perl"
 
 .IX Item "Switches"
 
@@ -3583,17 +4059,23 @@ of other folks.
 
 .IX Item "Predefined Names"
 
+.IX Item "Error Indicators"
+
 .IX Subsection "perlsub \- Perl subroutines"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "Private Variables via my()"
+.IX Item "Private Variables via \f(CWmy()\fR"
+
+.IX Item "Peristent Private Variables"
 
 .IX Item "Temporary Values via local()"
 
 .IX Item "Passing Symbol Table Entries (typeglobs)"
+
+.IX Item "When to Still Use local()"
 
 .IX Item "Pass by Reference"
 
@@ -3647,6 +4129,18 @@ of other folks.
 
 .IX Item "\s-1NOTE\s0"
 
+.IX Subsection "perlmodinstall \- Installing \s-1CPAN\s0 Modules"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1PREAMBLE\s0"
+
+.IX Item "\s-1HEY\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1COPYRIGHT\s0"
+
 .IX Subsection "perlform \- Perl formats"
 
 .IX Item "\s-1DESCRIPTION\s0"
@@ -3672,6 +4166,18 @@ of other folks.
 .IX Item "The use locale pragma"
 
 .IX Item "The setlocale function"
+
+.IX Item "Finding locales"
+
+.IX Item "\s-1LOCALE\s0 \s-1PROBLEMS\s0"
+
+.IX Item "Temporarily fixing locale problems"
+
+.IX Item "Permanently fixing locale problems"
+
+.IX Item "Permanently fixing your locale configuration"
+
+.IX Item "Permanently fixing system locale configuration"
 
 .IX Item "The localeconv function"
 
@@ -3721,9 +4227,17 @@ of other folks.
 
 .IX Item "\s-1DESCRIPTION\s0"
 
+.IX Item "Making References"
+
+.IX Item "Using References"
+
 .IX Item "Symbolic references"
 
 .IX Item "Not-so-symbolic references"
+
+.IX Item "Pseudo-hashes: Using an array as a hash"
+
+.IX Item "Function Templates"
 
 .IX Item "\s-1WARNING\s0"
 
@@ -3869,6 +4383,8 @@ of other folks.
 
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
+.IX Item "\s-1AUTHOR\s0 \s-1AND\s0 \s-1COPYRIGHT\s0"
+
 .IX Item "\s-1COPYRIGHT\s0"
 
 .IX Item "Acknowledgments"
@@ -3953,6 +4469,8 @@ of other folks.
 
 .IX Item "Named Pipes"
 
+.IX Item "\s-1WARNING\s0"
+
 .IX Item "Using open() for \s-1IPC\s0"
 
 .IX Item "Filehandles"
@@ -3965,7 +4483,11 @@ of other folks.
 
 .IX Item "Bidirectional Communication with Another Process"
 
+.IX Item "Bidirectional Communication with Yourself"
+
 .IX Item "Sockets: Client/Server Communication"
+
+.IX Item "Internet Line Terminators"
 
 .IX Item "Internet \s-1TCP\s0 Clients and Servers"
 
@@ -4021,6 +4543,24 @@ of other folks.
 
 .IX Item "\s-1BUGS\s0"
 
+.IX Item "Debugging Perl memory usage"
+
+.IX Item "Using \f(CW$ENV{PERL_DEBUG_MSTATS}\fR"
+
+.IX Item "Example of using \fB\-\s-1DL\s0\fR switch"
+
+.IX Item "\fB\-\s-1DL\s0\fR details"
+
+.IX Item "Limitations of \fB\-\s-1DL\s0\fR statistic"
+
+.IX Item "Debugging regular expressions"
+
+.IX Item "Compile-time output"
+
+.IX Item "Types of nodes"
+
+.IX Item "Run-time output"
+
 .IX Subsection "perldiag \- various Perl diagnostics"
 
 .IX Item "\s-1DESCRIPTION\s0"
@@ -4038,6 +4578,8 @@ of other folks.
 .IX Item "Security Bugs"
 
 .IX Item "Protecting Your Programs"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
 .IX Subsection "perltrap \- Perl traps for the unwary"
 
@@ -4079,6 +4621,56 @@ of other folks.
 
 .IX Item "Unclassified Traps"
 
+.IX Subsection "perlport \- Writing portable Perl"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1ISSUES\s0"
+
+.IX Item "Newlines"
+
+.IX Item "File Paths"
+
+.IX Item "System Interaction"
+
+.IX Item "Interprocess Communication (\s-1IPC\s0)"
+
+.IX Item "External Subroutines (\s-1XS\s0)"
+
+.IX Item "Standard Modules"
+
+.IX Item "Time and Date"
+
+.IX Item "System Resources"
+
+.IX Item "Security"
+
+.IX Item "Style"
+
+.IX Item "\s-1CPAN\s0 \s-1TESTERS\s0"
+
+.IX Item "\s-1PLATFORMS\s0"
+
+.IX Item "Unix"
+
+.IX Item "\s-1DOS\s0 and Derivatives"
+
+.IX Item "MacPerl"
+
+.IX Item "\s-1VMS\s0"
+
+.IX Item "\s-1EBCDIC\s0 Platforms"
+
+.IX Item "Other perls"
+
+.IX Item "\s-1FUNCTION\s0 \s-1IMPLEMENTATIONS\s0"
+
+.IX Item "Alphabetical Listing of Perl Functions"
+
+.IX Item "\s-1AUTHORS\s0 / \s-1CONTRIBUTORS\s0"
+
+.IX Item "\s-1VERSION\s0"
+
 .IX Subsection "perlstyle \- Perl style guide"
 
 .IX Item "\s-1DESCRIPTION\s0"
@@ -4086,6 +4678,14 @@ of other folks.
 .IX Subsection "perlpod \- plain old documentation"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "Verbatim Paragraph"
+
+.IX Item "Command Paragraph"
+
+.IX Item "Ordinary Block of Text"
+
+.IX Item "The Intent"
 
 .IX Item "Embedding Pods in Perl Modules"
 
@@ -4181,6 +4781,8 @@ of other folks.
 
 .IX Item "Variable-length Parameter Lists"
 
+.IX Item "The C_ARGS: Keyword"
+
 .IX Item "The \s-1PPCODE\s0: Keyword"
 
 .IX Item "Returning Undef And Empty Lists"
@@ -4198,6 +4800,10 @@ of other folks.
 .IX Item "The \s-1PROTOTYPE\s0: Keyword"
 
 .IX Item "The \s-1ALIAS\s0: Keyword"
+
+.IX Item "The \s-1INTERFACE\s0: Keyword"
+
+.IX Item "The \s-1INTERFACE_MACRO\s0: Keyword"
 
 .IX Item "The \s-1INCLUDE\s0: Keyword"
 
@@ -4311,6 +4917,8 @@ of other folks.
 
 .IX Item "Understanding the Magic of Tied Hashes and Arrays"
 
+.IX Item "Localizing changes"
+
 .IX Item "Subroutines"
 
 .IX Item "XSUBs and the Argument Stack"
@@ -4343,9 +4951,7 @@ of other folks.
 
 .IX Item "\s-1API\s0 \s-1LISTING\s0"
 
-.IX Item "\s-1EDITOR\s0"
-
-.IX Item "\s-1DATE\s0"
+.IX Item "\s-1AUTHORS\s0"
 
 .IX Subsection "perlcall \- Perl calling conventions from C"
 
@@ -4413,7 +5019,37 @@ of other folks.
 
 .IX Item "\s-1DATE\s0"
 
+.IX Subsection "perlhist \- the Perl history records"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1INTRODUCTION\s0"
+
+.IX Item "\s-1THE\s0 \s-1KEEPERS\s0 \s-1OF\s0 \s-1THE\s0 \s-1PUMPKIN\s0"
+
+.IX Item "\s-1PUMPKIN\s0?"
+
+.IX Item "\s-1THE\s0 \s-1RECORDS\s0"
+
+.IX Item "\s-1SELECTED\s0 \s-1RELEASE\s0 \s-1SIZES\s0"
+
+.IX Item "\s-1SELECTED\s0 \s-1PATCH\s0 \s-1SIZES\s0"
+
+.IX Item "\s-1THE\s0 \s-1KEEPERS\s0 \s-1OF\s0 \s-1THE\s0 \s-1RECORDS\s0"
+
 .IX Header "PRAGMA DOCUMENTATION"
+
+.IX Subsection "attrs \- set/get attributes of a subroutine"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Subsection "re \- Perl pragma to alter regular expression behaviour"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
 
 .IX Subsection "autouse \- postpone load of modules until a function is used"
 
@@ -4423,9 +5059,15 @@ of other folks.
 
 .IX Item "\s-1WARNING\s0"
 
-.IX Item "\s-1BUGS\s0"
-
 .IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "base \- Establish \s-1IS\s0\-A relationship with base class at compile time"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
 
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
@@ -4473,6 +5115,14 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0"
 
+.IX Subsection "fields \- compile-time class fields"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
 .IX Subsection "integer \- Perl pragma to compute arithmetic in integer instead of double"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -4507,14 +5157,6 @@ of other folks.
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Subsection "ops \- Perl pragma to restrict unsafe operations when compiling"
-
-.IX Item "\s-1SYNOPSIS\s0	"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
 .IX Subsection "overload \- Package for overloading perl operations"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -4548,6 +5190,8 @@ of other folks.
 .IX Item "Run-time Overloading"
 
 .IX Item "Public functions"
+
+.IX Item "Overloading constants"
 
 .IX Item "\s-1IMPLEMENTATION\s0"
 
@@ -4629,9 +5273,241 @@ of other folks.
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "\s-1CAVEATS\s0"
+.IX Item "Multiple packages"
 
 .IX Item "\s-1DIAGNOSTICS\s0"
+
+.IX Subsection "B \- The Perl Compiler"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OVERVIEW\s0 \s-1OF\s0 \s-1CLASSES\s0"
+
+.IX Item "\s-1SV\s0\-\s-1RELATED\s0 \s-1CLASSES\s0"
+
+.IX Item "B::\s-1SV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1IV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1NV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1RV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1PV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1PVMG\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1MAGIC\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1PVLV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1BM\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1GV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1IO\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1AV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1CV\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1HV\s0 \s-1METHODS\s0"
+
+.IX Item "\s-1OP\s0\-\s-1RELATED\s0 \s-1CLASSES\s0"
+
+.IX Item "B::\s-1OP\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1UNOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1BINOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1LOGOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1CONDOP\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1LISTOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1PMOP\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1SVOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1GVOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1PVOP\s0 \s-1METHOD\s0"
+
+.IX Item "B::\s-1LOOP\s0 \s-1METHODS\s0"
+
+.IX Item "B::\s-1COP\s0 \s-1METHODS\s0"
+
+.IX Item "\s-1FUNCTIONS\s0 \s-1EXPORTED\s0 \s-1BY\s0 \f(CWB\fR"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Asmdata \- Autogenerated data about Perl ops, used to generate bytecode"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Assembler \- Assemble Perl bytecode"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Bblock \- Walk basic blocks"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Bytecode \- Perl compiler's bytecode backend"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::C \- Perl compiler's C backend"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0"
+
+.IX Item "\s-1EXAMPLES\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::\s-1CC\s0 \- Perl compiler's optimized C translation backend"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0"
+
+.IX Item "\s-1EXAMPLES\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1DIFFERENCES\s0"
+
+.IX Item "Loops"
+
+.IX Item "Context of \*(N"..\*(T""
+
+.IX Item "Arithmetic"
+
+.IX Item "Deprecated features"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Debug \- Walk Perl syntax tree, printing debug info about ops"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Deparse \- Perl compiler backend to produce perl code"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Disassembler \- Disassemble Perl bytecode"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Lint \- Perl lint"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0 \s-1AND\s0 \s-1LINT\s0 \s-1CHECKS\s0"
+
+.IX Item "\s-1NON\s0 \s-1LINT\s0\-\s-1CHECK\s0 \s-1OPTIONS\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::O, O \- Generic interface to Perl Compiler backends"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1CONVENTIONS\s0"
+
+.IX Item "\s-1IMPLEMENTATION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Showlex \- Show lexical variables used in functions or files"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Stackobj \- Helper module for \s-1CC\s0 backend"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Terse \- Walk Perl syntax tree, printing terse info about ops"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "B::Xref \- Generates cross reference reports for Perl programs"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1OPTIONS\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
 
 .IX Subsection "Benchmark \- benchmark running times of code"
 
@@ -4655,27 +5531,19 @@ of other folks.
 
 .IX Item "\s-1MODIFICATION\s0 \s-1HISTORY\s0"
 
-.IX Subsection "Bundle::\s-1CPAN\s0 \- A bundle to play with all the other modules on \s-1CPAN\s0"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1CONTENTS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1AUTHOR\s0"
-
 .IX Subsection "\s-1CGI\s0 \- Simple Common Gateway Interface Class"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1ABSTRACT\s0"
 
-.IX Item "\s-1INSTALLATION\s0"
-
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Item "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0:"
+.IX Item "\s-1PROGRAMMING\s0 \s-1STYLE\s0"
+
+.IX Item "\s-1CALLING\s0 \s-1CGI\s0.\s-1PM\s0 \s-1ROUTINES\s0"
+
+.IX Item "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 (\s-1OBJECT\s0\-\s-1ORIENTED\s0 \s-1STYLE\s0):"
 
 .IX Item "\s-1CREATING\s0 A \s-1NEW\s0 \s-1QUERY\s0 \s-1OBJECT\s0 \s-1FROM\s0 \s-1AN\s0 \s-1INPUT\s0 \s-1FILE\s0"
 
@@ -4695,23 +5563,39 @@ of other folks.
 
 .IX Item "\s-1DELETING\s0 \s-1ALL\s0 \s-1PARAMETERS\s0:"
 
-.IX Item "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1FORM\s0 \s-1TO\s0 A \s-1FILE\s0:"
+.IX Item "\s-1DIRECT\s0 \s-1ACCESS\s0 \s-1TO\s0 \s-1THE\s0 \s-1PARAMETER\s0 \s-1LIST\s0:"
 
-.IX Item "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:"
+.IX Item "\s-1SAVING\s0 \s-1THE\s0 \s-1STATE\s0 \s-1OF\s0 \s-1THE\s0 \s-1SCRIPT\s0 \s-1TO\s0 A \s-1FILE\s0:"
 
-.IX Item "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0"
+.IX Item "\s-1USING\s0 \s-1THE\s0 \s-1FUNCTION\s0\-\s-1ORIENTED\s0 \s-1INTERFACE\s0"
 
-.IX Item "\s-1CALLING\s0 \s-1CGI\s0 \s-1FUNCTIONS\s0 \s-1THAT\s0 \s-1TAKE\s0 \s-1MULTIPLE\s0 \s-1ARGUMENTS\s0"
+.IX Item "\s-1PRAGMAS\s0"
 
-.IX Item "\s-1CREATING\s0 \s-1THE\s0 \s-1HTTP\s0 \s-1HEADER\s0:"
+.IX Item "\s-1GENERATING\s0 \s-1DYNAMIC\s0 \s-1DOCUMENTS\s0"
 
-.IX Item "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1INSTRUCTION\s0"
+.IX Item "\s-1CREATING\s0 A \s-1STANDARD\s0 \s-1HTTP\s0 \s-1HEADER\s0:"
 
-.IX Item "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1HEADER\s0:"
+.IX Item "\s-1GENERATING\s0 A \s-1REDIRECTION\s0 \s-1HEADER\s0"
+
+.IX Item "\s-1CREATING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0 \s-1HEADER\s0"
 
 .IX Item "\s-1ENDING\s0 \s-1THE\s0 \s-1HTML\s0 \s-1DOCUMENT\s0:"
 
-.IX Item "\s-1CREATING\s0 \s-1FORMS\s0"
+.IX Item "\s-1CREATING\s0 A \s-1SELF\s0\-\s-1REFERENCING\s0 \s-1URL\s0 \s-1THAT\s0 \s-1PRESERVES\s0 \s-1STATE\s0 \s-1INFORMATION\s0:"
+
+.IX Item "\s-1OBTAINING\s0 \s-1THE\s0 \s-1SCRIPT\s0'S \s-1URL\s0"
+
+.IX Item "\s-1CREATING\s0 \s-1STANDARD\s0 \s-1HTML\s0 \s-1ELEMENTS\s0:"
+
+.IX Item "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0"
+
+.IX Item "\s-1THE\s0 \s-1DISTRIBUTIVE\s0 \s-1PROPERTY\s0 \s-1OF\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0"
+
+.IX Item "\s-1HTML\s0 \s-1SHORTCUTS\s0 \s-1AND\s0 \s-1LIST\s0 \s-1INTERPOLATION\s0"
+
+.IX Item "\s-1NON\s0\-\s-1STANDARD\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0"
+
+.IX Item "\s-1CREATING\s0 \s-1FILL\s0\-\s-1OUT\s0 \s-1FORMS\s0:"
 
 .IX Item "\s-1CREATING\s0 \s-1AN\s0 \s-1ISINDEX\s0 \s-1TAG\s0"
 
@@ -4759,15 +5643,13 @@ of other folks.
 
 .IX Item "\s-1FETCHING\s0 \s-1ENVIRONMENT\s0 \s-1VARIABLES\s0"
 
-.IX Item "\s-1CREATING\s0 \s-1HTML\s0 \s-1ELEMENTS\s0"
-
-.IX Item "\s-1PROVIDING\s0 \s-1ARGUMENTS\s0 \s-1TO\s0 \s-1HTML\s0 \s-1SHORTCUTS\s0"
-
-.IX Item "Generating new \s-1HTML\s0 tags"
-
-.IX Item "\s-1IMPORTING\s0 \s-1CGI\s0 \s-1METHOD\s0 \s-1CALLS\s0 \s-1INTO\s0 \s-1YOUR\s0 \s-1NAME\s0 \s-1SPACE\s0"
-
 .IX Item "\s-1USING\s0 \s-1NPH\s0 \s-1SCRIPTS\s0"
+
+.IX Item "Server Push"
+
+.IX Item "Avoiding Denial of Service Attacks"
+
+.IX Item "\s-1COMPATIBILITY\s0 \s-1WITH\s0 \s-1CGI\s0\-\s-1LIB\s0.\s-1PL\s0"
 
 .IX Item "\s-1AUTHOR\s0 \s-1INFORMATION\s0"
 
@@ -4803,9 +5685,33 @@ of other folks.
 
 .IX Item "\s-1MAKING\s0 \s-1PERL\s0 \s-1ERRORS\s0 \s-1APPEAR\s0 \s-1IN\s0 \s-1THE\s0 \s-1BROWSER\s0 \s-1WINDOW\s0"
 
+.IX Item "Changing the default message"
+
 .IX Item "\s-1CHANGE\s0 \s-1LOG\s0"
 
 .IX Item "\s-1AUTHORS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "\s-1CGI::\s0Cookie \- Interface to Netscape Cookies"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1USING\s0 \s-1CGI::\s0Cookie"
+
+.IX Item "Creating New Cookies"
+
+.IX Item "Sending the Cookie to the Browser"
+
+.IX Item "Recovering Previous Cookies"
+
+.IX Item "Manipulating Cookies"
+
+.IX Item "\s-1AUTHOR\s0 \s-1INFORMATION\s0"
+
+.IX Item "\s-1BUGS\s0"
 
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
@@ -4838,6 +5744,10 @@ of other folks.
 .IX Item "\s-1DESCRIPTION\s0"
 
 .IX Item "\s-1USING\s0 \s-1CGI::\s0Push"
+
+.IX Item "Heterogeneous Pages"
+
+.IX Item "Changing the Page Delay on the Fly"
 
 .IX Item "\s-1INSTALLING\s0 \s-1CGI::\s0Push \s-1SCRIPTS\s0"
 
@@ -4873,9 +5783,11 @@ of other folks.
 
 .IX Item "recompile"
 
-.IX Item "The 4 Classes: Authors, Bundles, Modules, Distributions"
+.IX Item "The four \f(CWCPAN::*\fR Classes: Author, Bundle, Module, Distribution"
 
 .IX Item "Programmer's interface"
+
+.IX Item "Methods in the four"
 
 .IX Item "Cache Manager"
 
@@ -4883,11 +5795,15 @@ of other folks.
 
 .IX Item "Prerequisites"
 
+.IX Item "Finding packages and \s-1VERSION\s0"
+
 .IX Item "Debugging"
 
 .IX Item "Floppy, Zip, and all that Jazz"
 
 .IX Item "\s-1CONFIGURATION\s0"
+
+.IX Item "\s-1CD\s0\-\s-1ROM\s0 support"
 
 .IX Item "\s-1SECURITY\s0"
 
@@ -4913,11 +5829,13 @@ of other folks.
 
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
-.IX Subsection "Carp, carp \- warn of errors (from perspective of caller)"
+.IX Subsection "Carp, carp    \- warn of errors (from perspective of caller)"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "Forcing a Stack Trace"
 
 .IX Subsection "Class::Struct \- declare struct-like datatypes as Perl classes"
 
@@ -4933,29 +5851,19 @@ of other folks.
 
 .IX Item "Author and Modification History"
 
-.IX Subsection "Config \- access Perl configuration information"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1EXAMPLE\s0"
-
-.IX Item "\s-1WARNING\s0"
-
-.IX Item "\s-1NOTE\s0"
-
 .IX Subsection "Cwd, getcwd \- get pathname of current working directory"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
 
-.IX Subsection "DB_File \- Perl5 access to Berkeley \s-1DB\s0"
+.IX Subsection "DB_File \- Perl5 access to Berkeley \s-1DB\s0 version 1.x"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "Using DB_File with Berkeley \s-1DB\s0 version 2"
 
 .IX Item "Interface to Berkeley \s-1DB\s0"
 
@@ -5015,9 +5923,35 @@ of other folks.
 
 .IX Item "\s-1AVAILABILITY\s0"
 
+.IX Item "\s-1COPYRIGHT\s0"
+
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
 .IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "Data::Dumper \- stringified perl data structures, suitable for both printing and \f(CWeval\fR"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "Methods"
+
+.IX Item "Functions"
+
+.IX Item "Configuration Variables or Methods"
+
+.IX Item "Exports"
+
+.IX Item "\s-1EXAMPLES\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1VERSION\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
 .IX Subsection "Devel::SelfStubber \- generate stubs for a SelfLoading module"
 
@@ -5030,14 +5964,6 @@ of other folks.
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
-
-.IX Subsection "DynaLoader \- Dynamically load C libraries into Perl code"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1AUTHOR\s0"
 
 .IX Subsection "English \- use nice English (or awk) names for ugly punctuation variables"
 
@@ -5062,6 +5988,8 @@ of other folks.
 .IX Item "Selecting What To Export"
 
 .IX Item "Specialised Import Lists"
+
+.IX Item "Exporting without using Export's import method"
 
 .IX Item "Module Version Checking"
 
@@ -5102,6 +6030,20 @@ of other folks.
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Subsection "ExtUtils::Installed \- Inventory management of installed modules"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1USAGE\s0"
+
+.IX Item "\s-1FUNCTIONS\s0"
+
+.IX Item "\s-1EXAMPLE\s0"
+
+.IX Item "\s-1AUTHOR\s0"
 
 .IX Subsection "ExtUtils::Liblist \- determine libraries to use and how to use them"
 
@@ -5197,6 +6139,8 @@ of other folks.
 
 .IX Item "Distribution Support"
 
+.IX Item "Disabling an extension"
+
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
 .IX Item "\s-1AUTHORS\s0"
@@ -5219,14 +6163,6 @@ of other folks.
 
 .IX Item "\s-1AUTHOR\s0"
 
-.IX Subsection "ExtUtils::Miniperl, writemain \- write the C code for perlmain.c"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
 .IX Subsection "ExtUtils::Mkbootstrap \- make a bootstrap file for use by DynaLoader"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -5243,11 +6179,33 @@ of other folks.
 
 .IX Item "\s-1REVISION\s0"
 
+.IX Subsection "ExtUtils::Packlist \- manage .packlist files"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1USAGE\s0"
+
+.IX Item "\s-1FUNCTIONS\s0"
+
+.IX Item "\s-1EXAMPLE\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
 .IX Subsection "ExtUtils::testlib \- add blib/* directories to \f(CW@INC\fR"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Subsection "Fatal \- replace functions with equivalents which succeed or die"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1AUTHOR\s0"
 
 .IX Subsection "Fcntl \- load the C Fcntl.h defines"
 
@@ -5317,6 +6275,8 @@ of other folks.
 
 .IX Item "\s-1DESCRIPTION\s0"
 
+.IX Item "\s-1BUGS\s0"
+
 .IX Subsection "File::Path \- create or remove a series of directories"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -5326,6 +6286,56 @@ of other folks.
 .IX Item "\s-1AUTHORS\s0"
 
 .IX Item "\s-1REVISION\s0"
+
+.IX Subsection "File::Spec \- portably perform operations on file names"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Item "\s-1AUTHORS\s0"
+
+.IX Subsection "File::Spec::Mac \- File::Spec for MacOS"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1METHODS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "File::Spec::\s-1OS2\s0 \- methods for \s-1OS/2\s0 file specs"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Subsection "File::Spec::Unix \- methods used by File::Spec"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1METHODS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "File::Spec::\s-1VMS\s0 \- methods for \s-1VMS\s0 file specs"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "Methods always loaded"
+
+.IX Subsection "File::Spec::Win32 \- methods for Win32 file specs"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
 
 .IX Subsection "File::stat \- by-name interface to Perl's built-in \fIstat()\fR functions"
 
@@ -5395,7 +6405,7 @@ of other folks.
 
 .IX Item "Option starters"
 
-.IX Item "Return value"
+.IX Item "Return values and Errors"
 
 .IX Item "\s-1COMPATIBILITY\s0"
 
@@ -5404,6 +6414,10 @@ of other folks.
 .IX Item "\s-1CONFIGURATION\s0 \s-1OPTIONS\s0"
 
 .IX Item "\s-1OTHER\s0 \s-1USEFUL\s0 \s-1VARIABLES\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1COPYRIGHT\s0 \s-1AND\s0 \s-1DISCLAIMER\s0"
 
 .IX Subsection "Getopt::Std, getopt \- Process single-character switches with switch clustering"
 
@@ -5422,106 +6436,6 @@ of other folks.
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
-
-.IX Subsection "\s-1IO::\s0File \- supply object methods for filehandles"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1CONSTRUCTOR\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
-.IX Item "\s-1HISTORY\s0"
-
-.IX Subsection "\s-1IO::\s0Handle \- supply object methods for I/O handles"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1CONSTRUCTOR\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1NOTE\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
-.IX Item "\s-1BUGS\s0"
-
-.IX Item "\s-1HISTORY\s0"
-
-.IX Subsection "\s-1IO::\s0Pipe, \s-1IO::\s0pipe \- supply object methods for pipes"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1CONSTRCUTOR\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
-.IX Item "\s-1AUTHOR\s0"
-
-.IX Item "\s-1COPYRIGHT\s0"
-
-.IX Subsection "\s-1IO::\s0Seekable \- supply seek based methods for I/O objects"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
-.IX Item "\s-1HISTORY\s0"
-
-.IX Subsection "\s-1IO::\s0Select \- \s-1OO\s0 interface to the select system call"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1CONSTRUCTOR\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1EXAMPLE\s0"
-
-.IX Item "\s-1AUTHOR\s0"
-
-.IX Item "\s-1COPYRIGHT\s0"
-
-.IX Subsection "\s-1IO::\s0Socket \- Object interface to socket communications"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1CONSTRUCTOR\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1SUB\s0\-\s-1CLASSES\s0"
-
-.IX Item "\s-1IO::\s0Socket::\s-1INET\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1IO::\s0Socket::\s-1UNIX\s0"
-
-.IX Item "\s-1METHODS\s0"
-
-.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
-
-.IX Item "\s-1AUTHOR\s0"
-
-.IX Item "\s-1COPYRIGHT\s0"
 
 .IX Subsection "\s-1IO::\s0lib::\s-1IO::\s0File, \s-1IO::\s0File \- supply object methods for filehandles"
 
@@ -5641,6 +6555,46 @@ of other folks.
 
 .IX Item "\s-1WARNING\s0"
 
+.IX Subsection "\s-1IPC::\s0SysV \- SysV \s-1IPC\s0 constants"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Item "\s-1AUTHORS\s0"
+
+.IX Item "\s-1COPYRIGHT\s0"
+
+.IX Subsection "\s-1IPC::\s0SysV::Msg, \s-1IPC::\s0Msg \- SysV Msg \s-1IPC\s0 object class"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1METHODS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1COPYRIGHT\s0"
+
+.IX Subsection "\s-1IPC::\s0SysV::Semaphore, \s-1IPC::\s0Semaphore \- SysV Semaphore \s-1IPC\s0 object class"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1METHODS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
+.IX Item "\s-1COPYRIGHT\s0"
+
 .IX Subsection "Math::BigFloat \- Arbitrary length float math package"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -5658,6 +6612,8 @@ of other folks.
 .IX Item "\s-1DESCRIPTION\s0"
 
 .IX Item "\s-1EXAMPLES\s0"
+
+.IX Item "Autocreating constants"
 
 .IX Item "\s-1BUGS\s0"
 
@@ -5677,7 +6633,9 @@ of other folks.
 
 .IX Item "\s-1USAGE\s0"
 
-.IX Item "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0"
+.IX Item "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1DIVISION\s0 \s-1BY\s0 \s-1ZERO\s0 \s-1OR\s0 \s-1LOGARITHM\s0 \s-1OF\s0 \s-1ZERO\s0"
+
+.IX Item "\s-1ERRORS\s0 \s-1DUE\s0 \s-1TO\s0 \s-1INDIGESTIBLE\s0 \s-1ARGUMENTS\s0"
 
 .IX Item "\s-1BUGS\s0"
 
@@ -5695,7 +6653,17 @@ of other folks.
 
 .IX Item "\s-1SIMPLE\s0 (\s-1REAL\s0) \s-1ARGUMENTS\s0, \s-1COMPLEX\s0 \s-1RESULTS\s0"
 
-.IX Item "\s-1ANGLE\s0 \s-1CONVERSIONS\s0"
+.IX Item "\s-1PLANE\s0 \s-1ANGLE\s0 \s-1CONVERSIONS\s0"
+
+.IX Item "\s-1RADIAL\s0 \s-1COORDINATE\s0 \s-1CONVERSIONS\s0"
+
+.IX Item "\s-1COORDINATE\s0 \s-1SYSTEMS\s0"
+
+.IX Item "3-D \s-1ANGLE\s0 \s-1CONVERSIONS\s0"
+
+.IX Item "\s-1GREAT\s0 \s-1CIRCLE\s0 \s-1DISTANCES\s0"
+
+.IX Item "\s-1EXAMPLES\s0"
 
 .IX Item "\s-1BUGS\s0"
 
@@ -5813,7 +6781,7 @@ of other folks.
 
 .IX Subsection "Opcode::ops, ops \- Perl pragma to restrict unsafe operations when compiling"
 
-.IX Item "\s-1SYNOPSIS\s0	"
+.IX Item "\s-1SYNOPSIS\s0  "
 
 .IX Item "\s-1DESCRIPTION\s0"
 
@@ -5873,7 +6841,7 @@ of other folks.
 
 .IX Item "\s-1CREATION\s0"
 
-.IX Subsection "Pod::Html, Pod::\s-1HTML\s0 \- module to convert pod files to \s-1HTML\s0"
+.IX Subsection "Pod::Html \- module to convert pod files to \s-1HTML\s0"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
@@ -5906,22 +6874,6 @@ of other folks.
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
-
-.IX Subsection "Safe \- Compile and execute code in restricted compartments"
-
-.IX Item "\s-1SYNOPSIS\s0"
-
-.IX Item "\s-1DESCRIPTION\s0"
-
-.IX Item "\s-1WARNING\s0"
-
-.IX Item "\s-1RECENT\s0 \s-1CHANGES\s0"
-
-.IX Item "Methods in class Safe"
-
-.IX Item "Some Safety Issues"
-
-.IX Item "\s-1AUTHOR\s0"
 
 .IX Subsection "Search::Dict, look \- search for key in dictionary file"
 
@@ -6031,6 +6983,20 @@ of other folks.
 
 .IX Item "\s-1ENVIRONMENT\s0"
 
+.IX Subsection "Test \- provides a simple framework for writing test scripts"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1TEST\s0 \s-1TYPES\s0"
+
+.IX Item "\s-1ONFAIL\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Item "\s-1AUTHOR\s0"
+
 .IX Subsection "Test::Harness \- run perl standard test scripts with statistics"
 
 .IX Item "\s-1SYNOPSIS\s0"
@@ -6042,6 +7008,8 @@ of other folks.
 .IX Item "\s-1EXPORT\s0"
 
 .IX Item "\s-1DIAGNOSTICS\s0"
+
+.IX Item "\s-1ENVIRONMENT\s0"
 
 .IX Item "\s-1SEE\s0 \s-1ALSO\s0"
 
@@ -6057,11 +7025,13 @@ of other folks.
 
 .IX Item "\s-1EXAMPLE\s0"
 
-.IX Subsection "Text::ParseWords \- parse text into an array of tokens"
+.IX Subsection "Text::ParseWords \- parse text into an array of tokens or array of arrays"
 
 .IX Item "\s-1SYNOPSIS\s0"
 
 .IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1EXAMPLES\s0"
 
 .IX Item "\s-1AUTHORS\s0"
 
@@ -6098,6 +7068,68 @@ of other folks.
 .IX Item "\s-1BUGS\s0"
 
 .IX Item "\s-1AUTHOR\s0"
+
+.IX Subsection "Thread \- multithreading"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1FUNCTIONS\s0"
+
+.IX Item "\s-1METHODS\s0"
+
+.IX Item "\s-1LIMITATIONS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "Thread::Queue \- thread-safe queues"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1FUNCTIONS\s0 \s-1AND\s0 \s-1METHODS\s0"
+
+.IX Item "\s-1SEE\s0 \s-1ALSO\s0"
+
+.IX Subsection "Thread::Semaphore \- thread-safe semaphores"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1FUNCTIONS\s0 \s-1AND\s0 \s-1METHODS\s0"
+
+.IX Subsection "Thread::Signal \- Start a thread which runs signal handlers reliably"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1BUGS\s0"
+
+.IX Subsection "Thread::Specific \- thread-specific keys"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Subsection "Tie::Array \- base class for tied arrays"
+
+.IX Item "\s-1SYNOPSIS\s0  "
+
+.IX Item "\s-1DESCRIPTION\s0       "
+
+.IX Item "\s-1CAVEATS\s0"
+
+.IX Item "\s-1AUTHOR\s0 "
+
+.IX Subsection "Tie::Handle \- base class definitions for tied handles"
+
+.IX Item "\s-1SYNOPSIS\s0"
+
+.IX Item "\s-1DESCRIPTION\s0"
+
+.IX Item "\s-1MORE\s0 \s-1INFORMATION\s0"
 
 .IX Subsection "Tie::Hash, Tie::StdHash \- base class definitions for tied hashes"
 

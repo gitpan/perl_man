@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH LWP-RGET 1 "perl 5.004, patch 55" "28/Nov/97" "User Contributed Perl Documentation"
+.TH LWP-RGET 1 "libwww-perl-5.36" "11/Nov/98" "User Contributed Perl Documentation"
 .UC
 .if n .hy 0
 .if n .na
@@ -191,8 +191,10 @@
 lwp-rget \- Retrieve WWW documents recursively
 .SH "SYNOPSIS"
 .PP
-.Vb 2
-\& lwp-rget [--verbose] [--depth=N] [--limit=N] [--prefix=URL] <URL>
+.Vb 4
+\& lwp-rget [--verbose] [--auth=USER:PASS] [--depth=N] [--hier] [--iis]
+\&          [--keepext=mime/type[,mime/type]] [--limit=N] [--nospace]
+\&          [--prefix=URL] [--sleep=N] [--tolower] <URL>
 \& lwp-rget --version
 .Ve
 .SH "DESCRIPTION"
@@ -210,6 +212,11 @@ All documents are stored as plain files in the current directory. The
 file names chosen are derived from the last component of URL paths.
 .PP
 The options are:
+.Ip "--auth=\s-1USER:\s0PASn" 3
+Set the authentication credentials to user \*(L"\s-1USER\s0\*(R" and password \*(L"\s-1PASS\s0\*(R" if
+any restricted parts of the web site are hit.  If there are restricted
+parts of the web site and authentication credentials are not available,
+those pages will not be downloaded.
 .Ip "--depth=\fIn\fR" 3
 Limit the recursive level. Embedded images are always loaded, even if
 they fall outside the \fI--depth\fR. This means that one can use
@@ -217,14 +224,30 @@ they fall outside the \fI--depth\fR. This means that one can use
 inline graphics.
 .Sp
 The default depth is 5.
+.Ip "--hier" 3
+Download files into a hierarchy that mimics the web site structure.
+The default is to put all files in the current directory.
+.Ip "--iis" 3
+Sends an \*(L"Accept: */*\*(R" on all \s-1URL\s0 requests as a workaround for a bug in
+\s-1IIS\s0 2.0.  If no Accept \s-1MIME\s0 header is present, \s-1IIS\s0 2.0 returns with a
+\*(L"406 No acceptable objects were found\*(R" error.  Also converts any back
+slashes (\e\e) in URLs to forward slashes (/).
+.Ip "--keepext=\fImime/type[,mime/type]\fR" 3
+Keeps the current extension for the list \s-1MIME\s0 types.  Useful when
+downloading text/plain documents that shouldn't all be translated to
+*.txt files.
 .Ip "--limit=\fIn\fR" 3
 Limit the number of documents to get.  The default limit is 50.
+.Ip "--nospace" 3
+Changes spaces in all URLs to underscore characters (_).  Useful when
+downloading files from sites serving URLs with spaces in them.	Does not
+remove spaces from fragments, e.g., \*(L"file.html#somewhere in here\*(R".
 .Ip "--prefix=\fIurl_prefix\fR" 3
 Limit the links to follow. Only URLs that start the prefix string are
 followed.
 .Sp
 The default prefix is set as the \*(L"directory\*(R" of the initial \s-1URL\s0 to
-follow.  For instance if we start lwp-rget with the \s-1URL\s0
+follow.	 For instance if we start lwp-rget with the \s-1URL\s0
 \f(CWhttp://www.sn.no/foo/bar.html\fR, then prefix will be set to
 \f(CWhttp://www.sn.no/foo/\fR.
 .Sp
@@ -233,6 +256,9 @@ prefix.
 .Ip "--sleep=\fIn\fR" 3
 Sleep \fIn\fR seconds before retrieving each document. This options allows
 you to go slowly, not loading the server you visiting too much.
+.Ip "--tolower" 3
+Translates all links to lowercase.  Useful when downloading files from
+\s-1IIS\s0 since it does not serve files in a case sensitive manner.
 .Ip "--verbose" 3
 Make more noise while running.
 .Ip "--quiet" 3
@@ -261,13 +287,25 @@ Gisle Aas <aas@sn.no>
 
 .IX Header "DESCRIPTION"
 
+.IX Item "--auth=\s-1USER:\s0PASn"
+
 .IX Item "--depth=\fIn\fR"
 
+.IX Item "--hier"
+
+.IX Item "--iis"
+
+.IX Item "--keepext=\fImime/type[,mime/type]\fR"
+
 .IX Item "--limit=\fIn\fR"
+
+.IX Item "--nospace"
 
 .IX Item "--prefix=\fIurl_prefix\fR"
 
 .IX Item "--sleep=\fIn\fR"
+
+.IX Item "--tolower"
 
 .IX Item "--verbose"
 

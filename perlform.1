@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFORM 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLFORM 1 "perl 5.005, patch 53" "24/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -206,8 +206,8 @@ apart from all the other \*(L"types\*(R" in Perl.  This means that if you have a
 function named \*(L"Foo\*(R", it is not the same thing as having a format named
 \*(L"Foo\*(R".  However, the default name for the format associated with a given
 filehandle is the same as the name of the filehandle.  Thus, the default
-format for STDOUT is name \*(L"STDOUT\*(R", and the default format for filehandle
-TEMP is name \*(L"TEMP\*(R".  They just look the same.  They aren't.
+format for STDOUT is named \*(L"STDOUT\*(R", and the default format for filehandle
+TEMP is named \*(L"TEMP\*(R".  They just look the same.  They aren't.
 .PP
 Output record formats are declared as follows:
 .PP
@@ -415,11 +415,11 @@ The truly desperate can generate their own format on the fly, based
 on the current number of columns, and then \fIeval()\fR it:
 .PP
 .Vb 9
-\&    $format  = "format STDOUT = \en";
-\&             . '^' . '<' x $cols . "\en";
-\&             . '$entry' . "\en";
-\&             . "\et^" . "<" x ($cols-8) . "~~\en";
-\&             . '$entry' . "\en";
+\&    $format  = "format STDOUT = \en"
+\&             . '^' . '<' x $cols . "\en"
+\&             . '$entry' . "\en"
+\&             . "\et^" . "<" x ($cols-8) . "~~\en"
+\&             . '$entry' . "\en"
 \&             . ".\en";
 \&    print $format if $Debugging;
 \&    eval $format;
@@ -480,7 +480,7 @@ For example:
 .Vb 1
 \&    print "Wow, I just stored `$^A' in the accumulator!\en";
 .Ve
-Or to make an \fIswrite()\fR subroutine which is to \fIwrite()\fR what \fIsprintf()\fR
+Or to make an \fIswrite()\fR subroutine, which is to \fIwrite()\fR what \fIsprintf()\fR
 is to \fIprintf()\fR, do this:
 .PP
 .Vb 8
@@ -501,18 +501,18 @@ is to \fIprintf()\fR, do this:
 \&    print $string;
 .Ve
 .SH "WARNINGS"
-The lone dot that ends a format can also prematurely end an email
+The lone dot that ends a format can also prematurely end a mail
 message passing through a misconfigured Internet mailer (and based on
 experience, such misconfiguration is the rule, not the exception).  So
-when sending format code through email, you should indent it so that
+when sending format code through mail, you should indent it so that
 the format-ending dot is not on the left margin; this will prevent
-email cutoff.
+SMTP cutoff.
 .PP
 Lexical variables (declared with \*(L"my") are not visible within a
 format unless the format is declared within the scope of the lexical
 variable.  (They weren't visible at all before version 5.001.)
 .PP
-Formats are the only part of Perl which unconditionally use information
+Formats are the only part of Perl that unconditionally use information
 from a program's locale; if a program's environment specifies an
 LC_NUMERIC locale, it is always used to specify the decimal point
 character in formatted output.  Perl ignores all other aspects of locale
@@ -521,6 +521,16 @@ cannot be controlled by \f(CWuse locale\fR because the pragma is tied to the
 block structure of the program, and, for historical reasons, formats
 exist outside that block structure.  See the \fIperllocale\fR manpage for further
 discussion of locale handling.
+.PP
+Inside of an expression, the whitespace characters \en, \et and \ef are
+considered to be equivalent to a single space.  Thus, you could think
+of this filter being applied to each value in the format:
+.PP
+.Vb 1
+\& $value =~ tr/\en\et\ef/ /;
+.Ve
+The remaining whitespace character, \er, forces the printing of a new
+line if allowed by the picture line.
 
 .rn }` ''
 .IX Title "PERLFORM 1"

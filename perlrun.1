@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLRUN 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLRUN 1 "perl 5.005, patch 53" "23/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -207,7 +207,8 @@ places:
 Specified line by line via \fB\-e\fR switches on the command line.
 .Ip "2." 4
 Contained in the file specified by the first filename on the command line.
-(Note that systems supporting the #! notation invoke interpreters this way.)
+(Note that systems supporting the #! notation invoke interpreters this
+way. See the section on \fILocation of Perl\fR.)
 .Ip "3." 4
 Passed in implicitly via standard input.  This works only if there are
 no filename arguments\*(--to pass arguments to a \s-1STDIN\s0 script you
@@ -247,7 +248,7 @@ if you were so inclined, say
 .PP
 .Vb 3
 \&    #!/bin/sh -- # -*- perl -*- -p
-\&    eval 'exec /usr/bin/perl $0 -S ${1+"$@"}'
+\&    eval 'exec /usr/bin/perl -wS $0 ${1+"$@"}'
 \&        if $running_under_some_shell;
 .Ve
 to let Perl see the \fB\-p\fR switch.
@@ -282,13 +283,29 @@ Create a batch file to run your script, and codify it in
 distribution for more information).
 .Ip "Win95/\s-1NT\s0" 4
 The Win95/\s-1NT\s0 installation, when using the Activeware port of Perl,
-will modify the Registry to associate the .pl extension with the perl
+will modify the Registry to associate the \fI.pl\fR extension with the perl
 interpreter.  If you install another port of Perl, including the one
 in the Win32 directory of the Perl distribution, then you'll have to
-modify the Registry yourself.
+modify the Registry yourself.  Note that this means you can no 
+longer tell the difference between an executable Perl program
+and a Perl library file.
 .Ip "Macintosh" 4
 Macintosh perl scripts will have the appropriate Creator and
 Type, so that double-clicking them will invoke the perl application.
+.Ip "\s-1VMS\s0" 4
+Put
+.Sp
+.Vb 2
+\&    $ perl -mysw 'f$env("procedure")' 'p1' 'p2' 'p3' 'p4' 'p5' 'p6' 'p7' 'p8' !
+\&    $ exit++ + ++$status != 0 and $exit = $status = undef;
+.Ve
+at the top of your script, where \f(CW-mysw\fR are any command line switches you
+want to pass to Perl.  You can now invoke the script directly, by saying
+\f(CWperl script\fR, or as a \s-1DCL\s0 procedure, by saying \f(CW@script\fR (or implicitly
+via \fI\s-1DCL$PATH\s0\fR by just using the name of the script).
+.Sp
+This incantation is a bit much to remember, but Perl will display it for
+you if you say \f(CWperl "-V:startperl"\fR.
 .PP
 Command-interpreters on non-Unix systems have rather different ideas
 on quoting than Unix shells.  You'll need to learn the special
@@ -336,6 +353,17 @@ quoting variants, except that it makes free use of the Macintosh's non-\s-1ASCII
 characters as control characters.
 .PP
 There is no general solution to all of this.  It's just a mess.
+.Sh "Location of Perl"
+It may seem obvious to say, but Perl is useful only when users can
+easily find it. When possible, it's good for both \fB/usr/bin/perl\fR and
+\fB/usr/local/bin/perl\fR to be symlinks to the actual binary. If that
+can't be done, system administrators are strongly encouraged to put
+(symlinks to) perl and its accompanying utilities, such as perldoc, into
+a directory typically found along a user's \s-1PATH\s0, or in another obvious
+and convenient place.
+.PP
+In this documentation, \f(CW#!/usr/bin/perl\fR on the first line of the script
+will stand in for whatever method works on your system.
 .Sh "Switches"
 A single-character switch may be combined with the following switch, if
 any.
@@ -394,7 +422,7 @@ syntax tree.  And \fB\-Dr\fR displays compiled regular expressions. As an
 alternative, specify a number instead of list of letters (e.g., \fB\-D14\fR is
 equivalent to \fB\-Dtls\fR):
 .Sp
-.Vb 16
+.Vb 17
 \&        1  p  Tokenizing and parsing
 \&        2  s  Stack snapshots
 \&        4  l  Context (loop) stack processing
@@ -407,11 +435,15 @@ equivalent to \fB\-Dtls\fR):
 \&      512  r  Regular expression parsing and execution
 \&     1024  x  Syntax tree dump
 \&     2048  u  Tainting checks
-\&     4096  L  Memory leaks (not supported anymore)
+\&     4096  L  Memory leaks (needs C<-DLEAKTEST> when compiling Perl)
 \&     8192  H  Hash dump -- usurps values()
 \&    16384  X  Scratchpad allocation
 \&    32768  D  Cleaning up
+\&    65536  S  Thread synchronization
 .Ve
+All these flags require \f(CW-DDEBUGGING\fR when you compile the Perl
+executable.  This flag is automatically set if you include \f(CW-g\fR
+option when \f(CWConfigure\fR asks you about optimizer/debugger flags.
 .Ip "\fB\-e\fR \fIcommandline\fR" 5
 may be used to enter one line of script.
 If \fB\-e\fR is given, Perl
@@ -426,12 +458,49 @@ put in single quotes.
 .Ip "\fB\-h\fR" 5
 prints a summary of the options.
 .Ip "\fB\-i\fR[\fIextension\fR]" 5
-specifies that files processed by the \f(CW<>\fR construct are to be edited
-in-place.  It does this by renaming the input file, opening the output
-file by the original name, and selecting that output file as the default
-for \fIprint()\fR statements.  The extension, if supplied, is added to the name
-of the old file to make a backup copy.  If no extension is supplied, no
-backup is made.  From the shell, saying
+specifies that files processed by the \f(CW<>\fR construct are to be
+edited in-place.  It does this by renaming the input file, opening the
+output file by the original name, and selecting that output file as the
+default for \fIprint()\fR statements.  The extension, if supplied, is used to
+modify the name of the old file to make a backup copy, following these
+rules:
+.Sp
+If no extension is supplied, no backup is made and the current file is
+overwritten.
+.Sp
+If the extension doesn't contain a \f(CW*\fR then it is appended to the end
+of the current filename as a suffix.
+.Sp
+If the extension does contain one or more \f(CW*\fR characters, then each \f(CW*\fR
+is replaced with the current filename.  In perl terms you could think of
+this as:
+.Sp
+.Vb 1
+\&    ($backup = $extension) =~ s/\e*/$file_name/g;
+.Ve
+This allows you to add a prefix to the backup file, instead of (or in
+addition to) a suffix:
+.Sp
+.Vb 1
+\&    $ perl -pi'bak_*' -e 's/bar/baz/' fileA     # backup to 'bak_fileA'
+.Ve
+Or even to place backup copies of the original files into another
+directory (provided the directory already exists):
+.Sp
+.Vb 1
+\&    $ perl -pi'old/*.bak' -e 's/bar/baz/' fileA # backup to 'old/fileA.bak'
+.Ve
+These sets of one-liners are equivalent:
+.Sp
+.Vb 2
+\&    $ perl -pi -e 's/bar/baz/' fileA            # overwrite current file
+\&    $ perl -pi'*' -e 's/bar/baz/' fileA         # overwrite current file
+.Ve
+.Vb 2
+\&    $ perl -pi'.bak' -e 's/bar/baz/' fileA      # backup to 'fileA.bak'
+\&    $ perl -pi'*.bak' -e 's/bar/baz/' fileA     # backup to 'fileA.bak'
+.Ve
+From the shell, saying
 .Sp
 .Vb 1
 \&    $ perl -p -i.bak -e "s/foo/bar/; ... "
@@ -444,11 +513,18 @@ is the same as using the script:
 .Ve
 which is equivalent to
 .Sp
-.Vb 14
+.Vb 21
 \&    #!/usr/bin/perl
+\&    $extension = '.bak';
 \&    while (<>) {
 \&        if ($ARGV ne $oldargv) {
-\&            rename($ARGV, $ARGV . '.bak');
+\&            if ($extension !~ /\e*/) {
+\&                $backup = $ARGV . $extension;
+\&            }
+\&            else {
+\&                ($backup = $extension) =~ s/\e*/$ARGV/g;
+\&            }
+\&            rename($ARGV, $backup);
 \&            open(ARGVOUT, ">$ARGV");
 \&            select(ARGVOUT);
 \&            $oldargv = $ARGV;
@@ -462,12 +538,37 @@ which is equivalent to
 .Ve
 except that the \fB\-i\fR form doesn't need to compare \f(CW$ARGV\fR to \f(CW$oldargv\fR to
 know when the filename has changed.  It does, however, use \s-1ARGVOUT\s0 for
-the selected filehandle.  Note that \s-1STDOUT\s0 is restored as the
-default output filehandle after the loop.
+the selected filehandle.  Note that \s-1STDOUT\s0 is restored as the default
+output filehandle after the loop.
 .Sp
-You can use \f(CWeof\fR without parenthesis to locate the end of each input file,
-in case you want to append to each file, or reset line numbering (see
-example in the \f(CWeof\fR entry in the \fIperlfunc\fR manpage).
+As shown above, Perl creates the backup file whether or not any output
+is actually changed.  So this is just a fancy way to copy files:
+.Sp
+.Vb 3
+\&    $ perl -p -i'/some/file/path/*' -e 1 file1 file2 file3...
+\&  or
+\&    $ perl -p -i'.bak' -e 1 file1 file2 file3...
+.Ve
+You can use \f(CWeof\fR without parentheses to locate the end of each input
+file, in case you want to append to each file, or reset line numbering
+(see example in the \f(CWeof\fR entry in the \fIperlfunc\fR manpage).
+.Sp
+If, for a given file, Perl is unable to create the backup file as
+specified in the extension then it will skip that file and continue on
+with the next one (if it exists).
+.Sp
+For a discussion of issues surrounding file permissions and \f(CW-i\fR, see
+the section on \fIWhy does Perl let me delete read-only files?  Why does \-i clobber protected files?  Isn't this a bug in Perl?\fR in the \fIperlfaq5\fR manpage.
+.Sp
+You cannot use \fB\-i\fR to create directories or to strip extensions from
+files.
+.Sp
+Perl does not expand \f(CW~\fR, so don't do that.
+.Sp
+Finally, note that the \fB\-i\fR switch does not impede execution when no
+files are given on the command line.  In this case, no backup is made
+(the original file cannot, of course, be determined) and processing
+proceeds from \s-1STDIN\s0 to \s-1STDOUT\s0 as might be expected.
 .Ip "\fB\-I\fR\fIdirectory\fR" 5
 Directories specified by \fB\-I\fR are prepended to the search path for
 modules (\f(CW@INC\fR), and also tells the C preprocessor where to search for
@@ -582,7 +683,7 @@ original name fails, and if the name does not already end in one
 of those suffixes.  If your Perl was compiled with \s-1DEBUGGING\s0 turned
 on, using the \-Dp switch to Perl shows how the search progresses.
 .Sp
-If the file supplied contains directory separators (i.e. it is an
+If the filename supplied contains directory separators (i.e. it is an
 absolute or relative pathname), and if the file is not found,
 platforms that append file extensions will do so and try to look
 for the file with those extensions added, one by one.
@@ -598,7 +699,7 @@ have a shell compatible with Bourne shell:
 .Sp
 .Vb 3
 \&    #!/usr/bin/perl
-\&    eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
+\&    eval 'exec /usr/bin/perl -wS $0 ${1+"$@"}'
 \&            if $running_under_some_shell;
 .Ve
 The system ignores the first line and feeds the script to /bin/sh,
@@ -608,34 +709,38 @@ starts up the Perl interpreter.  On some systems \f(CW$0\fR doesn't always
 contain the full pathname, so the \fB\-S\fR tells Perl to search for the
 script if necessary.  After Perl locates the script, it parses the
 lines and ignores them because the variable \f(CW$running_under_some_shell\fR
-is never true.  A better construct than \f(CW$*\fR would be \f(CW${1+"$@"}\fR, which
-handles embedded spaces and such in the filenames, but doesn't work if
-the script is being interpreted by csh.  To start up sh rather
+is never true. If the script will be interpreted by csh, you will need
+to replace \f(CW${1+"$@"}\fR with \f(CW$*\fR, even though that doesn't understand
+embedded spaces (and such) in the argument list.  To start up sh rather
 than csh, some systems may have to replace the #! line with a line
 containing just a colon, which will be politely ignored by Perl.  Other
 systems can't control that, and need a totally devious construct that
 will work under any of csh, sh, or Perl, such as the following:
 .Sp
 .Vb 3
-\&        eval '(exit $?0)' && eval 'exec /usr/bin/perl -S $0 ${1+"$@"}'
-\&        & eval 'exec /usr/bin/perl -S $0 $argv:q'
+\&        eval '(exit $?0)' && eval 'exec /usr/bin/perl -wS $0 ${1+"$@"}'
+\&        & eval 'exec /usr/bin/perl -wS $0 $argv:q'
 \&                if $running_under_some_shell;
 .Ve
 .Ip "\fB\-T\fR" 5
-forces \*(L"taint\*(R" checks to be turned on so you can test them.  Ordinarily these checks are
-done only when running setuid or setgid.  It's a good idea to turn
-them on explicitly for programs run on another's behalf, such as \s-1CGI\s0
-programs.  See the \fIperlsec\fR manpage.
+forces \*(L"taint\*(R" checks to be turned on so you can test them.  Ordinarily
+these checks are done only when running setuid or setgid.  It's a good
+idea to turn them on explicitly for programs run on another's behalf,
+such as \s-1CGI\s0 programs.  See the \fIperlsec\fR manpage.  Note that (for security reasons)
+this option must be seen by Perl quite early; usually this means it must
+appear early on the command line or in the #! line (for systems which
+support that).
 .Ip "\fB\-u\fR" 5
 causes Perl to dump core after compiling your script.  You can then
-take this core dump and turn it into an executable file by using the
+in theory take this core dump and turn it into an executable file by using the
 \fBundump\fR program (not supplied).  This speeds startup at the expense of
 some disk space (which you can minimize by stripping the executable).
 (Still, a \*(L"hello world\*(R" executable comes out to about 200K on my
 machine.)  If you want to execute a portion of your script before dumping,
 use the \fIdump()\fR operator instead.  Note: availability of \fBundump\fR is
 platform specific and may not be available for a specific port of
-Perl.
+Perl.  It has been superseded by the new perl-to-C compiler, which is more
+portable, even though it's still only considered beta.
 .Ip "\fB\-U\fR" 5
 allows Perl to do unsafe operations.  Currently the only \*(L"unsafe\*(R"
 operations are the unlinking of directories while running as superuser,
@@ -708,16 +813,21 @@ The command used to load the debugger code.  The default is:
 .Ve
 .Ip "\s-1PERL5SHELL\s0 (specific to \s-1WIN32\s0 port)" 12
 May be set to an alternative shell that perl must use internally for
-executing \*(L"backtick\*(R" commands or \fIsystem()\fR.  Perl doesn't use \s-1COMSPEC\s0
-for this purpose because \s-1COMSPEC\s0 has a high degree of variability
-among users, leading to portability concerns.  Besides, perl can use
-a shell that may not be fit for interactive use, and setting \s-1COMSPEC\s0
-to such a shell may interfere with the proper functioning of other
-programs (which usually look in \s-1COMSPEC\s0 to find a shell fit for
-interactive use).
+executing \*(L"backtick\*(R" commands or \fIsystem()\fR.  Default is \f(CWcmd.exe /x/c\fR
+on WindowsNT and \f(CWcommand.com /c\fR on Windows95.  The value is considered
+to be space delimited.  Precede any character that needs to be protected
+(like a space or backslash) with a backslash.
+.Sp
+Note that Perl doesn't use \s-1COMSPEC\s0 for this purpose because
+\s-1COMSPEC\s0 has a high degree of variability among users, leading to
+portability concerns.  Besides, perl can use a shell that may not be
+fit for interactive use, and setting \s-1COMSPEC\s0 to such a shell may
+interfere with the proper functioning of other programs (which usually
+look in \s-1COMSPEC\s0 to find a shell fit for interactive use).
 .Ip "\s-1PERL_DEBUG_MSTATS\s0" 12
-Relevant only if your perl executable was built with \fB\-\s-1DDEBUGGING_MSTATS\s0\fR,
-if set, this causes memory statistics to be dumped after execution.  If set
+Relevant only if perl is compiled with the malloc included with the perl
+distribution (that is, if \f(CWperl -V:d_mymalloc\fR is \*(L'define').
+If set, this causes memory statistics to be dumped after execution.  If set
 to an integer greater than one, also causes memory statistics to be dumped
 after compilation.
 .Ip "\s-1PERL_DESTRUCT_LEVEL\s0" 12
@@ -765,6 +875,10 @@ honest:
 .IX Item "Win95/\s-1NT\s0"
 
 .IX Item "Macintosh"
+
+.IX Item "\s-1VMS\s0"
+
+.IX Subsection "Location of Perl"
 
 .IX Subsection "Switches"
 

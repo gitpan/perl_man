@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLVAR 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLVAR 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -191,16 +191,16 @@
 perlvar \- Perl predefined variables
 .SH "DESCRIPTION"
 .Sh "Predefined Names"
-The following names have special meaning to Perl.  Most of the
+The following names have special meaning to Perl.  Most 
 punctuation names have reasonable mnemonics, or analogues in one of
-the shells.  Nevertheless, if you wish to use the long variable names,
+the shells.  Nevertheless, if you wish to use long variable names,
 you just need to say
 .PP
 .Vb 1
 \&    use English;
 .Ve
 at the top of your program.  This will alias all the short names to the
-long names in the current package.  Some of them even have medium names,
+long names in the current package.  Some even have medium names,
 generally borrowed from \fBawk\fR.
 .PP
 To go a step further, those variables that depend on the currently
@@ -216,7 +216,7 @@ after which you may use either
 .Vb 1
 \&    method HANDLE EXPR
 .Ve
-or
+or more safely,
 .PP
 .Vb 1
 \&    HANDLE->method(EXPR)
@@ -278,10 +278,10 @@ operation's result is tested by itself as the sole criterion of a \f(CWwhile\fR
 test.  Note that outside of a \f(CWwhile\fR test, this will not happen.
 .Sp
 (Mnemonic: underline is understood in certain operations.)
-.Ip "$<\fIdigit\fR>" 8
+.Ip "$<\fIdigits\fR>" 8
 Contains the subpattern from the corresponding set of parentheses in
 the last pattern matched, not counting patterns matched in nested
-blocks that have been exited already.  (Mnemonic: like \edigit.)
+blocks that have been exited already.  (Mnemonic: like \edigits.)
 These variables are all read-only.
 .Ip "$\s-1MATCH\s0" 8
 .Ip "$&" 8
@@ -318,6 +318,16 @@ example:
 .Ve
 (Mnemonic: be positive and forward looking.)
 This variable is read-only.
+.Ip "@+" 8
+$+[0] is the offset of the end of the last successfull match.
+\f(CW$+[\fR\fIn\fR\f(CW]\fR is the offset of the end of the substring matched by
+\fIn\fR\-th subpattern.  
+.Sp
+Thus after a match against \f(CW$_\fR, $& coincides with \f(CWsubstr $_, $-[0],
+$+[0]\fR.  Similarly, \f(CW$\fR\fIn\fR coincides with \f(CWsubstr $_, $-[\fR\fIn\fR\f(CW],
+$+[\fR\fI0\fR\f(CW]\fR if \f(CW$-[\fR\fIn\fR\f(CW]\fR is defined, and $+ conincides with
+\f(CWsubstr $_, $-[-1], $+[-1]\fR.  One can use \f(CW$#+\fR to find the last
+matched subgroup in the last successful match.  Compare with the section on \fI@\-\fR.
 .Ip "$\s-1MULTILINE_MATCHING\s0" 8
 .Ip "$*" 8
 Set to 1 to do multi-line matching within a string, 0 to tell Perl
@@ -328,7 +338,8 @@ is 0.  (Mnemonic: * matches multiple things.)  Note that this variable
 influences the interpretation of only \*(L"\f(CW^\fR\*(R" and \*(L"\f(CW$\fR\*(R".  A literal newline can
 be searched for even when \f(CW$* == 0\fR.
 .Sp
-Use of \*(L"\f(CW$*\fR\*(R" is deprecated in modern perls.
+Use of \*(L"\f(CW$*\fR\*(R" is deprecated in modern Perls, supplanted by 
+the \f(CW/s\fR and \f(CW/m\fR modifiers on pattern matching.
 .Ip "input_line_number \s-1HANDLE\s0 \s-1EXPR\s0" 8
 .Ip "$\s-1INPUT_LINE_NUMBER\s0" 8
 .Ip "$\s-1NR\s0" 8
@@ -364,6 +375,28 @@ character belongs to the next paragraph, even if it's a newline.
 .Ve
 Remember: the value of $/ is a string, not a regexp.  \s-1AWK\s0 has to be
 better for something :\-)
+.Sp
+Setting $/ to a reference to an integer, scalar containing an integer, or
+scalar that's convertable to an integer will attempt to read records
+instead of lines, with the maximum record size being the referenced
+integer. So this:
+.Sp
+.Vb 3
+\&    $/ = \e32768; # or \e"32768", or \e$var_containing_32768
+\&    open(FILE, $myfile);
+\&    $_ = <FILE>;
+.Ve
+will read a record of no more than 32768 bytes from \s-1FILE\s0. If you're not
+reading from a record-oriented file (or your \s-1OS\s0 doesn't have
+record-oriented files), then you'll likely get a full chunk of data with
+every read. If a record is larger than the record size you've set, you'll
+get the record back in pieces.
+.Sp
+On \s-1VMS\s0, record reads are done with the equivalent of \f(CWsysread\fR, so it's
+best not to mix record and non-record reads on the same file. (This is
+likely not a problem, as any file you'd want to read in record mode is
+proably usable in line mode) Non-\s-1VMS\s0 systems perform normal I/O, so
+it's safe to mix record and non-record reads of a file.
 .Ip "autoflush \s-1HANDLE\s0 \s-1EXPR\s0" 8
 .Ip "$\s-1OUTPUT_AUTOFLUSH\s0" 8
 .Ip "$|" 8
@@ -461,6 +494,16 @@ output channel.  Default is 60.  (Mnemonic: = has horizontal lines.)
 .Ip "$-" 8
 The number of lines left on the page of the currently selected output
 channel.  (Mnemonic: lines_on_page \- lines_printed.)
+.Ip "@-" 8
+$\-[0] is the offset of the start of the last successfull match.
+\f(CW$-[\fR\fIn\fR\f(CW]\fR is the offset of the start of the substring matched by
+\fIn\fR\-th subpattern.  
+.Sp
+Thus after a match against \f(CW$_\fR, $& coincides with \f(CWsubstr $_, $-[0],
+$+[0]\fR.  Similarly, \f(CW$\fR\fIn\fR coincides with \f(CWsubstr $_, $-[\fR\fIn\fR\f(CW],
+$+[\fR\fI0\fR\f(CW]\fR if \f(CW$-[\fR\fIn\fR\f(CW]\fR is defined, and $+ conincides with
+\f(CWsubstr $_, $-[-1], $+[-1]\fR.  One can use \f(CW$#-\fR to find the last
+matched subgroup in the last successful match.  Compare with the section on \fI@+\fR.
 .Ip "format_name \s-1HANDLE\s0 \s-1EXPR\s0" 8
 .Ip "$\s-1FORMAT_NAME\s0" 8
 .Ip "$~" 8
@@ -495,12 +538,14 @@ the \f(CWformline()\fR entry in the \fIperlfunc\fR manpage.
 .Ip "$\s-1CHILD_ERROR\s0" 8
 .Ip "$?" 8
 The status returned by the last pipe close, backtick (\f(CW``\fR) command,
-or \fIsystem()\fR operator.  Note that this is the status word returned by
-the \fIwait()\fR system call (or else is made up to look like it).  Thus,
-the exit value of the subprocess is actually (\f(CW$? >> 8\fR), and
-\f(CW$? & 255\fR gives which signal, if any, the process died from, and
-whether there was a core dump.  (Mnemonic: similar to \fBsh\fR and
-\fBksh\fR.)
+or \fIsystem()\fR operator.  Note that this is the status word returned by the
+\fIwait()\fR system call (or else is made up to look like it).  Thus, the exit
+value of the subprocess is actually (\f(CW$? >> 8\fR), and \f(CW$? & 127\fR
+gives which signal, if any, the process died from, and \f(CW$? & 128\fR reports
+whether there was a core dump.  (Mnemonic: similar to \fBsh\fR and \fBksh\fR.)
+.Sp
+Additionally, if the \f(CWh_errno\fR variable is supported in C, its value
+is returned via $? if any of the \f(CWgethost*()\fR functions fail.
 .Sp
 Note that if you have installed a signal handler for \f(CWSIGCHLD\fR, the
 value of \f(CW$?\fR will usually be wrong outside that handler.
@@ -512,26 +557,47 @@ change the exit status of the script.
 Under \s-1VMS\s0, the pragma \f(CWuse vmsish 'status'\fR makes \f(CW$?\fR reflect the
 actual \s-1VMS\s0 exit status, instead of the default emulation of \s-1POSIX\s0
 status.
+.Sp
+Also see the section on \fIError Indicators\fR.
 .Ip "$\s-1OS_ERROR\s0" 8
 .Ip "$\s-1ERRNO\s0" 8
 .Ip "$!" 8
 If used in a numeric context, yields the current value of errno, with
 all the usual caveats.  (This means that you shouldn't depend on the
-value of \*(L"\f(CW$!\fR\*(R" to be anything in particular unless you've gotten a
+value of \f(CW$!\fR to be anything in particular unless you've gotten a
 specific error return indicating a system error.)  If used in a string
 context, yields the corresponding system error string.  You can assign
-to \*(L"\f(CW$!\fR\*(R" to set \fIerrno\fR if, for instance, you want \*(L"\f(CW$!\fR\*(R" to return the
+to \f(CW$!\fR to set \fIerrno\fR if, for instance, you want \f(CW"$!"\fR to return the
 string for error \fIn\fR, or you want to set the exit value for the \fIdie()\fR
 operator.  (Mnemonic: What just went bang?)
+.Sp
+Also see the section on \fIError Indicators\fR.
 .Ip "$\s-1EXTENDED_OS_ERROR\s0" 8
 .Ip "$^E" 8
-More specific information about the last system error than that provided by
-\f(CW$!\fR, if available.  (If not, it's just \f(CW$!\fR again.)
-At the moment, this differs from \f(CW$!\fR under only \s-1VMS\s0 and \s-1OS/2\s0, where it
-provides the \s-1VMS\s0 status value from the last system error, and \s-1OS/2\s0 error
-code of the last call to \s-1OS/2\s0 \s-1API\s0 either via \s-1CRT\s0, or directly from perl.  The
-caveats mentioned in the description of \f(CW$!\fR apply here, too.
-(Mnemonic: Extra error explanation.)
+Error information specific to the current operating system.  At
+the moment, this differs from \f(CW$!\fR under only \s-1VMS\s0, \s-1OS/2\s0, and Win32
+(and for MacPerl).  On all other platforms, \f(CW$^E\fR is always just
+the same as \f(CW$!\fR.
+.Sp
+Under \s-1VMS\s0, \f(CW$^E\fR provides the \s-1VMS\s0 status value from the last
+system error.  This is more specific information about the last
+system error than that provided by \f(CW$!\fR.  This is particularly
+important when \f(CW$!\fR is set to \fB\s-1EVMSERR\s0\fR.
+.Sp
+Under \s-1OS/2\s0, \f(CW$^E\fR is set to the error code of the last call to
+\s-1OS/2\s0 \s-1API\s0 either via \s-1CRT\s0, or directly from perl.
+.Sp
+Under Win32, \f(CW$^E\fR always returns the last error information
+reported by the Win32 call \f(CWGetLastError()\fR which describes
+the last error from within the Win32 \s-1API\s0.  Most Win32-specific
+code will report errors via \f(CW$^E\fR.  \s-1ANSI\s0 C and \s-1UNIX\s0\-like calls
+set \f(CWerrno\fR and so most portable Perl code will report errors
+via \f(CW$!\fR. 
+.Sp
+Caveats mentioned in the description of \f(CW$!\fR generally apply to
+\f(CW$^E\fR, also.  (Mnemonic: Extra error explanation.)
+.Sp
+Also see the section on \fIError Indicators\fR.
 .Ip "$\s-1EVAL_ERROR\s0" 8
 .Ip "$@" 8
 The Perl syntax error message from the last \fIeval()\fR command.  If null, the
@@ -542,6 +608,8 @@ the syntax error \*(L"at\*(R"?)
 Note that warning messages are not collected in this variable.  You can,
 however, set up a routine to process warnings by setting \f(CW$SIG{__WARN__}\fR
 as described below.
+.Sp
+Also see the section on \fIError Indicators\fR.
 .Ip "$\s-1PROCESS_ID\s0" 8
 .Ip "$\s-1PID\s0" 8
 .Ip "$$" 8
@@ -688,10 +756,14 @@ Start with single-step on.
 .Sp
 Note that some bits may be relevent at compile-time only, some at
 run-time only. This is a new mechanism and the details may change.
+.Ip "$^R" 8
+The result of evaluation of the last successful the section on \fI\f(CW(?{ code })\fR in the \fIperlre\fR manpage\fR 
+regular expression assertion.  (Excluding those used as switches.)  May
+be written to.
 .Ip "$^S" 8
 Current state of the interpreter.  Undefined if parsing of the current
 module/eval is not finished (may happen in \f(CW$SIG\fR{_\|_DIE_\|_} and
-\f(CW$SIG\fR{_\|_WARN_\|_} handlers).  True if inside an eval, othewise false.
+\f(CW$SIG\fR{_\|_WARN_\|_} handlers).  True if inside an eval, otherwise false.
 .Ip "$\s-1BASETIME\s0" 8
 .Ip "$^T" 8
 The time at which the script began running, in seconds since the
@@ -756,6 +828,10 @@ signals.  Example:
 \&    $SIG{'INT'} = 'DEFAULT';    # restore default action
 \&    $SIG{'QUIT'} = 'IGNORE';    # ignore SIGQUIT
 .Ve
+Using a value of \f(CW'IGNORE'\fR usually has the effect of ignoring the
+signal, except for the \f(CWCHLD\fR signal.  See the \fIperlipc\fR manpage for more about
+this special case.
+.Sp
 The \f(CW%SIG\fR array contains values for only the signals actually set within
 the Perl script.  Here are some other examples:
 .Sp
@@ -808,7 +884,7 @@ The \f(CW__DIE__\fR handler is explicitly disabled during the call, so that you
 can die from a \f(CW__DIE__\fR handler.  Similarly for \f(CW__WARN__\fR.
 .Sp
 Note that the \f(CW$SIG{__DIE__}\fR hook is called even inside \fIeval()\fRed
-blocks/strings.  See the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the section on \fI$^S\fR in the \fIperlvar\fR manpage for how to
+blocks/strings.  See the \f(CWdie\fR entry in the \fIperlfunc\fR manpage and the section on \fI$^S\fR in the \fIperlvar\fR manpage for how to
 circumvent this.
 .Sp
 Note that \f(CW__DIE__\fR/\f(CW__WARN__\fR handlers are very special in one
@@ -831,6 +907,56 @@ not available.
 .Sp
 See the \f(CWdie\fR entry in the \fIperlfunc\fR manpage, the \f(CWwarn\fR entry in the \fIperlfunc\fR manpage and the \f(CWeval\fR entry in the \fIperlfunc\fR manpage for
 additional info.
+.Sh "Error Indicators"
+The variables the section on \fI$@\fR, the section on \fI$!\fR, the section on \fI$^E\fR, and the section on \fI$?\fR contain information about
+different types of error conditions that may appear during execution of
+Perl script.  The variables are shown ordered by the \*(L"distance\*(R" between
+the subsystem which reported the error and the Perl process, and
+correspond to errors detected by the Perl interpreter, C library,
+operating system, or an external program, respectively.
+.PP
+To illustrate the differences between these variables, consider the 
+following Perl expression:
+.PP
+.Vb 5
+\&   eval '
+\&         open PIPE, "/cdrom/install |";
+\&         @res = <PIPE>;
+\&         close PIPE or die "bad pipe: $?, $!";
+\&        ';
+.Ve
+After execution of this statement all 4 variables may have been set.  
+.PP
+$@ is set if the string to be \f(CWeval\fR\-ed did not compile (this may happen if 
+\f(CWopen\fR or \f(CWclose\fR were imported with bad prototypes), or if Perl 
+code executed during evaluation \fIdie()\fRd (either implicitly, say, 
+if \f(CWopen\fR was imported from module the \fIFatal\fR manpage, or the \f(CWdie\fR after 
+\f(CWclose\fR was triggered).  In these cases the value of $@ is the compile 
+error, or \f(CWFatal\fR error (which will interpolate \f(CW$!\fR!), or the argument
+to \f(CWdie\fR (which will interpolate \f(CW$!\fR and \f(CW$?\fR!).
+.PP
+When the above expression is executed, \fIopen()\fR, \f(CW<PIPE>\fR, and \f(CWclose\fR 
+are translated to C run-time library calls.  $! is set if one of these 
+calls fails.  The value is a symbolic indicator chosen by the C run-time 
+library, say \f(CWNo such file or directory\fR.
+.PP
+On some systems the above C library calls are further translated 
+to calls to the kernel.  The kernel may have set more verbose error 
+indicator that one of the handful of standard C errors.  In such cases $^E 
+contains this verbose error indicator, which may be, say, \f(CWCDROM tray not
+closed\fR.  On systems where C library calls are identical to system calls
+$^E is a duplicate of $!.
+.PP
+Finally, $? may be set to non-\f(CW0\fR value if the external program 
+\f(CW/cdrom/install\fR fails.  Upper bits of the particular value may reflect 
+specific error conditions encountered by this program (this is 
+program-dependent), lower-bits reflect mode of failure (segfault, completion,
+etc.).  Note that in contrast to $@, $!, and $^E, which are set only 
+if error condition is detected, the variable $? is set on each \f(CWwait\fR or
+pipe \f(CWclose\fR, overwriting the old value.
+.PP
+For more details, see the individual descriptions at the section on \fI$@\fR, the section on \fI$!\fR, the section on \fI$^E\fR,
+and the section on \fI$?\fR.
 
 .rn }` ''
 .IX Title "PERLVAR 1"
@@ -858,7 +984,7 @@ additional info.
 
 .IX Item "\(bu"
 
-.IX Item "$<\fIdigit\fR>"
+.IX Item "$<\fIdigits\fR>"
 
 .IX Item "$\s-1MATCH\s0"
 
@@ -875,6 +1001,8 @@ additional info.
 .IX Item "$\s-1LAST_PAREN_MATCH\s0"
 
 .IX Item "$+"
+
+.IX Item "@+"
 
 .IX Item "$\s-1MULTILINE_MATCHING\s0"
 
@@ -949,6 +1077,8 @@ additional info.
 .IX Item "$\s-1FORMAT_LINES_LEFT\s0"
 
 .IX Item "$-"
+
+.IX Item "@-"
 
 .IX Item "format_name \s-1HANDLE\s0 \s-1EXPR\s0"
 
@@ -1072,6 +1202,8 @@ additional info.
 
 .IX Item "0x20"
 
+.IX Item "$^R"
+
 .IX Item "$^S"
 
 .IX Item "$\s-1BASETIME\s0"
@@ -1099,4 +1231,6 @@ additional info.
 .IX Item "%\s-1ENV\s0  $\s-1ENV\s0{expr}"
 
 .IX Item "%\s-1SIG\s0  $\s-1SIG\s0{expr}"
+
+.IX Subsection "Error Indicators"
 

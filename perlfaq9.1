@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ9 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLFAQ9 1 "perl 5.005, patch 53" "21/Jul/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -188,30 +188,84 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-perlfaq9 \- Networking ($Revision: 1.17 $, \f(CW$Date:\fR 1997/04/24 22:44:29 $)
+perlfaq9 \- Networking ($Revision: 1.20 $, \f(CW$Date:\fR 1998/06/22 18:31:09 $)
 .SH "DESCRIPTION"
 This section deals with questions related to networking, the internet,
 and a few on the web.
-.Sh "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
-Sure, but you probably can't afford our contracting rates :\-)
+.Sh "My \s-1CGI\s0 script runs from the command line but not the browser.   (500 Server Error)"
+If you can demonstrate that you've read the following FAQs and that
+your problem isn't something simple that can be easily answered, you'll
+probably receive a courteous and useful reply to your question if you
+post it on comp.infosystems.www.authoring.cgi (if it's something to do
+with \s-1HTTP\s0, \s-1HTML\s0, or the \s-1CGI\s0 protocols).  Questions that appear to be Perl
+questions but are really \s-1CGI\s0 ones that are posted to comp.lang.perl.misc
+may not be so well received.
 .PP
-Seriously, if you can demonstrate that you've read the following FAQs
-and that your problem isn't something simple that can be easily
-answered, you'll probably receive a courteous and useful reply to your
-question if you post it on comp.infosystems.www.authoring.cgi (if it's
-something to do with \s-1HTTP\s0, \s-1HTML\s0, or the \s-1CGI\s0 protocols).  Questions that
-appear to be Perl questions but are really \s-1CGI\s0 ones that are posted to
-comp.lang.perl.misc may not be so well received.
+The useful FAQs and related documents are:
 .PP
-The useful FAQs are:
-.PP
-.Vb 5
-\&    http://www.perl.com/perl/faq/idiots-guide.html
-\&    http://www3.pair.com/webthing/docs/cgi/faqs/cgifaq.shtml
-\&    http://www.perl.com/perl/faq/perl-cgi-faq.html
-\&    http://www-genome.wi.mit.edu/WWW/faqs/www-security-faq.html
-\&    http://www.boutell.com/faq/
+.Vb 2
+\&    CGI FAQ
+\&        http://www.webthing.com/page.cgi/cgifaq
 .Ve
+.Vb 2
+\&    Web FAQ
+\&        http://www.boutell.com/faq/
+.Ve
+.Vb 2
+\&    WWW Security FAQ
+\&        http://www.w3.org/Security/Faq/
+.Ve
+.Vb 2
+\&    HTTP Spec
+\&        http://www.w3.org/pub/WWW/Protocols/HTTP/
+.Ve
+.Vb 3
+\&    HTML Spec
+\&        http://www.w3.org/TR/REC-html40/
+\&        http://www.w3.org/pub/WWW/MarkUp/
+.Ve
+.Vb 2
+\&    CGI Spec
+\&        http://www.w3.org/CGI/
+.Ve
+.Vb 2
+\&    CGI Security FAQ
+\&        http://www.go2net.com/people/paulp/cgi-security/safe-cgi.txt
+.Ve
+.Sh "How can I get better error messages from a \s-1CGI\s0 program?"
+Use the \s-1CGI::\s0Carp module.  It replaces \f(CWwarn\fR and \f(CWdie\fR, plus the
+normal Carp modules \f(CWcarp\fR, \f(CWcroak\fR, and \f(CWconfess\fR functions with
+more verbose and safer versions.  It still sends them to the normal
+server error log.
+.PP
+.Vb 3
+\&    use CGI::Carp;
+\&    warn "This is a complaint";
+\&    die "But this one is serious";
+.Ve
+The following use of \s-1CGI::\s0Carp also redirects errors to a file of your choice,
+placed in a \s-1BEGIN\s0 block to catch compile-time warnings as well:
+.PP
+.Vb 6
+\&    BEGIN {
+\&        use CGI::Carp qw(carpout);
+\&        open(LOG, ">>/var/local/cgi-logs/mycgi-log")
+\&            or die "Unable to append to mycgi-log: $!\en";
+\&        carpout(*LOG);
+\&    }
+.Ve
+You can even arrange for fatal errors to go back to the client browser,
+which is nice for your own debugging, but might confuse the end user.
+.PP
+.Vb 2
+\&    use CGI::Carp qw(fatalsToBrowser);
+\&    die "Bad error here";
+.Ve
+Even if the error happens before you get the \s-1HTTP\s0 header out, the module
+will try to take care of this to avoid the dreaded server 500 errors.
+Normal warnings still go out to the server error log (or wherever
+you've sent them with \f(CWcarpout\fR) with the application name and date
+stamp prepended.
 .Sh "How do I remove \s-1HTML\s0 from a string?"
 The most correct way (albeit not the fastest) is to use \s-1HTML::\s0Parse
 from \s-1CPAN\s0 (part of the libwww-perl distribution, which is a must-have
@@ -233,6 +287,37 @@ If you want a more complete solution, see the 3-stage striphtml
 program in
 http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/striphtml.gz
 \&.
+.PP
+Here are some tricky cases that you should think about when picking
+a solution:
+.PP
+.Vb 1
+\&    <IMG SRC = "foo.gif" ALT = "A > B">
+.Ve
+.Vb 2
+\&    <IMG SRC = "foo.gif" 
+\&         ALT = "A > B">
+.Ve
+.Vb 1
+\&    <!-- <A comment> -->
+.Ve
+.Vb 1
+\&    <script>if (a<b && a>c)</script>
+.Ve
+.Vb 1
+\&    <# Just data #>
+.Ve
+.Vb 1
+\&    <![INCLUDE CDATA [ >>>>>>>>>>>> ]]>
+.Ve
+If \s-1HTML\s0 comments include other tags, those solutions would also break
+on text like this:
+.PP
+.Vb 3
+\&    <!-- This section commented out.
+\&        <B>You can't see me!</B>
+\&    -->
+.Ve
 .Sh "How do I extract URLs?"
 A quick but imperfect approach is
 .PP
@@ -273,12 +358,17 @@ The libwww-perl (\s-1LWP\s0) modules from \s-1CPAN\s0 provide a more powerful wa
 do this.  They work through proxies, and don't require lynx:
 .PP
 .Vb 3
-\&    # print HTML from a URL
+\&    # simplest version
+\&    use LWP::Simple;
+\&    $content = get($URL);
+.Ve
+.Vb 3
+\&    # or print HTML from a URL
 \&    use LWP::Simple;
 \&    getprint "http://www.sn.no/libwww-perl/";
 .Ve
 .Vb 10
-\&    # print ASCII from HTML from a URL
+\&    # or print ASCII from HTML from a URL
 \&    use LWP::Simple;
 \&    use HTML::Parse;
 \&    use HTML::FormatText;
@@ -289,7 +379,33 @@ do this.  They work through proxies, and don't require lynx:
 \&    $ascii = HTML::FormatText->new->format(parse_html($html));
 \&    print $ascii;
 .Ve
-.Sh "how do I decode or create those %\-encodings on the web?"
+.Sh "How do I automate an \s-1HTML\s0 form submission?"
+If you're submitting values using the \s-1GET\s0 method, create a \s-1URL\s0 and encode
+the form using the \f(CWquery_form\fR method:
+.PP
+.Vb 2
+\&    use LWP::Simple;
+\&    use URI::URL;
+.Ve
+.Vb 3
+\&    my $url = url('http://www.perl.com/cgi-bin/cpan_mod');
+\&    $url->query_form(module => 'DB_File', readme => 1);
+\&    $content = get($url);
+.Ve
+If you're using the \s-1POST\s0 method, create your own user agent and encode
+the content appropriately.
+.PP
+.Vb 2
+\&    use HTTP::Request::Common qw(POST);
+\&    use LWP::UserAgent;
+.Ve
+.Vb 4
+\&    $ua = LWP::UserAgent->new();
+\&    my $req = POST 'http://www.perl.com/cgi-bin/cpan_mod',
+\&                   [ module => 'DB_File', readme => 1 ];
+\&    $content = $ua->request($req)->as_string;
+.Ve
+.Sh "How do I decode or create those %\-encodings on the web?"
 Here's an example of decoding:
 .PP
 .Vb 2
@@ -314,6 +430,15 @@ both:
 .Ve
 Note that relative URLs in these headers can cause strange effects
 because of \*(L"optimizations\*(R" that servers do.
+.PP
+.Vb 3
+\&    $url = "http://www.perl.com/CPAN/";
+\&    print "Location: $url\en\en";
+\&    exit;
+.Ve
+To be correct to the spec, each of those \f(CW"\en"\fR
+should really each be \f(CW"\e015\e012"\fR, but unless you're
+stuck on MacOS, you probably won't notice.
 .Sh "How do I put a password on my web pages?"
 That depends.  You'll need to read the documentation for your web
 server, or perhaps check some of the other FAQs referenced above.
@@ -341,7 +466,7 @@ from outside your script (eg, \s-1CGI\s0 parameters) are never used in
 \f(CWeval\fR or \f(CWsystem\fR calls.  In addition to tainting, never use the
 single-argument form of \fIsystem()\fR or \fIexec()\fR.  Instead, supply the
 command and arguments as a list, which prevents shell globbing.
-.Sh "How do I parse an email header?"
+.Sh "How do I parse a mail header?"
 For a quick-and-dirty solution, try this solution derived
 from page 222 of the 2nd edition of \*(L"Programming Perl":
 .PP
@@ -355,42 +480,82 @@ That solution doesn't do well if, for example, you're trying to
 maintain all the Received lines.  A more complete approach is to use
 the Mail::Header module from \s-1CPAN\s0 (part of the MailTools package).
 .Sh "How do I decode a \s-1CGI\s0 form?"
-A lot of people are tempted to code this up themselves, so you've
-probably all seen a lot of code involving \f(CW$ENV{CONTENT_LENGTH}\fR and
-\f(CW$ENV{QUERY_STRING}\fR.  It's true that this can work, but there are
-also a lot of versions of this floating around that are quite simply
-broken!
+You use a standard module, probably \s-1CGI\s0.pm.  Under no circumstances
+should you attempt to do so by hand!
 .PP
-Please do not be tempted to reinvent the wheel.  Instead, use the
-\s-1CGI\s0.pm or CGI_Lite.pm (available from \s-1CPAN\s0), or if you're trapped in
-the module-free land of perl1 .. perl4, you might look into cgi-lib.pl
-(available from http://www.bio.cam.ac.uk/web/form.html).
-.Sh "How do I check a valid email address?"
-You can't.
+You'll see a lot of \s-1CGI\s0 programs that blindly read from \s-1STDIN\s0 the number
+of bytes equal to \s-1CONTENT_LENGTH\s0 for POSTs, or grab \s-1QUERY_STRING\s0 for
+decoding GETs.  These programs are very poorly written.  They only work
+sometimes.  They typically forget to check the return value of the \fIread()\fR
+system call, which is a cardinal sin.  They don't handle \s-1HEAD\s0 requests.
+They don't handle multipart forms used for file uploads.  They don't deal
+with \s-1GET/POST\s0 combinations where query fields are in more than one place.
+They don't deal with keywords in the query string.
 .PP
-Without sending mail to the address and seeing whether it bounces (and
-even then you face the halting problem), you cannot determine whether
-an email address is valid.  Even if you apply the email header
-standard, you can have problems, because there are deliverable
-addresses that aren't \s-1RFC\s0\-822 (the mail header standard) compliant,
-and addresses that aren't deliverable which are compliant.
+In short, they're bad hacks.  Resist them at all costs.  Please do not be
+tempted to reinvent the wheel.  Instead, use the \s-1CGI\s0.pm or CGI_Lite.pm
+(available from \s-1CPAN\s0), or if you're trapped in the module-free land
+of perl1 .. perl4, you might look into cgi-lib.pl (available from
+http://www.bio.cam.ac.uk/web/form.html).
 .PP
-Many are tempted to try to eliminate many frequently-invalid email
-addresses with a simple regexp, such as
-\f(CW/^[\ew.-]+\e@([\ew.-]\e.)+\ew+$/\fR.  However, this also throws out many
-valid ones, and says nothing about potential deliverability, so is not
-suggested.  Instead, see
+Make sure you know whether to use a \s-1GET\s0 or a \s-1POST\s0 in your form.
+GETs should only be used for something that doesn't update the server.
+Otherwise you can get mangled databases and repeated feedback mail
+messages.  The fancy word for this is ``idempotency'\*(R'.  This simply
+means that there should be no difference between making a \s-1GET\s0 request
+for a particular \s-1URL\s0 once or multiple times.  This is because the
+\s-1HTTP\s0 protocol definition says that a \s-1GET\s0 request may be cached by the
+browser, or server, or an intervening proxy.  \s-1POST\s0 requests cannot be
+cached, because each request is independent and matters.  Typically,
+\s-1POST\s0 requests change or depend on state on the server (query or update
+a database, send mail, or purchase a computer).
+.Sh "How do I check a valid mail address?"
+You can't, at least, not in real time.  Bummer, eh?
+.PP
+Without sending mail to the address and seeing whether there's a human
+on the other hand to answer you, you cannot determine whether a mail
+address is valid.  Even if you apply the mail header standard, you
+can have problems, because there are deliverable addresses that aren't
+\s-1RFC\s0\-822 (the mail header standard) compliant, and addresses that aren't
+deliverable which are compliant.
+.PP
+Many are tempted to try to eliminate many frequently-invalid
+mail addresses with a simple regexp, such as
+\f(CW/^[\ew.-]+\e@([\ew.-]\e.)+\ew+$/\fR.  It's a very bad idea.  However,
+this also throws out many valid ones, and says nothing about
+potential deliverability, so is not suggested.  Instead, see
 http://www.perl.com/\s-1CPAN/\s0authors/Tom_Christiansen/scripts/ckaddr.gz ,
 which actually checks against the full \s-1RFC\s0 spec (except for nested
-comments), looks for addresses you may not wish to accept email to
+comments), looks for addresses you may not wish to accept mail to
 (say, Bill Clinton or your postmaster), and then makes sure that the
-hostname given can be looked up in \s-1DNS\s0.  It's not fast, but it works.
+hostname given can be looked up in the \s-1DNS\s0 \s-1MX\s0 records.  It's not fast,
+but it works for what it tries to do.
 .PP
-Here's an alternative strategy used by many \s-1CGI\s0 script authors: Check
-the email address with a simple regexp (such as the one above).  If
-the regexp matched the address, accept the address.  If the regexp
-didn't match the address, request confirmation from the user that the
-email address they entered was correct.
+Our best advice for verifying a person's mail address is to have them
+enter their address twice, just as you normally do to change a password.
+This usually weeds out typos.  If both versions match, send
+mail to that address with a personal message that looks somewhat like:
+.PP
+.Vb 1
+\&    Dear someuser@host.com,
+.Ve
+.Vb 5
+\&    Please confirm the mail address you gave us Wed May  6 09:38:41
+\&    MDT 1998 by replying to this message.  Include the string
+\&    "Rumpelstiltskin" in that reply, but spelled in reverse; that is,
+\&    start with "Nik...".  Once this is done, your confirmed address will
+\&    be entered into our records.
+.Ve
+If you get the message back and they've followed your directions,
+you can be reasonably assured that it's real.
+.PP
+A related strategy that's less open to forgery is to give them a \s-1PIN\s0
+(personal \s-1ID\s0 number).  Record the address and \s-1PIN\s0 (best that it be a
+random one) for later processing.  In the mail you send, ask them to
+include the \s-1PIN\s0 in their reply.  But if it bounces, or the message is
+included via a ``vacation'\*(R' script, it'll be there anyway.  So it's
+best to ask them to mail back a slight alteration of the \s-1PIN\s0, such as
+with the characters reversed, one added or subtracted to each digit, etc.
 .Sh "How do I decode a \s-1MIME/BASE64\s0 string?"
 The \s-1MIME\s0\-tools package (available from \s-1CPAN\s0) handles this and a lot
 more.  Decoding \s-1BASE64\s0 becomes as simple as:
@@ -408,7 +573,7 @@ format after minor transliterations:
 \&    $len = pack("c", 32 + 0.75*length);   # compute length byte
 \&    print unpack("u", $len . $_);         # uudecode and print
 .Ve
-.Sh "How do I return the user's email address?"
+.Sh "How do I return the user's mail address?"
 On systems that support getpwuid, the $< variable and the
 Sys::Hostname module (which is part of the standard perl distribution),
 you can probably try using something like this:
@@ -417,9 +582,9 @@ you can probably try using something like this:
 \&    use Sys::Hostname;
 \&    $address = sprintf('%s@%s', getpwuid($<), hostname);
 .Ve
-Company policies on email address can mean that this generates addresses
-that the company's email system will not accept, so you should ask for
-users\*(R' email addresses when this matters.  Furthermore, not all systems
+Company policies on mail address can mean that this generates addresses
+that the company's mail system will not accept, so you should ask for
+users\*(R' mail addresses when this matters.  Furthermore, not all systems
 on which Perl runs are so forthcoming with this information as is Unix.
 .PP
 The Mail::Util module from \s-1CPAN\s0 (part of the MailTools package) provides a
@@ -427,10 +592,50 @@ The Mail::Util module from \s-1CPAN\s0 (part of the MailTools package) provides 
 It makes a more intelligent guess than the code above, using information
 given when the module was installed, but it could still be incorrect.
 Again, the best way is often just to ask the user.
-.Sh "How do I send/read mail?"
-Sending mail: the Mail::Mailer module from \s-1CPAN\s0 (part of the MailTools
-package) is \s-1UNIX\s0\-centric, while Mail::Internet uses Net::\s-1SMTP\s0 which is
-not \s-1UNIX\s0\-centric.  Reading mail: use the Mail::Folder module from \s-1CPAN\s0
+.Sh "How do I send mail?"
+Use the \f(CWsendmail\fR program directly:
+.PP
+.Vb 6
+\&    open(SENDMAIL, "|/usr/lib/sendmail -oi -t -odq")
+\&                        or die "Can't fork for sendmail: $!\en";
+\&    print SENDMAIL <<"EOF";
+\&    From: User Originating Mail <me\e@host>
+\&    To: Final Destination <you\e@otherhost>
+\&    Subject: A relevant subject line
+.Ve
+.Vb 3
+\&    Body of the message goes here, in as many lines as you like.
+\&    EOF
+\&    close(SENDMAIL)     or warn "sendmail didn't close nicely";
+.Ve
+The \fB\-oi\fR option prevents sendmail from interpreting a line consisting
+of a single dot as \*(L"end of message\*(R".  The \fB\-t\fR option says to use the
+headers to decide who to send the message to, and \fB\-odq\fR says to put
+the message into the queue.  This last option means your message won't
+be immediately delivered, so leave it out if you want immediate
+delivery.
+.PP
+Or use the \s-1CPAN\s0 module Mail::Mailer:
+.PP
+.Vb 1
+\&    use Mail::Mailer;
+.Ve
+.Vb 8
+\&    $mailer = Mail::Mailer->new();
+\&    $mailer->open({ From    => $from_address,
+\&                    To      => $to_address,
+\&                    Subject => $subject,
+\&                  })
+\&        or die "Can't open: $!\en";
+\&    print $mailer $body;
+\&    $mailer->close();
+.Ve
+The Mail::Internet module uses Net::\s-1SMTP\s0 which is less Unix-centric than
+Mail::Mailer, but less reliable.  Avoid raw \s-1SMTP\s0 commands.  There
+are many reasons to use a mail transport agent like sendmail.  These 
+include queueing, \s-1MX\s0 records, and security.
+.Sh "How do I read mail?"
+Use the Mail::Folder module from \s-1CPAN\s0
 (part of the MailFolder package) or the Mail::Internet module from
 \s-1CPAN\s0 (also part of the MailTools package).
 .PP
@@ -452,10 +657,40 @@ not \s-1UNIX\s0\-centric.  Reading mail: use the Mail::Folder module from \s-1CP
 \&    # send it
 \&    $mail->smtpsend or die;
 .Ve
+Often a module is overkill, though.  Here's a mail sorter.
+.PP
+.Vb 15
+\&    #!/usr/bin/perl 
+\&    # bysub1 - simple sort by subject
+\&    my(@msgs, @sub);
+\&    my $msgno = -1;
+\&    $/ = '';                    # paragraph reads
+\&    while (<>) {
+\&        if (/^From/m) {
+\&            /^Subject:\es*(?:Re:\es*)*(.*)/mi;
+\&            $sub[++$msgno] = lc($1) || '';
+\&        }
+\&        $msgs[$msgno] .= $_;
+\&    } 
+\&    for my $i (sort { $sub[$a] cmp $sub[$b] || $a <=> $b } (0 .. $#msgs)) {
+\&        print $msgs[$i];
+\&    }
+.Ve
+Or more succinctly, 
+.PP
+.Vb 6
+\&    #!/usr/bin/perl -n00
+\&    # bysub2 - awkish sort-by-subject
+\&    BEGIN { $msgno = -1 }
+\&    $sub[++$msgno] = (/^Subject:\es*(?:Re:\es*)*(.*)/mi)[0] if /^From/m;
+\&    $msg[$msgno] .= $_;
+\&    END { print @msg[ sort { $sub[$a] cmp $sub[$b] || $a <=> $b } (0 .. $#msg) ] }
+.Ve
 .Sh "How do I find out my hostname/domainname/\s-1IP\s0 address?"
-A lot of code has historically cavalierly called the \f(CW`hostname`\fR
-program.  While sometimes expedient, this isn't very portable.  It's
-one of those tradeoffs of convenience versus portability.
+The normal way to find your own hostname is to call the \f(CW`hostname`\fR
+program.  While sometimes expedient, this has some problems, such as
+not knowing whether you've got the canonical name or not.  It's one of
+those tradeoffs of convenience versus portability.
 .PP
 The Sys::Hostname module (part of the standard perl distribution) will
 give you the hostname after which you can find out the \s-1IP\s0 address
@@ -490,18 +725,33 @@ A \s-1DCE::RPC\s0 module is being developed (but is not yet available), and
 will be released as part of the \s-1DCE\s0\-Perl package (available from
 \s-1CPAN\s0).  No \s-1ONC::RPC\s0 module is known.
 .SH "AUTHOR AND COPYRIGHT"
-Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
-All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
+Copyright (c) 1997, 1998 Tom Christiansen and Nathan Torkington.
+All rights reserved.
+.PP
+When included as part of the Standard Version of Perl, or as part of
+its complete documentation whether printed or otherwise, this work
+may be distributed only under the terms of Perl's Artistic License.
+Any distribution of this file or derivatives thereof \fIoutside\fR
+of that package require that special arrangements be made with
+copyright holder.
+.PP
+Irrespective of its distribution, all code examples in this file
+are hereby placed into the public domain.  You are permitted and
+encouraged to use this code in your own programs for fun
+or for profit as you see fit.  A simple comment in the code giving
+credit would be courteous but is not required.
 
 .rn }` ''
 .IX Title "PERLFAQ9 1"
-.IX Name "perlfaq9 - Networking ($Revision: 1.17 $, $Date: 1997/04/24 22:44:29 $)"
+.IX Name "perlfaq9 - Networking ($Revision: 1.20 $, $Date: 1998/06/22 18:31:09 $)"
 
 .IX Header "NAME"
 
 .IX Header "DESCRIPTION"
 
-.IX Subsection "My \s-1CGI\s0 script runs from the command line but not the browser.  Can you help me fix it?"
+.IX Subsection "My \s-1CGI\s0 script runs from the command line but not the browser.   (500 Server Error)"
+
+.IX Subsection "How can I get better error messages from a \s-1CGI\s0 program?"
 
 .IX Subsection "How do I remove \s-1HTML\s0 from a string?"
 
@@ -513,7 +763,9 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Subsection "How do I fetch an \s-1HTML\s0 file?"
 
-.IX Subsection "how do I decode or create those %\-encodings on the web?"
+.IX Subsection "How do I automate an \s-1HTML\s0 form submission?"
+
+.IX Subsection "How do I decode or create those %\-encodings on the web?"
 
 .IX Subsection "How do I redirect to another page?"
 
@@ -523,17 +775,19 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Subsection "How do I make sure users can't enter values into a form that cause my \s-1CGI\s0 script to do bad things?"
 
-.IX Subsection "How do I parse an email header?"
+.IX Subsection "How do I parse a mail header?"
 
 .IX Subsection "How do I decode a \s-1CGI\s0 form?"
 
-.IX Subsection "How do I check a valid email address?"
+.IX Subsection "How do I check a valid mail address?"
 
 .IX Subsection "How do I decode a \s-1MIME/BASE64\s0 string?"
 
-.IX Subsection "How do I return the user's email address?"
+.IX Subsection "How do I return the user's mail address?"
 
-.IX Subsection "How do I send/read mail?"
+.IX Subsection "How do I send mail?"
+
+.IX Subsection "How do I read mail?"
 
 .IX Subsection "How do I find out my hostname/domainname/\s-1IP\s0 address?"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ8 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLFAQ8 1 "perl 5.005, patch 53" "8/Aug/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -188,7 +188,7 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-perlfaq8 \- System Interaction ($Revision: 1.21 $, \f(CW$Date:\fR 1997/04/24 22:44:19 $)
+perlfaq8 \- System Interaction ($Revision: 1.26 $, \f(CW$Date:\fR 1998/08/05 12:20:28 $)
 .SH "DESCRIPTION"
 This section of the Perl FAQ covers questions involving operating
 system interaction.  This involves interprocess communication (IPC),
@@ -199,7 +199,7 @@ Read the FAQs and documentation specific to the port of perl to your
 operating system (eg, the \fIperlvms\fR manpage, the \fIperlplan9\fR manpage, ...).  These should
 contain more detailed information on the vagaries of your perl.
 .Sh "How do I find out which operating system I'm running under?"
-The $^O variable ($\s-1OSTYPE\s0 if you use English) contains the operating
+The $^O variable ($\s-1OSNAME\s0 if you use English) contains the operating
 system that your perl binary was built for.
 .Sh "How come \fIexec()\fR doesn't return?"
 Because that's what it does: it replaces your currently running
@@ -230,6 +230,181 @@ How you access/control keyboards, screens, and pointing devices
 .Vb 1
 \&    Tk                          CPAN
 .Ve
+.PP
+Some of these specific cases are shown below.
+.Sh "How do I print something out in color?"
+In general, you don't, because you don't know whether
+the recipient has a color-aware display device.  If you
+know that they have an \s-1ANSI\s0 terminal that understands
+color, you can use the Term::ANSIColor module from \s-1CPAN\s0:
+.PP
+.Vb 3
+\&    use Term::ANSIColor;
+\&    print color("red"), "Stop!\en", color("reset");
+\&    print color("green"), "Go!\en", color("reset");
+.Ve
+Or like this:
+.PP
+.Vb 3
+\&    use Term::ANSIColor qw(:constants);
+\&    print RED, "Stop!\en", RESET;
+\&    print GREEN, "Go!\en", RESET;
+.Ve
+.Sh "How do I read just one key without waiting for a return key?"
+Controlling input buffering is a remarkably system-dependent matter.
+If most systems, you can just use the \fBstty\fR command as shown in
+the \f(CWgetc\fR entry in the \fIperlfunc\fR manpage, but as you see, that's already getting you into
+portability snags.  
+.PP
+.Vb 6
+\&    open(TTY, "+</dev/tty") or die "no tty: $!";
+\&    system "stty  cbreak </dev/tty >/dev/tty 2>&1";
+\&    $key = getc(TTY);           # perhaps this works
+\&    # OR ELSE
+\&    sysread(TTY, $key, 1);      # probably this does
+\&    system "stty -cbreak </dev/tty >/dev/tty 2>&1";
+.Ve
+The Term::ReadKey module from \s-1CPAN\s0 offers an easy-to-use interface that
+should be more efficient than shelling out to \fBstty\fR for each key.
+It even includes limited support for Windows.
+.PP
+.Vb 4
+\&    use Term::ReadKey;
+\&    ReadMode('cbreak');
+\&    $key = ReadKey(0);
+\&    ReadMode('normal');
+.Ve
+However, that requires that you have a working C compiler and can use it
+to build and install a \s-1CPAN\s0 module.  Here's a solution using
+the standard \s-1POSIX\s0 module, which is already on your systems (assuming
+your system supports \s-1POSIX\s0).
+.PP
+.Vb 2
+\&    use HotKey;
+\&    $key = readkey();
+.Ve
+And here's the HotKey module, which hides the somewhat mystifying calls
+to manipulate the \s-1POSIX\s0 termios structures.
+.PP
+.Vb 2
+\&    # HotKey.pm
+\&    package HotKey;
+.Ve
+.Vb 2
+\&    @ISA = qw(Exporter);
+\&    @EXPORT = qw(cbreak cooked readkey);
+.Ve
+.Vb 3
+\&    use strict;
+\&    use POSIX qw(:termios_h);
+\&    my ($term, $oterm, $echo, $noecho, $fd_stdin);
+.Ve
+.Vb 4
+\&    $fd_stdin = fileno(STDIN);
+\&    $term     = POSIX::Termios->new();
+\&    $term->getattr($fd_stdin);
+\&    $oterm     = $term->getlflag();
+.Ve
+.Vb 2
+\&    $echo     = ECHO | ECHOK | ICANON;
+\&    $noecho   = $oterm & ~$echo;
+.Ve
+.Vb 5
+\&    sub cbreak {
+\&        $term->setlflag($noecho);  # ok, so i don't want echo either
+\&        $term->setcc(VTIME, 1);
+\&        $term->setattr($fd_stdin, TCSANOW);
+\&    }
+.Ve
+.Vb 5
+\&    sub cooked {
+\&        $term->setlflag($oterm);
+\&        $term->setcc(VTIME, 0);
+\&        $term->setattr($fd_stdin, TCSANOW);
+\&    }
+.Ve
+.Vb 7
+\&    sub readkey {
+\&        my $key = '';
+\&        cbreak();
+\&        sysread(STDIN, $key, 1);
+\&        cooked();
+\&        return $key;
+\&    }
+.Ve
+.Vb 1
+\&    END { cooked() }
+.Ve
+.Vb 1
+\&    1;
+.Ve
+.Sh "How do I check whether input is ready on the keyboard?"
+The easiest way to do this is to read a key in nonblocking mode with the
+Term::ReadKey module from \s-1CPAN\s0, passing it an argument of \-1 to indicate
+not to block:
+.PP
+.Vb 1
+\&    use Term::ReadKey;
+.Ve
+.Vb 1
+\&    ReadMode('cbreak');
+.Ve
+.Vb 5
+\&    if (defined ($char = ReadKey(-1)) ) {
+\&        # input was waiting and it was $char
+\&    } else {
+\&        # no input was waiting
+\&    }
+.Ve
+.Vb 1
+\&    ReadMode('normal');                  # restore normal tty settings
+.Ve
+.Sh "How do I clear the screen?"
+If you only have to so infrequently, use \f(CWsystem\fR:
+.PP
+.Vb 1
+\&    system("clear");
+.Ve
+If you have to do this a lot, save the clear string
+so you can print it 100 times without calling a program
+100 times:
+.PP
+.Vb 2
+\&    $clear_string = `clear`;
+\&    print $clear_string;
+.Ve
+If you're planning on doing other screen manipulations, like cursor
+positions, etc, you might wish to use Term::Cap module:
+.PP
+.Vb 3
+\&    use Term::Cap;
+\&    $terminal = Term::Cap->Tgetent( {OSPEED => 9600} );
+\&    $clear_string = $terminal->Tputs('cl');
+.Ve
+.Sh "How do I get the screen size?"
+If you have Term::ReadKey module installed from \s-1CPAN\s0, 
+you can use it to fetch the width and height in characters
+and in pixels:
+.PP
+.Vb 2
+\&    use Term::ReadKey;
+\&    ($wchar, $hchar, $wpixels, $hpixels) = GetTerminalSize();
+.Ve
+This is more portable than the raw \f(CWioctl\fR, but not as 
+illustrative:
+.PP
+.Vb 10
+\&    require 'sys/ioctl.ph';
+\&    die "no TIOCGWINSZ " unless defined &TIOCGWINSZ;
+\&    open(TTY, "+</dev/tty")                     or die "No tty: $!";
+\&    unless (ioctl(TTY, &TIOCGWINSZ, $winsize='')) {
+\&        die sprintf "$0: ioctl TIOCGWINSZ (%08x: $!)\en", &TIOCGWINSZ;
+\&    }
+\&    ($row, $col, $xpixel, $ypixel) = unpack('S4', $winsize);
+\&    print "(row,col) = ($row,$col)";
+\&    print "  (xpixel,ypixel) = ($xpixel,$ypixel)" if $xpixel || $ypixel;
+\&    print "\en";
+.Ve
 .Sh "How do I ask the user for a password?"
 (This question has nothing to do with the web.  See a different
 \s-1FAQ\s0 for that.)
@@ -242,6 +417,14 @@ to the \fBstty\fR program, with varying degrees of portability.
 .PP
 You can also do this for most systems using the Term::ReadKey module
 from \s-1CPAN\s0, which is easier to use and in theory more portable.
+.PP
+.Vb 1
+\&    use Term::ReadKey;
+.Ve
+.Vb 2
+\&    ReadMode('noecho');
+\&    $password = ReadLine(0);
+.Ve
 .Sh "How do I read and write the serial port?"
 This depends on which operating system your program is running on.  In
 the case of Unix, the serial ports will be accessible through files in
@@ -278,20 +461,9 @@ This applies especially to socket I/O and autoflushing, discussed
 next.
 .Ip "flushing output" 4
 If you expect characters to get to your device when you \fIprint()\fR them,
-you'll want to autoflush that filehandle, as in the older
-.Sp
-.Vb 2
-\&    use FileHandle;
-\&    DEV->autoflush(1);
-.Ve
-and the newer
-.Sp
-.Vb 2
-\&    use IO::Handle;
-\&    DEV->autoflush(1);
-.Ve
-You can use \fIselect()\fR and the \f(CW$|\fR variable to control autoflushing
-(see the section on \fI$|\fR in the \fIperlvar\fR manpage and the \f(CWselect\fR entry in the \fIperlfunc\fR manpage):
+you'll want to autoflush that filehandle.  You can use \fIselect()\fR
+and the \f(CW$|\fR variable to control autoflushing (see the section on \fI$|\fR in the \fIperlvar\fR manpage
+and the \f(CWselect\fR entry in the \fIperlfunc\fR manpage):
 .Sp
 .Vb 3
 \&    $oldh = select(DEV);
@@ -303,6 +475,13 @@ You'll also see code that does this without a temporary variable, as in
 .Vb 1
 \&    select((select(DEV), $| = 1)[0]);
 .Ve
+Or if you don't mind pulling in a few thousand lines
+of code just because you're afraid of a little $| variable:
+.Sp
+.Vb 2
+\&    use IO::Handle;
+\&    DEV->autoflush(1);
+.Ve
 As mentioned in the previous item, this still doesn't work when using
 socket I/O between Unix and Macintosh.  You'll need to hardcode your
 line terminators, in that case.
@@ -313,14 +492,38 @@ the \f(CWalarm\fR entry in the \fIperlfunc\fR manpage).  If you have a non-block
 have a non-blocking read, which means you may have to use a 4-arg
 \fIselect()\fR to determine whether I/O is ready on that device (see
 the section on \fIselect\fR in the \fIperlfunc\fR manpage.
+.PP
+While trying to read from his caller-id box, the notorious Jamie Zawinski
+<jwz@netscape.com>, after much gnashing of teeth and fighting with sysread,
+sysopen, \s-1POSIX\s0's tcgetattr business, and various other functions that
+go bump in the night, finally came up with this:
+.PP
+.Vb 13
+\&    sub open_modem {
+\&        use IPC::Open2;
+\&        my $stty = `/bin/stty -g`;
+\&        open2( \e*MODEM_IN, \e*MODEM_OUT, "cu -l$modem_device -s2400 2>&1");
+\&        # starting cu hoses /dev/tty's stty settings, even when it has
+\&        # been opened on a pipe...
+\&        system("/bin/stty $stty");
+\&        $_ = <MODEM_IN>;
+\&        chop;
+\&        if ( !m/^Connected/ ) {
+\&            print STDERR "$0: cu printed `$_' instead of `Connected'\en";
+\&        }
+\&    }
+.Ve
 .Sh "How do I decode encrypted password files?"
 You spend lots and lots of money on dedicated hardware, but this is
 bound to get you talked about.
 .PP
 Seriously, you can't if they are Unix password files \- the Unix
-password system employs one-way encryption.  Programs like Crack can
-forcibly (and intelligently) try to guess passwords, but don't (can't)
-guarantee quick success.
+password system employs one-way encryption.  It's more like hashing than
+encryption.  The best you can check is whether something else hashes to
+the same string.  You can't turn a hash back into the original string.
+Programs like Crack
+can forcibly (and intelligently) try to guess passwords, but don't
+(can't) guarantee quick success.
 .PP
 If you're worried about users selecting bad passwords, you should
 proactively check when they try to change their password (by modifying
@@ -334,7 +537,7 @@ You could use
 or you could use fork as documented in the section on \fIfork\fR in the \fIperlfunc\fR manpage, with
 further examples in the \fIperlipc\fR manpage.  Some things to be aware of, if you're
 on a Unix-like system:
-.Ip "\s-1STDIN\s0, \s-1STDOUT\s0 and \s-1STDERR\s0 are shared" 4
+.Ip "\s-1STDIN\s0, \s-1STDOUT\s0, and \s-1STDERR\s0 are shared" 4
 Both the main process and the backgrounded one (the \*(L"child\*(R" process)
 share the same \s-1STDIN\s0, \s-1STDOUT\s0 and \s-1STDERR\s0 filehandles.  If both try to
 access them at once, strange things can happen.  You may want to close
@@ -356,9 +559,10 @@ You have to be prepared to \*(L"reap\*(R" the child process when it finishes
 See the section on \fISignals\fR in the \fIperlipc\fR manpage for other examples of code to do this.
 Zombies are not an issue with \f(CWsystem("prog &")\fR.
 .Sh "How do I trap control characters/signals?"
-You don't actually \*(L"trap\*(R" a control character.  Instead, that
-character generates a signal, which you then trap.  Signals are
-documented in the section on \fISignals\fR in the \fIperlipc\fR manpage and chapter 6 of the Camel.
+You don't actually \*(L"trap\*(R" a control character.  Instead, that character
+generates a signal which is sent to your terminal's currently
+foregrounded process group, which you then trap in your process.
+Signals are documented in the section on \fISignals\fR in the \fIperlipc\fR manpage and chapter 6 of the Camel.
 .PP
 Be warned that very few C libraries are re-entrant.  Therefore, if you
 attempt to \fIprint()\fR in a handler that got invoked during another stdio
@@ -386,10 +590,11 @@ you're in a \*(L"slow\*(R" call, such as <\s-1FH\s0>, \fIread()\fR, \fIconnect()
 that is, by raising an exception.  See the time-out handler for a
 blocking \fIflock()\fR in the section on \fISignals\fR in the \fIperlipc\fR manpage or chapter 6 of the Camel.
 .Sh "How do I modify the shadow password file on a Unix system?"
-If perl was installed correctly, the getpw*() functions described in
-the \fIperlfunc\fR manpage provide (read-only) access to the shadow password file.
-To change the file, make a new shadow password file (the format varies
-from system to system \- see the \fIpasswd(5)\fR manpage for specifics) and use
+If perl was installed correctly, and your shadow library was written
+properly, the getpw*() functions described in the \fIperlfunc\fR manpage should in
+theory provide (read-only) access to entries in the shadow password
+file.  To change the file, make a new shadow password file (the format
+varies from system to system \- see the \fIpasswd(5)\fR manpage for specifics) and use
 \fIpwd_mkdb\fR\|(8) to install it (see the \fIpwd_mkdb(5)\fR manpage for more details).
 .Sh "How do I set the time and date?"
 Assuming you're running under sufficient permissions, you should be
@@ -404,7 +609,7 @@ probably get away with setting an environment variable:
 .Vb 3
 \&    $ENV{TZ} = "MST7MDT";                  # unixish
 \&    $ENV{'SYS$TIMEZONE_DIFFERENTIAL'}="-5" # vms
-\&    system "trn comp.lang.perl";
+\&    system "trn comp.lang.perl.misc";
 .Ve
 .Sh "How can I \fIsleep()\fR or \fIalarm()\fR for under a second?"
 If you want finer granularity than the 1 second that the \fIsleep()\fR
@@ -416,7 +621,7 @@ http://www.perl.com/\s-1CPAN/\s0doc/misc/ancient/tutorial/eg/itimers.pl .
 In general, you may not be able to.  The Time::HiRes module (available
 from \s-1CPAN\s0) provides this functionality for some systems.
 .PP
-In general, you may not be able to.  But if you system supports both the
+In general, you may not be able to.  But if your system supports both the
 \fIsyscall()\fR function in Perl as well as a system call like \fIgettimeofday\fR\|(2),
 then you may be able to do something like this:
 .PP
@@ -458,9 +663,18 @@ then you may be able to do something like this:
 .Sh "How can I do an \fIatexit()\fR or \fIsetjmp()\fR/\fIlongjmp()\fR? (Exception handling)"
 Release 5 of Perl added the \s-1END\s0 block, which can be used to simulate
 \fIatexit()\fR.  Each package's \s-1END\s0 block is called when the program or
-thread ends (see the \fIperlmod\fR manpage manpage for more details).  It isn't
-called when untrapped signals kill the program, though, so if you use
-\s-1END\s0 blocks you should also use
+thread ends (see the \fIperlmod\fR manpage manpage for more details).  
+.PP
+For example, you can use this to make sure your filter program
+managed to finish its output without filling up the disk:
+.PP
+.Vb 3
+\&    END {
+\&        close(STDOUT) || die "stdout close failed: $!";
+\&    } 
+.Ve
+The \s-1END\s0 block isn't called when untrapped signals kill the program, though, so if
+you use \s-1END\s0 blocks you should also use
 .PP
 .Vb 1
 \&        use sigtrap qw(die normal-signals);
@@ -522,13 +736,19 @@ scripts inherently insecure.  Perl gives you a number of options
 (described in the \fIperlsec\fR manpage) to work around such systems.
 .Sh "How can I open a pipe both to and from a command?"
 The \s-1IPC::\s0Open2 module (part of the standard perl distribution) is an
-easy-to-use approach that internally uses \fIpipe()\fR, \fIfork()\fR, and \fIexec()\fR
-to do the job.  Make sure you read the deadlock warnings in its
-documentation, though (see the \fI\s-1IPC::\s0Open2\fR manpage).
+easy-to-use approach that internally uses \fIpipe()\fR, \fIfork()\fR, and \fIexec()\fR to do
+the job.  Make sure you read the deadlock warnings in its documentation,
+though (see the \fI\s-1IPC::\s0Open2\fR manpage).  See the section on \fIBidirectional Communication
+with Another Process\fR in the \fIperlipc\fR manpage and the section on \fIBidirectional Communication with
+Yourself\fR in the \fIperlipc\fR manpage
+.PP
+You may also use the \s-1IPC::\s0Open3 module (part of the standard perl
+distribution), but be warned that it has a different order of
+arguments from \s-1IPC::\s0Open2 (see the \fI\s-1IPC::\s0Open3\fR manpage).
 .Sh "Why can't I get the output of a command with \fIsystem()\fR?"
 You're confusing the purpose of \fIsystem()\fR and backticks (``).  \fIsystem()\fR
 runs a command and returns exit status information (as a 16 bit value:
-the low 8 bits are the signal the process died from, if any, and
+the low 7 bits are the signal the process died from, if any, and
 the high 8 bits are the actual exit value).  Backticks (``) run a
 command and return what it sent to \s-1STDOUT\s0.
 .PP
@@ -584,13 +804,55 @@ Note that you \fImust\fR use Bourne shell (\fIsh\fR\|(1)) redirection syntax in
 backticks, not \fIcsh\fR\|(1)!  Details on why Perl's \fIsystem()\fR and backtick
 and pipe opens all use the Bourne shell are in
 http://www.perl.com/\s-1CPAN/\s0doc/\s-1FMTEYEWTK/\s0versus/csh.whynot .
+To capture a command's \s-1STDERR\s0 and \s-1STDOUT\s0 together:
 .PP
-You may also use the \s-1IPC::\s0Open3 module (part of the standard perl
-distribution), but be warned that it has a different order of
-arguments from \s-1IPC::\s0Open2 (see the \fI\s-1IPC::\s0Open3\fR manpage).
+.Vb 3
+\&    $output = `cmd 2>&1`;                       # either with backticks
+\&    $pid = open(PH, "cmd 2>&1 |");              # or with an open pipe
+\&    while (<PH>) { }                            #    plus a read
+.Ve
+To capture a command's \s-1STDOUT\s0 but discard its \s-1STDERR\s0:
+.PP
+.Vb 3
+\&    $output = `cmd 2>/dev/null`;                # either with backticks
+\&    $pid = open(PH, "cmd 2>/dev/null |");       # or with an open pipe
+\&    while (<PH>) { }                            #    plus a read
+.Ve
+To capture a command's \s-1STDERR\s0 but discard its \s-1STDOUT\s0:
+.PP
+.Vb 3
+\&    $output = `cmd 2>&1 1>/dev/null`;           # either with backticks
+\&    $pid = open(PH, "cmd 2>&1 1>/dev/null |");  # or with an open pipe
+\&    while (<PH>) { }                            #    plus a read
+.Ve
+To exchange a command's \s-1STDOUT\s0 and \s-1STDERR\s0 in order to capture the \s-1STDERR\s0
+but leave its \s-1STDOUT\s0 to come out our old \s-1STDERR\s0:
+.PP
+.Vb 3
+\&    $output = `cmd 3>&1 1>&2 2>&3 3>&-`;        # either with backticks
+\&    $pid = open(PH, "cmd 3>&1 1>&2 2>&3 3>&-|");# or with an open pipe
+\&    while (<PH>) { }                            #    plus a read
+.Ve
+To read both a command's \s-1STDOUT\s0 and its \s-1STDERR\s0 separately, it's easiest
+and safest to redirect them separately to files, and then read from those
+files when the program is done:
+.PP
+.Vb 1
+\&    system("program args 1>/tmp/program.stdout 2>/tmp/program.stderr");
+.Ve
+Ordering is important in all these examples.  That's because the shell
+processes file descriptor redirections in strictly left to right order.
+.PP
+.Vb 2
+\&    system("prog args 1>tmpfile 2>&1");
+\&    system("prog args 2>&1 1>tmpfile");
+.Ve
+The first command sends both standard out and standard error to the
+temporary file.  The second command sends only the old standard output
+there, and the old standard error shows up on the old standard out.
 .Sh "Why doesn't \fIopen()\fR return an error when a pipe open fails?"
 It does, but probably not how you expect it to.  On systems that
-follow the standard \fIfork()\fR/\fIexec()\fR paradigm (eg, Unix), it works like
+follow the standard \fIfork()\fR/\fIexec()\fR paradigm (such as Unix), it works like
 this: \fIopen()\fR causes a \fIfork()\fR.  In the parent, \fIopen()\fR returns with the
 process \s-1ID\s0 of the child.  The child \fIexec()\fRs the command to be piped
 to/from.  The parent can't know whether the \fIexec()\fR was successful or
@@ -637,7 +899,7 @@ In most cases, this could and probably should be written as
 \&        or die "cat program failed!";
 .Ve
 Which will get the output quickly (as its generated, instead of only
-at the end ) and also check the return value.
+at the end) and also check the return value.
 .PP
 \fIsystem()\fR also provides direct control over whether shell wildcard
 processing may take place, whereas backticks do not.
@@ -662,6 +924,8 @@ You have to do this:
 \&    }
 .Ve
 Just as with \fIsystem()\fR, no shell escapes happen when you \fIexec()\fR a list.
+.PP
+There are more examples of this the section on \fISafe Pipe Opens\fR in the \fIperlipc\fR manpage.
 .Sh "Why can't my script read from \s-1STDIN\s0 after I gave it \s-1EOF\s0 (^D on Unix, ^Z on \s-1MS\s0\-\s-1DOS\s0)?"
 Because some stdio's set error and eof flags that need clearing.  The
 \s-1POSIX\s0 module defines \fIclearerr()\fR that you can use.  That is the
@@ -716,9 +980,10 @@ approach will suffice:
 .Ve
 .Sh "How can I write expect in Perl?"
 Once upon a time, there was a library called chat2.pl (part of the
-standard perl distribution), which never really got finished.  These
-days, your best bet is to look at the Comm.pl library available from
-\s-1CPAN\s0.
+standard perl distribution), which never really got finished.  If you
+find it somewhere, \fIdon't use it\fR.  These days, your best bet is to
+look at the Expect module available from \s-1CPAN\s0, which also requires two
+other modules from \s-1CPAN\s0, \s-1IO::\s0Pty and \s-1IO::\s0Stty.
 .Sh "Is there a way to hide perl's command line from programs such as \*(M"ps\*(S"?"
 First of all note that if you're doing this for security reasons (to
 avoid people seeing passwords, for example) then you should rewrite
@@ -741,9 +1006,7 @@ different process from the shell it was started from.  Changes to a
 process are not reflected in its parent, only in its own children
 created after the change.  There is shell magic that may allow you to
 fake it by \fIeval()\fRing the script's output in your shell; check out the
-comp.unix.questions \s-1FAQ\s0 for details.
-.Ip "\s-1VMS\s0" 4
-Change to \f(CW%ENV\fR persist after Perl exits, but directory changes do not.
+comp.unix.questions \s-1FAQ\s0 for details.  
 .Sh "How do I close a process's filehandle without waiting for it to complete?"
 Assuming your system supports such things, just send an appropriate signal
 to the process (see the section on \fIkill\fR in the \fIperlfunc\fR manpage.  It's common to first send a \s-1TERM\s0
@@ -755,7 +1018,8 @@ Unixish systems.  Non-Unix users should check their Your_OS::Process
 module for other solutions.
 .Ip "\(bu" 4
 Open /dev/tty and use the the \s-1TIOCNOTTY\s0 ioctl on it.  See the \fItty(4)\fR manpage
-for details.
+for details.  Or better yet, you can just use the \fI\s-1POSIX::\s0setsid()\fR
+function, so you don't have to worry about process groups.
 .Ip "\(bu" 4
 Change directory to /
 .Ip "\(bu" 4
@@ -807,10 +1071,17 @@ in the \f(CWfork\fR entry in the \fIperlfunc\fR manpage.
 There are a number of excellent interfaces to \s-1SQL\s0 databases.  See the
 \s-1DBD\s0::* modules available from
 http://www.perl.com/\s-1CPAN/\s0modules/dbperl/\s-1DBD\s0 .
+A lot of information on this can be found at 
+http://www.hermetica.com/technologia/perl/\s-1DBI/\s0index.html .
 .Sh "How do I make a \fIsystem()\fR exit on control-C?"
 You can't.  You need to imitate the \fIsystem()\fR call (see the \fIperlipc\fR manpage for
 sample code) and then have a signal handler for the \s-1INT\s0 signal that
-passes the signal on to the subprocess.
+passes the signal on to the subprocess.  Or you can check for it:
+.PP
+.Vb 2
+\&    $rc = system($cmd);
+\&    if ($rc & 127) { die "signal death" } 
+.Ve
 .Sh "How do I open a file without blocking?"
 If you're lucky enough to be using a system that supports
 non-blocking reads (most Unixish systems do), you need only to use the
@@ -854,8 +1125,33 @@ If your version of perl is compiled without dynamic loading, then you
 just need to replace step 3 (\fBmake\fR) with \fBmake perl\fR and you will
 get a new \fIperl\fR binary with your extension linked in.
 .PP
-See the \fIExtUtils::MakeMaker\fR manpage for more details on building extensions,
-the question \*(L"How do I keep my own module/library directory?\*(R"
+See the \fIExtUtils::MakeMaker\fR manpage for more details on building extensions.
+See also the next question.
+.Sh "What's the difference between require and use?"
+Perl offers several different ways to include code from one file into
+another.  Here are the deltas between the various inclusion constructs:
+.PP
+.Vb 3
+\&    1)  do $file is like eval `cat $file`, except the former:
+\&        1.1: searches @INC and updates %INC.
+\&        1.2: bequeaths an *unrelated* lexical scope on the eval'ed code.
+.Ve
+.Vb 3
+\&    2)  require $file is like do $file, except the former:
+\&        2.1: checks for redundant loading, skipping already loaded files.
+\&        2.2: raises an exception on failure to find, compile, or execute $file.
+.Ve
+.Vb 3
+\&    3)  require Module is like require "Module.pm", except the former:
+\&        3.1: translates each "::" into your system's directory separator.
+\&        3.2: primes the parser to disambiguate class Module as an indirect object.
+.Ve
+.Vb 3
+\&    4)  use Module is like require Module, except the former:
+\&        4.1: loads the module at compile time, not run-time.
+\&        4.2: imports symbols and semantics from that package to the current one.
+.Ve
+In general, you usually want \f(CWuse\fR and a proper Perl module.
 .Sh "How do I keep my own module/library directory?"
 When you build modules, use the \s-1PREFIX\s0 option when generating
 Makefiles:
@@ -874,7 +1170,7 @@ See Perl's the \fIlib\fR manpage for more information.
 .PP
 .Vb 3
 \&    use FindBin;
-\&    use lib "$FindBin:Bin";
+\&    use lib "$FindBin::Bin";
 \&    use your_own_modules;
 .Ve
 .Sh "How do I add a directory to my include path at runtime?"
@@ -890,73 +1186,26 @@ Here are the suggested ways of modifying your include path:
 The latter is particularly useful because it knows about machine
 dependent architectures.  The lib.pm pragmatic module was first
 included with the 5.002 release of Perl.
-.SH "How do I get one key from the terminal at a time, under POSIX?"
-.PP
-.Vb 10
-\&    #!/usr/bin/perl -w
-\&    use strict;
-\&    $| = 1;
-\&    for (1..4) {
-\&        my $got;
-\&        print "gimme: ";
-\&        $got = getone();
-\&        print "--> $got\en";
-\&    }
-\&    exit;
-.Ve
-.Vb 2
-\&    BEGIN {
-\&        use POSIX qw(:termios_h);
-.Ve
-.Vb 1
-\&        my ($term, $oterm, $echo, $noecho, $fd_stdin);
-.Ve
-.Vb 1
-\&        $fd_stdin = fileno(STDIN);
-.Ve
-.Vb 3
-\&        $term     = POSIX::Termios->new();
-\&        $term->getattr($fd_stdin);
-\&        $oterm     = $term->getlflag();
-.Ve
-.Vb 2
-\&        $echo     = ECHO | ECHOK | ICANON;
-\&        $noecho   = $oterm & ~$echo;
-.Ve
-.Vb 5
-\&        sub cbreak {
-\&            $term->setlflag($noecho);
-\&            $term->setcc(VTIME, 1);
-\&            $term->setattr($fd_stdin, TCSANOW);
-\&        }
-.Ve
-.Vb 5
-\&        sub cooked {
-\&            $term->setlflag($oterm);
-\&            $term->setcc(VTIME, 0);
-\&            $term->setattr($fd_stdin, TCSANOW);
-\&        }
-.Ve
-.Vb 7
-\&        sub getone {
-\&            my $key = '';
-\&            cbreak();
-\&            sysread(STDIN, $key, 1);
-\&            cooked();
-\&            return $key;
-\&        }
-.Ve
-.Vb 2
-\&    }
-\&    END { cooked() }
-.Ve
 .SH "AUTHOR AND COPYRIGHT"
-Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
-All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
+Copyright (c) 1997, 1998 Tom Christiansen and Nathan Torkington.
+All rights reserved.
+.PP
+When included as part of the Standard Version of Perl, or as part of
+its complete documentation whether printed or otherwise, this work
+may be distributed only under the terms of Perl's Artistic License.
+Any distribution of this file or derivatives thereof \fIoutside\fR
+of that package require that special arrangements be made with
+copyright holder.
+.PP
+Irrespective of its distribution, all code examples in this file
+are hereby placed into the public domain.  You are permitted and
+encouraged to use this code in your own programs for fun
+or for profit as you see fit.  A simple comment in the code giving
+credit would be courteous but is not required.
 
 .rn }` ''
 .IX Title "PERLFAQ8 1"
-.IX Name "perlfaq8 - System Interaction ($Revision: 1.21 $, $Date: 1997/04/24 22:44:19 $)"
+.IX Name "perlfaq8 - System Interaction ($Revision: 1.26 $, $Date: 1998/08/05 12:20:28 $)"
 
 .IX Header "NAME"
 
@@ -973,6 +1222,16 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 .IX Item "Screen"
 
 .IX Item "Mouse"
+
+.IX Subsection "How do I print something out in color?"
+
+.IX Subsection "How do I read just one key without waiting for a return key?"
+
+.IX Subsection "How do I check whether input is ready on the keyboard?"
+
+.IX Subsection "How do I clear the screen?"
+
+.IX Subsection "How do I get the screen size?"
 
 .IX Subsection "How do I ask the user for a password?"
 
@@ -992,7 +1251,7 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Subsection "How do I start a process in the background?"
 
-.IX Item "\s-1STDIN\s0, \s-1STDOUT\s0 and \s-1STDERR\s0 are shared"
+.IX Item "\s-1STDIN\s0, \s-1STDOUT\s0, and \s-1STDERR\s0 are shared"
 
 .IX Item "Signals"
 
@@ -1052,8 +1311,6 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Item "Unix"
 
-.IX Item "\s-1VMS\s0"
-
 .IX Subsection "How do I close a process's filehandle without waiting for it to complete?"
 
 .IX Subsection "How do I fork a daemon process?"
@@ -1094,13 +1351,13 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Item "5"
 
+.IX Subsection "What's the difference between require and use?"
+
 .IX Subsection "How do I keep my own module/library directory?"
 
 .IX Subsection "How do I add the directory my program lives in to the module/library search path?"
 
 .IX Subsection "How do I add a directory to my include path at runtime?"
-
-.IX Header "How do I get one key from the terminal at a time, under POSIX?"
 
 .IX Header "AUTHOR AND COPYRIGHT"
 

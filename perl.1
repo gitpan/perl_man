@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERL 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERL 1 "perl 5.005, patch 53" "16/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -204,53 +204,59 @@ perl \- Practical Extraction and Report Language
 For ease of access, the Perl manual has been split up into a number
 of sections:
 .PP
-.Vb 3
-\&    perl        Perl overview (this section)
-\&    perldelta   Perl changes since previous version
-\&    perlfaq     Perl frequently asked questions
+.Vb 4
+\&    perl                Perl overview (this section)
+\&    perldelta           Perl changes since previous version
+\&    perlfaq             Perl frequently asked questions
+\&    perltoc             Perl documentation table of contents
 .Ve
-.Vb 12
-\&    perldata    Perl data structures
-\&    perlsyn     Perl syntax
-\&    perlop      Perl operators and precedence
-\&    perlre      Perl regular expressions
-\&    perlrun     Perl execution and options
-\&    perlfunc    Perl builtin functions
-\&    perlvar     Perl predefined variables
-\&    perlsub     Perl subroutines
-\&    perlmod     Perl modules: how they work
-\&    perlmodlib  Perl modules: how to write and use
-\&    perlform    Perl formats
-\&    perllocale  Perl locale support
+.Vb 13
+\&    perldata            Perl data structures
+\&    perlsyn             Perl syntax
+\&    perlop              Perl operators and precedence
+\&    perlre              Perl regular expressions
+\&    perlrun             Perl execution and options
+\&    perlfunc            Perl builtin functions
+\&    perlvar             Perl predefined variables
+\&    perlsub             Perl subroutines
+\&    perlmod             Perl modules: how they work
+\&    perlmodlib          Perl modules: how to write and use
+\&    perlmodinstall      Perl modules: how to install from CPAN
+\&    perlform            Perl formats
+\&    perllocale          Perl locale support
 .Ve
 .Vb 8
-\&    perlref     Perl references
-\&    perldsc     Perl data structures intro
-\&    perllol     Perl data structures: lists of lists
-\&    perltoot    Perl OO tutorial
-\&    perlobj     Perl objects
-\&    perltie     Perl objects hidden behind simple variables
-\&    perlbot     Perl OO tricks and examples
-\&    perlipc     Perl interprocess communication
-.Ve
-.Vb 5
-\&    perldebug   Perl debugging
-\&    perldiag    Perl diagnostic messages
-\&    perlsec     Perl security
-\&    perltrap    Perl traps for the unwary
-\&    perlstyle   Perl style guide
-.Ve
-.Vb 2
-\&    perlpod     Perl plain old documentation
-\&    perlbook    Perl book information
+\&    perlref             Perl references
+\&    perldsc             Perl data structures intro
+\&    perllol             Perl data structures: lists of lists
+\&    perltoot            Perl OO tutorial
+\&    perlobj             Perl objects
+\&    perltie             Perl objects hidden behind simple variables
+\&    perlbot             Perl OO tricks and examples
+\&    perlipc             Perl interprocess communication
 .Ve
 .Vb 6
-\&    perlembed   Perl ways to embed perl in your C or C++ application
-\&    perlapio    Perl internal IO abstraction interface
-\&    perlxs      Perl XS application programming interface
-\&    perlxstut   Perl XS tutorial
-\&    perlguts    Perl internal functions for those doing extensions
-\&    perlcall    Perl calling conventions from C
+\&    perldebug           Perl debugging
+\&    perldiag            Perl diagnostic messages
+\&    perlsec             Perl security
+\&    perltrap            Perl traps for the unwary
+\&    perlport            Perl portability guide
+\&    perlstyle           Perl style guide
+.Ve
+.Vb 2
+\&    perlpod             Perl plain old documentation
+\&    perlbook            Perl book information
+.Ve
+.Vb 6
+\&    perlembed           Perl ways to embed perl in your C or C++ application
+\&    perlapio            Perl internal IO abstraction interface
+\&    perlxs              Perl XS application programming interface
+\&    perlxstut           Perl XS tutorial
+\&    perlguts            Perl internal functions for those doing extensions
+\&    perlcall            Perl calling conventions from C
+.Ve
+.Vb 1
+\&    perlhist            Perl history records
 .Ve
 (If you're intending to read these straight through for the first time,
 the suggested order will tend to reduce the number of forward references.)
@@ -403,8 +409,7 @@ or if you wish to simply express your gratitude to Larry and the
 Perl developers, please write to <\fIperl-thanks@perl.org\fR>.
 .SH "FILES"
 .PP
-.Vb 2
-\& "/tmp/perl-e$$"        temporary file for -e commands
+.Vb 1
 \& "@INC"                 locations of perl libraries
 .Ve
 .SH "SEE ALSO"
@@ -418,7 +423,9 @@ Perl developers, please write to <\fIperl-thanks@perl.org\fR>.
 .SH "DIAGNOSTICS"
 The \fB\-w\fR switch produces some lovely diagnostics.
 .PP
-See the \fIperldiag\fR manpage for explanations of all Perl's diagnostics.
+See the \fIperldiag\fR manpage for explanations of all Perl's diagnostics.  The \f(CWuse
+diagnostics\fR pragma automatically turns Perl's normally terse warnings
+and errors into these longer forms.
 .PP
 Compilation errors will tell you the line number of the error, with an
 indication of the next token or token type that was to be examined.

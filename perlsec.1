@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLSEC 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLSEC 1 "perl 5.005, patch 53" "28/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -222,7 +222,9 @@ the \fIperllocale\fR manpage), results of certain system calls (readdir, readlin
 the gecos field of getpw* calls), and all file input are marked as
 \*(L"tainted\*(R".  Tainted data may not be used directly or indirectly in any
 command that invokes a sub-shell, nor in any command that modifies
-files, directories, or processes.  Any variable set
+files, directories, or processes. (\fBImportant exception\fR: If you pass
+a list of arguments to either \f(CWsystem\fR or \f(CWexec\fR, the elements of
+that list are \fBNOT\fR checked for taintedness.) Any variable set
 to a value derived from tainted data will itself be tainted,
 even if it is logically impossible for the tainted data
 to alter the variable.  Because taintedness is associated with each
@@ -283,9 +285,9 @@ For example:
 \&    @files = glob('*.c');       # Always insecure (uses csh)
 .Ve
 If you try to do something insecure, you will get a fatal error saying
-something like \*(L"Insecure dependency\*(R" or \*(L"Insecure PATH\*(R".  Note that you
+something like \*(L"Insecure dependency\*(R" or \*(L"Insecure \f(CW$ENV\fR{PATH}\*(R".  Note that you
 can still write an insecure \fBsystem\fR or \fBexec\fR, but only by explicitly
-doing something like the last example above.
+doing something like the \*(L"considered secure\*(R" example above.
 .Sh "Laundering and Detecting Tainted Data"
 To test whether a variable contains tainted data, and whose use would thus
 trigger an \*(L"Insecure dependency\*(R" message, check your nearby \s-1CPAN\s0 mirror
@@ -366,6 +368,15 @@ guarantee that the executable in question isn't itself going to turn
 around and execute some other program that is dependent on your \s-1PATH\s0, it
 makes sure you set the \s-1PATH\s0.
 .PP
+The \s-1PATH\s0 isn't the only environment variable which can cause problems.
+Because some shells may use the variables \s-1IFS\s0, \s-1CDPATH\s0, \s-1ENV\s0, and
+\s-1BASH_ENV\s0, Perl checks that those are either empty or untainted when
+starting subprocesses. You may wish to add something like this to your
+setid and taint-checking scripts.
+.PP
+.Vb 1
+\&    delete @ENV{qw(IFS CDPATH ENV BASH_ENV)};   # Make %ENV safer
+.Ve
 It's also possible to get into trouble with other operations that don't
 care whether they use tainted values.  Make judicious use of the file
 tests in dealing with any user-supplied filenames.  When possible, do
@@ -398,7 +409,7 @@ not called with a string that the shell could expand.  This is by far the
 best way to call something that might be subjected to shell escapes: just
 never call the shell at all.  
 .PP
-.Vb 20
+.Vb 19
 \&    use English;
 \&    die "Can't fork: $!" unless defined $pid = open(KID, "-|");
 \&    if ($pid) {           # parent
@@ -409,15 +420,14 @@ never call the shell at all.
 \&    } else {
 \&        my @temp = ($EUID, $EGID);
 \&        $EUID = $UID;
-\&        $EGID = $GID;    # XXX: initgroups() not called
+\&        $EGID = $GID;    #      initgroups() also called!
 \&        # Make sure privs are really gone
 \&        ($EUID, $EGID) = @temp;
-\&        die "Can't drop privileges" unless
-\&            $UID == $EUID and
-\&            $GID eq $EGID;      # String test
+\&        die "Can't drop privileges" 
+\&                unless $UID == $EUID  && $GID eq $EGID; 
 \&        $ENV{PATH} = "/bin:/usr/bin";
-\&        exec 'myprog', 'arg1', 'arg2' or
-\&        die "can't exec myprog: $!";
+\&        exec 'myprog', 'arg1', 'arg2' 
+\&            or die "can't exec myprog: $!";
 \&    }
 .Ve
 A similar strategy would work for wildcard expansion via \f(CWglob\fR, although
@@ -501,9 +511,10 @@ First of all, however, you \fIcan't\fR take away read permission, because
 the source code has to be readable in order to be compiled and
 interpreted.  (That doesn't mean that a \s-1CGI\s0 script's source is
 readable by people on the web, though.)  So you have to leave the
-permissions at the socially friendly 0755 level.
+permissions at the socially friendly 0755 level.  This lets 
+people on your local system only see your source.
 .PP
-Some people regard this as a security problem.  If your program does
+Some people mistakenly regard this as a security problem.  If your program does
 insecure things, and relies on people not knowing how to exploit those
 insecurities, it is not secure.  It is often possible for someone to
 determine the insecure things and exploit them without viewing the
@@ -526,6 +537,8 @@ statements like \*(L"This is unpublished proprietary software of \s-1XYZ\s0 Corp
 Your access to it does not give you permission to use it blah blah
 blah.\*(R"  You should see a lawyer to be sure your licence's wording will
 stand up in court.
+.SH "SEE ALSO"
+the \fIperlrun\fR manpage for its description of cleaning up environment variables.
 
 .rn }` ''
 .IX Title "PERLSEC 1"
@@ -544,4 +557,6 @@ stand up in court.
 .IX Subsection "Security Bugs"
 
 .IX Subsection "Protecting Your Programs"
+
+.IX Header "SEE ALSO"
 

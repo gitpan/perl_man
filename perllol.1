@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLLOL 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLLOL 1 "perl 5.005, patch 53" "14/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -213,7 +213,7 @@ a declaration of the array:
 \&  bart
 .Ve
 Now you should be very careful that the outer bracket type
-is a round one, that is, parentheses.  That's because you're assigning to
+is a round one, that is, a parenthesis.  That's because you're assigning to
 an \f(CW@list\fR, so you need parentheses.  If you wanted there \fInot\fR to be an \f(CW@LoL\fR,
 but rather just a reference to it, you could do something more like this:
 .PP
@@ -343,18 +343,7 @@ you'd have to do something like this:
 \&        push @$ref_to_LoL, [ split ];
 \&    }
 .Ve
-Actually, if you were using strict, you'd have to declare not only
-\f(CW$ref_to_LoL\fR as you had to declare \f(CW@LoL\fR, but you'd \fIalso\fR having to
-initialize it to a reference to an empty list.  (This was a bug in
-perl version 5.001m that's been fixed for the 5.002 release.)
-.PP
-.Vb 4
-\&    my $ref_to_LoL = [];
-\&    while (<>) {
-\&        push @$ref_to_LoL, [ split ];
-\&    }
-.Ve
-Ok, now you can add new rows.  What about adding new columns?  If you're
+Now you can add new rows.  What about adding new columns?  If you're
 dealing with just matrices, it's often easiest to use simple assignment:
 .PP
 .Vb 5
@@ -521,7 +510,7 @@ If I were you, I'd put that in a function:
 .SH "AUTHOR"
 Tom Christiansen <\fItchrist@perl.com\fR>
 .PP
-Last udpate: Sat Oct  7 19:35:26 MDT 1995
+Last update: Thu Jun  4 16:16:23 MDT 1998
 
 .rn }` ''
 .IX Title "PERLLOL 1"

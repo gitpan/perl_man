@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTOOT 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLTOOT 1 "perl 5.005, patch 53" "14/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -296,7 +296,7 @@ by up-casing the hash keys:
 \&    };
 .Ve
 And so you could get at \f(CW$rec->{NAME}\fR to find \*(L"Jason\*(R", or
-\f(CW@{ \f(CW$rec\fR->{PEERS} }\fR to get at \*(L"Norbert\*(R", \*(L"Rhys\*(R", and \*(L"Phineas\*(R".
+\f(CW@{ $rec->{PEERS} }\fR to get at \*(L"Norbert\*(R", \*(L"Rhys\*(R", and \*(L"Phineas\*(R".
 (Have you ever noticed how many 23-year-old programmers seem to
 be named \*(L"Jason\*(R" these days? :\-)
 .PP
@@ -504,7 +504,7 @@ be made through methods.
 Perl doesn't impose restrictions on who gets to use which methods.
 The public-versus-private distinction is by convention, not syntax.
 (Well, unless you use the Alias module described below in
-the section on \fI/"Data Members as Variables\fR.)  Occasionally you'll see method names beginning or ending
+the section on \fIData Members as Variables\fR.)  Occasionally you'll see method names beginning or ending
 with an underscore or two.  This marking is a convention indicating
 that the methods are private to that class alone and sometimes to its
 closest acquaintances, its immediate subclasses.  But this distinction
@@ -743,7 +743,7 @@ and \s-1DESTROY\s0 methods as follows:
 \&    }
 .Ve
 What happens if a derived class (which we'll call Employee) inherits
-methods from this Person base class?  Then \f(CWEmployee->\fIdebug()\fR\fR, when called
+methods from this Person base class?  Then \f(CWEmployee->debug()\fR, when called
 as a class method, manipulates \f(CW$Person::Debugging\fR not \f(CW$Employee::Debugging\fR.
 .Sh "Class Destructors"
 The object destructor handles the death of each distinct object.  But sometimes
@@ -1045,7 +1045,7 @@ What do we mean by the \fIPerson::new()\fR function -- isn't that actually
 a method?  Well, in principle, yes.  A method is just a function that
 expects as its first argument a class name (package) or object
 (blessed reference).   \fIPerson::new()\fR is the function that both the
-\f(CWPerson->\fInew()\fR\fR method and the \f(CWEmployee->\fInew()\fR\fR method end
+\f(CWPerson->new()\fR method and the \f(CWEmployee->new()\fR method end
 up calling.  Understand that while a method call looks a lot like a
 function call, they aren't really quite the same, and if you treat them
 as the same, you'll very soon be left with nothing but broken programs.
@@ -1533,7 +1533,7 @@ of the object's data, which are stored in the private variable \f(CW$self\fR.
 Although this is the same function each time, it contains a different
 version of \f(CW$self\fR.
 .PP
-When a method like \f(CW$him->\fIname\fR\|("Jason")\fR is called, its implicit
+When a method like \f(CW$him->name("Jason")\fR is called, its implicit
 zeroth argument is the invoking object\*(--just as it is with all method
 calls.  But in this case, it's our code reference (something like a
 function pointer in \*(C+, but with deep binding of lexical variables).
@@ -2031,27 +2031,23 @@ the \fIperlbot\fR manpage,
 the \fIperltie\fR manpage,
 and
 the \fIoverload\fR manpage.
-.SH "COPYRIGHT"
-I \fIreally\fR hate to have to say this, but recent unpleasant
-experiences have mandated its inclusion:
+.SH "AUTHOR AND COPYRIGHT"
+Copyright (c) 1997, 1998 Tom Christiansen 
+All rights reserved.
 .PP
-.Vb 1
-\&    Copyright 1996 Tom Christiansen.  All Rights Reserved.
-.Ve
-This work derives in part from the second edition of \fIProgramming Perl\fR.
-Although destined for release as a manpage with the standard Perl
-distribution, it is not public domain (nor is any of Perl and its docset:
-publishers beware).  It's expected to someday make its way into a revision
-of the Camel Book.  While it is copyright by me with all rights reserved,
-permission is granted to freely distribute verbatim copies of this
-document provided that no modifications outside of formatting be made,
-and that this notice remain intact.  You are permitted and encouraged to
-use its code and derivatives thereof in your own source code for fun or
-for profit as you see fit.  But so help me, if in six months I find some
-book out there with a hacked-up version of this material in it claiming to
-be written by someone else, I'll tell all the world that you're a jerk.
-Furthermore, your lawyer will meet my lawyer (or O'Reilly's) over lunch
-to arrange for you to receive your just deserts.  Count on it.
+When included as part of the Standard Version of Perl, or as part of
+its complete documentation whether printed or otherwise, this work
+may be distributed only under the terms of Perl's Artistic License.
+Any distribution of this file or derivatives thereof \fIoutside\fR
+of that package require that special arrangements be made with
+copyright holder.
+.PP
+Irrespective of its distribution, all code examples in this file
+are hereby placed into the public domain.  You are permitted and
+encouraged to use this code in your own programs for fun
+or for profit as you see fit.  A simple comment in the code giving
+credit would be courteous but is not required.
+.SH "COPYRIGHT"
 .Sh "Acknowledgments"
 Thanks to
 Larry Wall,
@@ -2129,6 +2125,8 @@ and many others for their helpful comments.
 .IX Subsection "Object Terminology"
 
 .IX Header "SEE ALSO"
+
+.IX Header "AUTHOR AND COPYRIGHT"
 
 .IX Header "COPYRIGHT"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH H2PH 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH H2PH 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -190,7 +190,7 @@
 .SH "NAME"
 h2ph \- convert .h C header files to .ph Perl header files
 .SH "SYNOPSIS"
-\fBh2ph [headerfiles]\fR
+\fBh2ph [\-d destination directory] [\-r | \-a] [\-l] [headerfiles]\fR
 .SH "DESCRIPTION"
 \fIh2ph\fR
 converts any C header files specified to the corresponding Perl header file
@@ -200,11 +200,49 @@ It is most easily run while in /usr/include:
 .Vb 1
 \&        cd /usr/include; h2ph * sys/*
 .Ve
+or
+.PP
+.Vb 1
+\&        cd /usr/include; h2ph -r -l .
+.Ve
 The output files are placed in the hierarchy rooted at Perl's
 architecture dependent library directory.  You can specify a different
 hierarchy with a \fB\-d\fR switch.
 .PP
 If run with no arguments, filters standard input to standard output.
+.SH "OPTIONS"
+.Ip "-d destination_dir" 4
+Put the resulting \fB.ph\fR files beneath \fBdestination_dir\fR, instead of
+beneath the default Perl library location (\f(CW$Config{'installsitsearch'}\fR).
+.Ip "-r" 4
+Run recursively; if any of \fBheaderfiles\fR are directories, then run \fIh2ph\fR
+on all files in those directories (and their subdirectories, etc.).  \fB\-r\fR
+and \fB\-a\fR are mutually exclusive.
+.Ip "-a" 4
+Run automagically; convert \fBheaderfiles\fR, as well as any \fB.h\fR files
+which they include.  This option will search for \fB.h\fR files in all
+directories which your C compiler ordinarily uses.  \fB\-a\fR and \fB\-r\fR are
+mutually exclusive.
+.Ip "-l" 4
+Symbolic links will be replicated in the destination directory.  If \fB\-l\fR
+is not specified, then links are skipped over.
+.Ip "-h" 4
+Put ``hints'\*(R' in the .ph files which will help in locating problems with
+\fIh2ph\fR.  In those cases when you \fBrequire\fR a \fB.ph\fR file containing syntax
+errors, instead of the cryptic
+.Sp
+.Vb 1
+\&        [ some error condition ] at (eval mmm) line nnn
+.Ve
+you will see the slightly more helpful
+.Sp
+.Vb 1
+\&        [ some error condition ] at filename.ph line nnn
+.Ve
+However, the \fB.ph\fR files almost double in size when built using \fB\-h\fR.
+.Ip "-D" 4
+Include the code from the \fB.h\fR file as a comment in the \fB.ph\fR file.
+This is primarily used for debugging \fIh2ph\fR.
 .SH "ENVIRONMENT"
 No environment variables are used.
 .SH "FILES"
@@ -239,6 +277,20 @@ You may need to dicker with the files produced.
 .IX Header "SYNOPSIS"
 
 .IX Header "DESCRIPTION"
+
+.IX Header "OPTIONS"
+
+.IX Item "-d destination_dir"
+
+.IX Item "-r"
+
+.IX Item "-a"
+
+.IX Item "-l"
+
+.IX Item "-h"
+
+.IX Item "-D"
 
 .IX Header "ENVIRONMENT"
 

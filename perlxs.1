@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXS 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLXS 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -209,6 +209,11 @@ to handle special structures and types for the library being
 linked.
 .PP
 See the \fIperlxstut\fR manpage for a tutorial on the whole extension creation process.
+.PP
+Note: For many extensions, Dave Beazley's \s-1SWIG\s0 system provides a
+significantly more convenient mechanism for creating the \s-1XS\s0 glue
+code. See the section on \fI/www.cs.utah.edu/~beazley/\s-1SWIG\s0\fR in the \fIhttp:\fR manpage for more 
+information.
 .Sh "On The Road"
 Many of the examples which follow will concentrate on creating an interface
 between Perl and the \s-1ONC\s0+ \s-1RPC\s0 bind library functions.  The \fIrpcb_gettime()\fR
@@ -474,6 +479,16 @@ typemap.
 \&          OUTPUT:
 \&          timep sv_setnv(ST(1), (double)timep);
 .Ve
+\fBxsubpp\fR emits an automatic \f(CWSvSETMAGIC()\fR for all parameters in the
+\s-1OUTPUT\s0 section of the \s-1XSUB\s0, except \s-1RETVAL\s0.  This is the usually desired
+behavior, as it takes care of properly invoking \*(L'set\*(R' magic on output
+parameters (needed for hash or array element parameters that must be
+created if they didn't exist).  If for some reason, this behavior is
+not desired, the \s-1OUTPUT\s0 section may contain a \f(CWSETMAGIC: DISABLE\fR line
+to disable it for the remainder of the parameters in the \s-1OUTPUT\s0 section.
+Likewise,  \f(CWSETMAGIC: ENABLE\fR can be used to reenable it for the
+remainder of the \s-1OUTPUT\s0 section.  See the \fIperlguts\fR manpage for more details
+about \*(L'set\*(R' magic.
 .Sh "The \s-1CODE\s0: Keyword"
 This keyword is used in more complicated XSUBs which require
 special handling for the C function.  The \s-1RETVAL\s0 variable is
@@ -541,18 +556,20 @@ Function parameters are normally initialized with their
 values from the argument stack.  The typemaps contain the
 code segments which are used to transfer the Perl values to
 the C parameters.  The programmer, however, is allowed to
-override the typemaps and supply alternate initialization
-code.
+override the typemaps and supply alternate (or additional)
+initialization code.
 .PP
 The following code demonstrates how to supply initialization code for
-function parameters.  The initialization code is eval'd by the compiler
-before it is added to the output so anything which should be interpreted
-literally, such as double quotes, must be protected with backslashes.
+function parameters.  The initialization code is eval'd within double
+quotes by the compiler before it is added to the output so anything
+which should be interpreted literally [mainly \f(CW$\fR, \f(CW@\fR, or \f(CW\e\e\fR]
+must be protected with backslashes.  The variables \f(CW$var\fR, \f(CW$arg\fR,
+and \f(CW$type\fR can be used as in typemaps.
 .PP
 .Vb 6
 \&     bool_t
 \&     rpcb_gettime(host,timep)
-\&          char *host = (char *)SvPV(ST(0),na);
+\&          char *host = (char *)SvPV($arg,PL_na);
 \&          time_t &timep = 0;
 \&          OUTPUT:
 \&          timep
@@ -561,6 +578,26 @@ This should not be used to supply default values for parameters.  One
 would normally use this when a function parameter must be processed by
 another library function before it can be used.  Default parameters are
 covered in the next section.
+.PP
+If the initialization begins with \f(CW=\fR, then it is output on
+the same line where the input variable is declared.  If the
+initialization begins with \f(CW;\fR or \f(CW+\fR, then it is output after
+all of the input variables have been declared.  The \f(CW=\fR and \f(CW;\fR
+cases replace the initialization normally supplied from the typemap.
+For the \f(CW+\fR case, the initialization from the typemap will preceed
+the initialization code included after the \f(CW+\fR.  A global
+variable, \f(CW%v\fR, is available for the truely rare case where
+information from one initialization is needed in another
+initialization.
+.PP
+.Vb 6
+\&     bool_t
+\&     rpcb_gettime(host,timep)
+\&          time_t &timep ; /*\e$v{time}=@{[$v{time}=$arg]}*/
+\&          char *host + SvOK($v{time}) ? SvPV($arg,PL_na) : NULL;
+\&          OUTPUT:
+\&          timep
+.Ve
 .Sh "Default Parameter Values"
 Default values can be specified for function parameters by
 placing an assignment statement in the parameter list.  The
@@ -723,11 +760,39 @@ The \s-1XS\s0 code, with ellipsis, follows.
 \&          char *host = "localhost";
 \&          CODE:
 \&                  if( items > 1 )
-\&                       host = (char *)SvPV(ST(1), na);
+\&                       host = (char *)SvPV(ST(1), PL_na);
 \&                  RETVAL = rpcb_gettime( host, &timep );
 \&          OUTPUT:
 \&          timep
 \&          RETVAL
+.Ve
+.Sh "The C_ARGS: Keyword"
+The C_ARGS: keyword allows creating of \s-1XSUBS\s0 which have different
+calling sequence from Perl than from C, without a need to write
+\s-1CODE\s0: or \s-1CPPCODE\s0: section.  The contents of the C_ARGS: paragraph is
+put as the argument to the called C function without any change.
+.PP
+For example, suppose that C function is declared as
+.PP
+.Vb 1
+\&    symbolic nth_derivative(int n, symbolic function, int flags);
+.Ve
+and that the default flags are kept in a global C variable
+\f(CWdefault_flags\fR.  Suppose that you want to create an interface which
+is called as
+.PP
+.Vb 1
+\&    $second_deriv = $function->nth_derivative(2);
+.Ve
+To do this, declare the \s-1XSUB\s0 as
+.PP
+.Vb 6
+\&    symbolic
+\&    nth_derivative(function, n)
+\&        symbolic        function
+\&        int             n
+\&    C_ARGS:
+\&        n, function, default_flags
 .Ve
 .Sh "The \s-1PPCODE\s0: Keyword"
 The \s-1PPCODE\s0: keyword is an alternate form of the \s-1CODE\s0: keyword and is used
@@ -751,7 +816,7 @@ Perl as a single list.
 \&          bool_t  status;
 \&          PPCODE:
 \&          status = rpcb_gettime( host, &timep );
-\&          EXTEND(sp, 2);
+\&          EXTEND(SP, 2);
 \&          PUSHs(sv_2mortal(newSViv(status)));
 \&          PUSHs(sv_2mortal(newSViv(timep)));
 .Ve
@@ -766,7 +831,7 @@ directive.
 .PP
 The \fI\s-1EXTEND\s0()\fR macro is used to make room on the argument
 stack for 2 return values.  The \s-1PPCODE\s0: directive causes the
-\fBxsubpp\fR compiler to create a stack pointer called \f(CWsp\fR, and it
+\fBxsubpp\fR compiler to create a stack pointer available as \f(CWSP\fR, and it
 is this pointer which is being used in the \fI\s-1EXTEND\s0()\fR macro.
 The values are then pushed onto the stack with the \fIPUSHs()\fR
 macro.
@@ -777,6 +842,8 @@ the following statement.
 .Vb 1
 \&     ($status, $timep) = rpcb_gettime("localhost");
 .Ve
+When handling output parameters with a \s-1PPCODE\s0 section, be sure to handle
+\&'set\*(R' magic properly.  See the \fIperlguts\fR manpage for details about \*(L'set\*(R' magic.
 .Sh "Returning Undef And Empty Lists"
 Occasionally the programmer will want to return simply
 \f(CWundef\fR or an empty list if a function fails rather than a
@@ -789,7 +856,7 @@ of \f(CW$timep\fR will either be undef or it will be a valid time.
 .Vb 1
 \&     $timep = rpcb_gettime( "localhost" );
 .Ve
-The following \s-1XSUB\s0 uses the \f(CWSV *\fR return type as a mneumonic only,
+The following \s-1XSUB\s0 uses the \f(CWSV *\fR return type as a mnemonic only,
 and uses a \s-1CODE\s0: block to indicate to the compiler
 that the programmer has supplied all the necessary code.  The
 \fIsv_newmortal()\fR call will initialize the return value to undef, making that
@@ -823,7 +890,7 @@ return value, should the need arise.
 \&               sv_setnv( ST(0), (double)timep);
 \&          }
 \&          else{
-\&               ST(0) = &sv_undef;
+\&               ST(0) = &PL_sv_undef;
 \&          }
 .Ve
 To return an empty list one must use a \s-1PPCODE\s0: block and
@@ -930,14 +997,14 @@ prototypes.
 \&          char *host = "localhost";
 \&          CODE:
 \&                  if( items > 1 )
-\&                       host = (char *)SvPV(ST(1), na);
+\&                       host = (char *)SvPV(ST(1), PL_na);
 \&                  RETVAL = rpcb_gettime( host, &timep );
 \&          OUTPUT:
 \&          timep
 \&          RETVAL
 .Ve
 .Sh "The \s-1ALIAS\s0: Keyword"
-The \s-1ALIAS\s0: keyword allows an \s-1XSUB\s0 to have two more unique Perl names
+The \s-1ALIAS\s0: keyword allows an \s-1XSUB\s0 to have two or more unique Perl names
 and to know which of those names was used when it was invoked.  The Perl
 names may be fully-qualified with package names.  Each alias is given an
 index.  The compiler will setup a variable called \f(CWix\fR which contain the
@@ -960,6 +1027,77 @@ The following example will create aliases \f(CWFOO::gettime()\fR and
 \&          OUTPUT:
 \&          timep
 .Ve
+.Sh "The \s-1INTERFACE\s0: Keyword"
+This keyword declares the current \s-1XSUB\s0 as a keeper of the given
+calling signature.  If some text follows this keyword, it is
+considered as a list of functions which have this signature, and
+should be attached to XSUBs.
+.PP
+Say, if you have 4 functions \fImultiply()\fR, \fIdivide()\fR, \fIadd()\fR, \fIsubtract()\fR all
+having the signature
+.PP
+.Vb 1
+\&    symbolic f(symbolic, symbolic);
+.Ve
+you code them all by using \s-1XSUB\s0
+.PP
+.Vb 7
+\&    symbolic
+\&    interface_s_ss(arg1, arg2)  
+\&        symbolic        arg1
+\&        symbolic        arg2
+\&    INTERFACE:
+\&        multiply divide 
+\&        add subtract
+.Ve
+The advantage of this approach comparing to \s-1ALIAS\s0: keyword is that one
+can attach an extra function \fIremainder()\fR at runtime by using
+    
+    \s-1CV\s0 *mycv = \fInewXSproto\fR\|("Symbolic::remainder\*(R", 
+			  XS_Symbolic_interface_s_ss, _\|_FILE_\|_, \*(L"$$");
+    \fI\s-1XSINTERFACE_FUNC_SET\s0\fR\|(mycv, remainder);
+.PP
+(This example supposes that there was no \s-1INTERFACE_MACRO\s0: section,
+otherwise one needs to use something else instead of
+\f(CWXSINTERFACE_FUNC_SET\fR.)
+.Sh "The \s-1INTERFACE_MACRO\s0: Keyword"
+This keyword allows one to define an \s-1INTERFACE\s0 using a different way
+to extract a function pointer from an \s-1XSUB\s0.  The text which follows
+this keyword should give the name of macros which would extract/set a
+function pointer.  The extractor macro is given return type, \f(CWCV*\fR,
+and \f(CWXSANY.any_dptr\fR for this \f(CWCV*\fR.  The setter macro is given cv,
+and the function pointer.
+.PP
+The default value is \f(CWXSINTERFACE_FUNC\fR and \f(CWXSINTERFACE_FUNC_SET\fR.
+An \s-1INTERFACE\s0 keyword with an empty list of functions can be omitted if
+\s-1INTERFACE_MACRO\s0 keyword is used.
+.PP
+Suppose that in the previous example functions pointers for 
+\fImultiply()\fR, \fIdivide()\fR, \fIadd()\fR, \fIsubtract()\fR are kept in a global C array
+\f(CWfp[]\fR with offsets being \f(CWmultiply_off\fR, \f(CWdivide_off\fR, \f(CWadd_off\fR,
+\f(CWsubtract_off\fR.  Then one can use 
+.PP
+.Vb 4
+\&    #define XSINTERFACE_FUNC_BYOFFSET(ret,cv,f) \e
+\&        ((XSINTERFACE_CVT(ret,))fp[CvXSUBANY(cv).any_i32])
+\&    #define XSINTERFACE_FUNC_BYOFFSET_set(cv,f) \e
+\&        CvXSUBANY(cv).any_i32 = CAT2( f, _off )
+.Ve
+in C section,
+.PP
+.Vb 10
+\&    symbolic
+\&    interface_s_ss(arg1, arg2)  
+\&        symbolic        arg1
+\&        symbolic        arg2
+\&    INTERFACE_MACRO: 
+\&        XSINTERFACE_FUNC_BYOFFSET
+\&        XSINTERFACE_FUNC_BYOFFSET_set
+\&    INTERFACE:
+\&        multiply divide 
+\&        add subtract
+.Ve
+in \s-1XSUB\s0 section.
 .Sh "The \s-1INCLUDE\s0: Keyword"
 This keyword can be used to pull other files into the \s-1XS\s0 module.  The other
 files may have \s-1XS\s0 code.  \s-1INCLUDE\s0: can also be used to run a command to
@@ -1303,13 +1441,15 @@ this sense, there is no difference between the object created by the
 The typemap is a collection of code fragments which are used by the \fBxsubpp\fR
 compiler to map C function parameters and values to Perl values.  The
 typemap file may consist of three sections labeled \f(CWTYPEMAP\fR, \f(CWINPUT\fR, and
-\f(CWOUTPUT\fR.  The \s-1INPUT\s0 section tells the compiler how to translate Perl values
+\f(CWOUTPUT\fR.  Any unlabelled initial section is assumed to be a \f(CWTYPEMAP\fR
+section if a name is not explicitly specified.  The \s-1INPUT\s0 section tells
+the compiler how to translate Perl values
 into variables of certain C types.  The \s-1OUTPUT\s0 section tells the compiler
 how to translate the values from certain C types into values Perl can
 understand.  The \s-1TYPEMAP\s0 section tells the compiler which of the \s-1INPUT\s0 and
 \s-1OUTPUT\s0 code fragments should be used to map a given C type to a Perl value.
-Each of the sections of the typemap must be preceded by one of the \s-1TYPEMAP\s0,
-\s-1INPUT\s0, or \s-1OUTPUT\s0 keywords.
+The section labels \f(CWTYPEMAP\fR, \f(CWINPUT\fR, or \f(CWOUTPUT\fR must begin
+in the first column on a line by themselves, and must be in uppercase.
 .PP
 The default typemap in the \f(CWext\fR directory of the Perl source contains many
 useful types which can be used by Perl extensions.  Some extensions define
@@ -1495,6 +1635,8 @@ Jul 8, 1996
 
 .IX Subsection "Variable-length Parameter Lists"
 
+.IX Subsection "The C_ARGS: Keyword"
+
 .IX Subsection "The \s-1PPCODE\s0: Keyword"
 
 .IX Subsection "Returning Undef And Empty Lists"
@@ -1512,6 +1654,10 @@ Jul 8, 1996
 .IX Subsection "The \s-1PROTOTYPE\s0: Keyword"
 
 .IX Subsection "The \s-1ALIAS\s0: Keyword"
+
+.IX Subsection "The \s-1INTERFACE\s0: Keyword"
+
+.IX Subsection "The \s-1INTERFACE_MACRO\s0: Keyword"
 
 .IX Subsection "The \s-1INCLUDE\s0: Keyword"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLXSTUT 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLXSTUT 1 "perl 5.005, patch 53" "11/Feb/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -613,7 +613,7 @@ Let's now take a look at a portion of the .c file created for our extension.
 \&                } else {
 \&                        arg = 0.0;
 \&                }
-\&                sv_setnv(ST(0), (double)arg);   /* XXXXX */
+\&                sv_setnv(ST(0), (double)arg);           /* XXXXX */
 \&            }
 \&            XSRETURN(1);
 \&        }

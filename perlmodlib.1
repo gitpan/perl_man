@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLMODLIB 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLMODLIB 1 "perl 5.005, patch 53" "3/Jul/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -242,6 +242,8 @@ use or ignore current locale for builtin operations (see the \fIperllocale\fR ma
 restrict named opcodes when compiling or running Perl code
 .Ip "overload" 12
 overload basic Perl operations
+.Ip "re" 12
+alter behaviour of regular expressions
 .Ip "sigtrap" 12
 enable simple signal handling
 .Ip "strict" 12
@@ -337,7 +339,7 @@ keep more files open than the system permits
 .Ip "FileHandle" 12
 supply object methods for filehandles
 .Ip "FindBin" 12
-locate directory of original perl script
+locate directory of original Perl script
 .Ip "GDBM_File" 12
 access to the gdbm library
 .Ip "Getopt::Long" 12
@@ -386,7 +388,7 @@ by-name interface to Perl's builtin getproto*() functions
 .Ip "Net::servent" 12
 by-name interface to Perl's builtin getserv*() functions
 .Ip "Opcode" 12
-disable named opcodes when compiling or running perl code
+disable named opcodes when compiling or running Perl code
 .Ip "Pod::Text" 12
 convert \s-1POD\s0 data to formatted \s-1ASCII\s0 text
 .Ip "\s-1POSIX\s0" 12
@@ -402,7 +404,7 @@ save and restore selected file handle
 .Ip "SelfLoader" 12
 load functions only on demand
 .Ip "Shell" 12
-run shell commands transparently within perl
+run shell commands transparently within Perl
 .Ip "Socket" 12
 load the C socket.h defines and structure manipulators
 .Ip "Symbol" 12
@@ -418,7 +420,7 @@ word completion module
 .Ip "Term::ReadLine" 12
 interface to various \f(CWreadline\fR packages
 .Ip "Test::Harness" 12
-run perl standard test scripts with statistics
+run Perl standard test scripts with statistics
 .Ip "Text::Abbrev" 12
 create an abbreviation table from a list
 .Ip "Text::ParseWords" 12
@@ -456,7 +458,7 @@ To find out \fIall\fR the modules installed on your system, including
 those without documentation or outside the standard release, do this:
 .PP
 .Vb 1
-\&    find `perl -e 'print "@INC"'` -name '*.pm' -print
+\&    % find `perl -e 'print "@INC"'` -name '*.pm' -print
 .Ve
 They should all have their own documentation installed and accessible via
 your system \fIman\fR\|(1) command.  If that fails, try the \fIperldoc\fR program.
@@ -650,11 +652,11 @@ Generally you can delete the \*(L"\f(CWeq 'FOO'\fR\*(R" part with no harm at all
 Let the objects look after themselves! Generally, avoid hard-wired
 class names as far as possible.
 .Sp
-Avoid \f(CW$r->\fIClass::func()\fR\fR where using \f(CW@ISA=qw(... Class ...)\fR and
-\f(CW$r->\fIfunc()\fR\fR would work (see the \fIperlbot\fR manpage for more details).
+Avoid \f(CW$r->Class::func()\fR where using \f(CW@ISA=qw(... Class ...)\fR and
+\f(CW$r->func()\fR would work (see the \fIperlbot\fR manpage for more details).
 .Sp
 Use autosplit so little used or newly added functions won't be a
-burden to programs which don't use them. Add test functions to
+burden to programs that don't use them. Add test functions to
 the module after _\|_END_\|_ either using AutoSplit or by saying:
 .Sp
 .Vb 1
@@ -672,10 +674,10 @@ information in objects.
 .Sp
 Always use \fB\-w\fR. Try to \f(CWuse strict;\fR (or \f(CWuse strict qw(...);\fR).
 Remember that you can add \f(CWno strict qw(...);\fR to individual blocks
-of code which need less strictness. Always use \fB\-w\fR. Always use \fB\-w\fR!
+of code that need less strictness. Always use \fB\-w\fR. Always use \fB\-w\fR!
 Follow the guidelines in the \fIperlstyle\fR\|(1) manual.
 .Ip "Some simple style guidelines" 4
-The perlstyle manual supplied with perl has many helpful points.
+The perlstyle manual supplied with Perl has many helpful points.
 .Sp
 Coding style is a matter of personal taste. Many people evolve their
 style over several years as they learn what helps them write and
@@ -696,12 +698,12 @@ You may find it helpful to use letter case to indicate the scope
 or nature of a variable. For example:
 .Sp
 .Vb 3
-\& $ALL_CAPS_HERE   constants only (beware clashes with perl vars)
+\& $ALL_CAPS_HERE   constants only (beware clashes with Perl vars)
 \& $Some_Caps_Here  package-wide global/static
 \& $no_caps_here    function scope my() or local() variables
 .Ve
 Function and method names seem to work best as all lowercase.
-e.g., \f(CW$obj->\fIas_string()\fR\fR.
+e.g., \f(CW$obj->as_string()\fR.
 .Sp
 You can use a leading underscore to indicate that a variable or
 function should not be used outside the package that defined it.
@@ -796,7 +798,7 @@ Perl, for example, is supplied with two types of licence: The \s-1GNU\s0
 Artistic).  Larry has good reasons for \s-1NOT\s0 just using the \s-1GNU\s0 \s-1GPL\s0.
 .Sp
 My personal recommendation, out of respect for Larry, Perl, and the
-perl community at large is to state something simply like:
+Perl community at large is to state something simply like:
 .Sp
 .Vb 3
 \& Copyright (c) 1995 Your Name. All rights reserved.
@@ -828,7 +830,7 @@ If possible you should place the module into a major ftp archive and
 include details of its location in your announcement.
 .Sp
 Some notes about ftp archives: Please use a long descriptive file
-name which includes the version number. Most incoming directories
+name that includes the version number. Most incoming directories
 will not be readable/listable, i.e., you won't be able to see your
 file after uploading it. Remember to send your email notification
 message as soon as possible after uploading else your file may get
@@ -857,8 +859,8 @@ your modules from your ftp or \s-1WWW\s0 site into your own directory on
 .Sp
 Please remember to send me an updated entry for the Module list!
 .Ip "Take care when changing a released module." 8
-Always strive to remain compatible with previous released versions
-(see 2.2 above) Otherwise try to add a mechanism to revert to the
+Always strive to remain compatible with previous released versions.
+Otherwise try to add a mechanism to revert to the
 old behaviour if people rely on it. Document incompatible changes.
 .Sh "Guidelines for Converting Perl 4 Library Scripts into Modules"
 .Ip "There is no requirement to convert anything." 4
@@ -867,7 +869,7 @@ continue to work with no problems. You may need to make some minor
 changes (like escaping non-array @'s in double quoted strings) but
 there is no need to convert a .pl file into a Module for just that.
 .Ip "Consider the implications." 4
-All the perl applications which make use of the script will need to
+All Perl applications that make use of the script will need to
 be changed (slightly) if the script is converted into a module.  Is
 it worth it unless you plan to make other changes at the same time?
 .Ip "Make the most of the opportunity." 4
@@ -887,7 +889,7 @@ code will need careful checking, especially any package statements.
 Don't delete the original .pl file till the new .pm one works!
 .Sh "Guidelines for Reusing Application Code"
 .Ip "Complete applications rarely belong in the Perl Module Library." 4
-.Ip "Many applications contain some perl code which could be reused." 4
+.Ip "Many applications contain some Perl code that could be reused." 4
 Help save the world! Share your code in a form that makes it easy
 to reuse.
 .Ip "Break-out the reusable code into one or more separate module files." 4
@@ -897,9 +899,9 @@ fragment of code built on top of the reusable modules. In these cases
 the application could invoked as:
 .Sp
 .Vb 3
-\&     perl -e 'use Module::Name; method(@ARGV)' ...
+\&     % perl -e 'use Module::Name; method(@ARGV)' ...
 \&or
-\&     perl -mModule::Name ...    (in perl5.002 or higher)
+\&     % perl -mModule::Name ...    (in perl5.002 or higher)
 .Ve
 .SH "NOTE"
 Perl does not enforce private and public parts of its modules as you may
@@ -944,6 +946,8 @@ you're redefining the world and willing to take the consequences.
 .IX Item "ops"
 
 .IX Item "overload"
+
+.IX Item "re"
 
 .IX Item "sigtrap"
 
@@ -1271,7 +1275,7 @@ you're redefining the world and willing to take the consequences.
 
 .IX Item "Complete applications rarely belong in the Perl Module Library."
 
-.IX Item "Many applications contain some perl code which could be reused."
+.IX Item "Many applications contain some Perl code that could be reused."
 
 .IX Item "Break-out the reusable code into one or more separate module files."
 

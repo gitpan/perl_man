@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLRE 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLRE 1 "perl 5.005, patch 53" "23/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -192,13 +192,14 @@ perlre \- Perl regular expressions
 .SH "DESCRIPTION"
 This page describes the syntax of regular expressions in Perl.  For a
 description of how to \fIuse\fR regular expressions in matching
-operations, plus various examples of the same, see \f(CWm//\fR and \f(CWs///\fR in
-the \fIperlop\fR manpage.
+operations, plus various examples of the same, see discussion
+of \f(CWm//\fR, \f(CWs///\fR, \f(CWqr//\fR and \f(CW??\fR in the section on \fIRegexp Quote-Like Operators\fR in the \fIperlop\fR manpage.
 .PP
 The matching operations can have various modifiers.  The modifiers
-which relate to the interpretation of the regular expression inside
-are listed below.  For the modifiers that alter the behaviour of the
-operation, see the section on \fIm//\fR in the \fIperlop\fR manpage and the section on \fIs//\fR in the \fIperlop\fR manpage.
+that relate to the interpretation of the regular expression inside
+are listed below.  For the modifiers that alter the way a regular expression
+is used by Perl, see the section on \fIRegexp Quote-Like Operators\fR in the \fIperlop\fR manpage and 
+the section on \fIGory details of parsing quoted constructs\fR in the \fIperlop\fR manpage.
 .Ip "i" 4
 Do case-insensitive pattern matching.
 .Sp
@@ -211,6 +212,13 @@ line anywhere within the string,
 .Ip "s" 4
 Treat string as single line.  That is, change \*(L".\*(R" to match any character
 whatsoever, even a newline, which it normally would not match.
+.Sp
+The \f(CW/s\fR and \f(CW/m\fR modifiers both override the \f(CW$*\fR setting.  That is, no matter
+what \f(CW$*\fR contains, \f(CW/s\fR without \f(CW/m\fR will force \*(L"^\*(R" to match only at the
+beginning of the string and \*(L"$\*(R" to match only at the end (or just before a
+newline at the end) of the string.  Together, as /ms, they let the \*(L".\*(R" match
+any character whatsoever, while yet allowing \*(L"^\*(R" and \*(L"$\*(R" to match,
+respectively, just after and just before newlines within the string.
 .Ip "x" 4
 Extend your pattern's legibility by permitting whitespace and comments.
 .PP
@@ -225,13 +233,17 @@ backslashed nor within a character class.  You can use this to break up
 your regular expression into (slightly) more readable parts.  The \f(CW#\fR
 character is also treated as a metacharacter introducing a comment,
 just as in ordinary Perl code.  This also means that if you want real
-whitespace or \f(CW#\fR characters in the pattern that you'll have to either
+whitespace or \f(CW#\fR characters in the pattern (outside of a character
+class, where they are unaffected by \f(CW/x\fR), that you'll either have to 
 escape them or encode them using octal or hex escapes.  Taken together,
 these features go a long way towards making Perl's regular expressions
-more readable.  See the C comment deletion code in the \fIperlop\fR manpage.
+more readable.  Note that you have to be careful not to include the
+pattern delimiter in the comment\*(--perl has no way of knowing you did
+not intend to close the pattern early.  See the C\-comment deletion code
+in the \fIperlop\fR manpage.
 .Sh "Regular Expressions"
 The patterns used in pattern matching are regular expressions such as
-those supplied in the Version 8 regexp routines.  (In fact, the
+those supplied in the Version 8 regex routines.  (In fact, the
 routines are derived (distantly) from Henry Spencer's freely
 redistributable reimplementation of the V8 routines.)
 See the section on \fIVersion 8 Regular Expressions\fR for details.
@@ -297,7 +309,7 @@ that the meanings don't change, just the \*(L"greediness":
 Because patterns are processed as double quoted strings, the following
 also work:
 .PP
-.Vb 15
+.Vb 16
 \&    \et          tab                   (HT, TAB)
 \&    \en          newline               (LF, NL)
 \&    \er          return                (CR)
@@ -306,28 +318,38 @@ also work:
 \&    \ee          escape (think troff)  (ESC)
 \&    \e033        octal char (think of a PDP-11)
 \&    \ex1B        hex char
+\&    \ex{263a}    wide hex char         (Unicode SMILEY)
 \&    \ec[         control char
 \&    \el          lowercase next char (think vi)
 \&    \eu          uppercase next char (think vi)
 \&    \eL          lowercase till \eE (think vi)
 \&    \eU          uppercase till \eE (think vi)
 \&    \eE          end case modification (think vi)
-\&    \eQ          quote (disable) regexp metacharacters till \eE
+\&    \eQ          quote (disable) pattern metacharacters till \eE
 .Ve
 If \f(CWuse locale\fR is in effect, the case map used by \f(CW\el\fR, \f(CW\eL\fR, \f(CW\eu\fR
-and <\eU> is taken from the current locale.  See the \fIperllocale\fR manpage.
+and \f(CW\eU\fR is taken from the current locale.  See the \fIperllocale\fR manpage.
+.PP
+You cannot include a literal \f(CW$\fR or \f(CW@\fR within a \f(CW\eQ\fR sequence.
+An unescaped \f(CW$\fR or \f(CW@\fR interpolates the corresponding variable,
+while escaping will cause the literal string \f(CW\e$\fR to be matched.
+You'll need to write something like \f(CWm/\eQuser\eE\e@\eQhost/\fR.
 .PP
 In addition, Perl defines the following:
 .PP
-.Vb 6
+.Vb 10
 \&    \ew  Match a "word" character (alphanumeric plus "_")
 \&    \eW  Match a non-word character
 \&    \es  Match a whitespace character
 \&    \eS  Match a non-whitespace character
 \&    \ed  Match a digit character
 \&    \eD  Match a non-digit character
+\&    \epP Match P, named property.  Use \ep{Prop} for longer names.
+\&    \ePP Match non-P
+\&    \eX  Match eXtended Unicode "combining character sequence", \epM\epm*
+\&    \eC  Match a single C char (octet) even under utf8.
 .Ve
-Note that \f(CW\ew\fR matches a single alphanumeric character, not a whole
+A \f(CW\ew\fR matches a single alphanumeric character, not a whole
 word.  To match a word you'd need to say \f(CW\ew+\fR.  If \f(CWuse locale\fR is in
 effect, the list of alphabetic characters generated by \f(CW\ew\fR is taken
 from the current locale.  See the \fIperllocale\fR manpage. You may use \f(CW\ew\fR, \f(CW\eW\fR,
@@ -336,11 +358,12 @@ either end of a range).
 .PP
 Perl defines the following zero-width assertions:
 .PP
-.Vb 5
+.Vb 6
 \&    \eb  Match a word boundary
 \&    \eB  Match a non-(word boundary)
-\&    \eA  Match at only beginning of string
-\&    \eZ  Match at only end of string (or before newline at the end)
+\&    \eA  Match only at beginning of string
+\&    \eZ  Match only at end of string, or before newline at the end
+\&    \ez  Match only at end of string
 \&    \eG  Match only where previous m//g left off (works only with /g)
 .Ve
 A word boundary (\f(CW\eb\fR) is defined as a spot between two characters that
@@ -348,15 +371,15 @@ has a \f(CW\ew\fR on one side of it and a \f(CW\eW\fR on the other side of it (i
 either order), counting the imaginary characters off the beginning and
 end of the string as matching a \f(CW\eW\fR.  (Within character classes \f(CW\eb\fR
 represents backspace rather than a word boundary.)  The \f(CW\eA\fR and \f(CW\eZ\fR are
-just like \*(L"^\*(R" and \*(L"$\*(R" except that they won't match multiple times when the
+just like \*(L"^\*(R" and \*(L"$\*(R", except that they won't match multiple times when the
 \f(CW/m\fR modifier is used, while \*(L"^\*(R" and \*(L"$\*(R" will match at every internal line
 boundary.  To match the actual end of the string, not ignoring newline,
-you can use \f(CW\eZ(?!\en)\fR.  The \f(CW\eG\fR assertion can be used to chain global
+you can use \f(CW\ez\fR.  The \f(CW\eG\fR assertion can be used to chain global
 matches (using \f(CWm//g\fR), as described in
 the section on \fIRegexp Quote-Like Operators\fR in the \fIperlop\fR manpage.
 .PP
 It is also useful when writing \f(CWlex\fR\-like scanners, when you have several
-regexps which you want to match against consequent substrings of your
+patterns that you want to match against consequent substrings of your
 string, see the previous reference.
 The actual location where \f(CW\eG\fR will match can also be influenced
 by using \f(CWpos()\fR as an lvalue.  See the \f(CWpos\fR entry in the \fIperlfunc\fR manpage.
@@ -398,28 +421,28 @@ Once perl sees that you need one of \f(CW$&\fR, \f(CW$`\fR or \f(CW$'\fR anywher
 the program, it has to provide them on each and every pattern match.
 This can slow your program down.  The same mechanism that handles
 these provides for the use of \f(CW$1\fR, \f(CW$2\fR, etc., so you pay the same price
-for each regexp that contains capturing parentheses. But if you never
-use $&, etc., in your script, then regexps \fIwithout\fR capturing
+for each pattern that contains capturing parentheses. But if you never
+use $&, etc., in your script, then patterns \fIwithout\fR capturing
 parentheses won't be penalized. So avoid $&, $\*(R', and $` if you can,
 but if you can't (and some algorithms really appreciate them), once
 you've used them once, use them at will, because you've already paid
-the price.
+the price.  As of 5.005, $& is not so costly as the other two.
 .PP
-You will note that all backslashed metacharacters in Perl are
+Backslashed metacharacters in Perl are
 alphanumeric, such as \f(CW\eb\fR, \f(CW\ew\fR, \f(CW\en\fR.  Unlike some other regular
 expression languages, there are no backslashed symbols that aren't
 alphanumeric.  So anything that looks like \e\e, \e(, \e), \e<, \e>,
 \e{, or \e} is always interpreted as a literal character, not a
 metacharacter.  This was once used in a common idiom to disable or
 quote the special meanings of regular expression metacharacters in a
-string that you want to use for a pattern. Simply quote all the
+string that you want to use for a pattern. Simply quote all
 non-alphanumeric characters:
 .PP
 .Vb 1
 \&    $pattern =~ s/(\eW)/\e\e$1/g;
 .Ve
 Now it is much more common to see either the \fIquotemeta()\fR function or
-the \eQ escape sequence used to disable the metacharacters special
+the \f(CW\eQ\fR escape sequence used to disable all metacharacters\*(R' special
 meanings like this:
 .PP
 .Vb 1
@@ -430,131 +453,232 @@ The syntax is a pair of parentheses with a question mark as the first
 thing within the parentheses (this was a syntax error in older
 versions of Perl).  The character after the question mark gives the
 function of the extension.  Several extensions are already supported:
-.Ip "(?#text)" 10
+.Ip "\f(CW(?#text)\fR" 10
 A comment.  The text is ignored.  If the \f(CW/x\fR switch is used to enable
-whitespace formatting, a simple \f(CW#\fR will suffice.
-.Ip "(?:regexp)" 10
-This groups things like \*(L"()\*(R" but doesn't make backreferences like \*(L"()\*(R" does.  So
+whitespace formatting, a simple \f(CW#\fR will suffice.  Note that perl closes
+the comment as soon as it sees a \f(CW)\fR, so there is no way to put a literal
+\f(CW)\fR in the comment.
+.Ip "\f(CW(?:pattern)\fR" 10
+.Ip "\f(CW(?imsx-imsx:pattern)\fR" 10
+This is for clustering, not capturing; it groups subexpressions like
+\*(L"()\*(R", but doesn't make backreferences as \*(L"()\*(R" does.  So
 .Sp
 .Vb 1
-\&    split(/\eb(?:a|b|c)\eb/)
+\&    @fields = split(/\eb(?:a|b|c)\eb/)
 .Ve
 is like
 .Sp
 .Vb 1
-\&    split(/\eb(a|b|c)\eb/)
+\&    @fields = split(/\eb(a|b|c)\eb/)
 .Ve
 but doesn't spit out extra fields.
-.Ip "(?=regexp)" 10
+.Sp
+The letters between \f(CW?\fR and \f(CW:\fR act as flags modifiers, see
+the \fI\f(CW(?imsx-imsx)\fR\fR manpage.  In particular,
+.Sp
+.Vb 1
+\&    /(?s-i:more.*than).*million/i
+.Ve
+is equivalent to more verbose
+.Sp
+.Vb 1
+\&    /(?:(?s-i)more.*than).*million/i
+.Ve
+.Ip "\f(CW(?=pattern)\fR" 10
 A zero-width positive lookahead assertion.  For example, \f(CW/\ew+(?=\et)/\fR
 matches a word followed by a tab, without including the tab in \f(CW$&\fR.
-.Ip "(?!regexp)" 10
+.Ip "\f(CW(?!pattern)\fR" 10
 A zero-width negative lookahead assertion.  For example \f(CW/foo(?!bar)/\fR
 matches any occurrence of \*(L"foo\*(R" that isn't followed by \*(L"bar\*(R".  Note
 however that lookahead and lookbehind are \s-1NOT\s0 the same thing.  You cannot
-use this for lookbehind: \f(CW/(?!foo)bar/\fR will not find an occurrence of
-\*(L"bar\*(R" that is preceded by something which is not \*(L"foo\*(R".  That's because
-the \f(CW(?!foo)\fR is just saying that the next thing cannot be \*(L"foo\*(R"\*(--and
-it's not, it's a \*(L"bar\*(R", so \*(L"foobar\*(R" will match.  You would have to do
-something like \f(CW/(?!foo)...bar/\fR for that.   We say \*(L"like\*(R" because there's
-the case of your \*(L"bar\*(R" not having three characters before it.  You could
-cover that this way: \f(CW/(?:(?!foo)...|^..?)bar/\fR.  Sometimes it's still
-easier just to say:
+use this for lookbehind.
+.Sp
+If you are looking for a \*(L"bar\*(R" that isn't preceded by a \*(L"foo\*(R", \f(CW/(?!foo)bar/\fR
+will not do what you want.  That's because the \f(CW(?!foo)\fR is just saying that
+the next thing cannot be \*(L"foo\*(R"\*(--and it's not, it's a \*(L"bar\*(R", so \*(L"foobar\*(R" will
+match.  You would have to do something like \f(CW/(?!foo)...bar/\fR for that.   We
+say \*(L"like\*(R" because there's the case of your \*(L"bar\*(R" not having three characters
+before it.  You could cover that this way: \f(CW/(?:(?!foo)...|^.{0,2})bar/\fR.
+Sometimes it's still easier just to say:
 .Sp
 .Vb 1
-\&    if (/foo/ && $` =~ /bar$/)
+\&    if (/bar/ && $` !~ /foo$/)
 .Ve
 For lookbehind see below.
-.Ip "(?<=regexp)" 10
-A zero-width positive lookbehind assertion.  For example, \f(CW/(?=\et)\ew+/\fR
+.Ip "\f(CW(?<=pattern)\fR" 10
+A zero-width positive lookbehind assertion.  For example, \f(CW/(?<=\et)\ew+/\fR
 matches a word following a tab, without including the tab in \f(CW$&\fR.
 Works only for fixed-width lookbehind.
-.Ip "(?<!regexp)" 10
-A zero-width negative lookbehind assertion.  For example C</(?<!bar)foo/>
+.Ip "\f(CW(?<!pattern)\fR" 10
+A zero-width negative lookbehind assertion.  For example \f(CW/(?<!bar)foo/\fR
 matches any occurrence of \*(L"foo\*(R" that isn't following \*(L"bar\*(R".  
 Works only for fixed-width lookbehind.
-.Ip "(?{ code })" 10
+.Ip "\f(CW(?{ code })\fR" 10
 Experimental \*(L"evaluate any Perl code\*(R" zero-width assertion.  Always
-succeeds.  Currently the quoting rules are somewhat convoluted, as is the
-determination where the \f(CWcode\fR ends.
-.Ip "\f(CW(?>regexp)\fR" 10
-An \*(L"independend\*(R" subexpression.  Matches the substring which a
-\fIstandalone\fR \f(CWregexp\fR would match if anchored at the given position,
+succeeds.  \f(CWcode\fR is not interpolated.  Currently the rules to
+determine where the \f(CWcode\fR ends are somewhat convoluted.
+.Sp
+The \f(CWcode\fR is properly scoped in the following sense: if the assertion
+is backtracked (compare the section on \fIBacktracking\fR), all the changes introduced after
+\f(CWlocal\fRisation are undone, so
+.Sp
+.Vb 13
+\&  $_ = 'a' x 8;
+\&  m< 
+\&     (?{ $cnt = 0 })                    # Initialize $cnt.
+\&     (
+\&       a 
+\&       (?{
+\&           local $cnt = $cnt + 1;       # Update $cnt, backtracking-safe.
+\&       })
+\&     )*  
+\&     aaaa
+\&     (?{ $res = $cnt })                 # On success copy to non-localized
+\&                                        # location.
+\&   >x;
+.Ve
+will set \f(CW$res = 4\fR.  Note that after the match \f(CW$cnt\fR returns to the globally
+introduced value 0, since the scopes which restrict \f(CWlocal\fR statements
+are unwound.
+.Sp
+This assertion may be used as \f(CW(?(condition)yes-pattern\fR
+switch.  If \fInot\fR used in this way, the result of evaluation of \f(CWcode\fR
+is put into variable $^R.  This happens immediately, so $^R can be used from
+other \f(CW(?{ code })\fR assertions inside the same regular expression.
+.Sp
+The above assignment to $^R is properly localized, thus the old value of $^R
+is restored if the assertion is backtracked (compare the section on \fIBacktracking\fR).
+.Sp
+Due to security concerns, this construction is not allowed if the regular
+expression involves run-time interpolation of variables, unless 
+\f(CWuse re 'eval'\fR pragma is used (see the \fIre\fR manpage), or the variables contain
+results of \fIqr()\fR operator (see the section on \fIqr/\s-1STRING/\s0imosx\fR in the \fIperlop\fR manpage).
+.Sp
+This restriction is due to the wide-spread (questionable) practice of 
+using the construct
+.Sp
+.Vb 3
+\&    $re = <>;
+\&    chomp $re;
+\&    $string =~ /$re/;
+.Ve
+without tainting.  While this code is frowned upon from security point
+of view, when \f(CW(?{})\fR was introduced, it was considered bad to add 
+\fInew\fR security holes to existing scripts.
+.Sp
+\fB\s-1NOTE\s0:\fR  Use of the above insecure snippet without also enabling taint mode
+is to be severely frowned upon.  \f(CWuse re 'eval'\fR does not disable tainting
+checks, thus to allow \f(CW$re\fR in the above snippet to contain \f(CW(?{})\fR
+\fIwith tainting enabled\fR, one needs both \f(CWuse re 'eval'\fR and untaint
+the \f(CW$re\fR.
+.Ip "\f(CW(?p{ code })\fR" 10
+\fIVery experimental\fR \*(L"postponed\*(R" regular subexpression.  \f(CWcode\fR is evaluated
+at runtime, at the moment this subexpression may match.  The result of
+evaluation is considered as a regular expression, and matched as if it
+were inserted instead of this construct.
+.Sp
+\f(CWcode\fR is not interpolated.  Currently the rules to
+determine where the \f(CWcode\fR ends are somewhat convoluted.
+.Sp
+The following regular expression matches matching parenthesized group:
+.Sp
+.Vb 9
+\&  $re = qr{
+\&             \e(
+\&             (?:
+\&                (?> [^()]+ )    # Non-parens without backtracking
+\&              |
+\&                (?p{ $re })     # Group with matching parens
+\&             )*
+\&             \e)
+\&          }x;
+.Ve
+.Ip "\f(CW(?>pattern)\fR" 10
+An \*(L"independent\*(R" subexpression.  Matches the substring that a
+\fIstandalone\fR \f(CWpattern\fR would match if anchored at the given position,
 \fBand only this substring\fR.
 .Sp
 Say, \f(CW^(?>a*)ab\fR will never match, since \f(CW(?>a*)\fR (anchored
-at the beginning of string, as above) will match \fIall\fR the characters
+at the beginning of string, as above) will match \fIall\fR characters
 \f(CWa\fR at the beginning of string, leaving no \f(CWa\fR for \f(CWab\fR to match.
 In contrast, \f(CWa*ab\fR will match the same as \f(CWa+b\fR, since the match of
 the subgroup \f(CWa*\fR is influenced by the following group \f(CWab\fR (see
 the section on \fIBacktracking\fR).  In particular, \f(CWa*\fR inside \f(CWa*ab\fR will match
-less characters that a standalone \f(CWa*\fR, since this makes the tail match.
+fewer characters than a standalone \f(CWa*\fR, since this makes the tail match.
 .Sp
-Note that a similar effect to \f(CW(?>regexp)\fR may be achieved by
+An effect similar to \f(CW(?>pattern)\fR may be achieved by
 .Sp
 .Vb 1
-\&   (?=(regexp))\e1
+\&   (?=(pattern))\e1
 .Ve
 since the lookahead is in \fI"logical\*(R"\fR context, thus matches the same
 substring as a standalone \f(CWa+\fR.  The following \f(CW\e1\fR eats the matched
 string, thus making a zero-length assertion into an analogue of
-\f(CW(?\fR...)>.  (The difference of these two constructions is that the
-second one uses a catching group, thus shifts ordinals of
+\f(CW(?>...)\fR.  (The difference between these two constructs is that the
+second one uses a catching group, thus shifting ordinals of
 backreferences in the rest of a regular expression.)
 .Sp
-This construction is very useful for optimizations of \*(L"eternal\*(R"
-matches, since it will not backtrack (see the section on \fIBacktracking\fR).  Say,
+This construct is useful for optimizations of \*(L"eternal\*(R"
+matches, because it will not backtrack (see the section on \fIBacktracking\fR).  
 .Sp
-.Vb 6
-\&  / \e( ( 
-\&         [^()]+ 
-\&       | 
-\&         \e( [^()]* \e)
-\&       )+
-\&    \e) /x
+.Vb 8
+\&    m{ \e(
+\&          ( 
+\&            [^()]+ 
+\&          | 
+\&            \e( [^()]* \e)
+\&          )+
+\&       \e) 
+\&     }x
 .Ve
-will match a nonempty group with matching two-or-less-level-deep
-parentheses.  It is very efficient in finding such groups.  However,
-if there is no such group, it is going to take forever (on reasonably
-long string), since there are so many different ways to split a long
-string into several substrings (this is essentially what \f(CW(.+)+\fR is
-doing, and this is a subpattern of the above pattern).  Say, on
-\f(CW((()aaaaaaaaaaaaaaaaaa\fR the above pattern detects no-match in 5sec
-(on kitchentop'96 processor), and each extra letter doubles this time.
+That will efficiently match a nonempty group with matching
+two-or-less-level-deep parentheses.  However, if there is no such group,
+it will take virtually forever on a long string.  That's because there are
+so many different ways to split a long string into several substrings.
+This is what \f(CW(.+)+\fR is doing, and \f(CW(.+)+\fR is similar to a subpattern
+of the above pattern.  Consider that the above pattern detects no-match
+on \f(CW((()aaaaaaaaaaaaaaaaaa\fR in several seconds, but that  each extra
+letter doubles this time.  This exponential performance will make it
+appear that your program has hung.
 .Sp
-However, a tiny modification of this
+However, a tiny modification of this pattern 
 .Sp
-.Vb 6
-\&  / \e( ( 
-\&         (?> [^()]+ )
-\&       | 
-\&         \e( [^()]* \e)
-\&       )+
-\&    \e) /x
+.Vb 8
+\&    m{ \e( 
+\&          ( 
+\&            (?> [^()]+ )
+\&          | 
+\&            \e( [^()]* \e)
+\&          )+
+\&       \e) 
+\&     }x
 .Ve
-which uses (?>...) matches exactly when the above one does (it is a
-good excercise to check this), but finishes in a fourth of the above
-time on a similar string with 1000000 \f(CWa\fRs.
+which uses \f(CW(?>...)\fR matches exactly when the one above does (verifying
+this yourself would be a productive exercise), but finishes in a fourth
+the time when used on a similar string with 1000000 \f(CWa\fRs.  Be aware,
+however, that this pattern currently triggers a warning message under
+\fB\-w\fR saying it \f(CW"matches the null string many times"\fR):
 .Sp
-Note that on simple groups like the above \f(CW(?\fR [^()]+ )> a similar
+On simple groups, such as the pattern \f(CW(?> [^()]+ )\fR, a comparable
 effect may be achieved by negative lookahead, as in \f(CW[^()]+ (?! [^()] )\fR.
 This was only 4 times slower on a string with 1000000 \f(CWa\fRs.
-.Ip "(?(condition)yes-regexp|no-regexp)" 10
-.Ip "(?(condition)yes-regexp)" 10
+.Ip "\f(CW(?(condition)yes-pattern|no-pattern)\fR" 10
+.Ip "\f(CW(?(condition)yes-pattern)\fR" 10
 Conditional expression.  \f(CW(condition)\fR should be either an integer in
 parentheses (which is valid if the corresponding pair of parentheses
 matched), or lookahead/lookbehind/evaluate zero-width assertion.
 .Sp
 Say,
 .Sp
-.Vb 3
-\&    / ( \e( )? 
-\&      [^()]+ 
-\&      (?(1) \e) )/x
+.Vb 4
+\&    m{ ( \e( )? 
+\&       [^()]+ 
+\&       (?(1) \e) ) 
+\&     }x
 .Ve
 matches a chunk of non-parentheses, possibly included in parentheses
 themselves.
-.Ip "(?imsx)" 10
+.Ip "\f(CW(?imsx-imsx)\fR" 10
 One or more embedded pattern-match modifiers.  This is particularly
 useful for patterns that are specified in a table somewhere, some of
 which want to be case sensitive, and some of which don't.  The case
@@ -563,17 +687,18 @@ pattern.  For example:
 .Sp
 .Vb 2
 \&    $pattern = "foobar";
-\&    if ( /$pattern/i )
+\&    if ( /$pattern/i ) { } 
 .Ve
 .Vb 1
 \&    # more flexible:
 .Ve
 .Vb 2
 \&    $pattern = "(?i)foobar";
-\&    if ( /$pattern/ )
+\&    if ( /$pattern/ ) { } 
 .Ve
-Note that these modifiers are localized inside an enclosing group (if
-any).  Say,
+Letters after \f(CW-\fR switch modifiers off.
+.Sp
+These modifiers are localized inside an enclosing group (if any).  Say,
 .Sp
 .Vb 1
 \&    ( (?i) blah ) \es+ \e1
@@ -582,13 +707,13 @@ any).  Say,
 will match a repeated (\fIincluding the case\fR!) word \f(CWblah\fR in any
 case.
 .PP
-The specific choice of question mark for this and the new minimal
-matching construct was because 1) question mark is pretty rare in older
-regular expressions, and 2) whenever you see one, you should stop
-and \*(L"question\*(R" exactly what is going on.  That's psychology...
+A question mark was chosen for this and for the new minimal-matching
+construct because 1) question mark is pretty rare in older regular
+expressions, and 2) whenever you see one, you should stop and \*(L"question\*(R"
+exactly what is going on.  That's psychology...
 .Sh "Backtracking"
 A fundamental feature of regular expression matching involves the
-notion called \fIbacktracking\fR.  which is currently used (when needed)
+notion called \fIbacktracking\fR, which is currently used (when needed)
 by all regular expression quantifiers, namely \f(CW*\fR, \f(CW*?\fR, \f(CW+\fR,
 \f(CW+?\fR, \f(CW{n,m}\fR, and \f(CW{n,m}?\fR.
 .PP
@@ -698,17 +823,18 @@ As you see, this can be a bit tricky.  It's important to realize that a
 regular expression is merely a set of assertions that gives a definition
 of success.  There may be 0, 1, or several different ways that the
 definition might succeed against a particular string.  And if there are
-multiple ways it might succeed, you need to understand backtracking to know which variety of success you will achieve.
+multiple ways it might succeed, you need to understand backtracking to
+know which variety of success you will achieve.
 .PP
 When using lookahead assertions and negations, this can all get even
 tricker.  Imagine you'd like to find a sequence of non-digits not
 followed by \*(L"123\*(R".  You might try to write that as
 .PP
 .Vb 4
-\&        $_ = "ABC123";
-\&        if ( /^\eD*(?!123)/ ) {                          # Wrong!
-\&            print "Yup, no 123 in $_\en";
-\&        }
+\&    $_ = "ABC123";
+\&    if ( /^\eD*(?!123)/ ) {              # Wrong!
+\&        print "Yup, no 123 in $_\en";
+\&    }
 .Ve
 But that isn't going to match; at least, not the way you're hoping.  It
 claims that there is no 123 in the string.  Here's a clearer picture of
@@ -742,14 +868,13 @@ non-digits, you have something that's not 123?\*(R"  If the pattern matcher had
 let \f(CW\eD*\fR expand to \*(L"\s-1ABC\s0\*(R", this would have caused the whole pattern to
 fail.
 The search engine will initially match \f(CW\eD*\fR with \*(L"\s-1ABC\s0\*(R".  Then it will
-try to match \f(CW(?!123\fR with \*(L"123\*(R" which, of course, fails.  But because
+try to match \f(CW(?!123\fR with \*(L"123\*(R", which of course fails.  But because
 a quantifier (\f(CW\eD*\fR) has been used in the regular expression, the
 search engine can backtrack and retry the match differently
 in the hope of matching the complete regular expression.
 .PP
-Well now,
-the pattern really, \fIreally\fR wants to succeed, so it uses the
-standard regexp back-off-and-retry and lets \f(CW\eD*\fR expand to just \*(L"\s-1AB\s0\*(R" this
+The pattern really, \fIreally\fR wants to succeed, so it uses the
+standard pattern back-off-and-retry and lets \f(CW\eD*\fR expand to just \*(L"\s-1AB\s0\*(R" this
 time.  Now there's indeed something following \*(L"\s-1AB\s0\*(R" that is not
 \*(L"123\*(R".  It's in fact \*(L"C123\*(R", which suffices.
 .PP
@@ -767,7 +892,7 @@ you'd expect; that is, case 5 will fail, but case 6 succeeds:
 .Vb 1
 \&    6: got ABC
 .Ve
-In other words, the two zero-width assertions next to each other work like
+In other words, the two zero-width assertions next to each other work as though
 they're ANDed together, just as you'd use any builtin assertions:  \f(CW/^$/\fR
 matches only if you're at the beginning of the line \s-1AND\s0 the end of the
 line simultaneously.  The deeper underlying truth is that juxtaposition in
@@ -788,34 +913,41 @@ And if you used \f(CW*\fR's instead of limiting it to 0 through 5 matches, then
 it would take literally forever\*(--or until you ran out of stack space.
 .PP
 A powerful tool for optimizing such beasts is \*(L"independent\*(R" groups,
-which do not backtrace (see the \fI\f(CW(?>regexp)\fR\fR manpage).  Note also that
+which do not backtrace (see the \fI\f(CW(?>pattern)\fR\fR manpage).  Note also that
 zero-length lookahead/lookbehind assertions will not backtrace to make
 the tail match, since they are in \*(L"logical\*(R" context: only the fact
 whether they match or not is considered relevant.  For an example
 where side-effects of a lookahead \fImight\fR have influenced the
-following match, see the \fI\f(CW(?>regexp)\fR\fR manpage.
+following match, see the \fI\f(CW(?>pattern)\fR\fR manpage.
 .Sh "Version 8 Regular Expressions"
-In case you're not familiar with the \*(L"regular\*(R" Version 8 regexp
+In case you're not familiar with the \*(L"regular\*(R" Version 8 regex
 routines, here are the pattern-matching rules not described above.
 .PP
 Any single character matches itself, unless it is a \fImetacharacter\fR
 with a special meaning described here or above.  You can cause
-characters which normally function as metacharacters to be interpreted
+characters that normally function as metacharacters to be interpreted
 literally by prefixing them with a \*(L"\e\*(R" (e.g., \*(L"\e.\*(R" matches a \*(L".\*(R", not any
 character; \*(L"\e\e\*(R" matches a \*(L"\e").  A series of characters matches that
 series of characters in the target string, so the pattern \f(CWblurfl\fR
 would match \*(L"blurfl\*(R" in the target string.
 .PP
 You can specify a character class, by enclosing a list of characters
-in \f(CW[]\fR, which will match any one of the characters in the list.  If the
+in \f(CW[]\fR, which will match any one character from the list.  If the
 first character after the \*(L"[\*(R" is \*(L"^\*(R", the class matches any character not
 in the list.  Within a list, the \*(L"\-\*(R" character is used to specify a
-range, so that \f(CWa-z\fR represents all the characters between \*(L"a\*(R" and \*(L"z\*(R",
+range, so that \f(CWa-z\fR represents all characters between \*(L"a\*(R" and \*(L"z\*(R",
 inclusive.  If you want \*(L"\-\*(R" itself to be a member of a class, put it
 at the start or end of the list, or escape it with a backslash.  (The
 following all specify the same class of three characters: \f(CW[-az]\fR,
 \f(CW[az-]\fR, and \f(CW[a\e-z]\fR.  All are different from \f(CW[a-z]\fR, which
 specifies a class containing twenty-six characters.)
+.PP
+Note also that the whole range idea is rather unportable between
+character sets\*(--and even within character sets they may cause results
+you probably didn't expect.  A sound principle is to use only ranges
+that begin from and end at either alphabets of equal case ([a-e],
+[A\-E]), or digits ([0-9]).  Anything else is unsafe.  If in doubt,
+spell out the character sets in full.
 .PP
 Characters may be specified using a metacharacter syntax much like that
 used in C: \*(L"\en\*(R" matches a newline, \*(L"\et\*(R" a tab, \*(L"\er\*(R" a carriage return,
@@ -828,28 +960,37 @@ character except \*(L"\en\*(R" (unless you use \f(CW/s\fR).
 .PP
 You can specify a series of alternatives for a pattern using \*(L"|\*(R" to
 separate them, so that \f(CWfee|fie|foe\fR will match any of \*(L"fee\*(R", \*(L"fie\*(R",
-or \*(L"foe\*(R" in the target string (as would \f(CWf(e|i|o)e\fR).  Note that the
+or \*(L"foe\*(R" in the target string (as would \f(CWf(e|i|o)e\fR).  The
 first alternative includes everything from the last pattern delimiter
 ("(\*(R", \*(L"[\*(R", or the beginning of the pattern) up to the first \*(L"|\*(R", and
 the last alternative contains everything from the last \*(L"|\*(R" to the next
 pattern delimiter.  For this reason, it's common practice to include
 alternatives in parentheses, to minimize confusion about where they
-start and end.  Note however that \*(L"|\*(R" is interpreted as a literal with
-square brackets, so if you write \f(CW[fee|fie|foe]\fR you're really only
-matching \f(CW[feio|]\fR.
+start and end.
+.PP
+Alternatives are tried from left to right, so the first
+alternative found for which the entire expression matches, is the one that
+is chosen. This means that alternatives are not necessarily greedy. For
+example: when mathing \f(CWfoo|foot\fR against \*(L"barefoot\*(R", only the \*(L"foo\*(R"
+part will match, as that is the first alternative tried, and it successfully
+matches the target string. (This might not seem important, but it is
+important when you are capturing matched text using parentheses.)
+.PP
+Also remember that \*(L"|\*(R" is interpreted as a literal within square brackets,
+so if you write \f(CW[fee|fie|foe]\fR you're really only matching \f(CW[feio|]\fR.
 .PP
 Within a pattern, you may designate subpatterns for later reference by
 enclosing them in parentheses, and you may refer back to the \fIn\fRth
 subpattern later in the pattern using the metacharacter \e\fIn\fR.
 Subpatterns are numbered based on the left to right order of their
-opening parenthesis.  Note that a backreference matches whatever
+opening parenthesis.  A backreference matches whatever
 actually matched the subpattern in the string being examined, not the
 rules for that subpattern.  Therefore, \f(CW(0|0x)\ed*\es\e1\ed*\fR will
-match \*(L"0x1234 0x4321\*(R",but not \*(L"0x1234 01234\*(R", because subpattern 1
+match \*(L"0x1234 0x4321\*(R", but not \*(L"0x1234 01234\*(R", because subpattern 1
 actually matched \*(L"0x\*(R", even though the rule \f(CW0|0x\fR could
 potentially match the leading 0 in the second number.
 .Sh "\s-1WARNING\s0 on \e1 vs \f(CW$1\fR"
-Some people get too used to writing things like
+Some people get too used to writing things like:
 .PP
 .Vb 1
 \&    $pattern =~ s/(\eW)/\e\e\e1/g;
@@ -863,7 +1004,7 @@ of doing that, you get yourself into trouble if you then add an \f(CW/e\fR
 modifier.
 .PP
 .Vb 1
-\&    s/(\ed+)/ \e1 + 1 /eg;
+\&    s/(\ed+)/ \e1 + 1 /eg;        # causes warning under -w
 .Ve
 Or if you try to do
 .PP
@@ -874,8 +1015,145 @@ You can't disambiguate that by saying \f(CW\e{1}000\fR, whereas you can fix it w
 \f(CW${1}000\fR.  Basically, the operation of interpolation should not be confused
 with the operation of matching a backreference.  Certainly they mean two
 different things on the \fIleft\fR side of the \f(CWs///\fR.
+.Sh "Repeated patterns matching zero-length substring"
+\s-1WARNING\s0: Difficult material (and prose) ahead.  This section needs a rewrite.
+.PP
+Regular expressions provide a terse and powerful programming language.  As
+with most other power tools, power comes together with the ability
+to wreak havoc.
+.PP
+A common abuse of this power stems from the ability to make infinite
+loops using regular expressions, with something as innocous as:
+.PP
+.Vb 1
+\&    'foo' =~ m{ ( o? )* }x;
+.Ve
+The \f(CWo?\fR can match at the beginning of \f(CW'foo'\fR, and since the position
+in the string is not moved by the match, \f(CWo?\fR would match again and again
+due to the \f(CW*\fR modifier.  Another common way to create a similar cycle
+is with the looping modifier \f(CW//g\fR:
+.PP
+.Vb 1
+\&    @matches = ( 'foo' =~ m{ o? }xg );
+.Ve
+or
+.PP
+.Vb 1
+\&    print "match: <$&>\en" while 'foo' =~ m{ o? }xg;
+.Ve
+or the loop implied by \fIsplit()\fR.
+.PP
+However, long experience has shown that many programming tasks may
+be significantly simplified by using repeated subexpressions which
+may match zero-length substrings, with a simple example being:
+.PP
+.Vb 2
+\&    @chars = split //, $string;           # // is not magic in split
+\&    ($whitewashed = $string) =~ s/()/ /g; # parens avoid magic s// /
+.Ve
+Thus Perl allows the \f(CW/()/\fR construct, which \fIforcefully breaks
+the infinite loop\fR.  The rules for this are different for lower-level
+loops given by the greedy modifiers \f(CW*+{}\fR, and for higher-level
+ones like the \f(CW/g\fR modifier or \fIsplit()\fR operator.
+.PP
+The lower-level loops are \fIinterrupted\fR when it is detected that a 
+repeated expression did match a zero-length substring, thus
+.PP
+.Vb 1
+\&   m{ (?: NON_ZERO_LENGTH | ZERO_LENGTH )* }x;
+.Ve
+is made equivalent to 
+.PP
+.Vb 4
+\&   m{   (?: NON_ZERO_LENGTH )* 
+\&      | 
+\&        (?: ZERO_LENGTH )? 
+\&    }x;
+.Ve
+The higher level-loops preserve an additional state between iterations:
+whether the last match was zero-length.  To break the loop, the following 
+match after a zero-length match is prohibited to have a length of zero.
+This prohibition interacts with backtracking (see the section on \fIBacktracking\fR), 
+and so the \fIsecond best\fR match is chosen if the \fIbest\fR match is of
+zero length.
+.PP
+Say,
+.PP
+.Vb 2
+\&    $_ = 'bar';
+\&    s/\ew??/<$&>/g;
+.Ve
+results in \f(CW"<\fR<b><><a><><r><>">.  At each position of the string the best
+match given by non-greedy \f(CW??\fR is the zero-length match, and the \fIsecond 
+best\fR match is what is matched by \f(CW\ew\fR.  Thus zero-length matches
+alternate with one-character-long matches.
+.PP
+Similarly, for repeated \f(CWm/()/g\fR the second-best match is the match at the 
+position one notch further in the string.
+.PP
+The additional state of being \fImatched with zero-length\fR is associated to
+the matched string, and is reset by each assignment to \fIpos()\fR.
+.Sh "Creating custom \s-1RE\s0 engines"
+Overloaded constants (see the \fIoverload\fR manpage) provide a simple way to extend
+the functionality of the \s-1RE\s0 engine.
+.PP
+Suppose that we want to enable a new \s-1RE\s0 escape-sequence \f(CW\eY|\fR which
+matches at boundary between white-space characters and non-whitespace
+characters.  Note that \f(CW(?=\eS)(?<!\eS)|(?!\eS)(?<=\eS)\fR matches exactly
+at these positions, so we want to have each \f(CW\eY|\fR in the place of the
+more complicated version.  We can create a module \f(CWcustomre\fR to do
+this:
+.PP
+.Vb 2
+\&    package customre;
+\&    use overload;
+.Ve
+.Vb 5
+\&    sub import {
+\&      shift;
+\&      die "No argument to customre::import allowed" if @_;
+\&      overload::constant 'qr' => \e&convert;
+\&    }
+.Ve
+.Vb 1
+\&    sub invalid { die "/$_[0]/: invalid escape '\e\e$_[1]'"}
+.Ve
+.Vb 10
+\&    my %rules = ( '\e\e' => '\e\e', 
+\&                  'Y|' => qr/(?=\eS)(?<!\eS)|(?!\eS)(?<=\eS)/ );
+\&    sub convert {
+\&      my $re = shift;
+\&      $re =~ s{ 
+\&                \e\e ( \e\e | Y . )
+\&              }
+\&              { $rules{$1} or invalid($re,$1) }sgex; 
+\&      return $re;
+\&    }
+.Ve
+Now \f(CWuse customre\fR enables the new escape in constant regular
+expressions, i.e., those without any runtime variable interpolations.
+As documented in the \fIoverload\fR manpage, this conversion will work only over
+literal parts of regular expressions.  For \f(CW\eY|$re\eY|\fR the variable
+part of this regular expression needs to be converted explicitly
+(but only if the special meaning of \f(CW\eY|\fR should be enabled inside \f(CW$re\fR):
+.PP
+.Vb 5
+\&    use customre;
+\&    $re = <>;
+\&    chomp $re;
+\&    $re = customre::convert $re;
+\&    /\eY|$re\eY|/;
+.Ve
 .Sh "\s-1SEE\s0 \s-1ALSO\s0"
-\*(L"Mastering Regular Expressions\*(R" (see the \fIperlbook\fR manpage) by Jeffrey Friedl.
+the section on \fIRegexp Quote-Like Operators\fR in the \fIperlop\fR manpage.
+.PP
+the section on \fIGory details of parsing quoted constructs\fR in the \fIperlop\fR manpage.
+.PP
+the \f(CWpos\fR entry in the \fIperlfunc\fR manpage.
+.PP
+the \fIperllocale\fR manpage.
+.PP
+\fIMastering Regular Expressions\fR (see the \fIperlbook\fR manpage) by Jeffrey Friedl.
 
 .rn }` ''
 .IX Title "PERLRE 1"
@@ -895,33 +1173,41 @@ different things on the \fIleft\fR side of the \f(CWs///\fR.
 
 .IX Subsection "Regular Expressions"
 
-.IX Item "(?#text)"
+.IX Item "\f(CW(?#text)\fR"
 
-.IX Item "(?:regexp)"
+.IX Item "\f(CW(?:pattern)\fR"
 
-.IX Item "(?=regexp)"
+.IX Item "\f(CW(?imsx-imsx:pattern)\fR"
 
-.IX Item "(?!regexp)"
+.IX Item "\f(CW(?=pattern)\fR"
 
-.IX Item "(?<=regexp)"
+.IX Item "\f(CW(?!pattern)\fR"
 
-.IX Item "(?<!regexp)"
+.IX Item "\f(CW(?<=pattern)\fR"
 
-.IX Item "(?{ code })"
+.IX Item "\f(CW(?<!pattern)\fR"
 
-.IX Item "\f(CW(?>regexp)\fR"
+.IX Item "\f(CW(?{ code })\fR"
 
-.IX Item "(?(condition)yes-regexp|no-regexp)"
+.IX Item "\f(CW(?p{ code })\fR"
 
-.IX Item "(?(condition)yes-regexp)"
+.IX Item "\f(CW(?>pattern)\fR"
 
-.IX Item "(?imsx)"
+.IX Item "\f(CW(?(condition)yes-pattern|no-pattern)\fR"
+
+.IX Item "\f(CW(?(condition)yes-pattern)\fR"
+
+.IX Item "\f(CW(?imsx-imsx)\fR"
 
 .IX Subsection "Backtracking"
 
 .IX Subsection "Version 8 Regular Expressions"
 
 .IX Subsection "\s-1WARNING\s0 on \e1 vs \f(CW$1\fR"
+
+.IX Subsection "Repeated patterns matching zero-length substring"
+
+.IX Subsection "Creating custom \s-1RE\s0 engines"
 
 .IX Subsection "\s-1SEE\s0 \s-1ALSO\s0"
 

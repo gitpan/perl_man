@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDIAG 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLDIAG 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -215,10 +215,10 @@ The symbols \f(CW"%(-?@\fR sort before the letters, while \f(CW[\fR and \f(CW\e\
 (F) Lexically scoped variables aren't in a package, so it doesn't make sense
 to try to declare one with a package qualifier on the front.  Use \fIlocal()\fR
 if you want to localize a package variable.
-.Ip "\*(N"my\*(T" variable %s masks earlier declaration in same scope" 4
-(W) A lexical variable has been redeclared in the same scope, effectively
-eliminating all access to the previous instance.  This is almost always
-a typographical error.  Note that the earlier variable will still exist
+.Ip "\*(N"my\*(T" variable %s masks earlier declaration in same %s" 4
+(W) A lexical variable has been redeclared in the current scope or statement,
+effectively eliminating all access to the previous instance.  This is almost
+always a typographical error.  Note that the earlier variable will still exist
 until the end of the scope or until all closure referents to it are
 destroyed.
 .Ip "\*(N"no\*(T" not allowed in expression" 4
@@ -321,10 +321,8 @@ the string being unpacked.  See the \f(CWpack\fR entry in the \fIperlfunc\fR man
 the return value of your \fIsocket()\fR call?  See the \f(CWaccept\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Allocation too large: %lx" 4
 (X) You can't allocate more than 64K on an \s-1MS\s0\-\s-1DOS\s0 machine.
-.Ip "Allocation too large" 4
-(F) You can't allocate more than 2^31+"small amount\*(R" bytes.
 .Ip "Applying %s to %s will act on scalar(%s)" 4
-(W) The pattern match (//), substitution (s///), and translation (tr///)
+(W) The pattern match (//), substitution (s///), and transliteration (tr///)
 operators work on scalar values.  If you apply one of them to an array
 or a hash, it will convert the array or hash to a scalar value -- the
 length of an array, or the population info of a hash -- and then work on
@@ -336,6 +334,20 @@ the \f(CWgrep\fR entry in the \fIperlfunc\fR manpage and the \f(CWmap\fR entry i
 (W)(S) You said something that may not be interpreted the way
 you thought.  Normally it's pretty easy to disambiguate it by supplying
 a missing quote, operator, parenthesis pair or declaration.
+.Ip "Ambiguous call resolved as \s-1CORE\s0::%s(), qualify as such or use &" 4
+(W) A subroutine you have declared has the same name as a Perl keyword,
+and you have used the name without qualification for calling one or the
+other.  Perl decided to call the builtin because the subroutine is
+not imported.
+.Sp
+To force interpretation as a subroutine call, either put an ampersand
+before the subroutine name, or qualify the name with its package.
+Alternatively, you can import the subroutine (or pretend that it's
+imported with the \f(CWuse subs\fR pragma).
+.Sp
+To silently interpret it as the Perl operator, use the \f(CWCORE::\fR prefix
+on the operator (e.g. \f(CWCORE::log($x)\fR) or by declaring the subroutine
+to be an object method (see the \fIattrs\fR manpage).
 .Ip "Args must match #! line" 4
 (F) The setuid emulator requires that the arguments Perl was invoked
 with match the arguments specified on the #! line.  Since some systems
@@ -411,6 +423,10 @@ This message can be quite often seen with DB_File on systems with
 system \fImalloc()\fR.
 .Ip "Bad hash" 4
 (P) One of the internal hash routines was passed a null \s-1HV\s0 pointer.
+.Ip "Bad index while coercing array into hash" 4
+(F) The index looked up in the hash found as the 0'th element of a
+pseudo-hash is not legal.  Index values must be at 1 or greater.
+See the \fIperlref\fR manpage.
 .Ip "Bad name after %s::" 4
 (F) You started to name a symbol by using a package prefix, and then didn't
 finish the symbol.  In particular, you can't interpolate outside of quotes,
@@ -443,6 +459,10 @@ Perl yourself.
 (F) With \*(L"strict subs\*(R" in use, a bareword is only allowed as a
 subroutine identifier, in curly braces or to the left of the \*(L"=>\*(R" symbol.
 Perhaps you need to predeclare a subroutine?
+.Ip "Bareword \*(N"%s\*(T" refers to nonexistent package" 4
+(W) You used a qualified bareword of the form \f(CWFoo::\fR, but
+the compiler saw no other uses of that namespace before that point.
+Perhaps you need to predeclare a package?
 .Ip "\s-1BEGIN\s0 failed\*(--compilation aborted" 4
 (F) An untrapped exception was raised while executing a \s-1BEGIN\s0 subroutine.
 Compilation stops immediately and the interpreter is exited.
@@ -506,7 +526,17 @@ an object reference until it has been blessed.  See the \fIperlobj\fR manpage.
 .Ip "Can't call method \*(N"%s\*(T" without a package or object reference" 4
 (F) You used the syntax of a method call, but the slot filled by the
 object reference or package name contains an expression that returns
-neither an object reference nor a package name.  (Perhaps it's null?)
+a defined value which is neither an object reference nor a package name.
+Something like this will reproduce the error:
+.Sp
+.Vb 3
+\&    $BADREF = 42;
+\&    process $BADREF 1,2,3;
+\&    $BADREF->process(1,2,3);
+.Ve
+.Ip "Can't call method \*(N"%s\*(T" on an undefined value" 4
+(F) You used the syntax of a method call, but the slot filled by the
+object reference or package name contains an undefined value.
 Something like this will reproduce the error:
 .Sp
 .Vb 3
@@ -538,6 +568,10 @@ but then \f(CW$foo\fR no longer contains a glob.
 .Ip "Can't coerce %s to string in %s" 4
 (F) Certain types of SVs, in particular real symbol table entries
 (typeglobs), can't be forced to stop being what they are.
+.Ip "Can't coerce array into hash" 4
+(F) You used an array where a hash was expected, but the array has no
+information on how to map from keys to array indices.  You can do that
+only with arrays that have a hash reference at index 0.
 .Ip "Can't create pipe mailbox" 4
 (P) An error peculiar to \s-1VMS\s0.  The process is suffering from exhausted quotas
 or other plumbing problems.
@@ -639,6 +673,9 @@ mailbox buffers to be, and didn't get an answer.
 call for another.  It can't manufacture one out of whole cloth.  In general
 you should be calling it out of only an \s-1AUTOLOAD\s0 routine anyway.  See
 the \f(CWgoto\fR entry in the \fIperlfunc\fR manpage.
+.Ip "Can't goto subroutine from an eval-string" 4
+(F) The \*(L"goto subroutine\*(R" call can't be used to jump out of an eval \*(L"string\*(R".
+(You can use it to jump out of an eval {\s-1BLOCK\s0}, but you probably don't want to.)
 .Ip "Can't localize through a reference" 4
 (F) You said something like \f(CWlocal $$ref\fR, which Perl can't currently
 handle, because when it goes to restore the old value of whatever \f(CW$ref\fR
@@ -649,6 +686,11 @@ sure that \f(CW$ref\fR will still be a reference.
 lexical variable using \*(L"my\*(R".  This is not allowed.  If you want to
 localize a package variable of the same name, qualify it with the
 package name.
+.Ip "Can't localize pseudo-hash element" 4
+(F) You said something like \f(CWlocal $ar->{'key'}\fR, where \f(CW$ar\fR is
+a reference to a pseudo-hash.  That hasn't been implemented yet, but
+you can get a similar effect by localizing the corresponding array
+element directly -- \f(CWlocal $ar->[$ar->[0]{'key'}]\fR.
 .Ip "Can't locate auto/%s.al in @\s-1INC\s0" 4
 (F) A function (or method) was called in a package which allows autoload,
 but there is no function to autoload.  Most probable causes are a misprint
@@ -669,9 +711,6 @@ method, nor does any of its base classes.  See the \fIperlobj\fR manpage.
 to exist.
 .Ip "Can't make list assignment to \e%\s-1ENV\s0 on this system" 4
 (F) List assignment to \f(CW%ENV\fR is not supported on some systems, notably \s-1VMS\s0.
-.Ip "Can't mktemp()" 4
-(F) The \fImktemp()\fR routine failed for some reason while trying to process
-a \fB\-e\fR switch.  Maybe your /tmp partition is full, or clobbered.
 .Ip "Can't modify %s in %s" 4
 (F) You aren't allowed to assign to the item indicated, or otherwise try to
 change it, such as with an auto-increment.
@@ -756,6 +795,10 @@ message indicates that such a conversion was attempted.
 (P) The undefined \s-1SV\s0 is the bottom of the totem pole, in the scheme
 of upgradability.  Upgrading to undef indicates an error in the
 code calling sv_upgrade.
+.Ip "Can't use %%! because Errno.pm is not available" 4
+(F) The first time the %! hash is used, perl automatically loads the
+Errno.pm module. The Errno module is expected to tie the %! hash to
+provide symbolic names for \f(CW$!\fR errno values.
 .Ip "Can't use \*(N"my %s\*(T" in sort comparison" 4
 (F) The global variables \f(CW$a\fR and \f(CW$b\fR are reserved for sort comparisons.
 You mentioned \f(CW$a\fR or \f(CW$b\fR in the same line as the <=> or cmp operator,
@@ -793,9 +836,6 @@ weren't.
 (F) The compiler tried to interpret a bracketed expression as a
 subscript.  But to the left of the brackets was an expression that
 didn't look like an array reference, or anything else subscriptable.
-.Ip "Can't write to temp file for \fB\-e\fR: %s" 4
-(F) The write routine failed for some reason while trying to process
-a \fB\-e\fR switch.  Maybe your /tmp partition is full, or clobbered.
 .Ip "Can't x= to read-only value" 4
 (F) You tried to repeat a constant value (often the undefined value) with
 an assignment operator, which implies modifying the value itself.
@@ -803,13 +843,28 @@ Perhaps you need to copy the value to a temporary, and repeat that.
 .Ip "Cannot find an opnumber for \*(N"%s\*(T"" 4
 (F) A string of a form \f(CWCORE::word\fR was given to \fIprototype()\fR, but
 there is no builtin with the name \f(CWword\fR.
-.Ip "Cannot open temporary file" 4
-(F) The create routine failed for some reason while trying to process
-a \fB\-e\fR switch.  Maybe your /tmp partition is full, or clobbered.
 .Ip "Cannot resolve method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'" 4
 (F|P) Error resolving overloading specified by a method name (as
 opposed to a subroutine reference): no such method callable via the
 package. If method name is \f(CW???\fR, this is an internal error.
+.Ip "Character class syntax [. .] is reserved for future extensions" 4
+(W) Within regular expression character classes ([]) the syntax beginning
+with \*(L"[.\*(R" and ending with \*(L".]\*(R" is reserved for future extensions.
+If you need to represent those character sequences inside a regular
+expression character class, just quote the square brackets with the
+backslash: \*(L"\e[.\*(R" and \*(L".\e]\*(R".
+.Ip "Character class syntax [: :] is reserved for future extensions" 4
+(W) Within regular expression character classes ([]) the syntax beginning
+with \*(L"[:\*(R" and ending with \*(L":]\*(R" is reserved for future extensions.
+If you need to represent those character sequences inside a regular
+expression character class, just quote the square brackets with the
+backslash: \*(L"\e[:\*(R" and \*(L":\e]\*(R".
+.Ip "Character class syntax [= =] is reserved for future extensions" 4
+(W) Within regular expression character classes ([]) the syntax
+beginning with \*(L"[=\*(R" and ending with \*(L"=]\*(R" is reserved for future extensions.
+If you need to represent those character sequences inside a regular
+expression character class, just quote the square brackets with the
+backslash: \*(L"\e[=\*(R" and \*(L"=\e]\*(R".
 .Ip "chmod: mode argument is missing initial 0" 4
 (W) A novice will sometimes say
 .Sp
@@ -824,9 +879,25 @@ to 01411.  Octal constants are introduced with a leading 0 in Perl, as in C.
 (F) Perl could not compile a file specified in a \f(CWrequire\fR statement.
 Perl uses this generic message when none of the errors that it encountered
 were severe enough to halt compilation immediately.
+.Ip "Complex regular subexpression recursion limit (%d) exceeded" 4
+(W) The regular expression engine uses recursion in complex situations
+where back-tracking is required.  Recursion depth is limited to 32766,
+or perhaps less in architectures where the stack cannot grow
+arbitrarily.  ("Simple\*(R" and \*(L"medium\*(R" situations are handled without
+recursion and are not subject to a limit.)  Try shortening the string
+under examination; looping in Perl code (e.g. with \f(CWwhile\fR) rather
+than in the regular expression engine; or rewriting the regular
+expression so that it is simpler or backtracks less.  (See the \fIperlbook\fR manpage
+for information on \fIMastering Regular Expressions\fR.)
 .Ip "connect() on closed fd" 4
 (W) You tried to do a connect on a closed socket.  Did you forget to check
 the return value of your \fIsocket()\fR call?  See the \f(CWconnect\fR entry in the \fIperlfunc\fR manpage.
+.Ip "Constant is not %s reference" 4
+(F) A constant value (perhaps declared using the \f(CWuse constant\fR pragma)
+is being dereferenced, but it amounts to the wrong type of reference.  The
+message indicates the type of reference that was expected. This usually
+indicates a syntax error in dereferencing the constant value.
+See the section on \fIConstant Functions\fR in the \fIperlsub\fR manpage and the \fIconstant\fR manpage.
 .Ip "Constant subroutine %s redefined" 4
 (S) You redefined a subroutine which had previously been eligible for
 inlining.  See the section on \fIConstant Functions\fR in the \fIperlsub\fR manpage for commentary and
@@ -887,12 +958,30 @@ unlikely to be what you want.
 .Ip "\s-1END\s0 failed\*(--cleanup aborted" 4
 (F) An untrapped exception was raised while executing an \s-1END\s0 subroutine.
 The interpreter is immediately exited.
+.Ip "entering effective %s failed" 4
+(F) While under the \f(CWuse filetest\fR pragma, switching the real and
+effective uids or gids failed.
 .Ip "Error converting file specification %s" 4
 (F) An error peculiar to \s-1VMS\s0.  Because Perl may have to deal with file
 specifications in either \s-1VMS\s0 or Unix syntax, it converts them to a
 single form when it must operate on them directly.  Either you've
 passed an invalid file specification to Perl, or you've found a
 case the conversion routines don't handle.  Drat.
+.Ip "%s: Eval-group in insecure regular expression" 4
+(F) Perl detected tainted data when trying to compile a regular expression
+that contains the \f(CW(?{ ... })\fR zero-width assertion, which is unsafe.
+See the section on \fI(?{ code })\fR in the \fIperlre\fR manpage, and the \fIperlsec\fR manpage.
+.Ip "%s: Eval-group not allowed, use re \*(N'eval\*(T'" 4
+(F) A regular expression contained the \f(CW(?{ ... })\fR zero-width assertion,
+but that construct is only allowed when the \f(CWuse re 'eval'\fR pragma is
+in effect.  See the section on \fI(?{ code })\fR in the \fIperlre\fR manpage.
+.Ip "%s: Eval-group not allowed at run time" 4
+(F) Perl tried to compile a regular expression containing the \f(CW(?{ ... })\fR
+zero-width assertion at run time, as it would when the pattern contains
+interpolated values.  Since that is a security risk, it is not allowed.
+If you insist, you may still do this by explicitly building the pattern
+from an interpolated string at run time and using that in an \fIeval()\fR.
+See the section on \fI(?{ code })\fR in the \fIperlre\fR manpage.
 .Ip "Excessively long <> operator" 4
 (F) The contents of a <> operator may not exceed the maximum size of a
 Perl identifier.  If you're just trying to glob a long list of
@@ -913,6 +1002,11 @@ a goto, or a loop control statement.
 .Ip "Exiting substitution via %s" 4
 (W) You are exiting a substitution by unconventional means, such as
 a return, a goto, or a loop control statement.
+.Ip "Explicit blessing to \*(N'\*(T' (assuming package main)" 4
+(W) You are blessing a reference to a zero length string.  This has
+the effect of blessing the reference into the package main.  This is
+usually not what you want.  Consider providing a default target
+package, e.g. \fIbless\fR\|($ref, \f(CW$p\fR || \*(L'MyPackage');
 .Ip "Fatal \s-1VMS\s0 error at %s, line %d" 4
 (P) An error peculiar to \s-1VMS\s0.  Something untoward happened in a \s-1VMS\s0 system
 service or \s-1RTL\s0 routine; Perl's exit status should provide more details.  The
@@ -1042,6 +1136,10 @@ don't take to this kindly.
 .Ip "Illegal octal digit ignored" 4
 (W) You may have tried to use an 8 or 9 in a octal number.  Interpretation
 of the octal number stopped before the 8 or 9.
+.Ip "Illegal hex digit ignored" 4
+(W) You may have tried to use a character other than 0 \- 9 or A \- F in a
+hexadecimal number.  Interpretation of the hexadecimal number stopped
+before the illegal character.
 .Ip "Illegal switch in \s-1PERL5OPT\s0: %s" 4
 (X) The \s-1PERL5OPT\s0 environment variable may only be used to set the
 following switches: \fB\-[DIMUdmw]\fR.
@@ -1065,9 +1163,10 @@ for more information.
 (F) You can't use \fIsystem()\fR, \fIexec()\fR, or a piped open in a setuid or setgid
 script if \f(CW$ENV{PATH}\fR contains a directory that is writable by the world.
 See the \fIperlsec\fR manpage.
-.Ip "Insecure \s-1PATH\s0" 4
+.Ip "Insecure $\s-1ENV\s0{%s} while running %s" 4
 (F) You can't use \fIsystem()\fR, \fIexec()\fR, or a piped open in a setuid or
-setgid script if \f(CW$ENV{PATH}\fR is derived from data supplied (or
+setgid script if any of \f(CW$ENV{PATH}\fR, \f(CW$ENV{IFS}\fR, \f(CW$ENV{CDPATH}\fR,
+\f(CW$ENV{ENV}\fR or \f(CW$ENV{BASH_ENV}\fR are derived from data supplied (or
 potentially supplied) by the user.  The script must set the path to a
 known value, using trustworthy data.  See the \fIperlsec\fR manpage.
 .Ip "Integer overflow in hex number" 4
@@ -1088,15 +1187,18 @@ this \f(CWexec\fR as a request to terminate the Perl script
 and execute the specified command.
 .Ip "internal disaster in regexp" 4
 (P) Something went badly wrong in the regular expression parser.
-.Ip "internal error: glob failed" 4
-(P) Something went wrong with the external \fIprogram\fR\|(s) used for \f(CWglob\fR
-and \f(CW<*.c>\fR.  This may mean that your csh (C shell) is
-broken.  If so, you should change all of the csh-related variables in
-config.sh:  If you have tcsh, make the variables refer to it as if it
-were csh (e.g. \f(CWfull_csh='/usr/bin/tcsh'\fR); otherwise, make them all
-empty (except that \f(CWd_csh\fR should be \f(CW'undef'\fR) so that Perl will
-think csh is missing.  In either case, after editing config.sh, run
-\&\f(CW./Configure -S\fR and rebuild Perl.
+.Ip "glob failed (%s)" 4
+(W) Something went wrong with the external \fIprogram\fR\|(s) used for \f(CWglob\fR
+and \f(CW<*.c>\fR.  Usually, this means that you supplied a \f(CWglob\fR
+pattern that caused the external program to fail and exit with a nonzero
+status.  If the message indicates that the abnormal exit resulted in a
+coredump, this may also mean that your csh (C shell) is broken.  If so,
+you should change all of the csh-related variables in config.sh:  If you
+have tcsh, make the variables refer to it as if it were csh (e.g.
+\f(CWfull_csh='/usr/bin/tcsh'\fR); otherwise, make them all empty (except that
+\f(CWd_csh\fR should be \f(CW'undef'\fR) so that Perl will think csh is missing.
+In either case, after editing config.sh, run \f(CW./Configure -S\fR and
+rebuild Perl.
 .Ip "internal urp in regexp at /%s/" 4
 (P) Something went badly awry in the regular expression parser.
 .Ip "invalid [] range in regexp" 4
@@ -1130,6 +1232,9 @@ the \f(CWlast\fR entry in the \fIperlfunc\fR manpage.
 (F) You named a loop to restart, but you're not currently in a loop of
 that name, not even if you count where you were called from.  See
 the \f(CWlast\fR entry in the \fIperlfunc\fR manpage.
+.Ip "leaving effective %s failed" 4
+(F) While under the \f(CWuse filetest\fR pragma, switching the real and
+effective uids or gids failed.
 .Ip "listen() on closed fd" 4
 (W) You tried to do a listen on a closed socket.  Did you forget to check
 the return value of your \fIsocket()\fR call?  See the \f(CWlisten\fR entry in the \fIperlfunc\fR manpage.
@@ -1166,12 +1271,12 @@ catches that.  But an easy way to do the same thing is:
 \&    mod(2);
 .Ve
 Another way is to assign to a \fIsubstr()\fR that's off the end of the string.
-.Ip "Modification of noncreatable array value attempted, subscript %d" 4
+.Ip "Modification of non-creatable array value attempted, subscript %d" 4
 (F) You tried to make an array value spring into existence, and the
 subscript was probably negative, even counting from end of the array
 backwards.
-.Ip "Modification of noncreatable hash value attempted, subscript \*(N"%s\*(T"" 4
-(F) You tried to make a hash value spring into existence, and it couldn't
+.Ip "Modification of non-creatable hash value attempted, subscript \*(N"%s\*(T"" 4
+(P) You tried to make a hash value spring into existence, and it couldn't
 be created for some peculiar reason.
 .Ip "Module name must be constant" 4
 (F) Only a bare module name is allowed as the first argument to a \*(L"use\*(R".
@@ -1267,6 +1372,15 @@ your system.
 .Ip "No space allowed after \fB\-I\fR" 4
 (F) The argument to \fB\-I\fR must follow the \fB\-I\fR immediately with no
 intervening space.
+.Ip "No such array field" 4
+(F) You tried to access an array as a hash, but the field name used is
+not defined.  The hash at index 0 should map all valid field names to
+array indices for that to work.
+.Ip "No such field \*(N"%s\*(T" in variable %s of type %s" 4
+(F) You tried to access a field of a typed variable where the type
+does not know about the field name.  The field names are looked up in
+the \f(CW%FIELDS\fR hash in the type package at compile time.  The \f(CW%FIELDS\fR hash
+is usually set up with the \*(L'fields\*(R' pragma.
 .Ip "No such pipe open" 4
 (P) An error peculiar to \s-1VMS\s0.  The internal routine \fImy_pclose()\fR tried to
 close a pipe which hadn't been opened.  This should have been caught earlier as
@@ -1274,6 +1388,12 @@ an attempt to close an unopened filehandle.
 .Ip "No such signal: \s-1SIG\s0%s" 4
 (W) You specified a signal name as a subscript to \f(CW%SIG\fR that was not recognized.
 Say \f(CWkill -l\fR in your shell to see the valid signal names on your system.
+.Ip "no \s-1UTC\s0 offset information; assuming local time is \s-1UTC\s0" 4
+(S) A warning peculiar to \s-1VMS\s0.  Per was unable to find the local
+timezone offset, so it's assuming that local system time is equivalent
+to \s-1UTC\s0.  If it's not, define the logical name \fI\s-1SYS$TIMEZONE_DIFFERENTIAL\s0\fR
+to translate to the number of seconds which need to be added to \s-1UTC\s0 to
+get local time.
 .Ip "Not a \s-1CODE\s0 reference" 4
 (F) Perl was trying to evaluate a reference to a code value (that is, a
 subroutine), but found a reference to something else instead.  You can
@@ -1336,9 +1456,9 @@ supplied it an uninitialized value.  See the \fIperlform\fR manpage.
 about 250 characters.  You've exceeded that length.  Future versions of
 Perl are likely to eliminate this arbitrary limitation.  In the meantime,
 try using scientific notation (e.g. \*(L"1e6\*(R" instead of \*(L"1_000_000").
-.Ip "Odd number of elements in hash list" 4
-(S) You specified an odd number of elements to a hash list, which is odd,
-because hash lists come in key/value pairs.
+.Ip "Odd number of elements in hash assignment" 4
+(S) You specified an odd number of elements to initialize a hash, which
+is odd, because hashes come in key/value pairs.
 .Ip "Offset outside string" 4
 (F) You tried to do a read/write/send/recv operation with an offset
 pointing outside the buffer.  This is difficult to imagine.
@@ -1348,7 +1468,7 @@ will extend the buffer and zero pad the new area.
 (S) An internal warning that the grammar is screwed up.
 .Ip "oops: oopsHV" 4
 (S) An internal warning that the grammar is screwed up.
-.Ip "Operation `%s': no method found,%s" 4
+.Ip "Operation `%s': no method found, %s" 4
 (F) An attempt was made to perform an overloaded operation for which
 no handler was defined.  While some handlers can be autogenerated in
 terms of other handlers, there is no default handler for any
@@ -1363,7 +1483,7 @@ if you said \*(L"*foo * \*(L'foo'\*(R".
 .Ip "Out of memory for yacc stack" 4
 (F) The yacc parser wanted to grow its stack so it could continue parsing,
 but \fIrealloc()\fR wouldn't give it more memory, virtual or otherwise.
-.Ip "Out of memory!" 4
+.Ip "Out of memory during request for %s" 4
 (X|F) The \fImalloc()\fR function returned 0, indicating there was insufficient
 remaining memory (or virtual memory) to satisfy the request.
 .Sp
@@ -1372,11 +1492,15 @@ depends on the way perl was compiled.  By default it is not trappable.
 However, if compiled for this, Perl may use the contents of \f(CW$^M\fR as
 an emergency pool after \fIdie()\fRing with this message.  In this case the
 error is trappable \fIonce\fR.
-.Ip "Out of memory during request for %s" 4
+.Ip "Out of memory during \*(N"large\*(T" request for %s" 4
 (F) The \fImalloc()\fR function returned 0, indicating there was insufficient
 remaining memory (or virtual memory) to satisfy the request. However,
 the request was judged large enough (compile-time default is 64K), so
 a possibility to shut down by trapping this error is granted.
+.Ip "Out of memory during ridiculously large request" 4
+(F) You can't allocate more than 2^31+"small amount\*(R" bytes.  This error
+is most likely to be caused by a typo in the Perl program. e.g., \f(CW$arr[time]\fR
+instead of \f(CW$arr[$time]\fR.
 .Ip "page overflow" 4
 (W) A single call to \fIwrite()\fR produced more lines than can fit on a page.
 See the \fIperlform\fR manpage.
@@ -1458,7 +1582,7 @@ was string.
 (P) The compiler attempted to do a goto, or something weird like that.
 .Ip "panic: yylex" 4
 (P) The lexer got into a bad state while processing a case modifier.
-.Ip "Pareneses missing around \*(N"%s\*(T" list" 4
+.Ip "Parentheses missing around \*(N"%s\*(T" list" 4
 (W) You said something like
 .Sp
 .Vb 1
@@ -1476,7 +1600,7 @@ than the currently running version.  How long has it been since you upgraded,
 anyway?  See the \f(CWrequire\fR entry in the \fIperlfunc\fR manpage.
 .Ip "Permission denied" 4
 (F) The setuid emulator in suidperl decided you were up to no good.
-.Ip "pid %d not a child" 4
+.Ip "pid %x not a child" 4
 (W) A warning peculiar to \s-1VMS\s0.  \fIWaitpid()\fR was asked to wait for a process which
 isn't a subprocess of the current process.  While this is fine from \s-1VMS\s0\*(R'
 perspective, it's probably not what you intended.
@@ -1487,8 +1611,7 @@ the \s-1BSD\s0 version, which takes a pid.
 (W) \fIqw()\fR lists contain items separated by whitespace; as with literal
 strings, comment characters are not ignored, but are instead treated
 as literal data.  (You may have used different delimiters than the
-exclamation marks parentheses shown here; braces are also frequently
-used.)
+parentheses shown here; braces are also frequently used.)
 .Sp
 You probably wrote something like this:
 .Sp
@@ -1569,6 +1692,11 @@ last argument of the previous construct, for example:
 .Ip "Prototype mismatch: %s vs %s" 4
 (S) The subroutine being declared or defined had previously been declared
 or defined with a different function prototype.
+.Ip "Range iterator outside integer range" 4
+(F) One (or both) of the numeric arguments to the range operator \*(L"..\*(R"
+are outside the range which can be represented by integers internally.
+One possible workaround is to force Perl to use magical string
+increment by prepending \*(L"0\*(R" to your numbers.
 .Ip "Read on closed filehandle <%s>" 4
 (W) The filehandle you're reading from got itself closed sometime before now.
 Check your logic flow.
@@ -1578,9 +1706,24 @@ Check your logic flow.
 (F) You can't use the \fB\-D\fR option unless the code to produce the
 desired output is compiled into Perl, which entails some overhead,
 which is why it's currently left out of your copy.
-.Ip "Recursive inheritance detected" 4
+.Ip "Recursive inheritance detected in package \*(N'%s\*(T'" 4
 (F) More than 100 levels of inheritance were used.  Probably indicates
 an unintended loop in your inheritance hierarchy.
+.Ip "Recursive inheritance detected while looking for method \*(N'%s\*(T' in package \*(N'%s\*(T'" 4
+(F) More than 100 levels of inheritance were encountered while invoking a
+method.  Probably indicates an unintended loop in your inheritance hierarchy.
+.Ip "Reference found where even-sized list expected" 4
+(W) You gave a single reference where Perl was expecting a list with
+an even number of elements (for assignment to a hash). This
+usually means that you used the anon hash constructor when you meant 
+to use parens. In any case, a hash requires key/value \fBpairs\fR.
+.Sp
+.Vb 4
+\&    %hash = { one => 1, two => 2, };    # WRONG
+\&    %hash = [ qw/ an anon array / ];    # WRONG
+\&    %hash = ( one => 1, two => 2, );    # right
+\&    %hash = qw( one 1 two 2 );                  # also fine
+.Ve
 .Ip "Reference miscount in sv_replace()" 4
 (W) The internal \fIsv_replace()\fR function was handed a new \s-1SV\s0 with a
 reference count of other than 1.
@@ -1654,7 +1797,9 @@ or possibly some other missing operator, such as a comma.
 .Ip "Send on closed socket" 4
 (W) The filehandle you're sending to got itself closed sometime before now.
 Check your logic flow.
-.Ip "Sequence (? incomplete (F) A regular expression ended with an incomplete extension (?. See the \fIperlre\fR manpage." 4
+.Ip "Sequence (? incomplete" 4
+(F) A regular expression ended with an incomplete extension (?.
+See the \fIperlre\fR manpage.
 .Ip "Sequence (?#... not terminated" 4
 (F) A regular expression comment must be terminated by a closing
 parenthesis.  Embedded parentheses aren't allowed.  See the \fIperlre\fR manpage.
@@ -1732,6 +1877,12 @@ This is almost always an error, because \fIexec()\fR never returns unless
 there was a failure.  You probably wanted to use \fIsystem()\fR instead,
 which does return.  To suppress this warning, put the \fIexec()\fR in a block
 by itself.
+.Ip "Strange *+?{} on zero-length expression" 4
+(W) You applied a regular expression quantifier in a place where it
+makes no sense, such as on a zero-width assertion.
+Try putting the quantifier inside the assertion instead.  For example,
+the way to match \*(L"abc\*(R" provided that it is followed by three
+repetitions of \*(L"xyz\*(R" is \f(CW/abc(?=(?:xyz){3})/\fR, not \f(CW/abc(?=xyz){3}/\fR.
 .Ip "Stub found while resolving method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'" 4
 (P) Overloading resolution over \f(CW@ISA\fR tree may be broken by importation stubs.
 Stubs should never be implicitely created, but explicit calls to \f(CWcan\fR
@@ -1767,6 +1918,9 @@ of an assignment or as a subroutine argument for example).
 .Ip "suidperl is no longer needed since %s" 4
 (F) Your Perl was compiled with \fB\-D\fR\s-1SETUID_SCRIPTS_ARE_SECURE_NOW\s0, but a
 version of the setuid emulator somehow got run anyway.
+.Ip "switching effective %s is not implemented" 4
+(F) While under the \f(CWuse filetest\fR pragma, we cannot switch the
+real and effective uids or gids.
 .Ip "syntax error" 4
 (F) Probably means you had a syntax error.  Common reasons include:
 .Sp
@@ -1791,9 +1945,11 @@ if the error went away.  Sort of the cybernetic version of 20\ questions.
 (A) You've accidentally run your script through the Bourne shell
 instead of Perl.  Check the #! line, or manually feed your script
 into Perl yourself.
-.Ip "System V \s-1IPC\s0 is not implemented on this machine" 4
-(F) You tried to do something with a function beginning with \*(L"sem\*(R", \*(L"shm\*(R",
-or \*(L"msg\*(R".  See the \f(CWsemctl\fR entry in the \fIperlfunc\fR manpage, for example.
+.Ip "System V %s is not implemented on this machine" 4
+(F) You tried to do something with a function beginning with \*(L"sem\*(R",
+\*(L"shm\*(R", or \*(L"msg\*(R" but that System V \s-1IPC\s0 is not implemented in your
+machine.  In some machines the functionality can exist but be
+unconfigured.  Consult your system support.
 .Ip "Syswrite on closed filehandle" 4
 (W) The filehandle you're writing to got itself closed sometime before now.
 Check your logic flow.
@@ -1869,11 +2025,11 @@ Perl yourself.
 .Ip "trailing \e in regexp" 4
 (F) The regular expression ends with an unbackslashed backslash.  Backslash
 it.   See the \fIperlre\fR manpage.
-.Ip "Translation pattern not terminated" 4
+.Ip "Transliteration pattern not terminated" 4
 (F) The lexer couldn't find the interior delimiter of a tr/// or tr[][]
 or y/// or y[][] construct.  Missing the leading \f(CW$\fR from variables
 \f(CW$tr\fR or \f(CW$y\fR may cause this error.
-.Ip "Translation replacement not terminated" 4
+.Ip "Transliteration replacement not terminated" 4
 (F) The lexer couldn't find the final delimiter of a tr/// or tr[][]
 construct.
 .Ip "truncate not implemented" 4
@@ -1885,8 +2041,11 @@ certain type.  Arrays must be \f(CW@NAME\fR or \f(CW@{EXPR}\fR.  Hashes must be
 \f(CW%NAME\fR or \f(CW%{EXPR}\fR.  No implicit dereferencing is allowed\*(--use the
 {\s-1EXPR\s0} forms as an explicit dereference.  See the \fIperlref\fR manpage.
 .Ip "umask: argument is missing initial 0" 4
-(W) A umask of 222 is incorrect.  It should be 0222, because octal literals
-always start with 0 in Perl, as in C.
+(W) A umask of 222 is incorrect.  It should be 0222, because octal
+literals always start with 0 in Perl, as in C.
+.Ip "umask not implemented" 4
+(F) Your machine doesn't implement the umask function and you tried
+to use it to restrict permissions for yourself (\s-1EXPR\s0 & 0700).
 .Ip "Unable to create sub named \*(N"%s\*(T"" 4
 (F) You attempted to create or access a subroutine with an illegal name.
 .Ip "Unbalanced context: %d more PUSHes than POPs" 4
@@ -1919,6 +2078,9 @@ have been defined yet.  See the \f(CWsort\fR entry in the \fIperlfunc\fR manpage
 .Ip "Undefined top format \*(N"%s\*(T" called" 4
 (F) The format indicated doesn't seem to exist.  Perhaps it's really in
 another package?  See the \fIperlform\fR manpage.
+.Ip "Undefined value assigned to typeglob" 4
+(W) An undefined value was assigned to a typeglob, a la \f(CW*foo = undef\fR.
+This does nothing.  It's possible that you really mean \f(CWundef *foo\fR.
 .Ip "unexec of %s into %s failed!" 4
 (F) The \fIunexec()\fR routine failed for some reason.  See your local \s-1FSF\s0
 representative, who probably put it there in the first place.
@@ -1965,7 +2127,7 @@ Note that under some systems, like \s-1OS/2\s0, there may be different flavors o
 Perl executables, some of which may support fork, some not. Try changing
 the name you call Perl by to \f(CWperl_\fR, \f(CWperl__\fR, and so on.
 .Ip "Unsupported function %s" 4
-(F) This machines doesn't implement the indicated function, apparently.
+(F) This machine doesn't implement the indicated function, apparently.
 At least, Configure doesn't think so.
 .Ip "Unsupported socket function \*(N"%s\*(T" called" 4
 (F) Your machine doesn't support the Berkeley socket mechanism, or at
@@ -1975,16 +2137,6 @@ least that's what Configure thought.
 a term, so it's looking for the corresponding right angle bracket, and not
 finding it.  Chances are you left some needed parentheses out earlier in
 the line, and you really meant a \*(L"less than\*(R".
-.Ip "Use of \*(N"$$<digit>\*(T" to mean \*(N"${$}<digit>\*(T" is deprecated" 4
-(D) Perl versions before 5.004 misinterpreted any type marker followed
-by \*(L"$\*(R" and a digit.  For example, \*(L"$$0\*(R" was incorrectly taken to mean
-\*(L"${$}0\*(R" instead of \*(L"${$0}\*(R".  This bug is (mostly) fixed in Perl 5.004.
-.Sp
-However, the developers of Perl 5.004 could not fix this bug completely,
-because at least two widely-used modules depend on the old meaning of
-\*(L"$$0\*(R" in a string.  So Perl 5.004 still interprets \*(L"$$<digit>\*(R" in the
-old (broken) way inside strings; but it generates this message as a
-warning.  And in Perl 5.005, this special treatment will cease.
 .Ip "Use of $# is deprecated" 4
 (D) This was an ill-advised attempt to emulate a poorly defined \fBawk\fR feature.
 Use an explicit \fIprintf()\fR or \fIsprintf()\fR instead.
@@ -2007,7 +2159,7 @@ a \fIsplit()\fR explicitly to an array (or list).
 (D) As an (ahem) accidental feature, \f(CWAUTOLOAD\fR subroutines are looked
 up as methods (using the \f(CW@ISA\fR hierarchy) even when the subroutines to
 be autoloaded were called as plain functions (e.g. \f(CWFoo::bar()\fR), not
-as methods (e.g. \f(CWFoo-\fR\fIbar()\fR> or \f(CW$obj-\fR\fIbar()\fR>).
+as methods (e.g. \f(CWFoo->bar()\fR or \f(CW$obj->bar()\fR).
 .Sp
 This bug will be rectified in Perl 5.005, which will use method lookup
 only for methods\*(R' \f(CWAUTOLOAD\fRs.  However, there is a significant base
@@ -2022,7 +2174,14 @@ depend on inheriting \f(CWAUTOLOAD\fR for non-methods from a base class named
 .Sp
 In code that currently says \f(CWuse AutoLoader; @ISA = qw(AutoLoader);\fR you
 should remove AutoLoader from \f(CW@ISA\fR and change \f(CWuse AutoLoader;\fR to
-C<\f(CWuse AutoLoader 'AUTOLOAD';\fR.
+\f(CWuse AutoLoader 'AUTOLOAD';\fR.
+.Ip "Use of reserved word \*(N"%s\*(T" is deprecated" 4
+(D) The indicated bareword is a reserved word.  Future versions of perl
+may use it as a keyword, so you're better off either explicitly quoting
+the word in a manner appropriate for its context of use, or using a
+different name altogether.  The warning can be suppressed for subroutine
+names by either adding a \f(CW&\fR prefix, or using a package qualifier,
+e.g. \f(CW&our()\fR, or \f(CWFoo::our()\fR.
 .Ip "Use of %s is deprecated" 4
 (D) The construct indicated is no longer recommended for use, generally
 because there's a better way to do it, and also because the old way has
@@ -2031,6 +2190,8 @@ bad side effects.
 (W) An undefined value was used as if it were already defined.  It was
 interpreted as a "" or a 0, but maybe it was a mistake.  To suppress this
 warning assign an initial value to your variables.
+.Ip "Useless use of \*(N"re\*(T" pragma" 4
+(W) You did \f(CWuse re;\fR without any arguments.   That isn't very useful.
 .Ip "Useless use of %s in void context" 4
 (W) You did something without a side effect in a context that does nothing
 with the return value, such as a statement that doesn't return a value
@@ -2124,6 +2285,26 @@ variables.
 (A) You've accidentally run your script through \fBcsh\fR instead
 of Perl.  Check the #! line, or manually feed your script into
 Perl yourself.
+.Ip "perl: warning: Setting locale failed." 4
+(S) The whole warning message will look something like:
+.Sp
+.Vb 6
+\&        perl: warning: Setting locale failed.
+\&        perl: warning: Please check that your locale settings:
+\&                LC_ALL = "En_US",
+\&                LANG = (unset)
+\&            are supported and installed on your system.
+\&        perl: warning: Falling back to the standard locale ("C").
+.Ve
+Exactly what were the failed locale settings varies.  In the above the
+settings were that the \s-1LC_ALL\s0 was \*(L"En_US\*(R" and the \s-1LANG\s0 had no value.
+This error means that Perl detected that you and/or your system
+administrator have set up the so-called variable system but Perl could
+not use those settings.  This was not dead serious, fortunately: there
+is a \*(L"default locale\*(R" called \*(L"C\*(R" that Perl can and will use, the
+script will be run.  Before you really fix the problem, however, you
+will get the same error message each time you run Perl.  How to really
+fix the problem can be found in the \fIperllocale\fR manpage section \fB\s-1LOCALE\s0 \s-1PROBLEMS\s0\fR.
 .Ip "Warning: something's wrong" 4
 (W) You passed \fIwarn()\fR an empty string (the equivalent of \f(CWwarn ""\fR) or
 you called it with no args and \f(CW$_\fR was empty.
@@ -2244,7 +2425,7 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "\*(N"my\*(T" variable %s can't be in a package"
 
-.IX Item "\*(N"my\*(T" variable %s masks earlier declaration in same scope"
+.IX Item "\*(N"my\*(T" variable %s masks earlier declaration in same %s"
 
 .IX Item "\*(N"no\*(T" not allowed in expression"
 
@@ -2298,13 +2479,13 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Allocation too large: %lx"
 
-.IX Item "Allocation too large"
-
 .IX Item "Applying %s to %s will act on scalar(%s)"
 
 .IX Item "Arg too short for msgsnd"
 
 .IX Item "Ambiguous use of %s resolved as %s"
+
+.IX Item "Ambiguous call resolved as \s-1CORE\s0::%s(), qualify as such or use &"
 
 .IX Item "Args must match #! line"
 
@@ -2340,6 +2521,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Bad hash"
 
+.IX Item "Bad index while coercing array into hash"
+
 .IX Item "Bad name after %s::"
 
 .IX Item "Bad symbol for array"
@@ -2351,6 +2534,8 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Badly placed ()'s"
 
 .IX Item "Bareword \*(N"%s\*(T" not allowed while \*(N"strict subs\*(T" in use"
+
+.IX Item "Bareword \*(N"%s\*(T" refers to nonexistent package"
 
 .IX Item "\s-1BEGIN\s0 failed\*(--compilation aborted"
 
@@ -2382,6 +2567,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Can't call method \*(N"%s\*(T" without a package or object reference"
 
+.IX Item "Can't call method \*(N"%s\*(T" on an undefined value"
+
 .IX Item "Can't chdir to %s"
 
 .IX Item "Can't coerce %s to integer in %s"
@@ -2389,6 +2576,8 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Can't coerce %s to number in %s"
 
 .IX Item "Can't coerce %s to string in %s"
+
+.IX Item "Can't coerce array into hash"
 
 .IX Item "Can't create pipe mailbox"
 
@@ -2438,9 +2627,13 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Can't goto subroutine outside a subroutine"
 
+.IX Item "Can't goto subroutine from an eval-string"
+
 .IX Item "Can't localize through a reference"
 
 .IX Item "Can't localize lexical variable %s"
+
+.IX Item "Can't localize pseudo-hash element"
 
 .IX Item "Can't locate auto/%s.al in @\s-1INC\s0"
 
@@ -2451,8 +2644,6 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Can't locate package %s for @%s::\s-1ISA\s0"
 
 .IX Item "Can't make list assignment to \e%\s-1ENV\s0 on this system"
-
-.IX Item "Can't mktemp()"
 
 .IX Item "Can't modify %s in %s"
 
@@ -2500,6 +2691,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Can't upgrade to undef"
 
+.IX Item "Can't use %%! because Errno.pm is not available"
+
 .IX Item "Can't use \*(N"my %s\*(T" in sort comparison"
 
 .IX Item "Can't use %s for loop variable"
@@ -2518,15 +2711,17 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Can't use subscript on %s"
 
-.IX Item "Can't write to temp file for \fB\-e\fR: %s"
-
 .IX Item "Can't x= to read-only value"
 
 .IX Item "Cannot find an opnumber for \*(N"%s\*(T""
 
-.IX Item "Cannot open temporary file"
-
 .IX Item "Cannot resolve method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
+
+.IX Item "Character class syntax [. .] is reserved for future extensions"
+
+.IX Item "Character class syntax [: :] is reserved for future extensions"
+
+.IX Item "Character class syntax [= =] is reserved for future extensions"
 
 .IX Item "chmod: mode argument is missing initial 0"
 
@@ -2534,7 +2729,11 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Compilation failed in require"
 
+.IX Item "Complex regular subexpression recursion limit (%d) exceeded"
+
 .IX Item "connect() on closed fd"
+
+.IX Item "Constant is not %s reference"
 
 .IX Item "Constant subroutine %s redefined"
 
@@ -2570,7 +2769,15 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "\s-1END\s0 failed\*(--cleanup aborted"
 
+.IX Item "entering effective %s failed"
+
 .IX Item "Error converting file specification %s"
+
+.IX Item "%s: Eval-group in insecure regular expression"
+
+.IX Item "%s: Eval-group not allowed, use re \*(N'eval\*(T'"
+
+.IX Item "%s: Eval-group not allowed at run time"
 
 .IX Item "Excessively long <> operator"
 
@@ -2583,6 +2790,8 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Exiting subroutine via %s"
 
 .IX Item "Exiting substitution via %s"
+
+.IX Item "Explicit blessing to \*(N'\*(T' (assuming package main)"
 
 .IX Item "Fatal \s-1VMS\s0 error at %s, line %d"
 
@@ -2636,6 +2845,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Illegal octal digit ignored"
 
+.IX Item "Illegal hex digit ignored"
+
 .IX Item "Illegal switch in \s-1PERL5OPT\s0: %s"
 
 .IX Item "In string, @%s now must be written as \e@%s"
@@ -2644,7 +2855,7 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Insecure directory in %s"
 
-.IX Item "Insecure \s-1PATH\s0"
+.IX Item "Insecure $\s-1ENV\s0{%s} while running %s"
 
 .IX Item "Integer overflow in hex number"
 
@@ -2654,7 +2865,7 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "internal disaster in regexp"
 
-.IX Item "internal error: glob failed"
+.IX Item "glob failed (%s)"
 
 .IX Item "internal urp in regexp at /%s/"
 
@@ -2676,6 +2887,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Label not found for \*(N"redo %s\*(T""
 
+.IX Item "leaving effective %s failed"
+
 .IX Item "listen() on closed fd"
 
 .IX Item "Method for operation %s not found in package %s during blessing"
@@ -2694,9 +2907,9 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Modification of a read-only value attempted"
 
-.IX Item "Modification of noncreatable array value attempted, subscript %d"
+.IX Item "Modification of non-creatable array value attempted, subscript %d"
 
-.IX Item "Modification of noncreatable hash value attempted, subscript \*(N"%s\*(T""
+.IX Item "Modification of non-creatable hash value attempted, subscript \*(N"%s\*(T""
 
 .IX Item "Module name must be constant"
 
@@ -2742,9 +2955,15 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "No space allowed after \fB\-I\fR"
 
+.IX Item "No such array field"
+
+.IX Item "No such field \*(N"%s\*(T" in variable %s of type %s"
+
 .IX Item "No such pipe open"
 
 .IX Item "No such signal: \s-1SIG\s0%s"
+
+.IX Item "no \s-1UTC\s0 offset information; assuming local time is \s-1UTC\s0"
 
 .IX Item "Not a \s-1CODE\s0 reference"
 
@@ -2782,7 +3001,7 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Number too long"
 
-.IX Item "Odd number of elements in hash list"
+.IX Item "Odd number of elements in hash assignment"
 
 .IX Item "Offset outside string"
 
@@ -2790,15 +3009,17 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "oops: oopsHV"
 
-.IX Item "Operation `%s': no method found,%s"
+.IX Item "Operation `%s': no method found, %s"
 
 .IX Item "Operator or semicolon missing before %s"
 
 .IX Item "Out of memory for yacc stack"
 
-.IX Item "Out of memory!"
-
 .IX Item "Out of memory during request for %s"
+
+.IX Item "Out of memory during \*(N"large\*(T" request for %s"
+
+.IX Item "Out of memory during ridiculously large request"
 
 .IX Item "page overflow"
 
@@ -2868,13 +3089,13 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "panic: yylex"
 
-.IX Item "Pareneses missing around \*(N"%s\*(T" list"
+.IX Item "Parentheses missing around \*(N"%s\*(T" list"
 
 .IX Item "Perl %3.3f required\*(--this is only version %s, stopped"
 
 .IX Item "Permission denied"
 
-.IX Item "pid %d not a child"
+.IX Item "pid %x not a child"
 
 .IX Item "\s-1POSIX\s0 getpgrp can't take an argument"
 
@@ -2894,13 +3115,19 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Prototype mismatch: %s vs %s"
 
+.IX Item "Range iterator outside integer range"
+
 .IX Item "Read on closed filehandle <%s>"
 
 .IX Item "Reallocation too large: %lx"
 
 .IX Item "Recompile perl with \fB\-D\fR\s-1DEBUGGING\s0 to use \fB\-D\fR switch"
 
-.IX Item "Recursive inheritance detected"
+.IX Item "Recursive inheritance detected in package \*(N'%s\*(T'"
+
+.IX Item "Recursive inheritance detected while looking for method \*(N'%s\*(T' in package \*(N'%s\*(T'"
+
+.IX Item "Reference found where even-sized list expected"
 
 .IX Item "Reference miscount in sv_replace()"
 
@@ -2936,7 +3163,7 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Send on closed socket"
 
-.IX Item "Sequence (? incomplete (F) A regular expression ended with an incomplete extension (?. See the \fIperlre\fR manpage."
+.IX Item "Sequence (? incomplete"
 
 .IX Item "Sequence (?#... not terminated"
 
@@ -2974,6 +3201,8 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Statement unlikely to be reached"
 
+.IX Item "Strange *+?{} on zero-length expression"
+
 .IX Item "Stub found while resolving method `%s\*(T' overloading `%s\*(T' in package `%s\*(T'"
 
 .IX Item "Subroutine %s redefined"
@@ -2988,11 +3217,13 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "suidperl is no longer needed since %s"
 
+.IX Item "switching effective %s is not implemented"
+
 .IX Item "syntax error"
 
 .IX Item "syntax error at line %d: `%s\*(T' unexpected"
 
-.IX Item "System V \s-1IPC\s0 is not implemented on this machine"
+.IX Item "System V %s is not implemented on this machine"
 
 .IX Item "Syswrite on closed filehandle"
 
@@ -3028,15 +3259,17 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "trailing \e in regexp"
 
-.IX Item "Translation pattern not terminated"
+.IX Item "Transliteration pattern not terminated"
 
-.IX Item "Translation replacement not terminated"
+.IX Item "Transliteration replacement not terminated"
 
 .IX Item "truncate not implemented"
 
 .IX Item "Type of arg %d to %s must be %s (not %s)"
 
 .IX Item "umask: argument is missing initial 0"
+
+.IX Item "umask not implemented"
 
 .IX Item "Unable to create sub named \*(N"%s\*(T""
 
@@ -3059,6 +3292,8 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Undefined subroutine in sort"
 
 .IX Item "Undefined top format \*(N"%s\*(T" called"
+
+.IX Item "Undefined value assigned to typeglob"
 
 .IX Item "unexec of %s into %s failed!"
 
@@ -3090,8 +3325,6 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Unterminated <> operator"
 
-.IX Item "Use of \*(N"$$<digit>\*(T" to mean \*(N"${$}<digit>\*(T" is deprecated"
-
 .IX Item "Use of $# is deprecated"
 
 .IX Item "Use of $* is deprecated"
@@ -3104,9 +3337,13 @@ in \fI\s-1README\s0.os2\fR.
 
 .IX Item "Use of inherited \s-1AUTOLOAD\s0 for non-method %s() is deprecated"
 
+.IX Item "Use of reserved word \*(N"%s\*(T" is deprecated"
+
 .IX Item "Use of %s is deprecated"
 
 .IX Item "Use of uninitialized value"
+
+.IX Item "Useless use of \*(N"re\*(T" pragma"
 
 .IX Item "Useless use of %s in void context"
 
@@ -3121,6 +3358,8 @@ in \fI\s-1README\s0.os2\fR.
 .IX Item "Variable \*(N"%s\*(T" will not stay shared"
 
 .IX Item "Variable syntax"
+
+.IX Item "perl: warning: Setting locale failed."
 
 .IX Item "Warning: something's wrong"
 

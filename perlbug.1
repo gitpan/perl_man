@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLBUG 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLBUG 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -191,14 +191,16 @@
 perlbug \- how to submit bug reports on Perl
 .SH "SYNOPSIS"
 \fBperlbug\fR [\ \fB\-v\fR\ ] [\ \fB\-a\fR\ \fIaddress\fR\ ] [\ \fB\-s\fR\ \fIsubject\fR\ ]
-[\ \fB\-b\fR\ \fIbody\fR\ |\ \fB\-f\fR\ \fIfile\fR\ ] [\ \fB\-r\fR\ \fIreturnaddress\fR\ ]
+[\ \fB\-b\fR\ \fIbody\fR\ |\ \fB\-f\fR\ \fIinputfile\fR\ ] [\ \fB\-F\fR\ \fIoutputfile\fR\ ]
+[\ \fB\-r\fR\ \fIreturnaddress\fR\ ]
 [\ \fB\-e\fR\ \fIeditor\fR\ ] [\ \fB\-c\fR\ \fIadminaddress\fR\ |\ \fB\-C\fR\ ]
 [\ \fB\-S\fR\ ] [\ \fB\-t\fR\ ]  [\ \fB\-d\fR\ ]  [\ \fB\-h\fR\ ]
 .PP
-\fBperlbug\fR [\ \fB\-v\fR\ ] [\ \fB\-r\fR\ \fIreturnaddress\fR\ ] [\ \fB\-ok\fR\ |\ \fBokay\fR\ ]
+\fBperlbug\fR [\ \fB\-v\fR\ ] [\ \fB\-r\fR\ \fIreturnaddress\fR\ ]
+[\ \fB\-ok\fR\ |\ \fB\-okay\fR\ |\ \fB\-nok\fR\ |\ \fB\-nokay\fR\ ]
 .SH "DESCRIPTION"
 A program to help generate bug reports about perl or the modules that
-come with it, and mail them. 
+come with it, and mail them.
 .PP
 If you have found a bug with a non-standard port (one that was not part
 of the \fIstandard distribution\fR), a binary distribution, or a
@@ -304,10 +306,14 @@ Data mode (the default if you redirect or pipe output).  This prints out
 your configuration data, without mailing anything.  You can use this
 with \fB\-v\fR to get more complete data.
 .Ip "\fB\-e\fR" 8
-Editor to use. 
+Editor to use.
 .Ip "\fB\-f\fR" 8
 File containing the body of the report.  Use this to quickly send a
 prepared message.
+.Ip "\fB\-F\fR" 8
+File to output the results to instead of sending as an email. Useful
+particularly when running perlbug on a machine with no direct internet
+connection.
 .Ip "\fB\-h\fR" 8
 Prints a brief summary of the options.
 .Ip "\fB\-ok\fR" 8
@@ -319,6 +325,17 @@ with \fB\-v\fR to get more complete data.   Only makes a report if this
 system is less than 60 days old.
 .Ip "\fB\-okay\fR" 8
 As \fB\-ok\fR except it will report on older systems.
+.Ip "\fB\-nok\fR" 8
+Report unsuccessful build on this system.  Forces \fB\-C\fR.  Forces and
+supplies a value for \fB\-s\fR, then requires you to edit the report
+and say what went wrong.  Alternatively, a prepared report may be
+supplied using \fB\-f\fR.  Only prompts for a return address if it
+cannot guess it (for use with \fBmake\fR). Honors return address
+specified with \fB\-r\fR.  You can use this with \fB\-v\fR to get more
+complete data.  Only makes a report if this system is less than 60
+days old.
+.Ip "\fB\-nokay\fR" 8
+As \fB\-nok\fR except it will report on older systems.
 .Ip "\fB\-r\fR" 8
 Your return address.  The program will ask you to confirm its default
 if you don't use this option.
@@ -335,8 +352,9 @@ Include verbose configuration data in the report.
 Kenneth Albanowski (<kjahds@kjahds.com>), subsequently \fIdoc\fRtored
 by Gurusamy Sarathy (<gsar@umich.edu>), Tom Christiansen
 (<tchrist@perl.com>), Nathan Torkington (<gnat@frii.com>),
-Charles F. Randall (<cfr@pobox.com>) and
-Mike Guy (<mjtg@cam.a.uk>).
+Charles F. Randall (<cfr@pobox.com>), Mike Guy
+(<mjtg@cam.a.uk>), Dominic Dunlop (<domo@computer.org>)
+and Hugo van der Sanden (<hv@crypt0.demon.co.uk>).
 .SH "SEE ALSO"
 \fIperl\fR\|(1), \fIperldebug\fR\|(1), \fIperltrap\fR\|(1), \fIdiff\fR\|(1), \fIpatch\fR\|(1)
 .SH "BUGS"
@@ -382,11 +400,17 @@ None known (guess what must have been used to report them?)
 
 .IX Item "\fB\-f\fR"
 
+.IX Item "\fB\-F\fR"
+
 .IX Item "\fB\-h\fR"
 
 .IX Item "\fB\-ok\fR"
 
 .IX Item "\fB\-okay\fR"
+
+.IX Item "\fB\-nok\fR"
+
+.IX Item "\fB\-nokay\fR"
 
 .IX Item "\fB\-r\fR"
 

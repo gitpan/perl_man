@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLGUTS 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLGUTS 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -214,35 +214,52 @@ An \s-1SV\s0 can be created and loaded with one command.  There are four types o
 values that can be loaded: an integer value (\s-1IV\s0), a double (\s-1NV\s0), a string,
 (\s-1PV\s0), and another scalar (\s-1SV\s0).
 .PP
-The five routines are:
+The six routines are:
 .PP
-.Vb 5
+.Vb 6
 \&    SV*  newSViv(IV);
 \&    SV*  newSVnv(double);
 \&    SV*  newSVpv(char*, int);
+\&    SV*  newSVpvn(char*, int);
 \&    SV*  newSVpvf(const char*, ...);
 \&    SV*  newSVsv(SV*);
 .Ve
-To change the value of an *already-existing* \s-1SV\s0, there are six routines:
+To change the value of an *already-existing* \s-1SV\s0, there are seven routines:
 .PP
-.Vb 6
+.Vb 8
 \&    void  sv_setiv(SV*, IV);
+\&    void  sv_setuv(SV*, UV);
 \&    void  sv_setnv(SV*, double);
 \&    void  sv_setpv(SV*, char*);
 \&    void  sv_setpvn(SV*, char*, int)
 \&    void  sv_setpvf(SV*, const char*, ...);
+\&    void  sv_setpvfn(SV*, const char*, STRLEN, va_list *, SV **, I32, bool);
 \&    void  sv_setsv(SV*, SV*);
 .Ve
 Notice that you can choose to specify the length of the string to be
-assigned by using \f(CWsv_setpvn\fR or \f(CWnewSVpv\fR, or you may allow Perl to
-calculate the length by using \f(CWsv_setpv\fR or by specifying 0 as the second
-argument to \f(CWnewSVpv\fR.  Be warned, though, that Perl will determine the
-string's length by using \f(CWstrlen\fR, which depends on the string terminating
-with a \s-1NUL\s0 character.  The arguments of \f(CWsv_setpvf\fR are processed like
-\f(CWsprintf\fR, and the formatted output becomes the value.
+assigned by using \f(CWsv_setpvn\fR, \f(CWnewSVpvn\fR, or \f(CWnewSVpv\fR, or you may
+allow Perl to calculate the length by using \f(CWsv_setpv\fR or by specifying
+0 as the second argument to \f(CWnewSVpv\fR.  Be warned, though, that Perl will
+determine the string's length by using \f(CWstrlen\fR, which depends on the
+string terminating with a \s-1NUL\s0 character.
 .PP
-All SVs that will contain strings should, but need not, be terminated
-with a \s-1NUL\s0 character.  If it is not \s-1NUL\s0\-terminated there is a risk of
+The arguments of \f(CWsv_setpvf\fR are processed like \f(CWsprintf\fR, and the
+formatted output becomes the value.
+.PP
+\f(CWsv_setpvfn\fR is an analogue of \f(CWvsprintf\fR, but it allows you to specify
+either a pointer to a variable argument list or the address and length of
+an array of SVs.  The last argument points to a boolean; on return, if that
+boolean is true, then locale-specific information has been used to format
+the string, and the string's contents are therefore untrustworty (see
+the \fIperlsec\fR manpage).  This pointer may be \s-1NULL\s0 if that information is not
+important.  Note that this function requires you to specify the length of
+the format.
+.PP
+The \f(CWsv_set*()\fR functions are not generic enough to operate on values
+that have \*(L"magic\*(R".  See the section on \fIMagic Virtual Tables\fR later in this document.
+.PP
+All SVs that contain strings should be terminated with a \s-1NUL\s0 character.
+If it is not \s-1NUL\s0\-terminated there is a risk of
 core dumps and corruptions from code which passes the string to C
 functions or system calls which expect a \s-1NUL\s0\-terminated string.
 Perl's own functions typically add a trailing \s-1NUL\s0 for this reason.
@@ -261,7 +278,7 @@ or string.
 .PP
 In the \f(CWSvPV\fR macro, the length of the string returned is placed into the
 variable \f(CWlen\fR (this is a macro, so you do \fInot\fR use \f(CW&len\fR).  If you do not
-care what the length of the data is, use the global variable \f(CWna\fR.  Remember,
+care what the length of the data is, use the global variable \f(CWPL_na\fR.  Remember,
 however, that Perl allows arbitrary strings of data that may both contain
 NULs and might not be terminated by a \s-1NUL\s0.
 .PP
@@ -308,18 +325,24 @@ But note that these last three macros are valid only if \f(CWSvPOK()\fR is true.
 If you want to append something to the end of string stored in an \f(CWSV*\fR,
 you can use the following functions:
 .PP
-.Vb 4
+.Vb 5
 \&    void  sv_catpv(SV*, char*);
 \&    void  sv_catpvn(SV*, char*, int);
 \&    void  sv_catpvf(SV*, const char*, ...);
+\&    void  sv_catpvfn(SV*, const char*, STRLEN, va_list *, SV **, I32, bool);
 \&    void  sv_catsv(SV*, SV*);
 .Ve
 The first function calculates the length of the string to be appended by
 using \f(CWstrlen\fR.  In the second, you specify the length of the string
 yourself.  The third function processes its arguments like \f(CWsprintf\fR and
-appends the formatted output.  The fourth function extends the string
-stored in the first \s-1SV\s0 with the string stored in the second \s-1SV\s0.  It also
-forces the second \s-1SV\s0 to be interpreted as a string.
+appends the formatted output.  The fourth function works like \f(CWvsprintf\fR.
+You can specify the address and length of an array of SVs instead of the
+va_list argument. The fifth function extends the string stored in the first
+\s-1SV\s0 with the string stored in the second \s-1SV\s0.  It also forces the second \s-1SV\s0
+to be interpreted as a string.
+.PP
+The \f(CWsv_cat*()\fR functions are not generic enough to operate on values that
+have \*(L"magic\*(R".  See the section on \fIMagic Virtual Tables\fR later in this document.
 .PP
 If you know the name of a scalar variable, you can get a pointer to its \s-1SV\s0
 by using the following:
@@ -335,14 +358,14 @@ you can call:
 .Vb 1
 \&    SvOK(SV*)
 .Ve
-The scalar \f(CWundef\fR value is stored in an \s-1SV\s0 instance called \f(CWsv_undef\fR.  Its
+The scalar \f(CWundef\fR value is stored in an \s-1SV\s0 instance called \f(CWPL_sv_undef\fR.  Its
 address can be used whenever an \f(CWSV*\fR is needed.
 .PP
-There are also the two values \f(CWsv_yes\fR and \f(CWsv_no\fR, which contain Boolean
-\s-1TRUE\s0 and \s-1FALSE\s0 values, respectively.  Like \f(CWsv_undef\fR, their addresses can
+There are also the two values \f(CWPL_sv_yes\fR and \f(CWPL_sv_no\fR, which contain Boolean
+\s-1TRUE\s0 and \s-1FALSE\s0 values, respectively.  Like \f(CWPL_sv_undef\fR, their addresses can
 be used whenever an \f(CWSV*\fR is needed.
 .PP
-Do not be fooled into thinking that \f(CW(SV *) 0\fR is the same as \f(CW&sv_undef\fR.
+Do not be fooled into thinking that \f(CW(SV *) 0\fR is the same as \f(CW&PL_sv_undef\fR.
 Take this code:
 .PP
 .Vb 5
@@ -355,7 +378,7 @@ Take this code:
 This code tries to return a new \s-1SV\s0 (which contains the value 42) if it should
 return a real value, or undef otherwise.  Instead it has returned a \s-1NULL\s0
 pointer which, somewhere down the line, will cause a segmentation violation,
-bus error, or just weird results.  Change the zero to \f(CW&sv_undef\fR in the first
+bus error, or just weird results.  Change the zero to \f(CW&PL_sv_undef\fR in the first
 line and all will be well.
 .PP
 To free an \s-1SV\s0 that you've created, call \f(CWSvREFCNT_dec(SV*)\fR.  Normally this
@@ -676,9 +699,29 @@ Perl calculate the string length.  \s-1SV\s0 is blessed if \f(CWclassname\fR is 
 .Vb 1
 \&        SV* sv_setref_pvn(SV* rv, char* classname, PV iv, int length);
 .Ve
-.Vb 2
-\&        int sv_isa(SV* sv, char* name);
-\&        int sv_isobject(SV* sv);
+Tests whether the \s-1SV\s0 is blessed into the specified class.  It does not
+check inheritance relationships.
+.PP
+.Vb 1
+\&        int  sv_isa(SV* sv, char* name);
+.Ve
+Tests whether the \s-1SV\s0 is a reference to a blessed object.
+.PP
+.Vb 1
+\&        int  sv_isobject(SV* sv);
+.Ve
+Tests whether the \s-1SV\s0 is derived from the specified class. \s-1SV\s0 can be either
+a reference to a blessed object or a string containing a class name. This
+is the function implementing the \f(CWUNIVERSAL::isa\fR functionality.
+.PP
+.Vb 1
+\&        bool sv_derived_from(SV* sv, char* name);
+.Ve
+To check if you've got an object derived from a specific class you have 
+to write:
+.PP
+.Vb 1
+\&        if (sv_isobject(sv) && sv_derived_from(sv, class)) { ... }
 .Ve
 .Sh "Creating New Variables"
 To create a new Perl variable with an undef value which can be accessed from
@@ -780,19 +823,18 @@ name), and each value in the hash table is a \s-1GV\s0 (Glob Value).  This \s-1G
 in turn contains references to the various objects of that name,
 including (but not limited to) the following:
 .PP
-.Vb 7
+.Vb 6
 \&    Scalar Value
 \&    Array Value
 \&    Hash Value
-\&    File Handle
-\&    Directory Handle
+\&    I/O Handle
 \&    Format
 \&    Subroutine
 .Ve
-There is a single stash called \*(L"defstash\*(R" that holds the items that exist
+There is a single stash called \*(L"PL_defstash\*(R" that holds the items that exist
 in the \*(L"main\*(R" package.  To get at the items in other packages, append the
 string \*(L"::\*(R" to the package name.  The items in the \*(L"Foo\*(R" package are in
-the stash \*(L"Foo::\*(R" in defstash.  The items in the \*(L"Bar::Baz\*(R" package are
+the stash \*(L"Foo::\*(R" in PL_defstash.  The items in the \*(L"Bar::Baz\*(R" package are
 in the stash \*(L"Baz::\*(R" in \*(L"Bar::"'s stash.
 .PP
 To get the stash pointer for a particular package, use the function:
@@ -1040,14 +1082,40 @@ any time a scalar's value is used or changed.  The \f(CWMAGIC\fR's
 .Ve
 When the \s-1SV\s0 is read from or written to, the \f(CWuf_val\fR or \f(CWuf_set\fR
 function will be called with \f(CWuf_index\fR as the first arg and a
-pointer to the \s-1SV\s0 as the second.
+pointer to the \s-1SV\s0 as the second.  A simple example of how to add \*(L'U\*(R'
+magic is shown below.  Note that the ufuncs structure is copied by
+sv_magic, so you can safely allocate it on the stack.
 .PP
+.Vb 10
+\&    void
+\&    Umagic(sv)
+\&        SV *sv;
+\&    PREINIT:
+\&        struct ufuncs uf;
+\&    CODE:
+\&        uf.uf_val   = &my_get_fn;
+\&        uf.uf_set   = &my_set_fn;
+\&        uf.uf_index = 0;
+\&        sv_magic(sv, 0, 'U', (char*)&uf, sizeof(uf));
+.Ve
 Note that because multiple extensions may be using \*(L'~\*(R' or \*(L'U\*(R' magic,
 it is important for extensions to take extra care to avoid conflict.
 Typically only using the magic on objects blessed into the same class
 as the extension is sufficient.  For \*(L'~\*(R' magic, it may also be
 appropriate to add an I32 \*(L'signature\*(R' at the top of the private data
 area and check that.
+.PP
+Also note that the \f(CWsv_set*()\fR and \f(CWsv_cat*()\fR functions described
+earlier do \fBnot\fR invoke \*(L'set\*(R' magic on their targets.  This must
+be done by the user either by calling the \f(CWSvSETMAGIC()\fR macro after
+calling these functions, or by using one of the \f(CWsv_set*_mg()\fR or
+\f(CWsv_cat*_mg()\fR functions.  Similarly, generic C code must call the
+\f(CWSvGETMAGIC()\fR macro to invoke any \*(L'get\*(R' magic if they use an \s-1SV\s0
+obtained from external sources in functions that don't handle magic.
+the section on \fI\s-1API\s0 \s-1LISTING\s0\fR later in this document identifies such functions.
+For example, calls to the \f(CWsv_cat*()\fR functions typically need to be
+followed by \f(CWSvSETMAGIC()\fR, but they don't need a prior \f(CWSvGETMAGIC()\fR
+since their implementation handles \*(L'get\*(R' magic.
 .Sh "Finding Magic"
 .PP
 .Vb 1
@@ -1073,6 +1141,34 @@ in later releases, and are bracketed with [\s-1MAYCHANGE\s0] below. If
 you find yourself actually applying such information in this section, be
 aware that the behavior may change in the future, umm, without warning.
 .PP
+The perl tie function associates a variable with an object that implements
+the various \s-1GET\s0, \s-1SET\s0 etc methods.  To perform the equivalent of the perl
+tie function from an \s-1XSUB\s0, you must mimic this behaviour.  The code below
+carries out the necessary steps \- firstly it creates a new hash, and then
+creates a second hash which it blesses into the class which will implement
+the tie methods. Lastly it ties the two hashes together, and returns a
+reference to the new tied hash.  Note that the code below does \s-1NOT\s0 call the
+\s-1TIEHASH\s0 method in the MyTie class \-
+see the section on \fICalling Perl Routines from within C Programs\fR for details on how
+to do this.
+.PP
+.Vb 15
+\&    SV*
+\&    mytie()
+\&    PREINIT:
+\&        HV *hash;
+\&        HV *stash;
+\&        SV *tie;
+\&    CODE:
+\&        hash = newHV();
+\&        tie = newRV_noinc((SV*)newHV());
+\&        stash = gv_stashpv("MyTie", TRUE);
+\&        sv_bless(tie, stash);
+\&        hv_magic(hash, tie, 'P');
+\&        RETVAL = newRV_noinc(hash);
+\&    OUTPUT:
+\&        RETVAL
+.Ve
 The \f(CWav_store\fR function, when given a tied array argument, merely
 copies the magic of the array onto the value to be \*(L"stored\*(R", using
 \f(CWmg_copy\fR.  It may also return \s-1NULL\s0, indicating that the value did not
@@ -1188,7 +1284,7 @@ short-lived storage, the corresponding string may be reallocated like
 this:
 .Sp
 .Vb 1
-\&  SAVEDELETE(defstash, savepv(tmpbuf), strlen(tmpbuf));
+\&  SAVEDELETE(PL_defstash, savepv(tmpbuf), strlen(tmpbuf));
 .Ve
 .Ip "\f(CWSAVEDESTRUCTOR(f,p)\fR" 5
 At the end of \fIpseudo-block\fR the function \f(CWf\fR is called with the
@@ -1243,10 +1339,10 @@ To handle this situation, the \s-1PPCODE\s0 directive is used and the stack is
 extended using the macro:
 .PP
 .Vb 1
-\&    EXTEND(sp, num);
+\&    EXTEND(SP, num);
 .Ve
-where \f(CWsp\fR is the stack pointer, and \f(CWnum\fR is the number of elements the
-stack should be extended by.
+where \f(CWSP\fR is the macro that represents the local copy of the stack pointer,
+and \f(CWnum\fR is the number of elements the stack should be extended by.
 .PP
 Now that there is room on the stack, values can be pushed on it using the
 macros to push IVs, doubles, strings, and \s-1SV\s0 pointers respectively:
@@ -1300,8 +1396,9 @@ When using any of these routines (except \f(CWperl_call_argv\fR), the programmer
 must manipulate the Perl stack.  These include the following macros and
 functions:
 .PP
-.Vb 10
+.Vb 11
 \&    dSP
+\&    SP
 \&    PUSHMARK()
 \&    PUTBACK
 \&    SPAGAIN
@@ -1442,7 +1539,7 @@ This is converted to a tree similar to this one:
 \&        /   \e
 \&      $b     $c
 .Ve
-(but slightly more complicated).  This tree reflect the way Perl
+(but slightly more complicated).  This tree reflects the way Perl
 parsed your code, but has nothing to do with the execution order.
 There is an additional \*(L"thread\*(R" going through the nodes of the tree
 which shows the order of execution of the nodes.  In our simplified
@@ -1514,7 +1611,7 @@ and corresponding check routines is described in \fIopcode.pl\fR (do not
 forget to run \f(CWmake regen_headers\fR if you modify this file).
 .PP
 A check routine is called when the node is fully constructed except
-for the execution-order thread.  Since at this time there is no
+for the execution-order thread.  Since at this time there are no
 back-links to the currently constructed node, one can do most any
 operation to the top-level node, including freeing it and/or creating
 new nodes above/below it.
@@ -1537,7 +1634,7 @@ If constant folding was not performed, the execution-order thread is
 created.
 .Sh "Compile pass 2: context propagation"
 When a context for a part of compile tree is known, it is propagated
-down through the tree.  Aat this time the context can have 5 values
+down through the tree.  At this time the context can have 5 values
 (instead of 2 for runtime context): void, boolean, scalar, list, and
 lvalue.  In contrast with the pass 1 this pass is processed from top
 to bottom: a node's context determines the context for its children.
@@ -1551,28 +1648,36 @@ of \fIfree()\fRing (i.e. their type is changed to \s-1OP_NULL\s0).
 After the compile tree for a subroutine (or for an \f(CWeval\fR or a file)
 is created, an additional pass over the code is performed. This pass
 is neither top-down or bottom-up, but in the execution order (with
-additional compilications for conditionals).  These optimizations are
+additional complications for conditionals).  These optimizations are
 done in the subroutine \fIpeep()\fR.  Optimizations performed at this stage
 are subject to the same restrictions as in the pass 2.
 .SH "API LISTING"
 This is a listing of functions, macros, flags, and variables that may be
 useful to extension writers or that may be found while reading other
 extensions.
-.Ip "AvFILL" 8
-Same as \f(CWav_len\fR.
+.PP
+Note that all Perl API global variables must be referenced with the \f(CWPL_\fR
+prefix.  Some macros are provided for compatibility with the older,
+unadorned names, but this support will be removed in a future release.
+.PP
+It is strongly recommended that all Perl API functions that don't begin
+with \f(CWperl\fR be referenced with an explicit \f(CWPerl_\fR prefix.
+.PP
+The sort order of the listing is case insensitive, with any
+occurrences of \*(L'_\*(R' ignored for the the purpose of sorting.
 .Ip "av_clear" 8
 Clears an array, making it empty.  Does not free the memory used by the
 array itself.
 .Sp
 .Vb 1
-\&        void    av_clear _((AV* ar));
+\&        void    av_clear (AV* ar)
 .Ve
 .Ip "av_extend" 8
 Pre-extend an array.  The \f(CWkey\fR is the index to which the array should be
 extended.
 .Sp
 .Vb 1
-\&        void    av_extend _((AV* ar, I32 key));
+\&        void    av_extend (AV* ar, I32 key)
 .Ve
 .Ip "av_fetch" 8
 Returns the \s-1SV\s0 at the specified index in the array.  The \f(CWkey\fR is the
@@ -1583,13 +1688,15 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied arrays.
 .Sp
 .Vb 1
-\&        SV**    av_fetch _((AV* ar, I32 key, I32 lval));
+\&        SV**    av_fetch (AV* ar, I32 key, I32 lval)
 .Ve
+.Ip "AvFILL" 8
+Same as \f(CWav_len()\fR.  Deprecated, use \f(CWav_len()\fR instead.
 .Ip "av_len" 8
 Returns the highest index in the array.  Returns \-1 if the array is empty.
 .Sp
 .Vb 1
-\&        I32     av_len _((AV* ar));
+\&        I32     av_len (AV* ar)
 .Ve
 .Ip "av_make" 8
 Creates a new \s-1AV\s0 and populates it with a list of SVs.  The SVs are copied
@@ -1597,27 +1704,27 @@ into the array, so they may be freed after the call to av_make.  The new \s-1AV\
 will have a reference count of 1.
 .Sp
 .Vb 1
-\&        AV*     av_make _((I32 size, SV** svp));
+\&        AV*     av_make (I32 size, SV** svp)
 .Ve
 .Ip "av_pop" 8
-Pops an \s-1SV\s0 off the end of the array.  Returns \f(CW&sv_undef\fR if the array is
+Pops an \s-1SV\s0 off the end of the array.  Returns \f(CW&PL_sv_undef\fR if the array is
 empty.
 .Sp
 .Vb 1
-\&        SV*     av_pop _((AV* ar));
+\&        SV*     av_pop (AV* ar)
 .Ve
 .Ip "av_push" 8
 Pushes an \s-1SV\s0 onto the end of the array.  The array will grow automatically
 to accommodate the addition.
 .Sp
 .Vb 1
-\&        void    av_push _((AV* ar, SV* val));
+\&        void    av_push (AV* ar, SV* val)
 .Ve
 .Ip "av_shift" 8
 Shifts an \s-1SV\s0 off the beginning of the array.
 .Sp
 .Vb 1
-\&        SV*     av_shift _((AV* ar));
+\&        SV*     av_shift (AV* ar)
 .Ve
 .Ip "av_store" 8
 Stores an \s-1SV\s0 in an array.  The array index is specified as \f(CWkey\fR.  The
@@ -1631,13 +1738,13 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied arrays.
 .Sp
 .Vb 1
-\&        SV**    av_store _((AV* ar, I32 key, SV* val));
+\&        SV**    av_store (AV* ar, I32 key, SV* val)
 .Ve
 .Ip "av_undef" 8
 Undefines the array.  Frees the memory used by the array itself.
 .Sp
 .Vb 1
-\&        void    av_undef _((AV* ar));
+\&        void    av_undef (AV* ar)
 .Ve
 .Ip "av_unshift" 8
 Unshift the given number of \f(CWundef\fR values onto the beginning of the
@@ -1645,7 +1752,7 @@ array.  The array will grow automatically to accommodate the addition.
 You must then use \f(CWav_store\fR to assign values to these new elements.
 .Sp
 .Vb 1
-\&        void    av_unshift _((AV* ar, I32 num));
+\&        void    av_unshift (AV* ar, I32 num)
 .Ve
 .Ip "\s-1CLASS\s0" 8
 Variable which is setup by \f(CWxsubpp\fR to indicate the class name for a \*(C+ \s-1XS\s0
@@ -1657,7 +1764,7 @@ source, \f(CWd\fR is the destination, \f(CWn\fR is the number of items, and \f(C
 the type.  May fail on overlapping copies.  See also \f(CWMove\fR.
 .Sp
 .Vb 1
-\&        (void) Copy( s, d, n, t );
+\&        void    Copy( s, d, n, t )
 .Ve
 .Ip "croak" 8
 This is the \s-1XSUB\s0\-writer's interface to Perl's \f(CWdie\fR function.  Use this
@@ -1666,35 +1773,36 @@ function the same way you use the C \f(CWprintf\fR function.  See \f(CWwarn\fR.
 Returns the stash of the \s-1CV\s0.
 .Sp
 .Vb 1
-\&        HV * CvSTASH( SV* sv )
+\&        HV*     CvSTASH( SV* sv )
 .Ve
-.Ip "DBsingle" 8
+.Ip "PL_DBsingle" 8
 When Perl is run in debugging mode, with the \fB\-d\fR switch, this \s-1SV\s0 is a
 boolean which indicates whether subs are being single-stepped.
 Single-stepping is automatically turned on after every step.  This is the C
-variable which corresponds to Perl's \f(CW$DB::single\fR variable.  See \f(CWDBsub\fR.
-.Ip "DBsub" 8
+variable which corresponds to Perl's \f(CW$DB::single\fR variable.  See \f(CWPL_DBsub\fR.
+.Ip "PL_DBsub" 8
 When Perl is run in debugging mode, with the \fB\-d\fR switch, this \s-1GV\s0 contains
 the \s-1SV\s0 which holds the name of the sub being debugged.  This is the C
-variable which corresponds to Perl's \f(CW$DB::sub\fR variable.  See \f(CWDBsingle\fR.
+variable which corresponds to Perl's \f(CW$DB::sub\fR variable.  See \f(CWPL_DBsingle\fR.
 The sub name can be found by
 .Sp
 .Vb 1
-\&        SvPV( GvSV( DBsub ), na )
+\&        SvPV( GvSV( PL_DBsub ), PL_na )
 .Ve
-.Ip "DBtrace" 8
+.Ip "PL_DBtrace" 8
 Trace variable used when Perl is run in debugging mode, with the \fB\-d\fR
 switch.  This is the C variable which corresponds to Perl's \f(CW$DB::trace\fR
-variable.  See \f(CWDBsingle\fR.
+variable.  See \f(CWPL_DBsingle\fR.
 .Ip "dMARK" 8
 Declare a stack marker variable, \f(CWmark\fR, for the \s-1XSUB\s0.  See \f(CWMARK\fR and
 \f(CWdORIGMARK\fR.
 .Ip "dORIGMARK" 8
 Saves the original stack mark for the \s-1XSUB\s0.  See \f(CWORIGMARK\fR.
-.Ip "dowarn" 8
+.Ip "PL_dowarn" 8
 The C variable which corresponds to Perl's $^W warning variable.
 .Ip "dSP" 8
-Declares a stack pointer variable, \f(CWsp\fR, for the \s-1XSUB\s0.  See \f(CWSP\fR.
+Declares a local copy of perl's stack pointer for the \s-1XSUB\s0, available via
+the \f(CWSP\fR macro.  See \f(CWSP\fR.
 .Ip "dXSARGS" 8
 Sets up stack and mark pointers for an \s-1XSUB\s0, calling dSP and dMARK.  This is
 usually handled automatically by \f(CWxsubpp\fR.  Declares the \f(CWitems\fR variable
@@ -1702,6 +1810,13 @@ to indicate the number of items on the stack.
 .Ip "dXSI32" 8
 Sets up the \f(CWix\fR variable for an \s-1XSUB\s0 which has aliases.  This is usually
 handled automatically by \f(CWxsubpp\fR.
+.Ip "do_binmode" 8
+Switches filehandle to binmode.  \f(CWiotype\fR is what \f(CWIoTYPE(io)\fR would
+contain.
+.Sp
+.Vb 1
+\&        do_binmode(fp, iotype, TRUE);
+.Ve
 .Ip "\s-1ENTER\s0" 8
 Opening bracket on a callback.  See \f(CWLEAVE\fR and the \fIperlcall\fR manpage.
 .Sp
@@ -1712,7 +1827,23 @@ Opening bracket on a callback.  See \f(CWLEAVE\fR and the \fIperlcall\fR manpage
 Used to extend the argument stack for an \s-1XSUB\s0's return values.
 .Sp
 .Vb 1
-\&        EXTEND( sp, int x );
+\&        EXTEND( sp, int x )
+.Ve
+.Ip "fbm_compile" 8
+Analyses the string in order to make fast searches on it using \fIfbm_instr()\fR --
+the Boyer-Moore algorithm.
+.Sp
+.Vb 1
+\&        void    fbm_compile(SV* sv, U32 flags)
+.Ve
+.Ip "fbm_instr" 8
+Returns the location of the \s-1SV\s0 in the string delimited by \f(CWstr\fR and
+\f(CWstrend\fR.  It returns \f(CWNullch\fR if the string can't be found.  The
+\f(CWsv\fR does not have to be fbm_compiled, but the search will not be as
+fast then.
+.Sp
+.Vb 1
+\&        char*   fbm_instr(char *str, char *strend, SV *sv, U32 flags)
 .Ve
 .Ip "\s-1FREETMPS\s0" 8
 Closing bracket for temporaries on a callback.  See \f(CWSAVETMPS\fR and
@@ -1739,12 +1870,10 @@ context, respectively.
 Indicates that no arguments are being sent to a callback.  See the \fIperlcall\fR manpage.
 .Ip "G_SCALAR" 8
 Used to indicate scalar context.  See \f(CWGIMME_V\fR, \f(CWGIMME\fR, and the \fIperlcall\fR manpage.
-.Ip "G_VOID" 8
-Used to indicate void context.  See \f(CWGIMME_V\fR and the \fIperlcall\fR manpage.
 .Ip "gv_fetchmeth" 8
 Returns the glob with the given \f(CWname\fR and a defined subroutine or
 \f(CWNULL\fR.  The glob lives in the given \f(CWstash\fR, or in the stashes
-accessable via \f(CW@ISA\fR and @<\s-1UNIVERSAL\s0>.
+accessible via \f(CW@ISA\fR and \f(CW@UNIVERSAL\fR.
 .Sp
 The argument \f(CWlevel\fR should be either 0 or \-1.  If \f(CWlevel==0\fR, as a
 side-effect creates a glob with the given \f(CWname\fR in the given
@@ -1760,7 +1889,7 @@ you should not use the \s-1GV\s0 directly; instead, you should use the
 method's \s-1CV\s0, which can be obtained from the \s-1GV\s0 with the \f(CWGvCV\fR macro.
 .Sp
 .Vb 1
-\&        GV*     gv_fetchmeth _((HV* stash, char* name, STRLEN len, I32 level));
+\&        GV*     gv_fetchmeth (HV* stash, char* name, STRLEN len, I32 level)
 .Ve
 .Ip "gv_fetchmethod" 8
 .Ip "gv_fetchmethod_autoload" 8
@@ -1787,24 +1916,25 @@ These functions have the same side-effects and as \f(CWgv_fetchmeth\fR with
 The warning against passing the \s-1GV\s0 returned by \f(CWgv_fetchmeth\fR to
 \f(CWperl_call_sv\fR apply equally to these functions.
 .Sp
-.Vb 3
-\&        GV*     gv_fetchmethod _((HV* stash, char* name));
-\&        GV*     gv_fetchmethod_autoload _((HV* stash, char* name,
-\&                                           I32 autoload));
+.Vb 2
+\&        GV*     gv_fetchmethod (HV* stash, char* name)
+\&        GV*     gv_fetchmethod_autoload (HV* stash, char* name, I32 autoload)
 .Ve
+.Ip "G_VOID" 8
+Used to indicate void context.  See \f(CWGIMME_V\fR and the \fIperlcall\fR manpage.
 .Ip "gv_stashpv" 8
 Returns a pointer to the stash for a specified package.  If \f(CWcreate\fR is set
 then the package will be created if it does not already exist.  If \f(CWcreate\fR
 is not set and the package does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
-\&        HV*     gv_stashpv _((char* name, I32 create));
+\&        HV*     gv_stashpv (char* name, I32 create)
 .Ve
 .Ip "gv_stashsv" 8
 Returns a pointer to the stash for a specified package.  See \f(CWgv_stashpv\fR.
 .Sp
 .Vb 1
-\&        HV*     gv_stashsv _((SV* sv, I32 create));
+\&        HV*     gv_stashsv (SV* sv, I32 create)
 .Ve
 .Ip "GvSV" 8
 Return the \s-1SV\s0 from the \s-1GV\s0.
@@ -1813,10 +1943,10 @@ This flag, used in the length slot of hash entries and magic
 structures, specifies the structure contains a \f(CWSV*\fR pointer where a
 \f(CWchar*\fR pointer is to be expected. (For information only\*(--not to be used).
 .Ip "HeHASH" 8
-Returns the computed hash (type \f(CWU32\fR) stored in the hash entry.
+Returns the computed hash stored in the hash entry.
 .Sp
 .Vb 1
-\&        HeHASH(HE* he)
+\&        U32     HeHASH(HE* he)
 .Ve
 .Ip "HeKEY" 8
 Returns the actual pointer stored in the key slot of the hash entry.
@@ -1825,7 +1955,7 @@ The pointer may be either \f(CWchar*\fR or \f(CWSV*\fR, depending on the value o
 are usually preferable for finding the value of a key.
 .Sp
 .Vb 1
-\&        HeKEY(HE* he)
+\&        char*   HeKEY(HE* he)
 .Ve
 .Ip "HeKLEN" 8
 If this is negative, and amounts to \f(CWHEf_SVKEY\fR, it indicates the entry
@@ -1834,21 +1964,21 @@ Can be assigned to. The \f(CWHePV()\fR macro is usually preferable for finding
 key lengths.
 .Sp
 .Vb 1
-\&        HeKLEN(HE* he)
+\&        int     HeKLEN(HE* he)
 .Ve
 .Ip "HePV" 8
 Returns the key slot of the hash entry as a \f(CWchar*\fR value, doing any
 necessary dereferencing of possibly \f(CWSV*\fR keys.  The length of
 the string is placed in \f(CWlen\fR (this is a macro, so do \fInot\fR use
 \f(CW&len\fR).  If you do not care about what the length of the key is,
-you may use the global variable \f(CWna\fR.  Remember though, that hash
+you may use the global variable \f(CWPL_na\fR.  Remember though, that hash
 keys in perl are free to contain embedded nulls, so using \f(CWstrlen()\fR
 or similar is not a good way to find the length of hash keys.
 This is very similar to the \f(CWSvPV()\fR macro described elsewhere in
 this document.
 .Sp
 .Vb 1
-\&        HePV(HE* he, STRLEN len)
+\&        char*   HePV(HE* he, STRLEN len)
 .Ve
 .Ip "HeSVKEY" 8
 Returns the key as an \f(CWSV*\fR, or \f(CWNullsv\fR if the hash entry
@@ -1881,16 +2011,7 @@ Returns the value slot (type \f(CWSV*\fR) stored in the hash entry.
 Clears a hash, making it empty.
 .Sp
 .Vb 1
-\&        void    hv_clear _((HV* tb));
-.Ve
-.Ip "hv_delayfree_ent" 8
-Releases a hash entry, such as while iterating though the hash, but
-delays actual freeing of key and value until the end of the current
-statement (or thereabouts) with \f(CWsv_2mortal\fR.  See \f(CWhv_iternext\fR
-and \f(CWhv_free_ent\fR.
-.Sp
-.Vb 1
-\&        void    hv_delayfree_ent _((HV* hv, HE* entry));
+\&        void    hv_clear (HV* tb)
 .Ve
 .Ip "hv_delete" 8
 Deletes a key/value pair in the hash.  The value \s-1SV\s0 is removed from the hash
@@ -1899,7 +2020,7 @@ and returned to the caller.  The \f(CWklen\fR is the length of the key.  The
 returned.
 .Sp
 .Vb 1
-\&        SV*     hv_delete _((HV* tb, char* key, U32 klen, I32 flags));
+\&        SV*     hv_delete (HV* tb, char* key, U32 klen, I32 flags)
 .Ve
 .Ip "hv_delete_ent" 8
 Deletes a key/value pair in the hash.  The value \s-1SV\s0 is removed from the hash
@@ -1908,21 +2029,21 @@ to G_DISCARD then \s-1NULL\s0 will be returned.  \f(CWhash\fR can be a valid pre
 hash value, or 0 to ask for it to be computed.
 .Sp
 .Vb 1
-\&        SV*     hv_delete_ent _((HV* tb, SV* key, I32 flags, U32 hash));
+\&        SV*     hv_delete_ent (HV* tb, SV* key, I32 flags, U32 hash)
 .Ve
 .Ip "hv_exists" 8
 Returns a boolean indicating whether the specified hash key exists.  The
 \f(CWklen\fR is the length of the key.
 .Sp
 .Vb 1
-\&        bool    hv_exists _((HV* tb, char* key, U32 klen));
+\&        bool    hv_exists (HV* tb, char* key, U32 klen)
 .Ve
 .Ip "hv_exists_ent" 8
 Returns a boolean indicating whether the specified hash key exists. \f(CWhash\fR
 can be a valid precomputed hash value, or 0 to ask for it to be computed.
 .Sp
 .Vb 1
-\&        bool    hv_exists_ent _((HV* tb, SV* key, U32 hash));
+\&        bool    hv_exists_ent (HV* tb, SV* key, U32 hash)
 .Ve
 .Ip "hv_fetch" 8
 Returns the \s-1SV\s0 which corresponds to the specified key in the hash.  The
@@ -1934,7 +2055,7 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied hashes.
 .Sp
 .Vb 1
-\&        SV**    hv_fetch _((HV* tb, char* key, U32 klen, I32 lval));
+\&        SV**    hv_fetch (HV* tb, char* key, U32 klen, I32 lval)
 .Ve
 .Ip "hv_fetch_ent" 8
 Returns the hash entry which corresponds to the specified key in the hash.
@@ -1949,31 +2070,27 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied hashes.
 .Sp
 .Vb 1
-\&        HE*     hv_fetch_ent  _((HV* tb, SV* key, I32 lval, U32 hash));
-.Ve
-.Ip "hv_free_ent" 8
-Releases a hash entry, such as while iterating though the hash.  See
-\f(CWhv_iternext\fR and \f(CWhv_delayfree_ent\fR.
-.Sp
-.Vb 1
-\&        void    hv_free_ent _((HV* hv, HE* entry));
+\&        HE*     hv_fetch_ent  (HV* tb, SV* key, I32 lval, U32 hash)
 .Ve
 .Ip "hv_iterinit" 8
 Prepares a starting point to traverse a hash table.
 .Sp
 .Vb 1
-\&        I32     hv_iterinit _((HV* tb));
+\&        I32     hv_iterinit (HV* tb)
 .Ve
-Note that hv_iterinit \fIcurrently\fR returns the number of \fIbuckets\fR in
-the hash and \fInot\fR the number of keys (as indicated in the Advanced
-Perl Programming book). This may change in future. Use the \fIHvKEYS\fR\|(hv)
-macro to find the number of keys in a hash.
+Returns the number of keys in the hash (i.e. the same as \f(CWHvKEYS(tb)\fR).
+The return value is currently only meaningful for hashes without tie
+magic.
+.Sp
+\s-1NOTE\s0: Before version 5.004_65, \f(CWhv_iterinit\fR used to return the number
+of hash buckets that happen to be in use.  If you still need that
+esoteric value, you can get it through the macro \f(CWHvFILL(tb)\fR.
 .Ip "hv_iterkey" 8
 Returns the key from the current position of the hash iterator.  See
 \f(CWhv_iterinit\fR.
 .Sp
 .Vb 1
-\&        char*   hv_iterkey _((HE* entry, I32* retlen));
+\&        char*   hv_iterkey (HE* entry, I32* retlen)
 .Ve
 .Ip "hv_iterkeysv" 8
 Returns the key as an \f(CWSV*\fR from the current position of the hash
@@ -1981,39 +2098,39 @@ iterator.  The return value will always be a mortal copy of the
 key.  Also see \f(CWhv_iterinit\fR.
 .Sp
 .Vb 1
-\&        SV*     hv_iterkeysv  _((HE* entry));
+\&        SV*     hv_iterkeysv  (HE* entry)
 .Ve
 .Ip "hv_iternext" 8
 Returns entries from a hash iterator.  See \f(CWhv_iterinit\fR.
 .Sp
 .Vb 1
-\&        HE*     hv_iternext _((HV* tb));
+\&        HE*     hv_iternext (HV* tb)
 .Ve
 .Ip "hv_iternextsv" 8
 Performs an \f(CWhv_iternext\fR, \f(CWhv_iterkey\fR, and \f(CWhv_iterval\fR in one
 operation.
 .Sp
 .Vb 1
-\&        SV *    hv_iternextsv _((HV* hv, char** key, I32* retlen));
+\&        SV*     hv_iternextsv (HV* hv, char** key, I32* retlen)
 .Ve
 .Ip "hv_iterval" 8
 Returns the value from the current position of the hash iterator.  See
 \f(CWhv_iterkey\fR.
 .Sp
 .Vb 1
-\&        SV*     hv_iterval _((HV* tb, HE* entry));
+\&        SV*     hv_iterval (HV* tb, HE* entry)
 .Ve
 .Ip "hv_magic" 8
 Adds magic to a hash.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        void    hv_magic _((HV* hv, GV* gv, int how));
+\&        void    hv_magic (HV* hv, GV* gv, int how)
 .Ve
 .Ip "HvNAME" 8
 Returns the package name of a stash.  See \f(CWSvSTASH\fR, \f(CWCvSTASH\fR.
 .Sp
 .Vb 1
-\&        char *HvNAME (HV* stash)
+\&        char*   HvNAME (HV* stash)
 .Ve
 .Ip "hv_store" 8
 Stores an \s-1SV\s0 in a hash.  The hash key is specified as \f(CWkey\fR and \f(CWklen\fR is
@@ -2029,7 +2146,7 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied hashes.
 .Sp
 .Vb 1
-\&        SV**    hv_store _((HV* tb, char* key, U32 klen, SV* val, U32 hash));
+\&        SV**    hv_store (HV* tb, char* key, U32 klen, SV* val, U32 hash)
 .Ve
 .Ip "hv_store_ent" 8
 Stores \f(CWval\fR in a hash.  The hash key is specified as \f(CWkey\fR.  The \f(CWhash\fR
@@ -2046,51 +2163,51 @@ See the section on \fIUnderstanding the Magic of Tied Hashes and Arrays\fR for m
 information on how to use this function on tied hashes.
 .Sp
 .Vb 1
-\&        HE*     hv_store_ent  _((HV* tb, SV* key, SV* val, U32 hash));
+\&        HE*     hv_store_ent  (HV* tb, SV* key, SV* val, U32 hash)
 .Ve
 .Ip "hv_undef" 8
 Undefines the hash.
 .Sp
 .Vb 1
-\&        void    hv_undef _((HV* tb));
+\&        void    hv_undef (HV* tb)
 .Ve
 .Ip "isALNUM" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is an ascii alphanumeric
 character or digit.
 .Sp
 .Vb 1
-\&        int isALNUM (char c)
+\&        int     isALNUM (char c)
 .Ve
 .Ip "isALPHA" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is an ascii alphabetic
 character.
 .Sp
 .Vb 1
-\&        int isALPHA (char c)
+\&        int     isALPHA (char c)
 .Ve
 .Ip "isDIGIT" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is an ascii digit.
 .Sp
 .Vb 1
-\&        int isDIGIT (char c)
+\&        int     isDIGIT (char c)
 .Ve
 .Ip "isLOWER" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is a lowercase character.
 .Sp
 .Vb 1
-\&        int isLOWER (char c)
+\&        int     isLOWER (char c)
 .Ve
 .Ip "isSPACE" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is whitespace.
 .Sp
 .Vb 1
-\&        int isSPACE (char c)
+\&        int     isSPACE (char c)
 .Ve
 .Ip "isUPPER" 8
 Returns a boolean indicating whether the C \f(CWchar\fR is an uppercase character.
 .Sp
 .Vb 1
-\&        int isUPPER (char c)
+\&        int     isUPPER (char c)
 .Ve
 .Ip "items" 8
 Variable which is setup by \f(CWxsubpp\fR to indicate the number of items on the
@@ -2104,55 +2221,61 @@ Closing bracket on a callback.  See \f(CWENTER\fR and the \fIperlcall\fR manpage
 .Vb 1
 \&        LEAVE;
 .Ve
+.Ip "looks_like_number" 8
+Test if an the content of an \s-1SV\s0 looks like a number (or is a number).
+.Sp
+.Vb 1
+\&        int     looks_like_number(SV*)
+.Ve
 .Ip "\s-1MARK\s0" 8
 Stack marker variable for the \s-1XSUB\s0.  See \f(CWdMARK\fR.
 .Ip "mg_clear" 8
 Clear something magical that the \s-1SV\s0 represents.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        int     mg_clear _((SV* sv));
+\&        int     mg_clear (SV* sv)
 .Ve
 .Ip "mg_copy" 8
 Copies the magic from one \s-1SV\s0 to another.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        int     mg_copy _((SV *, SV *, char *, STRLEN));
+\&        int     mg_copy (SV *, SV *, char *, STRLEN)
 .Ve
 .Ip "mg_find" 8
 Finds the magic pointer for type matching the \s-1SV\s0.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        MAGIC*  mg_find _((SV* sv, int type));
+\&        MAGIC*  mg_find (SV* sv, int type)
 .Ve
 .Ip "mg_free" 8
 Free any magic storage used by the \s-1SV\s0.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        int     mg_free _((SV* sv));
+\&        int     mg_free (SV* sv)
 .Ve
 .Ip "mg_get" 8
 Do magic after a value is retrieved from the \s-1SV\s0.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        int     mg_get _((SV* sv));
+\&        int     mg_get (SV* sv)
 .Ve
 .Ip "mg_len" 8
 Report on the \s-1SV\s0's length.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        U32     mg_len _((SV* sv));
+\&        U32     mg_len (SV* sv)
 .Ve
 .Ip "mg_magical" 8
 Turns on the magical status of an \s-1SV\s0.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        void    mg_magical _((SV* sv));
+\&        void    mg_magical (SV* sv)
 .Ve
 .Ip "mg_set" 8
 Do magic after a value is assigned to the \s-1SV\s0.  See \f(CWsv_magic\fR.
 .Sp
 .Vb 1
-\&        int     mg_set _((SV* sv));
+\&        int     mg_set (SV* sv)
 .Ve
 .Ip "Move" 8
 The \s-1XSUB\s0\-writer's interface to the C \f(CWmemmove\fR function.  The \f(CWs\fR is the
@@ -2160,48 +2283,48 @@ source, \f(CWd\fR is the destination, \f(CWn\fR is the number of items, and \f(C
 the type.  Can do overlapping moves.  See also \f(CWCopy\fR.
 .Sp
 .Vb 1
-\&        (void) Move( s, d, n, t );
+\&        void    Move( s, d, n, t )
 .Ve
-.Ip "na" 8
+.Ip "PL_na" 8
 A variable which may be used with \f(CWSvPV\fR to tell Perl to calculate the
 string length.
 .Ip "New" 8
 The \s-1XSUB\s0\-writer's interface to the C \f(CWmalloc\fR function.
 .Sp
 .Vb 1
-\&        void * New( x, void *ptr, int size, type )
-.Ve
-.Ip "Newc" 8
-The \s-1XSUB\s0\-writer's interface to the C \f(CWmalloc\fR function, with cast.
-.Sp
-.Vb 1
-\&        void * Newc( x, void *ptr, int size, type, cast )
-.Ve
-.Ip "Newz" 8
-The \s-1XSUB\s0\-writer's interface to the C \f(CWmalloc\fR function.  The allocated
-memory is zeroed with \f(CWmemzero\fR.
-.Sp
-.Vb 1
-\&        void * Newz( x, void *ptr, int size, type )
+\&        void*   New( x, void *ptr, int size, type )
 .Ve
 .Ip "newAV" 8
 Creates a new \s-1AV\s0.  The reference count is set to 1.
 .Sp
 .Vb 1
-\&        AV*     newAV _((void));
+\&        AV*     newAV (void)
+.Ve
+.Ip "Newc" 8
+The \s-1XSUB\s0\-writer's interface to the C \f(CWmalloc\fR function, with cast.
+.Sp
+.Vb 1
+\&        void*   Newc( x, void *ptr, int size, type, cast )
+.Ve
+.Ip "newCONSTSUB" 8
+Creates a constant sub equivalent to Perl \f(CWsub FOO () { 123 }\fR
+which is eligible for inlining at compile-time.
+.Sp
+.Vb 1
+\&        void    newCONSTSUB(HV* stash, char* name, SV* sv)
 .Ve
 .Ip "newHV" 8
 Creates a new \s-1HV\s0.  The reference count is set to 1.
 .Sp
 .Vb 1
-\&        HV*     newHV _((void));
+\&        HV*     newHV (void)
 .Ve
 .Ip "newRV_inc" 8
 Creates an \s-1RV\s0 wrapper for an \s-1SV\s0.  The reference count for the original \s-1SV\s0 is
 incremented.
 .Sp
 .Vb 1
-\&        SV*     newRV_inc _((SV* ref));
+\&        SV*     newRV_inc (SV* ref)
 .Ve
 For historical reasons, \*(L"newRV\*(R" is a synonym for \*(L"newRV_inc\*(R".
 .Ip "newRV_noinc" 8
@@ -2209,36 +2332,54 @@ Creates an \s-1RV\s0 wrapper for an \s-1SV\s0.  The reference count for the orig
 \s-1SV\s0 is \fBnot\fR incremented.
 .Sp
 .Vb 1
-\&        SV*     newRV_noinc _((SV* ref));
+\&        SV*     newRV_noinc (SV* ref)
 .Ve
-.Ip "newSV" 8
-Creates a new \s-1SV\s0.  The \f(CWlen\fR parameter indicates the number of bytes of
-preallocated string space the \s-1SV\s0 should have.  The reference count for the
-new \s-1SV\s0 is set to 1.
+.Ip "\s-1NEWSV\s0" 8
+Creates a new \s-1SV\s0.  A non-zero \f(CWlen\fR parameter indicates the number of
+bytes of preallocated string space the \s-1SV\s0 should have.  An extra byte
+for a tailing \s-1NUL\s0 is also reserved.  (SvPOK is not set for the \s-1SV\s0 even
+if string space is allocated.)  The reference count for the new \s-1SV\s0 is
+set to 1.  \f(CWid\fR is an integer id between 0 and 1299 (used to identify
+leaks).
 .Sp
 .Vb 1
-\&        SV*     newSV _((STRLEN len));
+\&        SV*     NEWSV (int id, STRLEN len)
 .Ve
 .Ip "newSViv" 8
 Creates a new \s-1SV\s0 and copies an integer into it.  The reference count for the
 \s-1SV\s0 is set to 1.
 .Sp
 .Vb 1
-\&        SV*     newSViv _((IV i));
+\&        SV*     newSViv (IV i)
 .Ve
 .Ip "newSVnv" 8
 Creates a new \s-1SV\s0 and copies a double into it.  The reference count for the
 \s-1SV\s0 is set to 1.
 .Sp
 .Vb 1
-\&        SV*     newSVnv _((NV i));
+\&        SV*     newSVnv (NV i)
 .Ve
 .Ip "newSVpv" 8
 Creates a new \s-1SV\s0 and copies a string into it.  The reference count for the
 \s-1SV\s0 is set to 1.  If \f(CWlen\fR is zero then Perl will compute the length.
 .Sp
 .Vb 1
-\&        SV*     newSVpv _((char* s, STRLEN len));
+\&        SV*     newSVpv (char* s, STRLEN len)
+.Ve
+.Ip "newSVpvf" 8
+Creates a new \s-1SV\s0 an initialize it with the string formatted like
+\f(CWsprintf\fR.
+.Sp
+.Vb 1
+\&        SV*     newSVpvf(const char* pat, ...);
+.Ve
+.Ip "newSVpvn" 8
+Creates a new \s-1SV\s0 and copies a string into it.  The reference count for the
+\s-1SV\s0 is set to 1.  If \f(CWlen\fR is zero then Perl will create a zero length 
+string.
+.Sp
+.Vb 1
+\&        SV*     newSVpvn (char* s, STRLEN len)
 .Ve
 .Ip "newSVrv" 8
 Creates a new \s-1SV\s0 for the \s-1RV\s0, \f(CWrv\fR, to point to.  If \f(CWrv\fR is not an \s-1RV\s0 then
@@ -2247,19 +2388,26 @@ be blessed in the specified package.  The new \s-1SV\s0 is returned and its
 reference count is 1.
 .Sp
 .Vb 1
-\&        SV*     newSVrv _((SV* rv, char* classname));
+\&        SV*     newSVrv (SV* rv, char* classname)
 .Ve
 .Ip "newSVsv" 8
 Creates a new \s-1SV\s0 which is an exact duplicate of the original \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SV*     newSVsv _((SV* old));
+\&        SV*     newSVsv (SV* old)
 .Ve
 .Ip "newXS" 8
 Used by \f(CWxsubpp\fR to hook up XSUBs as Perl subs.
 .Ip "newXSproto" 8
 Used by \f(CWxsubpp\fR to hook up XSUBs as Perl subs.  Adds Perl prototypes to
 the subs.
+.Ip "Newz" 8
+The \s-1XSUB\s0\-writer's interface to the C \f(CWmalloc\fR function.  The allocated
+memory is zeroed with \f(CWmemzero\fR.
+.Sp
+.Vb 1
+\&        void*   Newz( x, void *ptr, int size, type )
+.Ve
 .Ip "Nullav" 8
 Null \s-1AV\s0 pointer.
 .Ip "Nullch" 8
@@ -2278,27 +2426,27 @@ Allocates a new Perl interpreter.  See the \fIperlembed\fR manpage.
 Performs a callback to the specified Perl sub.  See the \fIperlcall\fR manpage.
 .Sp
 .Vb 1
-\&        I32     perl_call_argv _((char* subname, I32 flags, char** argv));
+\&        I32     perl_call_argv (char* subname, I32 flags, char** argv)
 .Ve
 .Ip "perl_call_method" 8
 Performs a callback to the specified Perl method.  The blessed object must
 be on the stack.  See the \fIperlcall\fR manpage.
 .Sp
 .Vb 1
-\&        I32     perl_call_method _((char* methname, I32 flags));
+\&        I32     perl_call_method (char* methname, I32 flags)
 .Ve
 .Ip "perl_call_pv" 8
 Performs a callback to the specified Perl sub.  See the \fIperlcall\fR manpage.
 .Sp
 .Vb 1
-\&        I32     perl_call_pv _((char* subname, I32 flags));
+\&        I32     perl_call_pv (char* subname, I32 flags)
 .Ve
 .Ip "perl_call_sv" 8
 Performs a callback to the Perl sub whose name is in the \s-1SV\s0.  See
 the \fIperlcall\fR manpage.
 .Sp
 .Vb 1
-\&        I32     perl_call_sv _((SV* sv, I32 flags));
+\&        I32     perl_call_sv (SV* sv, I32 flags)
 .Ve
 .Ip "perl_construct" 8
 Initializes a new Perl interpreter.  See the \fIperlembed\fR manpage.
@@ -2308,13 +2456,13 @@ Shuts down a Perl interpreter.  See the \fIperlembed\fR manpage.
 Tells Perl to \f(CWeval\fR the string in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        I32     perl_eval_sv _((SV* sv, I32 flags));
+\&        I32     perl_eval_sv (SV* sv, I32 flags)
 .Ve
 .Ip "perl_eval_pv" 8
 Tells Perl to \f(CWeval\fR the given string and return an \s-1SV\s0* result.
 .Sp
 .Vb 1
-\&        SV*     perl_eval_pv _((char* p, I32 croak_on_error));
+\&        SV*     perl_eval_pv (char* p, I32 croak_on_error)
 .Ve
 .Ip "perl_free" 8
 Releases a Perl interpreter.  See the \fIperlembed\fR manpage.
@@ -2324,7 +2472,7 @@ Perl variable does not exist then it will be created.  If \f(CWcreate\fR is not
 set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
-\&        AV*     perl_get_av _((char* name, I32 create));
+\&        AV*     perl_get_av (char* name, I32 create)
 .Ve
 .Ip "perl_get_cv" 8
 Returns the \s-1CV\s0 of the specified Perl sub.  If \f(CWcreate\fR is set and the Perl
@@ -2332,7 +2480,7 @@ variable does not exist then it will be created.  If \f(CWcreate\fR is not
 set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
-\&        CV*     perl_get_cv _((char* name, I32 create));
+\&        CV*     perl_get_cv (char* name, I32 create)
 .Ve
 .Ip "perl_get_hv" 8
 Returns the \s-1HV\s0 of the specified Perl hash.  If \f(CWcreate\fR is set and the Perl
@@ -2340,7 +2488,7 @@ variable does not exist then it will be created.  If \f(CWcreate\fR is not
 set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
-\&        HV*     perl_get_hv _((char* name, I32 create));
+\&        HV*     perl_get_hv (char* name, I32 create)
 .Ve
 .Ip "perl_get_sv" 8
 Returns the \s-1SV\s0 of the specified Perl scalar.  If \f(CWcreate\fR is set and the
@@ -2348,7 +2496,7 @@ Perl variable does not exist then it will be created.  If \f(CWcreate\fR is not
 set and the variable does not exist then \s-1NULL\s0 is returned.
 .Sp
 .Vb 1
-\&        SV*     perl_get_sv _((char* name, I32 create));
+\&        SV*     perl_get_sv (char* name, I32 create)
 .Ve
 .Ip "perl_parse" 8
 Tells a Perl interpreter to parse a Perl script.  See the \fIperlembed\fR manpage.
@@ -2356,7 +2504,7 @@ Tells a Perl interpreter to parse a Perl script.  See the \fIperlembed\fR manpag
 Tells Perl to \f(CWrequire\fR a module.
 .Sp
 .Vb 1
-\&        void    perl_require_pv _((char* pv));
+\&        void    perl_require_pv (char* pv)
 .Ve
 .Ip "perl_run" 8
 Tells a Perl interpreter to run.  See the \fIperlembed\fR manpage.
@@ -2364,31 +2512,31 @@ Tells a Perl interpreter to run.  See the \fIperlembed\fR manpage.
 Pops an integer off the stack.
 .Sp
 .Vb 1
-\&        int POPi();
+\&        int     POPi()
 .Ve
 .Ip "POPl" 8
 Pops a long off the stack.
 .Sp
 .Vb 1
-\&        long POPl();
+\&        long    POPl()
 .Ve
 .Ip "POPp" 8
 Pops a string off the stack.
 .Sp
 .Vb 1
-\&        char * POPp();
+\&        char*   POPp()
 .Ve
 .Ip "POPn" 8
 Pops a double off the stack.
 .Sp
 .Vb 1
-\&        double POPn();
+\&        double  POPn()
 .Ve
 .Ip "POPs" 8
 Pops an \s-1SV\s0 off the stack.
 .Sp
 .Vb 1
-\&        SV* POPs();
+\&        SV*     POPs()
 .Ve
 .Ip "\s-1PUSHMARK\s0" 8
 Opening bracket for arguments on a callback.  See \f(CWPUTBACK\fR and the \fIperlcall\fR manpage.
@@ -2398,31 +2546,39 @@ Opening bracket for arguments on a callback.  See \f(CWPUTBACK\fR and the \fIper
 .Ve
 .Ip "PUSHi" 8
 Push an integer onto the stack.  The stack must have room for this element.
-See \f(CWXPUSHi\fR.
+Handles \*(L'set\*(R' magic.  See \f(CWXPUSHi\fR.
 .Sp
 .Vb 1
-\&        PUSHi(int d)
+\&        void    PUSHi(int d)
 .Ve
 .Ip "PUSHn" 8
 Push a double onto the stack.  The stack must have room for this element.
-See \f(CWXPUSHn\fR.
+Handles \*(L'set\*(R' magic.  See \f(CWXPUSHn\fR.
 .Sp
 .Vb 1
-\&        PUSHn(double d)
+\&        void    PUSHn(double d)
 .Ve
 .Ip "PUSHp" 8
 Push a string onto the stack.  The stack must have room for this element.
-The \f(CWlen\fR indicates the length of the string.  See \f(CWXPUSHp\fR.
+The \f(CWlen\fR indicates the length of the string.  Handles \*(L'set\*(R' magic.  See
+\f(CWXPUSHp\fR.
 .Sp
 .Vb 1
-\&        PUSHp(char *c, int len )
+\&        void    PUSHp(char *c, int len )
 .Ve
 .Ip "PUSHs" 8
-Push an \s-1SV\s0 onto the stack.  The stack must have room for this element.  See
-\f(CWXPUSHs\fR.
+Push an \s-1SV\s0 onto the stack.  The stack must have room for this element.  Does
+not handle \*(L'set\*(R' magic.  See \f(CWXPUSHs\fR.
 .Sp
 .Vb 1
-\&        PUSHs(sv)
+\&        void    PUSHs(sv)
+.Ve
+.Ip "PUSHu" 8
+Push an unsigned integer onto the stack.  The stack must have room for
+this element.  See \f(CWXPUSHu\fR.
+.Sp
+.Vb 1
+\&        void    PUSHu(unsigned int d)
 .Ve
 .Ip "\s-1PUTBACK\s0" 8
 Closing bracket for \s-1XSUB\s0 arguments.  This is usually handled by \f(CWxsubpp\fR.
@@ -2435,13 +2591,13 @@ See \f(CWPUSHMARK\fR and the \fIperlcall\fR manpage for other uses.
 The \s-1XSUB\s0\-writer's interface to the C \f(CWrealloc\fR function.
 .Sp
 .Vb 1
-\&        void * Renew( void *ptr, int size, type )
+\&        void*   Renew( void *ptr, int size, type )
 .Ve
 .Ip "Renewc" 8
 The \s-1XSUB\s0\-writer's interface to the C \f(CWrealloc\fR function, with cast.
 .Sp
 .Vb 1
-\&        void * Renewc( void *ptr, int size, type, cast )
+\&        void*   Renewc( void *ptr, int size, type, cast )
 .Ve
 .Ip "\s-1RETVAL\s0" 8
 Variable which is setup by \f(CWxsubpp\fR to hold the return value for an \s-1XSUB\s0.
@@ -2457,14 +2613,14 @@ The \s-1XSUB\s0\-writer's interface to the C \f(CWrealloc\fR function.
 Copy a string to a safe spot.  This does not use an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        char*   savepv _((char* sv));
+\&        char*   savepv (char* sv)
 .Ve
 .Ip "savepvn" 8
 Copy a string to a safe spot.  The \f(CWlen\fR indicates number of bytes to
 copy.  This does not use an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        char*   savepvn _((char* sv, I32 len));
+\&        char*   savepvn (char* sv, I32 len)
 .Ve
 .Ip "\s-1SAVETMPS\s0" 8
 Opening bracket for temporaries on a callback.  See \f(CWFREETMPS\fR and
@@ -2486,68 +2642,68 @@ Refetch the stack pointer.  Used after a callback.  See the \fIperlcall\fR manpa
 Used to access elements on the \s-1XSUB\s0's stack.
 .Sp
 .Vb 1
-\&        SV* ST(int x)
+\&        SV*     ST(int x)
 .Ve
 .Ip "strEQ" 8
 Test two strings to see if they are equal.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strEQ( char *s1, char *s2 )
+\&        int     strEQ( char *s1, char *s2 )
 .Ve
 .Ip "strGE" 8
 Test two strings to see if the first, \f(CWs1\fR, is greater than or equal to the
 second, \f(CWs2\fR.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strGE( char *s1, char *s2 )
+\&        int     strGE( char *s1, char *s2 )
 .Ve
 .Ip "strGT" 8
 Test two strings to see if the first, \f(CWs1\fR, is greater than the second,
 \f(CWs2\fR.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strGT( char *s1, char *s2 )
+\&        int     strGT( char *s1, char *s2 )
 .Ve
 .Ip "strLE" 8
 Test two strings to see if the first, \f(CWs1\fR, is less than or equal to the
 second, \f(CWs2\fR.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strLE( char *s1, char *s2 )
+\&        int     strLE( char *s1, char *s2 )
 .Ve
 .Ip "strLT" 8
 Test two strings to see if the first, \f(CWs1\fR, is less than the second,
 \f(CWs2\fR.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strLT( char *s1, char *s2 )
+\&        int     strLT( char *s1, char *s2 )
 .Ve
 .Ip "strNE" 8
 Test two strings to see if they are different.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strNE( char *s1, char *s2 )
+\&        int     strNE( char *s1, char *s2 )
 .Ve
 .Ip "strnEQ" 8
 Test two strings to see if they are equal.  The \f(CWlen\fR parameter indicates
 the number of bytes to compare.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strnEQ( char *s1, char *s2 )
+\&        int     strnEQ( char *s1, char *s2 )
 .Ve
 .Ip "strnNE" 8
 Test two strings to see if they are different.  The \f(CWlen\fR parameter
 indicates the number of bytes to compare.  Returns true or false.
 .Sp
 .Vb 1
-\&        int strnNE( char *s1, char *s2, int len )
+\&        int     strnNE( char *s1, char *s2, int len )
 .Ve
 .Ip "sv_2mortal" 8
 Marks an \s-1SV\s0 as mortal.  The \s-1SV\s0 will be destroyed when the current context
 ends.
 .Sp
 .Vb 1
-\&        SV*     sv_2mortal _((SV* sv));
+\&        SV*     sv_2mortal (SV* sv)
 .Ve
 .Ip "sv_bless" 8
 Blesses an \s-1SV\s0 into a specified package.  The \s-1SV\s0 must be an \s-1RV\s0.  The package
@@ -2555,34 +2711,70 @@ must be designated by its stash (see \f(CWgv_stashpv()\fR).  The reference count
 of the \s-1SV\s0 is unaffected.
 .Sp
 .Vb 1
-\&        SV*     sv_bless _((SV* sv, HV* stash));
+\&        SV*     sv_bless (SV* sv, HV* stash)
 .Ve
 .Ip "sv_catpv" 8
 Concatenates the string onto the end of the string which is in the \s-1SV\s0.
+Handles \*(L'get\*(R' magic, but not \*(L'set\*(R' magic.  See \f(CWsv_catpv_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_catpv _((SV* sv, char* ptr));
+\&        void    sv_catpv (SV* sv, char* ptr)
+.Ve
+.Ip "sv_catpv_mg" 8
+Like \f(CWsv_catpv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_catpvn (SV* sv, char* ptr)
 .Ve
 .Ip "sv_catpvn" 8
 Concatenates the string onto the end of the string which is in the \s-1SV\s0.  The
-\f(CWlen\fR indicates number of bytes to copy.
+\f(CWlen\fR indicates number of bytes to copy.  Handles \*(L'get\*(R' magic, but not
+\&'set\*(R' magic.  See \f(CWsv_catpvn_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_catpvn _((SV* sv, char* ptr, STRLEN len));
+\&        void    sv_catpvn (SV* sv, char* ptr, STRLEN len)
+.Ve
+.Ip "sv_catpvn_mg" 8
+Like \f(CWsv_catpvn\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_catpvn_mg (SV* sv, char* ptr, STRLEN len)
 .Ve
 .Ip "sv_catpvf" 8
 Processes its arguments like \f(CWsprintf\fR and appends the formatted output
-to an \s-1SV\s0.
+to an \s-1SV\s0.  Handles \*(L'get\*(R' magic, but not \*(L'set\*(R' magic.  \f(CWSvSETMAGIC()\fR must
+typically be called after calling this function to handle \*(L'set\*(R' magic.
 .Sp
 .Vb 1
-\&        void    sv_catpvf _((SV* sv, const char* pat, ...));
+\&        void    sv_catpvf (SV* sv, const char* pat, ...)
+.Ve
+.Ip "sv_catpvf_mg" 8
+Like \f(CWsv_catpvf\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_catpvf_mg (SV* sv, const char* pat, ...)
 .Ve
 .Ip "sv_catsv" 8
 Concatenates the string from \s-1SV\s0 \f(CWssv\fR onto the end of the string in \s-1SV\s0
-\f(CWdsv\fR.
+\f(CWdsv\fR.  Handles \*(L'get\*(R' magic, but not \*(L'set\*(R' magic.  See \f(CWsv_catsv_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_catsv _((SV* dsv, SV* ssv));
+\&        void    sv_catsv (SV* dsv, SV* ssv)
+.Ve
+.Ip "sv_catsv_mg" 8
+Like \f(CWsv_catsv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_catsv_mg (SV* dsv, SV* ssv)
+.Ve
+.Ip "sv_chop" 8
+Efficient removal of characters from the beginning of the string
+buffer.  \fISvPOK\fR\|(sv) must be true and the \f(CWptr\fR must be a pointer to
+somewhere inside the string buffer.  The \f(CWptr\fR becomes the first
+character of the adjusted string.
+.Sp
+.Vb 1
+\&        void    sv_chop(SV* sv, char *ptr)
 .Ve
 .Ip "sv_cmp" 8
 Compares the strings in two SVs.  Returns \-1, 0, or 1 indicating whether the
@@ -2590,46 +2782,70 @@ string in \f(CWsv1\fR is less than, equal to, or greater than the string in
 \f(CWsv2\fR.
 .Sp
 .Vb 1
-\&        I32     sv_cmp _((SV* sv1, SV* sv2));
+\&        I32     sv_cmp (SV* sv1, SV* sv2)
 .Ve
 .Ip "SvCUR" 8
 Returns the length of the string which is in the \s-1SV\s0.  See \f(CWSvLEN\fR.
 .Sp
 .Vb 1
-\&        int SvCUR (SV* sv)
+\&        int     SvCUR (SV* sv)
 .Ve
 .Ip "SvCUR_set" 8
 Set the length of the string which is in the \s-1SV\s0.  See \f(CWSvCUR\fR.
 .Sp
 .Vb 1
-\&        SvCUR_set (SV* sv, int val )
+\&        void    SvCUR_set (SV* sv, int val )
 .Ve
 .Ip "sv_dec" 8
 Auto-decrement of the value in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        void    sv_dec _((SV* sv));
+\&        void    sv_dec (SV* sv)
+.Ve
+.Ip "sv_derived_from" 8
+Returns a boolean indicating whether the \s-1SV\s0 is a subclass of the
+specified class.
+.Sp
+.Vb 1
+\&        int     sv_derived_from(SV* sv, char* class)
+.Ve
+.Ip "sv_derived_from" 8
+Returns a boolean indicating whether the \s-1SV\s0 is derived from the specified
+class.  This is the function that implements \f(CWUNIVERSAL::isa\fR.  It works
+for class names as well as for objects.
+.Sp
+.Vb 1
+\&        bool    sv_derived_from _((SV* sv, char* name));
 .Ve
 .Ip "SvEND" 8
 Returns a pointer to the last character in the string which is in the \s-1SV\s0.
 See \f(CWSvCUR\fR.  Access the character as
 .Sp
 .Vb 1
-\&        *SvEND(sv)
+\&        char*   SvEND(sv)
 .Ve
 .Ip "sv_eq" 8
 Returns a boolean indicating whether the strings in the two SVs are
 identical.
 .Sp
 .Vb 1
-\&        I32     sv_eq _((SV* sv1, SV* sv2));
+\&        I32     sv_eq (SV* sv1, SV* sv2)
 .Ve
-.Ip "SvGROW" 8
-Expands the character buffer in the \s-1SV\s0.  Calls \f(CWsv_grow\fR to perform the
-expansion if necessary.  Returns a pointer to the character buffer.
+.Ip "SvGETMAGIC" 8
+Invokes \f(CWmg_get\fR on an \s-1SV\s0 if it has \*(L'get\*(R' magic.  This macro evaluates
+its argument more than once.
 .Sp
 .Vb 1
-\&        char * SvGROW( SV* sv, int len )
+\&        void    SvGETMAGIC( SV *sv )
+.Ve
+.Ip "SvGROW" 8
+Expands the character buffer in the \s-1SV\s0 so that it has room for the
+indicated number of bytes (remember to reserve space for an extra
+trailing \s-1NUL\s0 character).  Calls \f(CWsv_grow\fR to perform the expansion if
+necessary.  Returns a pointer to the character buffer.
+.Sp
+.Vb 1
+\&        char*   SvGROW( SV* sv, STRLEN len )
 .Ve
 .Ip "sv_grow" 8
 Expands the character buffer in the \s-1SV\s0.  This will use \f(CWsv_unref\fR and will
@@ -2639,52 +2855,54 @@ Use \f(CWSvGROW\fR.
 Auto-increment of the value in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        void    sv_inc _((SV* sv));
+\&        void    sv_inc (SV* sv)
+.Ve
+.Ip "sv_insert" 8
+Inserts a string at the specified offset/length within the \s-1SV\s0.
+Similar to the Perl \fIsubstr()\fR function.
+.Sp
+.Vb 2
+\&        void    sv_insert(SV *sv, STRLEN offset, STRLEN len,
+\&                          char *str, STRLEN strlen)
 .Ve
 .Ip "SvIOK" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains an integer.
 .Sp
 .Vb 1
-\&        int SvIOK (SV* SV)
+\&        int     SvIOK (SV* SV)
 .Ve
 .Ip "SvIOK_off" 8
 Unsets the \s-1IV\s0 status of an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SvIOK_off (SV* sv)
+\&        void    SvIOK_off (SV* sv)
 .Ve
 .Ip "SvIOK_on" 8
 Tells an \s-1SV\s0 that it is an integer.
 .Sp
 .Vb 1
-\&        SvIOK_on (SV* sv)
+\&        void    SvIOK_on (SV* sv)
 .Ve
 .Ip "SvIOK_only" 8
 Tells an \s-1SV\s0 that it is an integer and disables all other \s-1OK\s0 bits.
 .Sp
 .Vb 1
-\&        SvIOK_on (SV* sv)
+\&        void    SvIOK_only (SV* sv)
 .Ve
 .Ip "SvIOKp" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains an integer.  Checks the
 \fBprivate\fR setting.  Use \f(CWSvIOK\fR.
 .Sp
 .Vb 1
-\&        int SvIOKp (SV* SV)
+\&        int     SvIOKp (SV* SV)
 .Ve
 .Ip "sv_isa" 8
 Returns a boolean indicating whether the \s-1SV\s0 is blessed into the specified
-class.  This does not know how to check for subtype, so it doesn't work in
+class.  This does not check for subtypes; use \f(CWsv_derived_from\fR to verify
 an inheritance relationship.
 .Sp
 .Vb 1
-\&        int     sv_isa _((SV* sv, char* name));
-.Ve
-.Ip "SvIV" 8
-Returns the integer which is in the \s-1SV\s0.
-.Sp
-.Vb 1
-\&        int SvIV (SV* sv)
+\&        int     sv_isa (SV* sv, char* name)
 .Ve
 .Ip "sv_isobject" 8
 Returns a boolean indicating whether the \s-1SV\s0 is an \s-1RV\s0 pointing to a blessed
@@ -2692,263 +2910,309 @@ object.  If the \s-1SV\s0 is not an \s-1RV\s0, or if the object is not blessed, 
 will return false.
 .Sp
 .Vb 1
-\&        int     sv_isobject _((SV* sv));
+\&        int     sv_isobject (SV* sv)
+.Ve
+.Ip "SvIV" 8
+Returns the integer which is in the \s-1SV\s0.
+.Sp
+.Vb 1
+\&        int SvIV (SV* sv)
 .Ve
 .Ip "SvIVX" 8
 Returns the integer which is stored in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        int  SvIVX (SV* sv);
+\&        int     SvIVX (SV* sv)
 .Ve
 .Ip "SvLEN" 8
 Returns the size of the string buffer in the \s-1SV\s0.  See \f(CWSvCUR\fR.
 .Sp
 .Vb 1
-\&        int SvLEN (SV* sv)
+\&        int     SvLEN (SV* sv)
 .Ve
 .Ip "sv_len" 8
 Returns the length of the string in the \s-1SV\s0.  Use \f(CWSvCUR\fR.
 .Sp
 .Vb 1
-\&        STRLEN  sv_len _((SV* sv));
+\&        STRLEN  sv_len (SV* sv)
 .Ve
 .Ip "sv_magic" 8
 Adds magic to an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        void    sv_magic _((SV* sv, SV* obj, int how, char* name, I32 namlen));
+\&        void    sv_magic (SV* sv, SV* obj, int how, char* name, I32 namlen)
 .Ve
 .Ip "sv_mortalcopy" 8
 Creates a new \s-1SV\s0 which is a copy of the original \s-1SV\s0.  The new \s-1SV\s0 is marked
 as mortal.
 .Sp
 .Vb 1
-\&        SV*     sv_mortalcopy _((SV* oldsv));
-.Ve
-.Ip "SvOK" 8
-Returns a boolean indicating whether the value is an \s-1SV\s0.
-.Sp
-.Vb 1
-\&        int SvOK (SV* sv)
+\&        SV*     sv_mortalcopy (SV* oldsv)
 .Ve
 .Ip "sv_newmortal" 8
 Creates a new \s-1SV\s0 which is mortal.  The reference count of the \s-1SV\s0 is set to 1.
 .Sp
 .Vb 1
-\&        SV*     sv_newmortal _((void));
+\&        SV*     sv_newmortal (void)
 .Ve
-.Ip "sv_no" 8
-This is the \f(CWfalse\fR \s-1SV\s0.  See \f(CWsv_yes\fR.  Always refer to this as \f(CW&sv_no\fR.
 .Ip "SvNIOK" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a number, integer or
 double.
 .Sp
 .Vb 1
-\&        int SvNIOK (SV* SV)
+\&        int     SvNIOK (SV* SV)
 .Ve
 .Ip "SvNIOK_off" 8
 Unsets the \s-1NV/IV\s0 status of an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SvNIOK_off (SV* sv)
+\&        void    SvNIOK_off (SV* sv)
 .Ve
 .Ip "SvNIOKp" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a number, integer or
 double.  Checks the \fBprivate\fR setting.  Use \f(CWSvNIOK\fR.
 .Sp
 .Vb 1
-\&        int SvNIOKp (SV* SV)
+\&        int     SvNIOKp (SV* SV)
 .Ve
+.Ip "PL_sv_no" 8
+This is the \f(CWfalse\fR \s-1SV\s0.  See \f(CWPL_sv_yes\fR.  Always refer to this as \f(CW&PL_sv_no\fR.
 .Ip "SvNOK" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a double.
 .Sp
 .Vb 1
-\&        int SvNOK (SV* SV)
+\&        int     SvNOK (SV* SV)
 .Ve
 .Ip "SvNOK_off" 8
 Unsets the \s-1NV\s0 status of an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SvNOK_off (SV* sv)
+\&        void    SvNOK_off (SV* sv)
 .Ve
 .Ip "SvNOK_on" 8
 Tells an \s-1SV\s0 that it is a double.
 .Sp
 .Vb 1
-\&        SvNOK_on (SV* sv)
+\&        void    SvNOK_on (SV* sv)
 .Ve
 .Ip "SvNOK_only" 8
 Tells an \s-1SV\s0 that it is a double and disables all other \s-1OK\s0 bits.
 .Sp
 .Vb 1
-\&        SvNOK_on (SV* sv)
+\&        void    SvNOK_only (SV* sv)
 .Ve
 .Ip "SvNOKp" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a double.  Checks the
 \fBprivate\fR setting.  Use \f(CWSvNOK\fR.
 .Sp
 .Vb 1
-\&        int SvNOKp (SV* SV)
+\&        int     SvNOKp (SV* SV)
 .Ve
 .Ip "SvNV" 8
 Returns the double which is stored in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        double SvNV (SV* sv);
+\&        double  SvNV (SV* sv)
 .Ve
 .Ip "SvNVX" 8
 Returns the double which is stored in the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        double SvNVX (SV* sv);
+\&        double  SvNVX (SV* sv)
+.Ve
+.Ip "SvOK" 8
+Returns a boolean indicating whether the value is an \s-1SV\s0.
+.Sp
+.Vb 1
+\&        int     SvOK (SV* sv)
+.Ve
+.Ip "SvOOK" 8
+Returns a boolean indicating whether the SvIVX is a valid offset value
+for the SvPVX.  This hack is used internally to speed up removal of
+characters from the beginning of a SvPV.  When SvOOK is true, then the
+start of the allocated string buffer is really (SvPVX \- SvIVX).
+.Sp
+.Vb 1
+\&        int     SvOOK(SV* sv)
 .Ve
 .Ip "SvPOK" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a character string.
 .Sp
 .Vb 1
-\&        int SvPOK (SV* SV)
+\&        int     SvPOK (SV* SV)
 .Ve
 .Ip "SvPOK_off" 8
 Unsets the \s-1PV\s0 status of an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SvPOK_off (SV* sv)
+\&        void    SvPOK_off (SV* sv)
 .Ve
 .Ip "SvPOK_on" 8
 Tells an \s-1SV\s0 that it is a string.
 .Sp
 .Vb 1
-\&        SvPOK_on (SV* sv)
+\&        void    SvPOK_on (SV* sv)
 .Ve
 .Ip "SvPOK_only" 8
 Tells an \s-1SV\s0 that it is a string and disables all other \s-1OK\s0 bits.
 .Sp
 .Vb 1
-\&        SvPOK_on (SV* sv)
+\&        void    SvPOK_only (SV* sv)
 .Ve
 .Ip "SvPOKp" 8
 Returns a boolean indicating whether the \s-1SV\s0 contains a character string.
 Checks the \fBprivate\fR setting.  Use \f(CWSvPOK\fR.
 .Sp
 .Vb 1
-\&        int SvPOKp (SV* SV)
+\&        int     SvPOKp (SV* SV)
 .Ve
 .Ip "SvPV" 8
 Returns a pointer to the string in the \s-1SV\s0, or a stringified form of the \s-1SV\s0
-if the \s-1SV\s0 does not contain a string.  If \f(CWlen\fR is \f(CWna\fR then Perl will
-handle the length on its own.
+if the \s-1SV\s0 does not contain a string.  If \f(CWlen\fR is \f(CWPL_na\fR then Perl will
+handle the length on its own.  Handles \*(L'get\*(R' magic.
 .Sp
 .Vb 1
-\&        char * SvPV (SV* sv, int len )
+\&        char*   SvPV (SV* sv, int len )
+.Ve
+.Ip "SvPV_force" 8
+Like <SvPV> but will force the \s-1SV\s0 into becoming a string (SvPOK).  You
+want force if you are going to update the SvPVX directly.
+.Sp
+.Vb 1
+\&        char*   SvPV_force(SV* sv, int len)
 .Ve
 .Ip "SvPVX" 8
 Returns a pointer to the string in the \s-1SV\s0.  The \s-1SV\s0 must contain a string.
 .Sp
 .Vb 1
-\&        char * SvPVX (SV* sv)
+\&        char*   SvPVX (SV* sv)
 .Ve
 .Ip "SvREFCNT" 8
 Returns the value of the object's reference count.
 .Sp
 .Vb 1
-\&        int SvREFCNT (SV* sv);
+\&        int     SvREFCNT (SV* sv)
 .Ve
 .Ip "SvREFCNT_dec" 8
 Decrements the reference count of the given \s-1SV\s0.
 .Sp
 .Vb 1
-\&        void SvREFCNT_dec (SV* sv)
+\&        void    SvREFCNT_dec (SV* sv)
 .Ve
 .Ip "SvREFCNT_inc" 8
 Increments the reference count of the given \s-1SV\s0.
 .Sp
 .Vb 1
-\&        void SvREFCNT_inc (SV* sv)
+\&        void    SvREFCNT_inc (SV* sv)
 .Ve
 .Ip "SvROK" 8
 Tests if the \s-1SV\s0 is an \s-1RV\s0.
 .Sp
 .Vb 1
-\&        int SvROK (SV* sv)
+\&        int     SvROK (SV* sv)
 .Ve
 .Ip "SvROK_off" 8
 Unsets the \s-1RV\s0 status of an \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SvROK_off (SV* sv)
+\&        void    SvROK_off (SV* sv)
 .Ve
 .Ip "SvROK_on" 8
 Tells an \s-1SV\s0 that it is an \s-1RV\s0.
 .Sp
 .Vb 1
-\&        SvROK_on (SV* sv)
+\&        void    SvROK_on (SV* sv)
 .Ve
 .Ip "SvRV" 8
 Dereferences an \s-1RV\s0 to return the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        SV*     SvRV (SV* sv);
+\&        SV*     SvRV (SV* sv)
 .Ve
-.Ip "SvTAINT" 8
-Taints an \s-1SV\s0 if tainting is enabled
+.Ip "SvSETMAGIC" 8
+Invokes \f(CWmg_set\fR on an \s-1SV\s0 if it has \*(L'set\*(R' magic.  This macro evaluates
+its argument more than once.
 .Sp
 .Vb 1
-\&        SvTAINT (SV* sv);
-.Ve
-.Ip "SvTAINTED" 8
-Checks to see if an \s-1SV\s0 is tainted. Returns \s-1TRUE\s0 if it is, \s-1FALSE\s0 if not.
-.Sp
-.Vb 1
-\&        SvTAINTED (SV* sv);
-.Ve
-.Ip "SvTAINTED_off" 8
-Untaints an \s-1SV\s0. Be \fIvery\fR careful with this routine, as it short-circuits
-some of Perl's fundamental security features. \s-1XS\s0 module authors should
-not use this function unless they fully understand all the implications
-of unconditionally untainting the value. Untainting should be done in
-the standard perl fashion, via a carefully crafted regexp, rather than
-directly untainting variables.
-.Sp
-.Vb 1
-\&        SvTAINTED_off (SV* sv);
-.Ve
-.Ip "SvTAINTED_on" 8
-Marks an \s-1SV\s0 as tainted.
-.Sp
-.Vb 1
-\&        SvTAINTED_on (SV* sv);
+\&        void    SvSETMAGIC( SV *sv )
 .Ve
 .Ip "sv_setiv" 8
-Copies an integer into the given \s-1SV\s0.
+Copies an integer into the given \s-1SV\s0.  Does not handle \*(L'set\*(R' magic.
+See \f(CWsv_setiv_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_setiv _((SV* sv, IV num));
+\&        void    sv_setiv (SV* sv, IV num)
+.Ve
+.Ip "sv_setiv_mg" 8
+Like \f(CWsv_setiv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setiv_mg (SV* sv, IV num)
 .Ve
 .Ip "sv_setnv" 8
-Copies a double into the given \s-1SV\s0.
+Copies a double into the given \s-1SV\s0.  Does not handle \*(L'set\*(R' magic.
+See \f(CWsv_setnv_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_setnv _((SV* sv, double num));
+\&        void    sv_setnv (SV* sv, double num)
+.Ve
+.Ip "sv_setnv_mg" 8
+Like \f(CWsv_setnv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setnv_mg (SV* sv, double num)
 .Ve
 .Ip "sv_setpv" 8
 Copies a string into an \s-1SV\s0.  The string must be null-terminated.
+Does not handle \*(L'set\*(R' magic.  See \f(CWsv_setpv_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_setpv _((SV* sv, char* ptr));
+\&        void    sv_setpv (SV* sv, char* ptr)
+.Ve
+.Ip "sv_setpv_mg" 8
+Like \f(CWsv_setpv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setpv_mg (SV* sv, char* ptr)
+.Ve
+.Ip "sv_setpviv" 8
+Copies an integer into the given \s-1SV\s0, also updating its string value.
+Does not handle \*(L'set\*(R' magic.  See \f(CWsv_setpviv_mg\fR.
+.Sp
+.Vb 1
+\&        void    sv_setpviv (SV* sv, IV num)
+.Ve
+.Ip "sv_setpviv_mg" 8
+Like \f(CWsv_setpviv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setpviv_mg (SV* sv, IV num)
 .Ve
 .Ip "sv_setpvn" 8
 Copies a string into an \s-1SV\s0.  The \f(CWlen\fR parameter indicates the number of
-bytes to be copied.
+bytes to be copied.  Does not handle \*(L'set\*(R' magic.  See \f(CWsv_setpvn_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_setpvn _((SV* sv, char* ptr, STRLEN len));
+\&        void    sv_setpvn (SV* sv, char* ptr, STRLEN len)
+.Ve
+.Ip "sv_setpvn_mg" 8
+Like \f(CWsv_setpvn\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setpvn_mg (SV* sv, char* ptr, STRLEN len)
 .Ve
 .Ip "sv_setpvf" 8
 Processes its arguments like \f(CWsprintf\fR and sets an \s-1SV\s0 to the formatted
-output.
+output.  Does not handle \*(L'set\*(R' magic.  See \f(CWsv_setpvf_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_setpvf _((SV* sv, const char* pat, ...));
+\&        void    sv_setpvf (SV* sv, const char* pat, ...)
+.Ve
+.Ip "sv_setpvf_mg" 8
+Like \f(CWsv_setpvf\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setpvf_mg (SV* sv, const char* pat, ...)
 .Ve
 .Ip "sv_setref_iv" 8
 Copies an integer into a new \s-1SV\s0, optionally blessing the \s-1SV\s0.  The \f(CWrv\fR
@@ -2958,7 +3222,7 @@ blessing.  Set \f(CWclassname\fR to \f(CWNullch\fR to avoid the blessing.  The n
 will be returned and will have a reference count of 1.
 .Sp
 .Vb 1
-\&        SV*     sv_setref_iv _((SV *rv, char *classname, IV iv));
+\&        SV*     sv_setref_iv (SV *rv, char *classname, IV iv)
 .Ve
 .Ip "sv_setref_nv" 8
 Copies a double into a new \s-1SV\s0, optionally blessing the \s-1SV\s0.  The \f(CWrv\fR
@@ -2968,18 +3232,18 @@ blessing.  Set \f(CWclassname\fR to \f(CWNullch\fR to avoid the blessing.  The n
 will be returned and will have a reference count of 1.
 .Sp
 .Vb 1
-\&        SV*     sv_setref_nv _((SV *rv, char *classname, double nv));
+\&        SV*     sv_setref_nv (SV *rv, char *classname, double nv)
 .Ve
 .Ip "sv_setref_pv" 8
 Copies a pointer into a new \s-1SV\s0, optionally blessing the \s-1SV\s0.  The \f(CWrv\fR
 argument will be upgraded to an \s-1RV\s0.  That \s-1RV\s0 will be modified to point to
-the new \s-1SV\s0.  If the \f(CWpv\fR argument is \s-1NULL\s0 then \f(CWsv_undef\fR will be placed
+the new \s-1SV\s0.  If the \f(CWpv\fR argument is \s-1NULL\s0 then \f(CWPL_sv_undef\fR will be placed
 into the \s-1SV\s0.  The \f(CWclassname\fR argument indicates the package for the
 blessing.  Set \f(CWclassname\fR to \f(CWNullch\fR to avoid the blessing.  The new \s-1SV\s0
 will be returned and will have a reference count of 1.
 .Sp
 .Vb 1
-\&        SV*     sv_setref_pv _((SV *rv, char *classname, void* pv));
+\&        SV*     sv_setref_pv (SV *rv, char *classname, void* pv)
 .Ve
 Do not use with integral Perl types such as \s-1HV\s0, \s-1AV\s0, \s-1SV\s0, \s-1CV\s0, because those
 objects will become corrupted by the pointer copy process.
@@ -2994,21 +3258,84 @@ argument indicates the package for the blessing.  Set \f(CWclassname\fR to
 a reference count of 1.
 .Sp
 .Vb 1
-\&        SV*     sv_setref_pvn _((SV *rv, char *classname, char* pv, I32 n));
+\&        SV*     sv_setref_pvn (SV *rv, char *classname, char* pv, I32 n)
 .Ve
 Note that \f(CWsv_setref_pv\fR copies the pointer while this copies the string.
-.Ip "sv_setsv" 8
-Copies the contents of the source \s-1SV\s0 \f(CWssv\fR into the destination \s-1SV\s0 \f(CWdsv\fR.
-The source \s-1SV\s0 may be destroyed if it is mortal.
+.Ip "SvSetSV" 8
+Calls \f(CWsv_setsv\fR if dsv is not the same as ssv.  May evaluate arguments
+more than once.
 .Sp
 .Vb 1
-\&        void    sv_setsv _((SV* dsv, SV* ssv));
+\&        void    SvSetSV (SV* dsv, SV* ssv)
+.Ve
+.Ip "SvSetSV_nosteal" 8
+Calls a non-destructive version of \f(CWsv_setsv\fR if dsv is not the same as ssv.
+May evaluate arguments more than once.
+.Sp
+.Vb 1
+\&        void    SvSetSV_nosteal (SV* dsv, SV* ssv)
+.Ve
+.Ip "sv_setsv" 8
+Copies the contents of the source \s-1SV\s0 \f(CWssv\fR into the destination \s-1SV\s0 \f(CWdsv\fR.
+The source \s-1SV\s0 may be destroyed if it is mortal.  Does not handle \*(L'set\*(R' magic.
+See the macro forms \f(CWSvSetSV\fR, \f(CWSvSetSV_nosteal\fR and \f(CWsv_setsv_mg\fR.
+.Sp
+.Vb 1
+\&        void    sv_setsv (SV* dsv, SV* ssv)
+.Ve
+.Ip "sv_setsv_mg" 8
+Like \f(CWsv_setsv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setsv_mg (SV* dsv, SV* ssv)
+.Ve
+.Ip "sv_setuv" 8
+Copies an unsigned integer into the given \s-1SV\s0.  Does not handle \*(L'set\*(R' magic.
+See \f(CWsv_setuv_mg\fR.
+.Sp
+.Vb 1
+\&        void    sv_setuv (SV* sv, UV num)
+.Ve
+.Ip "sv_setuv_mg" 8
+Like \f(CWsv_setuv\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_setuv_mg (SV* sv, UV num)
 .Ve
 .Ip "SvSTASH" 8
 Returns the stash of the \s-1SV\s0.
 .Sp
 .Vb 1
-\&        HV * SvSTASH (SV* sv)
+\&        HV*     SvSTASH (SV* sv)
+.Ve
+.Ip "SvTAINT" 8
+Taints an \s-1SV\s0 if tainting is enabled
+.Sp
+.Vb 1
+\&        void    SvTAINT (SV* sv)
+.Ve
+.Ip "SvTAINTED" 8
+Checks to see if an \s-1SV\s0 is tainted. Returns \s-1TRUE\s0 if it is, \s-1FALSE\s0 if not.
+.Sp
+.Vb 1
+\&        int     SvTAINTED (SV* sv)
+.Ve
+.Ip "SvTAINTED_off" 8
+Untaints an \s-1SV\s0. Be \fIvery\fR careful with this routine, as it short-circuits
+some of Perl's fundamental security features. \s-1XS\s0 module authors should
+not use this function unless they fully understand all the implications
+of unconditionally untainting the value. Untainting should be done in
+the standard perl fashion, via a carefully crafted regexp, rather than
+directly untainting variables.
+.Sp
+.Vb 1
+\&        void    SvTAINTED_off (SV* sv)
+.Ve
+.Ip "SvTAINTED_on" 8
+Marks an \s-1SV\s0 as tainted.
+.Sp
+.Vb 1
+\&        void    SvTAINTED_on (SV* sv)
 .Ve
 .Ip "SVt_IV" 8
 Integer type flag for scalars.  See \f(CWsvtype\fR.
@@ -3026,10 +3353,10 @@ Type flag for blessed scalars.  See \f(CWsvtype\fR.
 Double type flag for scalars.  See \f(CWsvtype\fR.
 .Ip "SvTRUE" 8
 Returns a boolean indicating whether Perl would evaluate the \s-1SV\s0 as true or
-false, defined or undefined.
+false, defined or undefined.  Does not handle \*(L'get\*(R' magic.
 .Sp
 .Vb 1
-\&        int SvTRUE (SV* sv)
+\&        int     SvTRUE (SV* sv)
 .Ve
 .Ip "SvTYPE" 8
 Returns the type of the \s-1SV\s0.  See \f(CWsvtype\fR.
@@ -3040,38 +3367,76 @@ Returns the type of the \s-1SV\s0.  See \f(CWsvtype\fR.
 .Ip "svtype" 8
 An enum of flags for Perl types.  These are found in the file \fBsv.h\fR in the
 \f(CWsvtype\fR enum.  Test these flags with the \f(CWSvTYPE\fR macro.
-.Ip "SvUPGRADE" 8
-Used to upgrade an \s-1SV\s0 to a more complex form.  Uses \f(CWsv_upgrade\fR to perform
-the upgrade if necessary.  See \f(CWsvtype\fR.
-.Sp
-.Vb 1
-\&        bool    SvUPGRADE _((SV* sv, svtype mt));
-.Ve
-.Ip "sv_upgrade" 8
-Upgrade an \s-1SV\s0 to a more complex form.  Use \f(CWSvUPGRADE\fR.  See \f(CWsvtype\fR.
-.Ip "sv_undef" 8
-This is the \f(CWundef\fR \s-1SV\s0.  Always refer to this as \f(CW&sv_undef\fR.
+.Ip "PL_sv_undef" 8
+This is the \f(CWundef\fR \s-1SV\s0.  Always refer to this as \f(CW&PL_sv_undef\fR.
 .Ip "sv_unref" 8
 Unsets the \s-1RV\s0 status of the \s-1SV\s0, and decrements the reference count of
 whatever was being referenced by the \s-1RV\s0.  This can almost be thought of
 as a reversal of \f(CWnewSVrv\fR.  See \f(CWSvROK_off\fR.
 .Sp
 .Vb 1
-\&        void    sv_unref _((SV* sv));
+\&        void    sv_unref (SV* sv)
 .Ve
+.Ip "SvUPGRADE" 8
+Used to upgrade an \s-1SV\s0 to a more complex form.  Uses \f(CWsv_upgrade\fR to perform
+the upgrade if necessary.  See \f(CWsvtype\fR.
+.Sp
+.Vb 1
+\&        bool    SvUPGRADE (SV* sv, svtype mt)
+.Ve
+.Ip "sv_upgrade" 8
+Upgrade an \s-1SV\s0 to a more complex form.  Use \f(CWSvUPGRADE\fR.  See \f(CWsvtype\fR.
 .Ip "sv_usepvn" 8
 Tells an \s-1SV\s0 to use \f(CWptr\fR to find its string value.  Normally the string is
 stored inside the \s-1SV\s0 but sv_usepvn allows the \s-1SV\s0 to use an outside string.
 The \f(CWptr\fR should point to memory that was allocated by \f(CWmalloc\fR.  The
 string length, \f(CWlen\fR, must be supplied.  This function will realloc the
 memory pointed to by \f(CWptr\fR, so that pointer should not be freed or used by
-the programmer after giving it to sv_usepvn.
+the programmer after giving it to sv_usepvn.  Does not handle \*(L'set\*(R' magic.
+See \f(CWsv_usepvn_mg\fR.
 .Sp
 .Vb 1
-\&        void    sv_usepvn _((SV* sv, char* ptr, STRLEN len));
+\&        void    sv_usepvn (SV* sv, char* ptr, STRLEN len)
 .Ve
-.Ip "sv_yes" 8
-This is the \f(CWtrue\fR \s-1SV\s0.  See \f(CWsv_no\fR.  Always refer to this as \f(CW&sv_yes\fR.
+.Ip "sv_usepvn_mg" 8
+Like \f(CWsv_usepvn\fR, but also handles \*(L'set\*(R' magic.
+.Sp
+.Vb 1
+\&        void    sv_usepvn_mg (SV* sv, char* ptr, STRLEN len)
+.Ve
+.Ip "sv_vcatpvfn(sv, pat, patlen, args, svargs, svmax, used_locale)" 8
+Processes its arguments like \f(CWvsprintf\fR and appends the formatted output
+to an \s-1SV\s0.  Uses an array of SVs if the C style variable argument list is
+missing (\s-1NULL\s0).  Indicates if locale information has been used for formatting.
+.Sp
+.Vb 3
+\&        void    sv_catpvfn _((SV* sv, const char* pat, STRLEN patlen,
+\&                              va_list *args, SV **svargs, I32 svmax,
+\&                              bool *used_locale));
+.Ve
+.Ip "sv_vsetpvfn(sv, pat, patlen, args, svargs, svmax, used_locale)" 8
+Works like \f(CWvcatpvfn\fR but copies the text into the \s-1SV\s0 instead of
+appending it.
+.Sp
+.Vb 3
+\&        void    sv_setpvfn _((SV* sv, const char* pat, STRLEN patlen,
+\&                              va_list *args, SV **svargs, I32 svmax,
+\&                              bool *used_locale));
+.Ve
+.Ip "SvUV" 8
+Returns the unsigned integer which is in the \s-1SV\s0.
+.Sp
+.Vb 1
+\&        UV      SvUV(SV* sv)
+.Ve
+.Ip "SvUVX" 8
+Returns the unsigned integer which is stored in the \s-1SV\s0.
+.Sp
+.Vb 1
+\&        UV      SvUVX(SV* sv)
+.Ve
+.Ip "PL_sv_yes" 8
+This is the \f(CWtrue\fR \s-1SV\s0.  See \f(CWPL_sv_no\fR.  Always refer to this as \f(CW&PL_sv_yes\fR.
 .Ip "\s-1THIS\s0" 8
 Variable which is setup by \f(CWxsubpp\fR to designate the object in a \*(C+ \s-1XSUB\s0.
 This is always the proper type for the \*(C+ object.  See \f(CWCLASS\fR and
@@ -3080,44 +3445,48 @@ the section on \fIUsing \s-1XS\s0 With \*(C+\fR in the \fIperlxs\fR manpage.
 Converts the specified character to lowercase.
 .Sp
 .Vb 1
-\&        int toLOWER (char c)
+\&        int     toLOWER (char c)
 .Ve
 .Ip "toUPPER" 8
 Converts the specified character to uppercase.
 .Sp
 .Vb 1
-\&        int toUPPER (char c)
+\&        int     toUPPER (char c)
 .Ve
 .Ip "warn" 8
 This is the \s-1XSUB\s0\-writer's interface to Perl's \f(CWwarn\fR function.  Use this
 function the same way you use the C \f(CWprintf\fR function.  See \f(CWcroak()\fR.
 .Ip "XPUSHi" 8
-Push an integer onto the stack, extending the stack if necessary.  See
-\f(CWPUSHi\fR.
+Push an integer onto the stack, extending the stack if necessary.  Handles
+\&'set\*(R' magic. See \f(CWPUSHi\fR.
 .Sp
 .Vb 1
 \&        XPUSHi(int d)
 .Ve
 .Ip "XPUSHn" 8
-Push a double onto the stack, extending the stack if necessary.  See
-\f(CWPUSHn\fR.
+Push a double onto the stack, extending the stack if necessary.  Handles \*(L'set\*(R'
+magic.  See \f(CWPUSHn\fR.
 .Sp
 .Vb 1
 \&        XPUSHn(double d)
 .Ve
 .Ip "XPUSHp" 8
 Push a string onto the stack, extending the stack if necessary.  The \f(CWlen\fR
-indicates the length of the string.  See \f(CWPUSHp\fR.
+indicates the length of the string.  Handles \*(L'set\*(R' magic.  See \f(CWPUSHp\fR.
 .Sp
 .Vb 1
 \&        XPUSHp(char *c, int len)
 .Ve
 .Ip "XPUSHs" 8
-Push an \s-1SV\s0 onto the stack, extending the stack if necessary.  See \f(CWPUSHs\fR.
+Push an \s-1SV\s0 onto the stack, extending the stack if necessary.  Does not
+handle \*(L'set\*(R' magic.  See \f(CWPUSHs\fR.
 .Sp
 .Vb 1
 \&        XPUSHs(sv)
 .Ve
+.Ip "XPUSHu" 8
+Push an unsigned integer onto the stack, extending the stack if
+necessary.  See \f(CWPUSHu\fR.
 .Ip "\s-1XS\s0" 8
 Macro to declare an \s-1XSUB\s0 and its C parameter list.  This is handled by
 \f(CWxsubpp\fR.
@@ -3126,7 +3495,7 @@ Return from \s-1XSUB\s0, indicating number of items on the stack.  This is usual
 handled by \f(CWxsubpp\fR.
 .Sp
 .Vb 1
-\&        XSRETURN(int x);
+\&        XSRETURN(int x)
 .Ve
 .Ip "\s-1XSRETURN_EMPTY\s0" 8
 Return an empty list from an \s-1XSUB\s0 immediately.
@@ -3138,10 +3507,10 @@ Return an empty list from an \s-1XSUB\s0 immediately.
 Return an integer from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mIV\fR.
 .Sp
 .Vb 1
-\&        XSRETURN_IV(IV v);
+\&        XSRETURN_IV(IV v)
 .Ve
 .Ip "\s-1XSRETURN_NO\s0" 8
-Return \f(CW&sv_no\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mNO\fR.
+Return \f(CW&PL_sv_no\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mNO\fR.
 .Sp
 .Vb 1
 \&        XSRETURN_NO;
@@ -3150,22 +3519,22 @@ Return \f(CW&sv_no\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mNO\fR.
 Return an double from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mNV\fR.
 .Sp
 .Vb 1
-\&        XSRETURN_NV(NV v);
+\&        XSRETURN_NV(NV v)
 .Ve
 .Ip "\s-1XSRETURN_PV\s0" 8
 Return a copy of a string from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mPV\fR.
 .Sp
 .Vb 1
-\&        XSRETURN_PV(char *v);
+\&        XSRETURN_PV(char *v)
 .Ve
 .Ip "\s-1XSRETURN_UNDEF\s0" 8
-Return \f(CW&sv_undef\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mUNDEF\fR.
+Return \f(CW&PL_sv_undef\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mUNDEF\fR.
 .Sp
 .Vb 1
 \&        XSRETURN_UNDEF;
 .Ve
 .Ip "\s-1XSRETURN_YES\s0" 8
-Return \f(CW&sv_yes\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mYES\fR.
+Return \f(CW&PL_sv_yes\fR from an \s-1XSUB\s0 immediately.  Uses \f(CWXST_mYES\fR.
 .Sp
 .Vb 1
 \&        XSRETURN_YES;
@@ -3175,39 +3544,39 @@ Place an integer into the specified position \f(CWi\fR on the stack.  The value 
 stored in a new mortal \s-1SV\s0.
 .Sp
 .Vb 1
-\&        XST_mIV( int i, IV v );
+\&        XST_mIV( int i, IV v )
 .Ve
 .Ip "XST_mNV" 8
 Place a double into the specified position \f(CWi\fR on the stack.  The value is
 stored in a new mortal \s-1SV\s0.
 .Sp
 .Vb 1
-\&        XST_mNV( int i, NV v );
+\&        XST_mNV( int i, NV v )
 .Ve
 .Ip "XST_mNO" 8
-Place \f(CW&sv_no\fR into the specified position \f(CWi\fR on the stack.
+Place \f(CW&PL_sv_no\fR into the specified position \f(CWi\fR on the stack.
 .Sp
 .Vb 1
-\&        XST_mNO( int i );
+\&        XST_mNO( int i )
 .Ve
 .Ip "XST_mPV" 8
 Place a copy of a string into the specified position \f(CWi\fR on the stack.  The
 value is stored in a new mortal \s-1SV\s0.
 .Sp
 .Vb 1
-\&        XST_mPV( int i, char *v );
+\&        XST_mPV( int i, char *v )
 .Ve
 .Ip "XST_mUNDEF" 8
-Place \f(CW&sv_undef\fR into the specified position \f(CWi\fR on the stack.
+Place \f(CW&PL_sv_undef\fR into the specified position \f(CWi\fR on the stack.
 .Sp
 .Vb 1
-\&        XST_mUNDEF( int i );
+\&        XST_mUNDEF( int i )
 .Ve
 .Ip "XST_mYES" 8
-Place \f(CW&sv_yes\fR into the specified position \f(CWi\fR on the stack.
+Place \f(CW&PL_sv_yes\fR into the specified position \f(CWi\fR on the stack.
 .Sp
 .Vb 1
-\&        XST_mYES( int i );
+\&        XST_mYES( int i )
 .Ve
 .Ip "\s-1XS_VERSION\s0" 8
 The version identifier for an \s-1XS\s0 module.  This is usually handled
@@ -3221,19 +3590,18 @@ The \s-1XSUB\s0\-writer's interface to the C \f(CWmemzero\fR function.  The \f(C
 destination, \f(CWn\fR is the number of items, and \f(CWt\fR is the type.
 .Sp
 .Vb 1
-\&        (void) Zero( d, n, t );
+\&        void    Zero( d, n, t )
 .Ve
-.SH "EDITOR"
-Jeff Okamoto <\fIokamoto@corp.hp.com\fR>
+.SH "AUTHORS"
+Until May 1997, this document was maintained by Jeff Okamoto
+<okamoto@corp.hp.com>.  It is now maintained as part of Perl itself.
 .PP
 With lots of help and suggestions from Dean Roehrich, Malcolm Beattie,
 Andreas Koenig, Paul Hudson, Ilya Zakharevich, Paul Marquess, Neil
-Bowers, Matthew Green, Tim Bunce, Spider Boardman, Ulrich Pfeifer, and
-Stephen McCamant.
+Bowers, Matthew Green, Tim Bunce, Spider Boardman, Ulrich Pfeifer,
+Stephen McCamant, and Gurusamy Sarathy.
 .PP
-API Listing by Dean Roehrich <\fIroehrich@cray.com\fR>.
-.SH "DATE"
-Version 31.8: 1997/5/17
+API Listing originally by Dean Roehrich <roehrich@cray.com>.
 
 .rn }` ''
 .IX Title "PERLGUTS 1"
@@ -3357,13 +3725,13 @@ Version 31.8: 1997/5/17
 
 .IX Header "API LISTING"
 
-.IX Item "AvFILL"
-
 .IX Item "av_clear"
 
 .IX Item "av_extend"
 
 .IX Item "av_fetch"
+
+.IX Item "AvFILL"
 
 .IX Item "av_len"
 
@@ -3389,17 +3757,17 @@ Version 31.8: 1997/5/17
 
 .IX Item "CvSTASH"
 
-.IX Item "DBsingle"
+.IX Item "PL_DBsingle"
 
-.IX Item "DBsub"
+.IX Item "PL_DBsub"
 
-.IX Item "DBtrace"
+.IX Item "PL_DBtrace"
 
 .IX Item "dMARK"
 
 .IX Item "dORIGMARK"
 
-.IX Item "dowarn"
+.IX Item "PL_dowarn"
 
 .IX Item "dSP"
 
@@ -3407,9 +3775,15 @@ Version 31.8: 1997/5/17
 
 .IX Item "dXSI32"
 
+.IX Item "do_binmode"
+
 .IX Item "\s-1ENTER\s0"
 
 .IX Item "\s-1EXTEND\s0"
+
+.IX Item "fbm_compile"
+
+.IX Item "fbm_instr"
 
 .IX Item "\s-1FREETMPS\s0"
 
@@ -3427,13 +3801,13 @@ Version 31.8: 1997/5/17
 
 .IX Item "G_SCALAR"
 
-.IX Item "G_VOID"
-
 .IX Item "gv_fetchmeth"
 
 .IX Item "gv_fetchmethod"
 
 .IX Item "gv_fetchmethod_autoload"
+
+.IX Item "G_VOID"
 
 .IX Item "gv_stashpv"
 
@@ -3461,8 +3835,6 @@ Version 31.8: 1997/5/17
 
 .IX Item "hv_clear"
 
-.IX Item "hv_delayfree_ent"
-
 .IX Item "hv_delete"
 
 .IX Item "hv_delete_ent"
@@ -3474,8 +3846,6 @@ Version 31.8: 1997/5/17
 .IX Item "hv_fetch"
 
 .IX Item "hv_fetch_ent"
-
-.IX Item "hv_free_ent"
 
 .IX Item "hv_iterinit"
 
@@ -3517,6 +3887,8 @@ Version 31.8: 1997/5/17
 
 .IX Item "\s-1LEAVE\s0"
 
+.IX Item "looks_like_number"
+
 .IX Item "\s-1MARK\s0"
 
 .IX Item "mg_clear"
@@ -3537,15 +3909,15 @@ Version 31.8: 1997/5/17
 
 .IX Item "Move"
 
-.IX Item "na"
+.IX Item "PL_na"
 
 .IX Item "New"
 
+.IX Item "newAV"
+
 .IX Item "Newc"
 
-.IX Item "Newz"
-
-.IX Item "newAV"
+.IX Item "newCONSTSUB"
 
 .IX Item "newHV"
 
@@ -3553,13 +3925,17 @@ Version 31.8: 1997/5/17
 
 .IX Item "newRV_noinc"
 
-.IX Item "newSV"
+.IX Item "\s-1NEWSV\s0"
 
 .IX Item "newSViv"
 
 .IX Item "newSVnv"
 
 .IX Item "newSVpv"
+
+.IX Item "newSVpvf"
+
+.IX Item "newSVpvn"
 
 .IX Item "newSVrv"
 
@@ -3568,6 +3944,8 @@ Version 31.8: 1997/5/17
 .IX Item "newXS"
 
 .IX Item "newXSproto"
+
+.IX Item "Newz"
 
 .IX Item "Nullav"
 
@@ -3635,6 +4013,8 @@ Version 31.8: 1997/5/17
 
 .IX Item "PUSHs"
 
+.IX Item "PUSHu"
+
 .IX Item "\s-1PUTBACK\s0"
 
 .IX Item "Renew"
@@ -3683,11 +4063,21 @@ Version 31.8: 1997/5/17
 
 .IX Item "sv_catpv"
 
+.IX Item "sv_catpv_mg"
+
 .IX Item "sv_catpvn"
+
+.IX Item "sv_catpvn_mg"
 
 .IX Item "sv_catpvf"
 
+.IX Item "sv_catpvf_mg"
+
 .IX Item "sv_catsv"
+
+.IX Item "sv_catsv_mg"
+
+.IX Item "sv_chop"
 
 .IX Item "sv_cmp"
 
@@ -3697,15 +4087,23 @@ Version 31.8: 1997/5/17
 
 .IX Item "sv_dec"
 
+.IX Item "sv_derived_from"
+
+.IX Item "sv_derived_from"
+
 .IX Item "SvEND"
 
 .IX Item "sv_eq"
+
+.IX Item "SvGETMAGIC"
 
 .IX Item "SvGROW"
 
 .IX Item "sv_grow"
 
 .IX Item "sv_inc"
+
+.IX Item "sv_insert"
 
 .IX Item "SvIOK"
 
@@ -3719,9 +4117,9 @@ Version 31.8: 1997/5/17
 
 .IX Item "sv_isa"
 
-.IX Item "SvIV"
-
 .IX Item "sv_isobject"
+
+.IX Item "SvIV"
 
 .IX Item "SvIVX"
 
@@ -3733,17 +4131,15 @@ Version 31.8: 1997/5/17
 
 .IX Item "sv_mortalcopy"
 
-.IX Item "SvOK"
-
 .IX Item "sv_newmortal"
-
-.IX Item "sv_no"
 
 .IX Item "SvNIOK"
 
 .IX Item "SvNIOK_off"
 
 .IX Item "SvNIOKp"
+
+.IX Item "PL_sv_no"
 
 .IX Item "SvNOK"
 
@@ -3759,6 +4155,10 @@ Version 31.8: 1997/5/17
 
 .IX Item "SvNVX"
 
+.IX Item "SvOK"
+
+.IX Item "SvOOK"
+
 .IX Item "SvPOK"
 
 .IX Item "SvPOK_off"
@@ -3770,6 +4170,8 @@ Version 31.8: 1997/5/17
 .IX Item "SvPOKp"
 
 .IX Item "SvPV"
+
+.IX Item "SvPV_force"
 
 .IX Item "SvPVX"
 
@@ -3787,23 +4189,31 @@ Version 31.8: 1997/5/17
 
 .IX Item "SvRV"
 
-.IX Item "SvTAINT"
-
-.IX Item "SvTAINTED"
-
-.IX Item "SvTAINTED_off"
-
-.IX Item "SvTAINTED_on"
+.IX Item "SvSETMAGIC"
 
 .IX Item "sv_setiv"
 
+.IX Item "sv_setiv_mg"
+
 .IX Item "sv_setnv"
+
+.IX Item "sv_setnv_mg"
 
 .IX Item "sv_setpv"
 
+.IX Item "sv_setpv_mg"
+
+.IX Item "sv_setpviv"
+
+.IX Item "sv_setpviv_mg"
+
 .IX Item "sv_setpvn"
 
+.IX Item "sv_setpvn_mg"
+
 .IX Item "sv_setpvf"
+
+.IX Item "sv_setpvf_mg"
 
 .IX Item "sv_setref_iv"
 
@@ -3813,9 +4223,27 @@ Version 31.8: 1997/5/17
 
 .IX Item "sv_setref_pvn"
 
+.IX Item "SvSetSV"
+
+.IX Item "SvSetSV_nosteal"
+
 .IX Item "sv_setsv"
 
+.IX Item "sv_setsv_mg"
+
+.IX Item "sv_setuv"
+
+.IX Item "sv_setuv_mg"
+
 .IX Item "SvSTASH"
+
+.IX Item "SvTAINT"
+
+.IX Item "SvTAINTED"
+
+.IX Item "SvTAINTED_off"
+
+.IX Item "SvTAINTED_on"
 
 .IX Item "SVt_IV"
 
@@ -3837,17 +4265,27 @@ Version 31.8: 1997/5/17
 
 .IX Item "svtype"
 
+.IX Item "PL_sv_undef"
+
+.IX Item "sv_unref"
+
 .IX Item "SvUPGRADE"
 
 .IX Item "sv_upgrade"
 
-.IX Item "sv_undef"
-
-.IX Item "sv_unref"
-
 .IX Item "sv_usepvn"
 
-.IX Item "sv_yes"
+.IX Item "sv_usepvn_mg"
+
+.IX Item "sv_vcatpvfn(sv, pat, patlen, args, svargs, svmax, used_locale)"
+
+.IX Item "sv_vsetpvfn(sv, pat, patlen, args, svargs, svmax, used_locale)"
+
+.IX Item "SvUV"
+
+.IX Item "SvUVX"
+
+.IX Item "PL_sv_yes"
 
 .IX Item "\s-1THIS\s0"
 
@@ -3864,6 +4302,8 @@ Version 31.8: 1997/5/17
 .IX Item "XPUSHp"
 
 .IX Item "XPUSHs"
+
+.IX Item "XPUSHu"
 
 .IX Item "\s-1XS\s0"
 
@@ -3901,7 +4341,5 @@ Version 31.8: 1997/5/17
 
 .IX Item "Zero"
 
-.IX Header "EDITOR"
-
-.IX Header "DATE"
+.IX Header "AUTHORS"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDOC 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLDOC 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -190,9 +190,11 @@
 .SH "NAME"
 perldoc \- Look up Perl documentation in pod format.
 .SH "SYNOPSIS"
-\fBperldoc\fR [\fB\-h\fR] [\fB\-v\fR] [\fB\-t\fR] [\fB\-u\fR] [\fB\-m\fR] [\fB\-l\fR] PageName|ModuleName|ProgramName
+\fBperldoc\fR [\fB\-h\fR] [\fB\-v\fR] [\fB\-t\fR] [\fB\-u\fR] [\fB\-m\fR] [\fB\-l\fR] [\fB\-F\fR]  [\fB\-X\fR] PageName|ModuleName|ProgramName
 .PP
 \fBperldoc\fR \fB\-f\fR BuiltinFunction
+.PP
+\fBperldoc\fR \fB\-q\fR FAQ Keyword
 .SH "DESCRIPTION"
 \fIperldoc\fR looks up a piece of documentation in .pod format that is embedded
 in the perl installation tree or in a perl script, and displays it via
@@ -219,9 +221,19 @@ you need, and you'd like to inspect the code directly; perldoc will find
 the file for you and simply hand it off for display.
 .Ip "\fB\-l\fR file name only" 5
 Display the file name of the module found.
+.Ip "\fB\-F\fR file names" 5
+Consider arguments as file names, no search in directories will be performed.
 .Ip "\fB\-f\fR perlfunc" 5
 The \fB\-f\fR option followed by the name of a perl built in function will
 extract the documentation of this function from the \fIperlfunc\fR manpage.
+.Ip "\fB\-q\fR perlfaq" 5
+The \fB\-q\fR option takes a regular expression as an argument.  It will search
+the question headings in perlfaq[1-9] and print the entries matching
+the regular expression.
+.Ip "\fB\-X\fR use an index if present" 5
+The \fB\-X\fR option looks for a entry whose basename matches the name given on the
+command line in the file \f(CW$Config{archlib}/pod.idx\fR.  The pod.idx file should
+contain fully qualified filenames, one per line.
 .Ip "\fBPageName|ModuleName|ProgramName\fR" 5
 The item you want to look up.  Nested modules (such as \f(CWFile::Basename\fR)
 are specified either as \f(CWFile::Basename\fR or \f(CWFile/Basename\fR.  You may also
@@ -235,7 +247,10 @@ command line arguments.  \f(CWperldoc\fR also searches directories
 specified by the \f(CWPERL5LIB\fR (or \f(CWPERLLIB\fR if \f(CWPERL5LIB\fR is not
 defined) and \f(CWPATH\fR environment variables.
 (The latter is so that embedded pods for executables, such as
-\f(CWperldoc\fR itself, are available.)
+\f(CWperldoc\fR itself, are available.)  \f(CWperldoc\fR will use, in order of
+preference, the pager defined in \f(CWPERLDOC_PAGER\fR, \f(CWMANPAGER\fR, or
+\f(CWPAGER\fR before trying to find a pager on its own.  (\f(CWMANPAGER\fR is not
+used if \f(CWperldoc\fR was told to display plain text or unformatted pod.)
 .SH "AUTHOR"
 Kenneth Albanowski <kjahds@kjahds.com>
 .PP
@@ -265,7 +280,13 @@ Minor updates by Andy Dougherty <doughera@lafcol.lafayette.edu>
 
 .IX Item "\fB\-l\fR file name only"
 
+.IX Item "\fB\-F\fR file names"
+
 .IX Item "\fB\-f\fR perlfunc"
+
+.IX Item "\fB\-q\fR perlfaq"
+
+.IX Item "\fB\-X\fR use an index if present"
 
 .IX Item "\fBPageName|ModuleName|ProgramName\fR"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLREF 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLREF 1 "perl 5.005, patch 53" "23/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -191,19 +191,19 @@
 perlref \- Perl references and nested data structures
 .SH "DESCRIPTION"
 Before release 5 of Perl it was difficult to represent complex data
-structures, because all references had to be symbolic, and even that was
-difficult to do when you wanted to refer to a variable rather than a
-symbol table entry.  Perl not only makes it easier to use symbolic
-references to variables, but lets you have \*(L"hard\*(R" references to any piece
-of data.  Any scalar may hold a hard reference.  Because arrays and hashes
-contain scalars, you can now easily build arrays of arrays, arrays of
-hashes, hashes of arrays, arrays of hashes of functions, and so on.
+structures, because all references had to be symbolic\*(--and even then
+it was difficult to refer to a variable instead of a symbol table entry.
+Perl now not only makes it easier to use symbolic references to variables,
+but also lets you have \*(L"hard\*(R" references to any piece of data or code.
+Any scalar may hold a hard reference.  Because arrays and hashes contain
+scalars, you can now easily build arrays of arrays, arrays of hashes,
+hashes of arrays, arrays of hashes of functions, and so on.
 .PP
 Hard references are smart\*(--they keep track of reference counts for you,
 automatically freeing the thing referred to when its reference count goes
-to zero.  (Note: The reference counts for values in self-referential or
+to zero.  (Note: the reference counts for values in self-referential or
 cyclic data structures may not go to zero without a little help; see
-the section on \fITwo-Phased Garbage Collection\fR in the \fIperlobj\fR manpage for a detailed explanation.
+the section on \fITwo-Phased Garbage Collection\fR in the \fIperlobj\fR manpage for a detailed explanation.)
 If that thing happens to be an object, the object is destructed.  See
 the \fIperlobj\fR manpage for more about objects.  (In a sense, everything in Perl is an
 object, but we usually reserve the word for references to objects that
@@ -218,7 +218,7 @@ them that; references are confusing enough without useless synonyms.)
 In contrast, hard references are more like hard links in a Unix file
 system: They are used to access an underlying object without concern for
 what its (other) name is.  When the word \*(L"reference\*(R" is used without an
-adjective, like in the following paragraph, it usually is talking about a
+adjective, as in the following paragraph, it is usually talking about a
 hard reference.
 .PP
 References are easy to use in Perl.  There is just one overriding
@@ -226,8 +226,8 @@ principle: Perl does no implicit referencing or dereferencing.  When a
 scalar is holding a reference, it always behaves as a simple scalar.  It
 doesn't magically start being an array or hash or subroutine; you have to
 tell it explicitly to do so, by dereferencing it.
-.PP
-References can be constructed in several ways.
+.Sh "Making References"
+References can be created in several ways.
 .Ip "1." 4
 By using the backslash operator on a variable, subroutine, or value.
 (This works much like the & (address-of) operator in C.)  Note
@@ -243,19 +243,19 @@ reference that the backslash returned.  Here are some examples:
 \&    $coderef   = \e&handler;
 \&    $globref   = \e*foo;
 .Ve
-It isn't possible to create a true reference to an \s-1IO\s0 handle (filehandle or
-dirhandle) using the backslash operator.  See the explanation of the
-*foo{\s-1THING\s0} syntax below.  (However, you're apt to find Perl code
-out there using globrefs as though they were \s-1IO\s0 handles, which is
-grandfathered into continued functioning.)
+It isn't possible to create a true reference to an \s-1IO\s0 handle (filehandle
+or dirhandle) using the backslash operator.  The most you can get is a
+reference to a typeglob, which is actually a complete symbol table entry.
+But see the explanation of the \f(CW*foo{THING}\fR syntax below.  However,
+you can still use type globs and globrefs as though they were \s-1IO\s0 handles.
 .Ip "2." 4
-A reference to an anonymous array can be constructed using square
+A reference to an anonymous array can be created using square
 brackets:
 .Sp
 .Vb 1
 \&    $arrayref = [1, 2, ['a', 'b', 'c']];
 .Ve
-Here we've constructed a reference to an anonymous array of three elements
+Here we've created a reference to an anonymous array of three elements
 whose final element is itself a reference to another anonymous array of three
 elements.  (The multidimensional syntax described later can be used to
 access this.  For example, after the above, \f(CW$arrayref->[2][1]\fR would have
@@ -270,9 +270,11 @@ a list of references!
 \&    @list = \e($a, @b, %c);      # same thing!
 .Ve
 As a special case, \f(CW\e(@foo)\fR returns a list of references to the contents
-of \f(CW@foo\fR, not a reference to \f(CW@foo\fR itself.  Likewise for \f(CW%foo\fR.
+of \f(CW@foo\fR, not a reference to \f(CW@foo\fR itself.  Likewise for \f(CW%foo\fR,
+except that the key references are to copies (since the keys are just
+strings rather than full-fledged scalars).
 .Ip "3." 4
-A reference to an anonymous hash can be constructed using curly
+A reference to an anonymous hash can be created using curly
 brackets:
 .Sp
 .Vb 4
@@ -281,7 +283,7 @@ brackets:
 \&        'Clyde' => 'Bonnie',
 \&    };
 .Ve
-Anonymous hash and array constructors can be intermixed freely to
+Anonymous hash and array composers like these can be intermixed freely to
 produce as complicated a structure as you want.  The multidimensional
 syntax described below works for these too.  The values above are
 literals, but variables and expressions would work just as well, because
@@ -303,8 +305,17 @@ reference to it, you have these options:
 \&    sub hashem {       +{ @_ } }   # ok
 \&    sub hashem { return { @_ } }   # ok
 .Ve
+On the other hand, if you want the other meaning, you can do this:
+.Sp
+.Vb 3
+\&    sub showem {        { @_ } }   # ambiguous (currently ok, but may change)
+\&    sub showem {       {; @_ } }   # ok
+\&    sub showem { { return @_ } }   # ok
+.Ve
+Note how the leading \f(CW+{\fR and \f(CW{;\fR always serve to disambiguate
+the expression to mean either the \s-1HASH\s0 reference, or the \s-1BLOCK\s0.
 .Ip "4." 4
-A reference to an anonymous subroutine can be constructed by using
+A reference to an anonymous subroutine can be created by using
 \f(CWsub\fR without a subname:
 .Sp
 .Vb 1
@@ -313,7 +324,7 @@ A reference to an anonymous subroutine can be constructed by using
 Note the presence of the semicolon.  Except for the fact that the code
 inside isn't executed immediately, a \f(CWsub {}\fR is not so much a
 declaration as it is an operator, like \f(CWdo{}\fR or \f(CWeval{}\fR.  (However, no
-matter how many times you execute that line (unless you're in an
+matter how many times you execute that particular line (unless you're in an
 \f(CWeval("...")\fR), \f(CW$coderef\fR will still have a reference to the \fI\s-1SAME\s0\fR
 anonymous subroutine.)
 .Sp
@@ -361,7 +372,7 @@ Note particularly that \f(CW$x\fR continues to refer to the value passed into
 scope by the time the anonymous subroutine runs.  That's what closure
 is all about.
 .Sp
-This applies to only lexical variables, by the way.  Dynamic variables
+This applies only to lexical variables, by the way.  Dynamic variables
 continue to work as they have always worked.  Closure is not something
 that most Perl programmers need trouble themselves about to begin with.
 .Ip "5." 4
@@ -370,11 +381,26 @@ Perl objects are just references to a special kind of object that happens to kno
 which package it's associated with.  Constructors are just special
 subroutines that know how to create that association.  They do so by
 starting with an ordinary reference, and it remains an ordinary reference
-even while it's also being an object.  Constructors are customarily
-named \fInew()\fR, but don't have to be:
+even while it's also being an object.  Constructors are often
+named \fInew()\fR and called indirectly:
 .Sp
 .Vb 1
 \&    $objref = new Doggie (Tail => 'short', Ears => 'long');
+.Ve
+But don't have to be:
+.Sp
+.Vb 1
+\&    $objref   = Doggie->new(Tail => 'short', Ears => 'long');
+.Ve
+.Vb 2
+\&    use Term::Cap;
+\&    $terminal = Term::Cap->Tgetent( { OSPEED => 9600 });
+.Ve
+.Vb 4
+\&    use Tk;
+\&    $main    = MainWindow->new();
+\&    $menubar = $main->Frame(-relief              => "raised",
+\&                            -borderwidth         => 2)
 .Ve
 .Ip "6." 4
 References of the appropriate type can spring into existence if you
@@ -405,37 +431,35 @@ except in the case of scalars.  *foo{\s-1SCALAR\s0} returns a reference to an
 anonymous scalar if \f(CW$foo\fR hasn't been used yet.  This might change in a
 future release.
 .Sp
-The use of *foo{\s-1IO\s0} is the best way to pass bareword filehandles into or
-out of subroutines, or to store them in larger data structures.
+*foo{\s-1IO\s0} is an alternative to the \e*\s-1HANDLE\s0 mechanism given in
+the section on \fITypeglobs and Filehandles\fR in the \fIperldata\fR manpage for passing filehandles
+into or out of subroutines, or storing into larger data structures.
+Its disadvantage is that it won't create a new filehandle for you.
+Its advantage is that you have no risk of clobbering more than you want
+to with a typeglob assignment, although if you assign to a scalar instead
+of a typeglob, you're ok.
 .Sp
-.Vb 5
+.Vb 2
+\&    splutter(*STDOUT);
 \&    splutter(*STDOUT{IO});
+.Ve
+.Vb 4
 \&    sub splutter {
 \&        my $fh = shift;
 \&        print $fh "her um well a hmmm\en";
 \&    }
 .Ve
-.Vb 5
+.Vb 2
+\&    $rec = get_rec(*STDIN);
 \&    $rec = get_rec(*STDIN{IO});
+.Ve
+.Vb 4
 \&    sub get_rec {
 \&        my $fh = shift;
 \&        return scalar <$fh>;
 \&    }
 .Ve
-Beware, though, that you can't do this with a routine which is going to
-open the filehandle for you, because *\s-1HANDLE\s0{\s-1IO\s0} will be undef if \s-1HANDLE\s0
-hasn't been used yet.  Use \e*\s-1HANDLE\s0 for that sort of thing instead.
-.Sp
-Using \e*\s-1HANDLE\s0 (or *\s-1HANDLE\s0) is another way to use and store non-bareword
-filehandles (before perl version 5.002 it was the only way).  The two
-methods are largely interchangeable, you can do
-.Sp
-.Vb 2
-\&    splutter(\e*STDOUT);
-\&    $rec = get_rec(\e*STDIN);
-.Ve
-with the above subroutine definitions.
-.PP
+.Sh "Using References"
 That's it for creating references.  By now you're probably dying to
 know how to use references to get back to your long-lost data.  There
 are several basic methods.
@@ -523,6 +547,7 @@ statement, \f(CW$array[$x]\fR may have been undefined.  If so, it's
 automatically defined with a hash reference so that we can look up
 \f(CW{"foo"}\fR in it.  Likewise \f(CW$array[$x]->{"foo"}\fR will automatically get
 defined with an array reference so that we can look up \f(CW[0]\fR in it.
+This process is called \fIautovivification\fR.
 .Sp
 One more thing here.  The arrow is optional \fI\s-1BETWEEN\s0\fR brackets
 subscripts, so you can shrink the above down to
@@ -550,8 +575,8 @@ civility though.
 The \fIref()\fR operator may be used to determine what type of thing the
 reference is pointing to.  See the \fIperlfunc\fR manpage.
 .PP
-The \fIbless()\fR operator may be used to associate a reference with a package
-functioning as an object class.  See the \fIperlobj\fR manpage.
+The \fIbless()\fR operator may be used to associate the object a reference
+points to with a package functioning as an object class.  See the \fIperlobj\fR manpage.
 .PP
 A typeglob may be dereferenced the same way a reference can, because
 the dereference syntax always indicates the kind of reference desired.
@@ -608,12 +633,12 @@ block.  An inner block may countermand that with
 .Vb 1
 \&    no strict 'refs';
 .Ve
-Only package variables are visible to symbolic references.  Lexical
-variables (declared with \fImy()\fR) aren't in a symbol table, and thus are
-invisible to this mechanism.  For example:
+Only package variables (globals, even if localized) are visible to
+symbolic references.  Lexical variables (declared with \fImy()\fR) aren't in
+a symbol table, and thus are invisible to this mechanism.  For example:
 .PP
 .Vb 6
-\&    local($value) = 10;
+\&    local $value = 10;
 \&    $ref = \e$value;
 \&    {
 \&        my $value = 20;
@@ -682,6 +707,115 @@ makes it more than a bareword:
 The \fB\-w\fR switch will warn you if it interprets a reserved word as a string.
 But it will no longer warn you about using lowercase words, because the
 string is effectively quoted.
+.Sh "Pseudo-hashes: Using an array as a hash"
+\s-1WARNING\s0:  This section describes an experimental feature.  Details may
+change without notice in future versions.
+.PP
+Beginning with release 5.005 of Perl you can use an array reference
+in some contexts that would normally require a hash reference.  This
+allows you to access array elements using symbolic names, as if they
+were fields in a structure.
+.PP
+For this to work, the array must contain extra information.  The first
+element of the array has to be a hash reference that maps field names
+to array indices.  Here is an example:
+.PP
+.Vb 1
+\&   $struct = [{foo => 1, bar => 2}, "FOO", "BAR"];
+.Ve
+.Vb 2
+\&   $struct->{foo};  # same as $struct->[1], i.e. "FOO"
+\&   $struct->{bar};  # same as $struct->[2], i.e. "BAR"
+.Ve
+.Vb 2
+\&   keys %$struct;   # will return ("foo", "bar") in some order
+\&   values %$struct; # will return ("FOO", "BAR") in same some order
+.Ve
+.Vb 3
+\&   while (my($k,$v) = each %$struct) {
+\&       print "$k => $v\en";
+\&   }
+.Ve
+Perl will raise an exception if you try to delete keys from a pseudo-hash
+or try to access nonexistent fields.  For better performance, Perl can also
+do the translation from field names to array indices at compile time for
+typed object references.  See the \fIfields\fR manpage.
+.Sh "Function Templates"
+As explained above, a closure is an anonymous function with access to the
+lexical variables visible when that function was compiled.  It retains
+access to those variables even though it doesn't get run until later,
+such as in a signal handler or a Tk callback.
+.PP
+Using a closure as a function template allows us to generate many functions
+that act similarly.  Suppopose you wanted functions named after the colors
+that generated \s-1HTML\s0 font changes for the various colors:
+.PP
+.Vb 1
+\&    print "Be ", red("careful"), "with that ", green("light");
+.Ve
+The \fIred()\fR and \fIgreen()\fR functions would be very similar.  To create these,
+we'll assign a closure to a typeglob of the name of the function we're
+trying to build.  
+.PP
+.Vb 5
+\&    @colors = qw(red blue green yellow orange purple violet);
+\&    for my $name (@colors) {
+\&        no strict 'refs';       # allow symbol table manipulation
+\&        *$name = *{uc $name} = sub { "<FONT COLOR='$name'>@_</FONT>" };
+\&    } 
+.Ve
+Now all those different functions appear to exist independently.  You can
+call \fIred()\fR, \fI\s-1RED\s0()\fR, \fIblue()\fR, \fI\s-1BLUE\s0()\fR, \fIgreen()\fR, etc.  This technique saves on
+both compile time and memory use, and is less error-prone as well, since
+syntax checks happen at compile time.  It's critical that any variables in
+the anonymous subroutine be lexicals in order to create a proper closure.
+That's the reasons for the \f(CWmy\fR on the loop iteration variable.
+.PP
+This is one of the only places where giving a prototype to a closure makes
+much sense.  If you wanted to impose scalar context on the arguments of
+these functions (probably not a wise idea for this particular example),
+you could have written it this way instead:
+.PP
+.Vb 1
+\&    *$name = sub ($) { "<FONT COLOR='$name'>$_[0]</FONT>" };
+.Ve
+However, since prototype checking happens at compile time, the assignment
+above happens too late to be of much use.  You could address this by
+putting the whole loop of assignments within a \s-1BEGIN\s0 block, forcing it
+to occur during compilation.
+.PP
+Access to lexicals that change over type\*(--like those in the \f(CWfor\fR loop
+above\*(--only works with closures, not general subroutines.  In the general
+case, then, named subroutines do not nest properly, although anonymous
+ones do.  If you are accustomed to using nested subroutines in other
+programming languages with their own private variables, you'll have to
+work at it a bit in Perl.  The intuitive coding of this kind of thing
+incurs mysterious warnings about ``will not stay shared'\*(R'.  For example,
+this won't work:
+.PP
+.Vb 5
+\&    sub outer {
+\&        my $x = $_[0] + 35;
+\&        sub inner { return $x * 19 }   # WRONG
+\&        return $x + inner();
+\&    } 
+.Ve
+A work-around is the following:
+.PP
+.Vb 5
+\&    sub outer {
+\&        my $x = $_[0] + 35;
+\&        local *inner = sub { return $x * 19 };
+\&        return $x + inner();
+\&    } 
+.Ve
+Now \fIinner()\fR can only be called from within \fIouter()\fR, because of the
+temporary assignments of the closure (anonymous subroutine).  But when
+it does, it has normal access to the lexical variable \f(CW$x\fR from the scope
+of \fIouter()\fR.
+.PP
+This has the interesting effect of creating a function local to another
+function, something not normally supported in Perl.
 .SH "WARNING"
 You may not (usefully) use a reference as the key to a hash.  It will be
 converted into a string:
@@ -699,14 +833,16 @@ more like
 .Ve
 And then at least you can use the \fIvalues()\fR, which will be
 real refs, instead of the \fIkeys()\fR, which won't.
+.PP
+The standard Tie::RefHash module provides a convenient workaround to this.
 .SH "SEE ALSO"
 Besides the obvious documents, source code can be instructive.
 Some rather pathological examples of the use of references can be found
 in the \fIt/op/ref.t\fR regression test in the Perl source directory.
 .PP
 See also the \fIperldsc\fR manpage and the \fIperllol\fR manpage for how to use references to create
-complex data structures, and the \fIperlobj\fR manpage for how to use them to create
-objects.
+complex data structures, and the \fIperltoot\fR manpage, the \fIperlobj\fR manpage, and the \fIperlbot\fR manpage
+for how to use them to create objects.
 
 .rn }` ''
 .IX Title "PERLREF 1"
@@ -715,6 +851,8 @@ objects.
 .IX Header "NAME"
 
 .IX Header "DESCRIPTION"
+
+.IX Subsection "Making References"
 
 .IX Item "1."
 
@@ -730,6 +868,8 @@ objects.
 
 .IX Item "7."
 
+.IX Subsection "Using References"
+
 .IX Item "1."
 
 .IX Item "2."
@@ -741,6 +881,10 @@ objects.
 .IX Subsection "Symbolic references"
 
 .IX Subsection "Not-so-symbolic references"
+
+.IX Subsection "Pseudo-hashes: Using an array as a hash"
+
+.IX Subsection "Function Templates"
 
 .IX Header "WARNING"
 

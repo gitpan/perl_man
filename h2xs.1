@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH H2XS 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH H2XS 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -190,17 +190,17 @@
 .SH "NAME"
 h2xs \- convert .h C header files to Perl extensions
 .SH "SYNOPSIS"
-\fBh2xs\fR [\fB\-AOPXcdf\fR] [\fB\-v\fR version] [\fB\-n\fR module_name] [\fB\-p\fR prefix] [\fB\-s\fR sub] [headerfile [extra_libraries]]
+\fBh2xs\fR [\fB\-AOPXcdf\fR] [\fB\-v\fR version] [\fB\-n\fR module_name] [\fB\-p\fR prefix] [\fB\-s\fR sub] [headerfile ... [extra_libraries]]
 .PP
 \fBh2xs\fR \fB\-h\fR
 .SH "DESCRIPTION"
-\fIh2xs\fR builds a Perl extension from any C header file.  The extension will
-include functions which can be used to retrieve the value of any #define
-statement which was in the C header.
+\fIh2xs\fR builds a Perl extension from C header files.  The extension
+will include functions which can be used to retrieve the value of any
+#define statement which was in the C header files.
 .PP
 The \fImodule_name\fR will be used for the name of the extension.  If
-module_name is not supplied then the name of the header file will be used,
-with the first character capitalized.
+module_name is not supplied then the name of the first header file
+will be used, with the first character capitalized.
 .PP
 If the extension might need extra libraries, they should be included
 here.  The extension Makefile.PL will take care of checking whether

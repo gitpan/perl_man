@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLIPC 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLIPC 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -243,7 +243,17 @@ So to check whether signal 17 and SIGALRM were the same, do just this:
 .Ve
 You may also choose to assign the strings \f(CW'IGNORE'\fR or \f(CW'DEFAULT'\fR as
 the handler, in which case Perl will try to discard the signal or do the
-default thing.  Some signals can be neither trapped nor ignored, such as
+default thing.
+.PP
+On most UNIX platforms, the \f(CWCHLD\fR (sometimes also known as \f(CWCLD\fR) signal
+has special behavior with respect to a value of \f(CW'IGNORE'\fR.
+Setting \f(CW$SIG{CHLD}\fR to \f(CW'IGNORE'\fR on such a platform has the effect of
+not creating zombie processes when the parent process fails to \f(CWwait()\fR
+on its child processes (i.e. child processes are automatically reaped).
+Calling \f(CWwait()\fR with \f(CW$SIG{CHLD}\fR set to \f(CW'IGNORE'\fR usually returns
+\f(CW-1\fR on such platforms.
+.PP
+Some signals can be neither trapped nor ignored, such as
 the KILL and STOP (but not the TSTP) signals.  One strategy for
 temporarily ignoring signals is to use a \fIlocal()\fR statement, which will be
 automatically restored once your block is exited.  (Remember that \fIlocal()\fR
@@ -356,7 +366,7 @@ systems, \fImkfifo\fR\|(1).  These may not be in your normal path.
 \&    if  (      system('mknod',  $path, 'p')
 \&            && system('mkfifo', $path) )
 \&    {
-\&        die "mk{nod,fifo} $path failed;
+\&        die "mk{nod,fifo} $path failed";
 \&    }
 .Ve
 A fifo is convenient when you want to connect a process to an unrelated
@@ -391,6 +401,31 @@ to find out whether anyone (or anything) has accidentally removed our fifo.
 \&        sleep 2;    # to avoid dup signals
 \&    }
 .Ve
+.Sh "\s-1WARNING\s0"
+By installing Perl code to deal with signals, you're exposing yourself
+to danger from two things.  First, few system library functions are
+re-entrant.  If the signal interrupts while Perl is executing one function
+(like \fImalloc\fR\|(3) or \fIprintf\fR\|(3)), and your signal handler then calls the
+same function again, you could get unpredictable behavior\*(--often, a
+core dump.  Second, Perl isn't itself re-entrant at the lowest levels.
+If the signal interrupts Perl while Perl is changing its own internal
+data structures, similarly unpredictable behaviour may result.
+.PP
+There are two things you can do, knowing this: be paranoid or be
+pragmatic.  The paranoid approach is to do as little as possible in your
+signal handler.  Set an existing integer variable that already has a
+value, and return.  This doesn't help you if you're in a slow system call,
+which will just restart.  That means you have to \f(CWdie\fR to \fIlongjump\fR\|(3) out
+of the handler.  Even this is a little cavalier for the true paranoiac,
+who avoids \f(CWdie\fR in a handler because the system \fIis\fR out to get you.
+The pragmatic approach is to say ``I know the risks, but prefer the
+convenience'\*(R', and to do anything you want in your signal handler,
+prepared to clean up core dumps now and again.
+.PP
+To forbid signal handlers altogether would bars you from
+many interesting programs, including virtually everything in this manpage,
+since you could no longer even write \s-1SIGCHLD\s0 handlers.  Their dodginess
+is expected to be addresses in the 5.005 release.
 .SH "Using \fIopen()\fR for IPC"
 Perl's basic \fIopen()\fR statement can also be used for unidirectional interprocess
 communication by either appending or prepending a pipe symbol to the second
@@ -420,7 +455,7 @@ expecting filenames in \f(CW@ARGV\fR, the clever programmer can write something
 like this:
 .PP
 .Vb 1
-\&    $ program f1 "cmd1|" - f2 "cmd2|" f3 < tmpfile
+\&    % program f1 "cmd1|" - f2 "cmd2|" f3 < tmpfile
 .Ve
 and irrespective of which shell it's called from, the Perl program will
 read from the file \fIf1\fR, the process \fIcmd1\fR, standard input (\fItmpfile\fR
@@ -452,17 +487,27 @@ to bogus command will trigger a signal they'd better be prepared to
 handle.  Consider:
 .PP
 .Vb 3
-\&    open(FH, "|bogus");
-\&    print FH "bang\en";
-\&    close FH;
+\&    open(FH, "|bogus")  or die "can't fork: $!";
+\&    print FH "bang\en"   or die "can't write: $!";
+\&    close FH            or die "can't close: $!";
+.Ve
+That won't blow up until the close, and it will blow up with a SIGPIPE.
+To catch it, you could use this:
+.PP
+.Vb 4
+\&    $SIG{PIPE} = 'IGNORE';
+\&    open(FH, "|bogus")  or die "can't fork: $!";
+\&    print FH "bang\en"   or die "can't write: $!";
+\&    close FH            or die "can't close: status=$?";
 .Ve
 .Sh "Filehandles"
-Both the main process and the child process share the same \s-1STDIN\s0,
-\s-1STDOUT\s0 and \s-1STDERR\s0 filehandles.  If both processes try to access them
-at once, strange things can happen.  You may want to close or reopen
-the filehandles for the child.  You can get around this by opening
-your pipe with \fIopen()\fR, but on some systems this means that the child
-process cannot outlive the parent.
+Both the main process and any child processes it forks share the same
+\s-1STDIN\s0, \s-1STDOUT\s0, and \s-1STDERR\s0 filehandles.  If both processes try to access
+them at once, strange things can happen.  You'll certainly want to any
+stdio flush output buffers before forking.  You may also want to close
+or reopen the filehandles for the child.  You can get around this by
+opening your pipe with \fIopen()\fR, but on some systems this means that the
+child process cannot outlive the parent.
 .Sh "Background Processes"
 You can run a command in the background with:
 .PP
@@ -475,23 +520,35 @@ shell) will be the same as the parent's.  You won't need to catch
 details).
 .Sh "Complete Dissociation of Child from Parent"
 In some cases (starting server processes, for instance) you'll want to
-complete dissociate the child process from the parent.  The following
-process is reported to work on most Unixish systems.  Non-Unix users
-should check their Your_OS::Process module for other solutions.
-.Ip "\(bu" 4
-Open /dev/tty and use the \s-1TIOCNOTTY\s0 ioctl on it.  See the \fItty(4)\fR manpage
-for details.
-.Ip "\(bu" 4
-Change directory to /
-.Ip "\(bu" 4
-Reopen \s-1STDIN\s0, \s-1STDOUT\s0, and \s-1STDERR\s0 so they're not connected to the old
-tty.
-.Ip "\(bu" 4
-Background yourself like this:
-.Sp
+completely dissociate the child process from the parent.  This is
+often called daemonization.  A well behaved daemon will also \fIchdir()\fR
+to the root directory (so it doesn't prevent unmounting the filesystem
+containing the directory from which it was launched) and redirect its
+standard file descriptors from and to \fI/dev/null\fR (so that random
+output doesn't wind up on the user's terminal).
+.PP
 .Vb 1
-\&    fork && exit;
+\&    use POSIX 'setsid';
 .Ve
+.Vb 10
+\&    sub daemonize {
+\&        chdir '/'               or die "Can't chdir to /: $!";
+\&        open STDIN, '/dev/null' or die "Can't read /dev/null: $!";
+\&        open STDOUT, '>/dev/null'
+\&                                or die "Can't write to /dev/null: $!";
+\&        defined(my $pid = fork) or die "Can't fork: $!";
+\&        exit if $pid;
+\&        setsid                  or die "Can't start a new session: $!";
+\&        open STDERR, '>&STDOUT' or die "Can't dup stdout: $!";
+\&    }
+.Ve
+The \fIfork()\fR has to come before the \fIsetsid()\fR to ensure that you aren't a
+process group leader (the \fIsetsid()\fR will fail if you are).  If your
+system doesn't have the \fIsetsid()\fR function, open \fI/dev/tty\fR and use the
+\f(CWTIOCNOTTY\fR \fIioctl()\fR on it instead.  See the \fItty(4)\fR manpage for details.
+.PP
+Non-Unix users should check their Your_OS::Process module for other
+solutions.
 .Sh "Safe Pipe Opens"
 Another interesting approach to \s-1IPC\s0 is making your single program go
 multiprocess and communicate between (or even amongst) yourselves.  The
@@ -606,7 +663,7 @@ awkward \fIselect()\fR loop and wouldn't allow you to use normal Perl input
 operations.
 .PP
 If you look at its source, you'll see that \fIopen2()\fR uses low-level
-primitives like Unix \fIpipe()\fR and \fIexec()\fR to create all the connections.
+primitives like Unix \fIpipe()\fR and \fIexec()\fR calls to create all the connections.
 While it might have been slightly more efficient by using \fIsocketpair()\fR, it
 would have then been even less portable than it already is.  The \fIopen2()\fR
 and \fIopen3()\fR functions are  unlikely to work anywhere except on a Unix
@@ -617,7 +674,7 @@ Here's an example of using \fIopen2()\fR:
 .Vb 6
 \&    use FileHandle;
 \&    use IPC::Open2;
-\&    $pid = open2( \e*Reader, \e*Writer, "cat -u -n" );
+\&    $pid = open2(*Reader, *Writer, "cat -u -n" );
 \&    Writer->autoflush(); # default here, actually
 \&    print Writer "stuff\en";
 \&    $got = <Reader>;
@@ -648,6 +705,85 @@ program you're using.  The \fIComm\fR library also has \fIexpect()\fR
 and \fIinteract()\fR functions.  Find the library (and we hope its
 successor \fI\s-1IPC::\s0Chat\fR) at your nearest \s-1CPAN\s0 archive as detailed
 in the \s-1SEE\s0 \s-1ALSO\s0 section below.
+.PP
+The newer Expect.pm module from \s-1CPAN\s0 also addresses this kind of thing.
+This module requires two other modules from \s-1CPAN\s0: \s-1IO::\s0Pty and \s-1IO::\s0Stty.
+It sets up a pseudo-terminal to interact with programs that insist on
+using talking to the terminal device driver.  If your system is 
+amongst those supported, this may be your best bet.
+.Sh "Bidirectional Communication with Yourself"
+If you want, you may make low-level \fIpipe()\fR and \fIfork()\fR
+to stitch this together by hand.  This example only
+talks to itself, but you could reopen the appropriate
+handles to \s-1STDIN\s0 and \s-1STDOUT\s0 and call other processes.
+.PP
+.Vb 8
+\&    #!/usr/bin/perl -w
+\&    # pipe1 - bidirectional communication using two pipe pairs
+\&    #         designed for the socketpair-challenged
+\&    use IO::Handle;     # thousands of lines just for autoflush :-(
+\&    pipe(PARENT_RDR, CHILD_WTR);                # XXX: failure?
+\&    pipe(CHILD_RDR,  PARENT_WTR);               # XXX: failure?
+\&    CHILD_WTR->autoflush(1);
+\&    PARENT_WTR->autoflush(1);
+.Ve
+.Vb 16
+\&    if ($pid = fork) {
+\&        close PARENT_RDR; close PARENT_WTR;
+\&        print CHILD_WTR "Parent Pid $$ is sending this\en";
+\&        chomp($line = <CHILD_RDR>);
+\&        print "Parent Pid $$ just read this: `$line'\en";
+\&        close CHILD_RDR; close CHILD_WTR;
+\&        waitpid($pid,0);
+\&    } else {
+\&        die "cannot fork: $!" unless defined $pid;
+\&        close CHILD_RDR; close CHILD_WTR;
+\&        chomp($line = <PARENT_RDR>);
+\&        print "Child Pid $$ just read this: `$line'\en";
+\&        print PARENT_WTR "Child Pid $$ is sending this\en";
+\&        close PARENT_RDR; close PARENT_WTR;
+\&        exit;
+\&    }
+.Ve
+But you don't actually have to make two pipe calls.  If you 
+have the \fIsocketpair()\fR system call, it will do this all for you.
+.PP
+.Vb 3
+\&    #!/usr/bin/perl -w
+\&    # pipe2 - bidirectional communication using socketpair
+\&    #   "the best ones always go both ways"
+.Ve
+.Vb 7
+\&    use Socket;
+\&    use IO::Handle;     # thousands of lines just for autoflush :-(
+\&    # We say AF_UNIX because although *_LOCAL is the
+\&    # POSIX 1003.1g form of the constant, many machines
+\&    # still don't have it.
+\&    socketpair(CHILD, PARENT, AF_UNIX, SOCK_STREAM, PF_UNSPEC)
+\&                                or  die "socketpair: $!";
+.Ve
+.Vb 2
+\&    CHILD->autoflush(1);
+\&    PARENT->autoflush(1);
+.Ve
+.Vb 16
+\&    if ($pid = fork) {
+\&        close PARENT;
+\&        print CHILD "Parent Pid $$ is sending this\en";
+\&        chomp($line = <CHILD>);
+\&        print "Parent Pid $$ just read this: `$line'\en";
+\&        close CHILD;
+\&        waitpid($pid,0);
+\&    } else {
+\&        die "cannot fork: $!" unless defined $pid;
+\&        close CHILD;
+\&        chomp($line = <PARENT>);
+\&        print "Child Pid $$ just read this: `$line'\en";
+\&        print PARENT "Child Pid $$ is sending this\en";
+\&        close PARENT;
+\&        exit;
+\&    }
+.Ve
 .SH "Sockets: Client/Server Communication"
 While not limited to Unix-derived operating systems (e.g., WinSock on PCs
 provides socket support, as do some VMS libraries), you may not have
@@ -676,15 +812,23 @@ protocols are based on one-line messages and responses (so one party
 knows the other has finished when a \*(L"\en\*(R" is received) or multi-line
 messages and responses that end with a period on an empty line
 (\*(R"\en.\en\*(R" terminates a message/response).
+.Sh "Internet Line Terminators"
+The Internet line terminator is \*(L"\e015\e012\*(R".  Under \s-1ASCII\s0 variants of
+Unix, that could usually be written as \*(L"\er\en\*(R", but under other systems,
+\*(L"\er\en\*(R" might at times be \*(L"\e015\e015\e012\*(R", \*(L"\e012\e012\e015\*(R", or something
+completely different.  The standards specify writing \*(L"\e015\e012\*(R" to be
+conformant (be strict in what you provide), but they also recommend
+accepting a lone \*(L"\e012\*(R" on input (but be lenient in what you require).
+We haven't always been very good about that in the code in this manpage,
+but unless you're on a Mac, you'll probably be ok.
 .Sh "Internet \s-1TCP\s0 Clients and Servers"
 Use Internet-domain sockets when you want to do client-server
 communication that might extend to machines outside of your own system.
 .PP
 Here's a sample \s-1TCP\s0 client using Internet-domain sockets:
 .PP
-.Vb 5
+.Vb 4
 \&    #!/usr/bin/perl -w
-\&    require 5.002;
 \&    use strict;
 \&    use Socket;
 \&    my ($remote,$port, $iaddr, $paddr, $proto, $line);
@@ -718,11 +862,11 @@ instead.
 .PP
 .Vb 6
 \&    #!/usr/bin/perl -Tw
-\&    require 5.002;
 \&    use strict;
 \&    BEGIN { $ENV{PATH} = '/usr/ucb:/bin' }
 \&    use Socket;
 \&    use Carp;
+\&    $EOL = "\e015\e012";
 .Ve
 .Vb 1
 \&    sub logmsg { print "$0 $$: @_ at ", scalar localtime, "\en" }
@@ -760,7 +904,7 @@ instead.
 .Ve
 .Vb 3
 \&        print Client "Hello there, $name, it's now ",
-\&                        scalar localtime, "\en";
+\&                        scalar localtime, $EOL;
 \&    }
 .Ve
 And here's a multithreaded version.  It's multithreaded in that
@@ -770,11 +914,11 @@ go back to service a new client.
 .PP
 .Vb 6
 \&    #!/usr/bin/perl -Tw
-\&    require 5.002;
 \&    use strict;
 \&    BEGIN { $ENV{PATH} = '/usr/ucb:/bin' }
 \&    use Socket;
 \&    use Carp;
+\&    $EOL = "\e015\e012";
 .Ve
 .Vb 2
 \&    sub spawn;  # forward declaration
@@ -825,8 +969,8 @@ go back to service a new client.
 .Ve
 .Vb 5
 \&        spawn sub {
-\&            print "Hello there, $name, it's now ", scalar localtime, "\en";
-\&            exec '/usr/games/fortune'
+\&            print "Hello there, $name, it's now ", scalar localtime, $EOL;
+\&            exec '/usr/games/fortune'           # XXX: `wrong' line terminators
 \&                or confess "can't exec fortune: $!";
 \&        };
 .Ve
@@ -878,9 +1022,8 @@ Let's look at another \s-1TCP\s0 client.  This one connects to the \s-1TCP\s0 \*
 service on a number of different machines and shows how far their clocks
 differ from the system on which it's being run:
 .PP
-.Vb 4
+.Vb 3
 \&    #!/usr/bin/perl  -w
-\&    require 5.002;
 \&    use strict;
 \&    use Socket;
 .Ve
@@ -921,7 +1064,7 @@ used internally to implement pipes.  Unlike Internet domain sockets, Unix
 domain sockets can show up in the file system with an \fIls\fR\|(1) listing.
 .PP
 .Vb 2
-\&    $ ls -l /dev/log
+\&    % ls -l /dev/log
 \&    srw-rw-rw-  1 root            0 Oct 31 07:23 /dev/log
 .Ve
 You can test for these with Perl's \fB\-S\fR file test:
@@ -933,9 +1076,8 @@ You can test for these with Perl's \fB\-S\fR file test:
 .Ve
 Here's a sample Unix-domain client:
 .PP
-.Vb 5
+.Vb 4
 \&    #!/usr/bin/perl -w
-\&    require 5.002;
 \&    use Socket;
 \&    use strict;
 \&    my ($rendezvous, $line);
@@ -949,17 +1091,19 @@ Here's a sample Unix-domain client:
 \&    }
 \&    exit;
 .Ve
-And here's a corresponding server.
+And here's a corresponding server.  You don't have to worry about silly
+network terminators here because Unix domain sockets are guaranteed
+to be on the localhost, and thus everything works right.
 .PP
-.Vb 5
+.Vb 4
 \&    #!/usr/bin/perl -Tw
-\&    require 5.002;
 \&    use strict;
 \&    use Socket;
 \&    use Carp;
 .Ve
-.Vb 1
+.Vb 2
 \&    BEGIN { $ENV{PATH} = '/usr/ucb:/bin' }
+\&    sub logmsg { print "$0 $$: @_ at ", scalar localtime, "\en" }
 .Ve
 .Vb 3
 \&    my $NAME = '/tmp/catsock';
@@ -974,6 +1118,16 @@ And here's a corresponding server.
 .Ve
 .Vb 1
 \&    logmsg "server started on $NAME";
+.Ve
+.Vb 1
+\&    my $waitedpid;
+.Ve
+.Vb 5
+\&    sub REAPER {
+\&        $waitedpid = wait;
+\&        $SIG{CHLD} = \e&REAPER;  # loathe sysV
+\&        logmsg "reaped $waitedpid" . ($? ? " with exit $?" : '');
+\&    }
 .Ve
 .Vb 1
 \&    $SIG{CHLD} = \e&REAPER;
@@ -1085,11 +1239,13 @@ from, and then a list of documents to get from that host.  This is a
 more interesting client than the previous one because it first sends
 something to the server before fetching the server's response.
 .PP
-.Vb 15
+.Vb 17
 \&    #!/usr/bin/perl -w
 \&    use IO::Socket;
 \&    unless (@ARGV > 1) { die "usage: $0 host document ..." }
 \&    $host = shift(@ARGV);
+\&    $EOL = "\e015\e012";
+\&    $BLANK = $EOL x 2;
 \&    foreach $document ( @ARGV ) {
 \&        $remote = IO::Socket::INET->new( Proto     => "tcp",
 \&                                         PeerAddr  => $host,
@@ -1097,7 +1253,7 @@ something to the server before fetching the server's response.
 \&                                        );
 \&        unless ($remote) { die "cannot connect to http daemon on $host" }
 \&        $remote->autoflush(1);
-\&        print $remote "GET $document HTTP/1.0\en\en";
+\&        print $remote "GET $document HTTP/1.0" . $BLANK;
 \&        while ( <$remote> ) { print }
 \&        close $remote;
 \&    }
@@ -1125,7 +1281,7 @@ such a request.
 Here's an example of running that program, which we'll call \fIwebget\fR:
 .PP
 .Vb 6
-\&    shell_prompt$ webget www.perl.com /guanaco.html
+\&    % webget www.perl.com /guanaco.html
 \&    HTTP/1.1 404 File Not Found
 \&    Date: Thu, 08 May 1997 18:02:32 GMT
 \&    Server: Apache/1.2b6
@@ -1159,9 +1315,8 @@ simultaneously copies everything from standard input to the socket.
 To accomplish the same thing using just one process would be \fImuch\fR
 harder, because it's easier to code two processes to do one thing than it
 is to code one process to do two things.  (This keep-it-simple principle
-is one of the cornerstones of the Unix philosophy, and good software
-engineering as well, which is probably why it's spread to other systems
-as well.)
+a cornerstones of the Unix philosophy, and good software engineering as
+well, which is probably why it's spread to other systems.)
 .PP
 Here's the code:
 .PP
@@ -1211,9 +1366,6 @@ The \f(CWkill\fR function in the parent's \f(CWif\fR block is there to send a
 signal to our child process (current running in the \f(CWelse\fR block)
 as soon as the remote server has closed its end of the connection.
 .PP
-The \f(CWkill\fR at the end of the parent's block is there to eliminate the
-child process as soon as the server we connect to closes its end.
-.PP
 If the remote server sends data a byte at time, and you need that
 data immediately without waiting for a newline (which might not happen),
 you may wish to replace the \f(CWwhile\fR loop in the parent with the
@@ -1229,10 +1381,10 @@ Making a system call for each byte you want to read is not very efficient
 (to put it mildly) but is the simplest to explain and works reasonably
 well.
 .SH "TCP Servers with IO::Socket"
-Setting up server is little bit more involved than running a client.
+As always, setting up a server is little bit more involved than running a client.
 The model is that the server creates a special kind of socket that
 does nothing but listen on a particular port for incoming connections.
-It does this by calling the \f(CWIO::Socket::INET->\fInew()\fR\fR method with
+It does this by calling the \f(CWIO::Socket::INET->new()\fR method with
 slightly different arguments than the client did.
 .Ip "Proto" 5
 This is which protocol to use.  Like our clients, we'll
@@ -1271,7 +1423,7 @@ you'll have to use the \f(CWsysread\fR variant of the interactive client above.
 This server accepts one of five different commands, sending output
 back to the client.  Note that unlike most network servers, this one
 only handles one incoming client at a time.  Multithreaded servers are
-covered in Chapter 6 of the Camel or in the \fIperlipc\fR\|(1) manpage.
+covered in Chapter 6 of the Camel as well as later in this manpage.
 .PP
 Here's the code.  We'll
 .PP
@@ -1333,10 +1485,9 @@ will check many of them asynchronously by simulating a multicast and then
 using \fIselect()\fR to do a timed-out wait for I/O.  To do something similar
 with TCP, you'd have to use a different socket handle for each host.
 .PP
-.Vb 5
+.Vb 4
 \&    #!/usr/bin/perl -w
 \&    use strict;
-\&    require 5.002;
 \&    use Socket;
 \&    use Sys::Hostname;
 .Ve
@@ -1395,34 +1546,40 @@ you weren't wanting it to.
 .PP
 Here's a small example showing shared memory usage.
 .PP
-.Vb 5
-\&    $IPC_PRIVATE = 0;
-\&    $IPC_RMID = 0;
-\&    $size = 2000;
-\&    $key = shmget($IPC_PRIVATE, $size , 0777 );
-\&    die unless defined $key;
+.Vb 1
+\&    use IPC::SysV qw(IPC_PRIVATE IPC_RMID S_IRWXU S_IRWXG S_IRWXO);
 .Ve
 .Vb 3
-\&    $message = "Message #1";
-\&    shmwrite($key, $message, 0, 60 ) || die "$!";
-\&    shmread($key,$buff,0,60) || die "$!";
+\&    $size = 2000;
+\&    $key = shmget(IPC_PRIVATE, $size, S_IRWXU|S_IRWXG|S_IRWXO) || die "$!";
+\&    print "shm key $key\en";
 .Ve
-.Vb 1
-\&    print $buff,"\en";
+.Vb 5
+\&    $message = "Message #1";
+\&    shmwrite($key, $message, 0, 60) || die "$!";
+\&    print "wrote: '$message'\en";
+\&    shmread($key, $buff, 0, 60) || die "$!";
+\&    print "read : '$buff'\en";
+.Ve
+.Vb 4
+\&    # the buffer of shmread is zero-character end-padded.
+\&    substr($buff, index($buff, "\e0")) = '';
+\&    print "un" unless $buff eq $message;
+\&    print "swell\en";
 .Ve
 .Vb 2
-\&    print "deleting $key\en";
-\&    shmctl($key ,$IPC_RMID, 0) || die "$!";
+\&    print "deleting shm $key\en";
+\&    shmctl($key, IPC_RMID, 0) || die "$!";
 .Ve
 Here's an example of a semaphore:
 .PP
-.Vb 6
+.Vb 1
+\&    use IPC::SysV qw(IPC_CREAT);
+.Ve
+.Vb 3
 \&    $IPC_KEY = 1234;
-\&    $IPC_RMID = 0;
-\&    $IPC_CREATE = 0001000;
-\&    $key = semget($IPC_KEY, $nsems , 0666 | $IPC_CREATE );
-\&    die if !defined($key);
-\&    print "$key\en";
+\&    $key = semget($IPC_KEY, 10, 0666 | IPC_CREAT ) || die "$!";
+\&    print "shm key $key\en";
 .Ve
 Put this code in a separate file to be run in more than one process.
 Call the file \fItake\fR:
@@ -1480,27 +1637,19 @@ Call this file \fIgive\fR:
 \&    semop($key,$opstring) || die "$!";
 .Ve
 The SysV IPC code above was written long ago, and it's definitely
-clunky looking.  It should at the very least be made to \f(CWuse strict\fR
-and \f(CWrequire "sys/ipc.ph"\fR.  Better yet, check out the IPC::SysV modules
-on CPAN.
+clunky looking.  For a more modern look, see the IPC::SysV module
+which is included with Perl starting from Perl 5.005.
 .SH "NOTES"
-If you are running under version 5.000 (dubious) or 5.001, you can still
-use most of the examples in this document.  You may have to remove the
-\f(CWuse strict\fR and some of the \fImy()\fR statements for 5.000, and for both
-you'll have to load in version 1.2 or older of the \fISocket.pm\fR module, which
-is included in \fIperl5.002\fR.
+Most of these routines quietly but politely return \f(CWundef\fR when they
+fail instead of causing your program to die right then and there due to
+an uncaught exception.  (Actually, some of the new \fISocket\fR conversion
+functions  \fIcroak()\fR on bad arguments.)  It is therefore essential to
+check return values from these functions.  Always begin your socket
+programs this way for optimal success, and don't forget to add \fB\-T\fR
+taint checking flag to the #! line for servers:
 .PP
-Most of these routines quietly but politely return \f(CWundef\fR when they fail
-instead of causing your program to die right then and there due to an
-uncaught exception.  (Actually, some of the new \fISocket\fR conversion
-functions  \fIcroak()\fR on bad arguments.)  It is therefore essential
-that you should check the return values of these functions.  Always begin
-your socket programs this way for optimal success, and don't forget to add
-\fB\-T\fR taint checking flag to the pound-bang line for servers:
-.PP
-.Vb 5
-\&    #!/usr/bin/perl -w
-\&    require 5.002;
+.Vb 4
+\&    #!/usr/bin/perl -Tw
 \&    use strict;
 \&    use sigtrap;
 \&    use Socket;
@@ -1513,14 +1662,14 @@ signals and to stick with simple TCP and UDP socket operations; e.g., don't
 try to pass open file descriptors over a local UDP datagram socket if you
 want your code to stand a chance of being portable.
 .PP
-Because few vendors provide C libraries that are safely re-entrant,
-the prudent programmer will do little else within a handler beyond
-setting a numeric variable that already exists; or, if locked into
-a slow (restarting) system call, using \fIdie()\fR to raise an exception
-and \fIlongjmp\fR\|(3) out.  In fact, even these may in some cases cause a
-core dump.  It's probably best to avoid signals except where they are
-absolutely inevitable.  This perilous problems will be addressed in a
-future release of Perl.
+As mentioned in the signals section, because few vendors provide C
+libraries that are safely re-entrant, the prudent programmer will do
+little else within a handler beyond setting a numeric variable that
+already exists; or, if locked into a slow (restarting) system call,
+using \fIdie()\fR to raise an exception and \fIlongjmp\fR\|(3) out.  In fact, even
+these may in some cases cause a core dump.  It's probably best to avoid
+signals except where they are absolutely inevitable.  This 
+will be addressed in a future release of Perl.
 .SH "AUTHOR"
 Tom Christiansen, with occasional vestiges of Larry Wall's original
 version and suggestions from the Perl Porters.
@@ -1528,10 +1677,10 @@ version and suggestions from the Perl Porters.
 There's a lot more to networking than this, but this should get you
 started.
 .PP
-For intrepid programmers, the classic textbook \fIUnix Network Programming\fR
-by Richard Stevens (published by Addison-Wesley).  Note that most books
-on networking address networking from the perspective of a C programmer;
-translation to Perl is left as an exercise for the reader.
+For intrepid programmers, the indispensable textbook is \fIUnix Network
+Programming\fR by W. Richard Stevens (published by Addison-Wesley).  Note
+that most books on networking address networking from the perspective of
+a C programmer; translation to Perl is left as an exercise for the reader.
 .PP
 The \fIIO::Socket\fR\|(3) manpage describes the object library, and the \fISocket\fR\|(3)
 manpage describes the low-level interface to sockets.  Besides the obvious
@@ -1557,6 +1706,8 @@ Threads, and ToolTalk\*(--just to name a few.
 
 .IX Header "Named Pipes"
 
+.IX Subsection "\s-1WARNING\s0"
+
 .IX Header "Using \fIopen()\fR for IPC"
 
 .IX Subsection "Filehandles"
@@ -1565,19 +1716,15 @@ Threads, and ToolTalk\*(--just to name a few.
 
 .IX Subsection "Complete Dissociation of Child from Parent"
 
-.IX Item "\(bu"
-
-.IX Item "\(bu"
-
-.IX Item "\(bu"
-
-.IX Item "\(bu"
-
 .IX Subsection "Safe Pipe Opens"
 
 .IX Subsection "Bidirectional Communication with Another Process"
 
+.IX Subsection "Bidirectional Communication with Yourself"
+
 .IX Header "Sockets: Client/Server Communication"
+
+.IX Subsection "Internet Line Terminators"
 
 .IX Subsection "Internet \s-1TCP\s0 Clients and Servers"
 

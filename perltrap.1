@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTRAP 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLTRAP 1 "perl 5.005, patch 53" "19/Jul/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -484,8 +484,8 @@ The second and third arguments of \f(CWsplice()\fR are now evaluated in scalar
 context (as the Camel says) rather than list context.
 .Sp
 .Vb 5
-\&    sub sub1{return(0,2) }          # return a 2-elem array
-\&    sub sub2{ return(1,2,3)}        # return a 3-elem array
+\&    sub sub1{return(0,2) }          # return a 2-element list
+\&    sub sub2{ return(1,2,3)}        # return a 3-element list
 \&    @a1 = ("a","b","c","d","e");
 \&    @a2 = splice(@a1,&sub1,&sub2);
 \&    print join(' ',@a2),"\en";
@@ -689,6 +689,26 @@ Better parsing in perl 5
 \&    # perl4 prints: is zero
 \&    # perl5 warns: "Useless use of a constant in void context" if using -w
 .Ve
+.Ip "\(bu Parsing" 4
+String interpolation of the \f(CW$#array\fR construct differs when braces
+are to used around the name.
+.Sp
+.Vb 2
+\&    @ = (1..3);
+\&    print "${#a}";
+.Ve
+.Vb 2
+\&    # perl4 prints: 2
+\&    # perl5 fails with syntax error
+.Ve
+.Vb 2
+\&    @ = (1..3);
+\&    print "$#{a}";
+.Ve
+.Vb 2
+\&    # perl4 prints: {a}
+\&    # perl5 prints: 2
+.Ve
 .Sh "Numerical Traps"
 Perl4-to-Perl5 traps having to do with numerical operators,
 operands, or output from same.
@@ -790,19 +810,10 @@ variable is localized subsequent to the assignment
 \&    # perl4 prints: This is Perl 4
 \&    # perl5 prints:
 .Ve
-.Vb 1
-\&    # Another example
-.Ve
-.Vb 4
-\&    *fred = *barney; # fred is aliased to barney
-\&    @barney = (1, 2, 4);
-\&    # @fred;
-\&    print "@fred";  # should print "1, 2, 4"
-.Ve
-.Vb 2
-\&    # perl4 prints: 1 2 4
-\&    # perl5 prints: In string, @fred now must be written as \e@fred
-.Ve
+.Ip "\(bu (Globs)" 5
+Assigning \f(CWundef\fR to a glob has no effect in Perl 5.   In Perl 4
+it undefines the associated scalar (but may have other side effects
+including SEGVs).
 .Ip "\(bu (Scalar String)" 5
 Changes in unary negation (of strings)
 This change effects both the return value and what it
@@ -964,6 +975,10 @@ This test could be added to t/op/sprintf.t
 Probably a bug.
 .Sh "Precedence Traps"
 Perl4-to-Perl5 traps involving precedence order.
+.PP
+Perl 4 has almost the same precedence rules as Perl 5 for the operators
+that they both have.  Perl 4 however, seems to have had some
+inconsistencies that made the behavior differ from what was documented.
 .Ip "\(bu Precedence" 5
 \s-1LHS\s0 vs. \s-1RHS\s0 of any assignment operator.  \s-1LHS\s0 is evaluated first
 in perl4, second in perl5; this can affect the relationship
@@ -1044,7 +1059,11 @@ treats \f(CW$::\fR as main \f(CWpackage\fR
 \&    # perl 5 prints: x
 .Ve
 .Ip "\(bu Precedence" 5
-concatenation precedence over filetest operator?
+perl4 had buggy precedence for the file test operators vis-a-vis
+the assignment operators.  Thus, although the precedence table
+for perl4 leads one to believe \f(CW-e $foo .= "q"\fR should parse as
+\f(CW((-e $foo) .= "q")\fR, it actually parses as \f(CW(-e ($foo .= "q"))\fR.
+In perl5, the precedence is as documented.
 .Sp
 .Vb 1
 \&    -e $foo .= "q"
@@ -1053,6 +1072,23 @@ concatenation precedence over filetest operator?
 \&    # perl4 prints: no output
 \&    # perl5 prints: Can't modify -e in concatenation
 .Ve
+.Ip "\(bu Precedence" 5
+In perl4, \fIkeys()\fR, \fIeach()\fR and \fIvalues()\fR were special high-precedence operators
+that operated on a single hash, but in perl5, they are regular named unary
+operators.  As documented, named unary operators have lower precedence
+than the arithmetic and concatenation operators \f(CW+ - .\fR, but the perl4
+variants of these operators actually bind tighter than \f(CW+ - .\fR.
+Thus, for:
+.Sp
+.Vb 2
+\&    %foo = 1..10;
+\&    print keys %foo - 1
+.Ve
+.Vb 2
+\&    # perl4 prints: 4
+\&    # perl5 prints: Type of arg 1 to keys must be hash (not subtraction)
+.Ve
+The perl4 behavior was probably more useful, if less consistent.
 .Sh "General Regular Expression Traps using s///, etc."
 All types of \s-1RE\s0 traps.
 .Ip "\(bu Regular Expression" 5
@@ -1186,26 +1222,6 @@ repeatedly, like \f(CW/x/\fR or \f(CWm!x!\fR.
 \&    # perl4 prints: perl4
 \&    # perl5 prints: perl5
 .Ve
-.Ip "\(bu Regular Expression" 5
-Under perl4 and upto version 5.003, a failed \f(CWm//g\fR match used to
-reset the internal iterator, so that subsequent \f(CWm//g\fR match attempts
-began from the beginning of the string.  In perl version 5.004 and later,
-failed \f(CWm//g\fR matches do not reset the iterator position (which can be
-found using the \f(CWpos()\fR function\*(--see the \f(CWpos\fR entry in the \fIperlfunc\fR manpage).
-.Sp
-.Vb 5
-\&    $test = "foop";
-\&    for (1..3) {
-\&        print $1 while ($test =~ /(o)/g);
-\&        # pos $test = 0;     # to get old behavior
-\&    }
-.Ve
-.Vb 2
-\&    # perl4     prints: oooooo
-\&    # perl5.004 prints: oo
-.Ve
-You may always reset the iterator yourself as shown in the commented line
-to get the old behavior.
 .Sh "Subroutine, Signal, Sorting Traps"
 The general group of Perl4-to-Perl5 traps having to do with
 Signals, Sorting, and their related subroutines, as well as
@@ -1697,6 +1713,8 @@ they'll be fixed and removed.
 
 .IX Item "\(bu Parsing"
 
+.IX Item "\(bu Parsing"
+
 .IX Subsection "Numerical Traps"
 
 .IX Item "\(bu Numerical"
@@ -1712,6 +1730,8 @@ they'll be fixed and removed.
 .IX Item "\(bu (Arrays)"
 
 .IX Item "\(bu (Hashes)"
+
+.IX Item "\(bu (Globs)"
 
 .IX Item "\(bu (Globs)"
 
@@ -1747,9 +1767,9 @@ they'll be fixed and removed.
 
 .IX Item "\(bu Precedence"
 
-.IX Subsection "General Regular Expression Traps using s///, etc."
+.IX Item "\(bu Precedence"
 
-.IX Item "\(bu Regular Expression"
+.IX Subsection "General Regular Expression Traps using s///, etc."
 
 .IX Item "\(bu Regular Expression"
 

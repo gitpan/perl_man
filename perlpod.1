@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLPOD 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLPOD 1 "perl 5.005, patch 53" "12/Feb/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -193,17 +193,20 @@ perlpod \- plain old documentation
 A pod-to-whatever translator reads a pod file paragraph by paragraph,
 and translates it to the appropriate output format.  There are
 three kinds of paragraphs:
-.Ip "\(bu" 4
+verbatim,
+command, and
+ordinary text.
+.Sh "Verbatim Paragraph"
 A verbatim paragraph, distinguished by being indented (that is,
 it starts with space or tab).  It should be reproduced exactly,
 with tabs assumed to be on 8-column boundaries.  There are no
 special formatting escapes, so you can't italicize or anything
 like that.  A \e means \e, and nothing else.
-.Ip "\(bu" 4
-A command.  All command paragraphs start with \*(L"=\*(R", followed by an
+.Sh "Command Paragraph"
+All command paragraphs start with \*(L"=\*(R", followed by an
 identifier, followed by arbitrary text that the command can
 use however it pleases.  Currently recognized commands are
-.Sp
+.PP
 .Vb 10
 \&    =head1 heading
 \&    =head2 heading
@@ -216,13 +219,18 @@ use however it pleases.  Currently recognized commands are
 \&    =begin X
 \&    =end X
 .Ve
+.Ip "=pod" 4
+.Ip "=cut" 4
 The \*(L"=pod\*(R" directive does nothing beyond telling the compiler to lay
 off parsing code through the next \*(L"=cut\*(R".  It's useful for adding
 another paragraph to the doc if you're mixing up code and pod a lot.
-.Sp
+.Ip "=head1" 4
+.Ip "=head2" 4
 Head1 and head2 produce first and second level headings, with the text in
 the same paragraph as the \*(L"=headn\*(R" directive forming the heading description.
-.Sp
+.Ip "=over" 4
+.Ip "=back" 4
+.Ip "=item" 4
 Item, over, and back require a little more explanation: \*(L"=over\*(R" starts a
 section specifically for the generation of a list using \*(L"=item\*(R" commands. At
 the end of your list, use \*(L"=back\*(R" to end it. You will probably want to give
@@ -236,7 +244,9 @@ or use \*(L"=item 1.\*(R", \*(L"=item 2.\*(R", etc., to produce numbered lists, 
 \*(L"=item foo\*(R", \*(L"=item bar\*(R", etc., i.e., things that looks nothing like bullets
 or numbers. If you start with bullets or numbers, stick with them, as many
 formatters use the first \*(L"=item\*(R" type to decide how to format the list.
-.Sp
+.Ip "=for" 4
+.Ip "=begin" 4
+.Ip "=end" 4
 For, begin, and end let you include sections that are not interpreted
 as pod text, but passed directly to particular formatters. A formatter
 that can utilize that format will use the section, otherwise it will be
@@ -324,12 +334,12 @@ Some examples of lists include:
 .Vb 1
 \& =back
 .Ve
-.Ip "\(bu" 4
-An ordinary block of text.  It will be filled, and maybe even
+.Sh "Ordinary Block of Text"
+It will be filled, and maybe even
 justified.  Certain interior sequences are recognized both
 here and in commands:
-.Sp
-.Vb 22
+.PP
+.Vb 30
 \&    I<text>     italicize text, used for emphasis or variables
 \&    B<text>     embolden text, used for switches and programs
 \&    S<text>     text contains non-breaking spaces
@@ -341,6 +351,14 @@ here and in commands:
 \&                    L<"sec">            section in this manual page
 \&                                        (the quotes are optional)
 \&                    L</"sec">           ditto
+\&                same as above but only 'text' is used for output.
+\&                (Text can not contain the characters '|' or '>')
+\&                    L<text|name>
+\&                    L<text|name/ident>
+\&                    L<text|name/"sec">
+\&                    L<text|"sec">
+\&                    L<text|/"sec">
+\&                
 \&    F<file>     Used for filenames
 \&    X<index>    An index entry
 \&    Z<>         A zero-width character
@@ -353,7 +371,7 @@ here and in commands:
 \&                    E<html>             Some non-numeric HTML entity, such
 \&                                        as E<Agrave>
 .Ve
-.PP
+.Sh "The Intent"
 That's it.  The intent is simplicity, not power.  I wanted paragraphs
 to look like paragraphs (block format), so that they stand out
 visually, and so that I could run them through fmt easily to reformat
@@ -380,8 +398,8 @@ Note that I'm not at all claiming this to be sufficient for producing a
 book.  I'm just trying to make an idiot-proof common source for nroff,
 TeX, and other markup languages, as used for online documentation.
 Translators exist for \fBpod2man\fR  (that's for \fInroff\fR\|(1) and \fItroff\fR\|(1)),
-\fBpod2html\fR, \fBpod2latex\fR, and \fBpod2fm\fR.
-.SH "Embedding Pods in Perl Modules"
+\fBpod2text\fR, \fBpod2html\fR, \fBpod2latex\fR, and \fBpod2fm\fR.
+.Sh "Embedding Pods in Perl Modules"
 You can embed pod documentation in your Perl scripts.  Start your
 documentation with a \*(L"=head1\*(R" command at the beginning, and end it
 with a \*(L"=cut\*(R" command.  Perl will ignore the pod text.  See any of the
@@ -401,17 +419,21 @@ directive.
 .Ve
 If you had not had that empty line there, then the translators wouldn't
 have seen it.
-.SH "Common Pod Pitfalls"
+.Sh "Common Pod Pitfalls"
 .Ip "\(bu" 4
 Pod translators usually will require paragraphs to be separated by
 completely empty lines.  If you have an apparently empty line with
 some spaces on it, this can cause odd formatting.
 .Ip "\(bu" 4
 Translators will mostly add wording around a L<> link, so that
-\f(CWL<\fIfoo\fR\|(1)>\fR becomes \*(L"the \fIfoo\fR(1) manpage\*(R", for example (see
+\f(CWL<foo(1)>\fR becomes \*(L"the \fIfoo\fR(1) manpage\*(R", for example (see
 \fBpod2man\fR for details).  Thus, you shouldn't write things like \f(CWthe
 L<foo> manpage\fR, if you want the translated document to read
 sensibly.
+.Sp
+If you don need or want total control of the text used for a
+link in the output use the form L<show this text|foo>
+instead.
 .Ip "\(bu" 4
 The script \fIpod/checkpods.\s-1PL\s0\fR in the Perl source distribution
 provides skeletal checking for lines that look empty but aren't
@@ -433,15 +455,37 @@ Larry Wall
 
 .IX Header "DESCRIPTION"
 
-.IX Item "\(bu"
+.IX Subsection "Verbatim Paragraph"
 
-.IX Item "\(bu"
+.IX Subsection "Command Paragraph"
 
-.IX Item "\(bu"
+.IX Item "=pod"
 
-.IX Header "Embedding Pods in Perl Modules"
+.IX Item "=cut"
 
-.IX Header "Common Pod Pitfalls"
+.IX Item "=head1"
+
+.IX Item "=head2"
+
+.IX Item "=over"
+
+.IX Item "=back"
+
+.IX Item "=item"
+
+.IX Item "=for"
+
+.IX Item "=begin"
+
+.IX Item "=end"
+
+.IX Subsection "Ordinary Block of Text"
+
+.IX Subsection "The Intent"
+
+.IX Subsection "Embedding Pods in Perl Modules"
+
+.IX Subsection "Common Pod Pitfalls"
 
 .IX Item "\(bu"
 

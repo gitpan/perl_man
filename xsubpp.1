@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH XSUBPP 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH XSUBPP 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -190,7 +190,7 @@
 .SH "NAME"
 xsubpp \- compiler to convert Perl XS code into C code
 .SH "SYNOPSIS"
-\fBxsubpp\fR [\fB\-v\fR] [\fB\-\*(C+\fR] [\fB\-except\fR] [\fB\-s pattern\fR] [\fB\-prototypes\fR] [\fB\-noversioncheck\fR] [\fB\-nolinenumbers\fR] [\fB\-typemap typemap\fR]... file.xs
+\fBxsubpp\fR [\fB\-v\fR] [\fB\-\*(C+\fR] [\fB\-except\fR] [\fB\-s pattern\fR] [\fB\-prototypes\fR] [\fB\-noversioncheck\fR] [\fB\-nolinenumbers\fR] [\fB\-typemap typemap\fR] [\fB\-object_capi\fR]... file.xs
 .SH "DESCRIPTION"
 \fIxsubpp\fR will compile XS code into C code by embedding the constructs
 necessary to let C functions manipulate Perl values and creates the glue
@@ -224,6 +224,10 @@ from the \f(CW.xs\fR file) and the \f(CW.pm\fR files have the same version
 number.
 .Ip "\fB\-nolinenumbers\fR" 5
 Prevents the inclusion of `#line\*(R' directives in the output.
+.Ip "\fB\-object_capi\fR" 5
+Compile code as C in a \s-1PERL_OBJECT\s0 environment.
+.Sp
+back
 .SH "ENVIRONMENT"
 No environment variables are used.
 .SH "AUTHOR"
@@ -258,6 +262,8 @@ See the file \fIchanges.pod\fR.
 .IX Item "\fB\-noversioncheck\fR"
 
 .IX Item "\fB\-nolinenumbers\fR"
+
+.IX Item "\fB\-object_capi\fR"
 
 .IX Header "ENVIRONMENT"
 

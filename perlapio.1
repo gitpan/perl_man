@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLAPIO 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLAPIO 1 "perl 5.005, patch 53" "28/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -253,13 +253,13 @@ perlapio \- perl's IO abstraction interface.
 .Ve
 .SH "DESCRIPTION"
 Perl's source code should use the above functions instead of those
-defined in ANSI C's \fIstdio.h\fR,  \fIperlio.h\fR will the \f(CW#define\fR them to
+defined in ANSI C's \fIstdio.h\fR.  The perl headers will \f(CW#define\fR them to
 the I/O mechanism selected at Configure time.
 .PP
 The functions are modeled on those in \fIstdio.h\fR, but parameter order
 has been \*(L"tidied up a little\*(R".
 .Ip "\fBPerlIO *\fR" 4
-This takes the place of \s-1FILE\s0 *. Unlike \s-1FILE\s0 * it should be treated as
+This takes the place of \s-1FILE\s0 *. Like \s-1FILE\s0 * it should be treated as
 opaque (it is probably safe to assume it is a pointer to something).
 .Ip "\fBPerlIO_stdin()\fR, \fBPerlIO_stdout()\fR, \fBPerlIO_stderr()\fR" 4
 Use these rather than \f(CWstdin\fR, \f(CWstdout\fR, \f(CWstderr\fR. They are written
@@ -270,7 +270,7 @@ values.
 .Ip "\fBPerlIO_open(path, mode)\fR, \fBPerlIO_fdopen(fd,mode)\fR" 4
 These correspond to \fIfopen()\fR/\fIfdopen()\fR arguments are the same.
 .Ip "\fBPerlIO_printf(f,fmt,...)\fR, \fBPerlIO_vprintf(f,fmt,a)\fR" 4
-These are is \fIfprintf()\fR/vfprintf equivalents.
+These are \fIfprintf()\fR/\fIvfprintf()\fR equivalents.
 .Ip "\fBPerlIO_stdoutf(fmt,...)\fR" 4
 This is \fIprintf()\fR equivalent. printf is #defined to this function,
 so it is (currently) legal to use \f(CWprintf(fmt,...)\fR in perl sources.
@@ -340,8 +340,8 @@ of \s-1FILE\s0 * is complete. It is removed from list of \*(L'exported\*(R'
 behaviour.
 .Ip "\fBPerlIO_setlinebuf(f)\fR" 4
 This corresponds to \fIsetlinebuf()\fR. Use is deprecated pending
-further discussion. (Perl core uses it \fIonly\fR when \*(L"dumping\*(R"
-is has nothing to do with $| auto-flush.)
+further discussion. (Perl core uses it \fIonly\fR when \*(L"dumping\*(R";
+it has nothing to do with $| auto-flush.)
 .PP
 In addition to user \s-1API\s0 above there is an \*(L"implementation\*(R" interface
 which allows perl to get at internals of PerlIO.

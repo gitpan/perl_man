@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDSC 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLDSC 1 "perl 5.005, patch 53" "14/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -242,8 +242,8 @@ sections on each of the following:
 .Ip "\(bu hashes of hashes" 5
 .Ip "\(bu more elaborate constructs" 5
 .PP
-But for now, let's look at some of the general issues common to all
-of these types of data structures.
+But for now, let's look at general issues common to all
+these types of data structures.
 .SH "REFERENCES"
 The most important thing to understand about all data structures in Perl
 -- including multidimensional arrays\*(--is that even though they might
@@ -290,7 +290,7 @@ That's because Perl doesn't (ever) implicitly dereference your variables.
 If you want to get at the thing a reference is referring to, then you have
 to do this yourself using either prefix typing indicators, like
 \f(CW${$blah}\fR, \f(CW@{$blah}\fR, \f(CW@{$blah[$i]}\fR, or else postfix pointer arrows,
-like \f(CW$a->[3]\fR, \f(CW$h->{fred}\fR, or even \f(CW$ob->\fImethod()\fR->[3]\fR.
+like \f(CW$a->[3]\fR, \f(CW$h->{fred}\fR, or even \f(CW$ob->method()->[3]\fR.
 .SH "COMMON MISTAKES"
 The two most common mistakes made in constructing something like
 an array of arrays is either accidentally counting the number of
@@ -493,7 +493,7 @@ well as the \f(CWx\fR command to dump out complex data structures.  For
 example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
 .PP
 .Vb 18
-\&    DB<1> X $LoL
+\&    DB<1> x $LoL
 \&    $LoL = ARRAY(0x13b5a0)
 \&       0  ARRAY(0x1f0a24)
 \&          0  'fred'
@@ -512,7 +512,6 @@ example, given the assignment to \f(CW$LoL\fR above, here's the debugger output:
 \&          2  'elroy'
 \&          3  'judy'
 .Ve
-There's also a lowercase \fBx\fR command which is nearly the same.
 .SH "CODE EXAMPLES"
 Presented with little comment (these will get their own manpages someday)
 here are short code examples illustrating access of various
@@ -668,7 +667,7 @@ types of data structures.
 \&                                    $a cmp $b
 \&            } keys %HoL )
 \& {
-\&     print "$family: ", join(", ", sort @{ $HoL{$family}), "\en";
+\&     print "$family: ", join(", ", sort @{ $HoL{$family} }), "\en";
 \& }
 .Ve
 .SH "LISTS OF HASHES"
@@ -834,7 +833,7 @@ types of data structures.
 \& # append new members to an existing family
 \& %new_folks = (
 \&     wife => "wilma",
-\&     pet  => "dino";
+\&     pet  => "dino",
 \& );
 .Ve
 .Vb 3

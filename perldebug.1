@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLDEBUG 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLDEBUG 1 "perl 5.005, patch 53" "11/Jul/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -242,7 +242,7 @@ it prints out the description for just that command.  The special
 argument of \f(CWh h\fR produces a more compact help listing, designed to fit
 together on one screen.
 .Sp
-If the output the \f(CWh\fR command (or any command, for that matter) scrolls
+If the output of the \f(CWh\fR command (or any command, for that matter) scrolls
 past your screen, either precede the command with a leading pipe symbol so
 it's run through your pager, as in
 .Sp
@@ -417,6 +417,10 @@ For example, this will print out \f(CW$foo\fR every time line
 .Ve
 .Ip "A" 12
 Delete all installed actions.
+.Ip "W [expr]" 12
+Add a global watch-expression.
+.Ip "W" 12
+Delete all watch-expressions.
 .Ip "O [opt[=val]] [op'val' [opt?]..." 12
 Set or query values of options.  val defaults to 1.  opt can
 be abbreviated.  Several options can be listed.
@@ -479,6 +483,8 @@ Whether to print contents of globs.
 Dump arrays holding debugged files.
 .Ip "\f(CWDumpPackages\fR" 24
 Dump symbol tables of packages.
+.Ip "\f(CWDumpReused\fR" 24
+Dump contents of \*(L"reused\*(R" addresses.
 .Ip "\f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR" 24
 Change style of string dump.  Default value of \f(CWquote\fR is \f(CWauto\fR, one
 can enable either double-quotish dump, or single-quotish by setting it
@@ -687,8 +693,8 @@ function \f(CWAmbulation::legs\fR was called in a list context from the
 but from line 4.
 .Sp
 Note that if you execute \f(CWT\fR command from inside an active \f(CWuse\fR
-statement, the backtrace will contain both \f(CWthe \f(CWrequire\fR entry in the \fIperlfunc\fR manpage\fR
-frame and an \f(CWthe section on \fIeval EXPR\fR in the \fIperlfunc\fR manpage\fR) frame.
+statement, the backtrace will contain both \f(CWrequire\fR
+frame and an \f(CWeval\fR) frame.
 .Ip "Listing" 8
 Listing given via different flavors of \f(CWl\fR command looks like this:
 .Sp
@@ -884,7 +890,7 @@ breakpoint on \fIload\fR of some module thusly
 and restart debugger by \f(CWR\fR command (if possible).  One can use \f(CWb
 compile subname\fR for the same purpose.
 .Sh "Debugger Customization"
-Most probably you not want to modify the debugger, it contains enough
+Most probably you do not want to modify the debugger, it contains enough
 hooks to satisfy most needs.  You may change the behaviour of debugger
 from the debugger itself, using \f(CWO\fRptions, from the command line via
 \f(CWPERLDB_OPTS\fR environment variable, and from \fIcustomization files\fR.
@@ -972,12 +978,12 @@ Perl inserts the contents of \f(CW$ENV{PERL5DB}\fR (or \f(CWBEGIN {require
 \&'perl5db.pl'}\fR if not present) before the first line of the
 application.
 .Ip "\(bu" 5
-The array C<@{"_<$filename"}> is the line-by-line contents of
+The array \f(CW@{"_<$filename"}\fR is the line-by-line contents of
 \f(CW$filename\fR for all the compiled files.  Same for \f(CWeval\fRed strings which
 contain subroutines, or which are currently executed.  The \f(CW$filename\fR
 for \f(CWeval\fRed strings looks like \f(CW(eval 34)\fR.
 .Ip "\(bu" 5
-The hash C<%{"_<$filename"}> contains breakpoints and action (it is
+The hash \f(CW%{"_<$filename"}\fR contains breakpoints and action (it is
 keyed by line number), and individual entries are settable (as opposed
 to the whole hash).  Only true/false is important to Perl, though the
 values used by \fIperl5db.pl\fR have the form
@@ -988,13 +994,13 @@ Same for evaluated strings which contain subroutines, or which are
 currently executed.  The \f(CW$filename\fR for \f(CWeval\fRed strings looks like
 \f(CW(eval 34)\fR.
 .Ip "\(bu" 5
-The scalar C<${"_<$filename"}> contains C<"_<$filename">.  Same for
+The scalar \f(CW${"_<$filename"}\fR contains \f(CW"_<$filename"\fR.  Same for
 evaluated strings which contain subroutines, or which are currently
 executed.  The \f(CW$filename\fR for \f(CWeval\fRed strings looks like \f(CW(eval
 34)\fR.
 .Ip "\(bu" 5
 After each \f(CWrequire\fRd file is compiled, but before it is executed,
-C<\fI\s-1DB::\s0postponed\fR\|(*{"_<$filename"})> is called (if subroutine
+\f(CWDB::postponed(*{"_<$filename"})\fR is called (if subroutine
 \f(CWDB::postponed\fR exists).  Here the \f(CW$filename\fR is the expanded name of
 the \f(CWrequire\fRd file (as found in values of \f(CW%INC\fR).
 .Ip "\(bu" 5
@@ -1067,15 +1073,15 @@ After the rc file is read, the debugger reads environment variable
 \s-1PERLDB_OPTS\s0 and parses it as a rest of \f(CWO ...\fR line in debugger prompt.
 .PP
 It also maintains magical internal variables, such as \f(CW@DB::dbline\fR,
-\f(CW%DB::dbline\fR, which are aliases for C<@{"::_<current_file"}>
-C<%{"::_<current_file"}>.  Here \f(CWcurrent_file\fR is the currently
+\f(CW%DB::dbline\fR, which are aliases for \f(CW@{"::_<current_file"}\fR
+\f(CW%{"::_<current_file"}\fR.  Here \f(CWcurrent_file\fR is the currently
 selected (with the debugger's \f(CWf\fR command, or by flow of execution)
 file.
 .PP
 Some functions are provided to simplify customization.  See the section on \fIDebugger
 Customization\fR for description of \f(CWDB::parse_options(string)\fR.  The
 function \f(CWDB::dump_trace(skip[, count])\fR skips the specified number
-of frames, and returns an array containing info about the caller
+of frames, and returns a list containing info about the caller
 frames (all if \f(CWcount\fR is missing).  Each entry is a hash with keys
 \f(CWcontext\fR (\f(CW$\fR or \f(CW@\fR), \f(CWsub\fR (subroutine name, or info about
 eval), \f(CWargs\fR (\f(CWundef\fR or a reference to an array), \f(CWfile\fR, and
@@ -1086,12 +1092,504 @@ formatted info about caller frames.  The last two functions may be
 convenient as arguments to \f(CW<\fR, \f(CW<<\fR commands.
 .Sh "Other resources"
 You did try the \fB\-w\fR switch, didn't you?
-.SH "BUGS"
+.Sh "\s-1BUGS\s0"
 You cannot get the stack frame information or otherwise debug functions
 that were not compiled by Perl, such as C or \*(C+ extensions.
 .PP
 If you alter your \f(CW@_\fR arguments in a subroutine (such as with \fBshift\fR
 or \fBpop\fR, the stack backtrace will not show the original values.
+.SH "Debugging Perl memory usage"
+Perl is \fIvery\fR frivolous with memory.  There is a saying that to
+estimate memory usage of Perl, assume a reasonable algorithm of
+allocation, and multiply your estimages by 10.  This is not absolutely
+true, but may give you a good grasp of what happens.
+.PP
+Say, an integer cannot take less than 20 bytes of memory, a float
+cannot take less than 24 bytes, a string cannot take less than 32
+bytes (all these examples assume 32-bit architectures, the result are
+much worse on 64-bit architectures).  If a variable is accessed in two
+of three different ways (which require an integer, a float, or a
+string), the memory footprint may increase by another 20 bytes.  A
+sloppy \fImalloc()\fR implementation will make these numbers yet more.
+.PP
+On the opposite end of the scale, a declaration like
+.PP
+.Vb 1
+\&  sub foo;
+.Ve
+may take (on some versions of perl) up to 500 bytes of memory.
+.PP
+Off-the-cuff anecdotal estimates of a code bloat give a factor around
+8.  This means that the compiled form of reasonable (commented
+indented etc.)  code will take approximately 8 times more than the
+disk space the code takes.
+.PP
+There are two Perl-specific ways to analyze the memory usage:
+\f(CW$ENV\fR{PERL_DEBUG_MSTATS} and \fB\-DL\fR switch.  First one is available
+only if perl is compiled with Perl's \fImalloc()\fR, the second one only if
+Perl compiled with \f(CW-DDEBUGGING\fR (as with giving \f(CW-D optimise=-g\fR
+option to \fIConfigure\fR).
+.Sh "Using \f(CW$ENV{PERL_DEBUG_MSTATS}\fR"
+If your perl is using Perl's \fImalloc()\fR, and compiled with correct
+switches (this is the default), then it will print memory usage
+statistics after compiling your code (if \f(CW$ENV{PERL_DEBUG_MSTATS}\fR >
+1), and before termination of the script (if
+\f(CW$ENV{PERL_DEBUG_MSTATS}\fR >= 1).  The report format is similar to one
+in the following example:
+.PP
+.Vb 13
+\&  env PERL_DEBUG_MSTATS=2 perl -e "require Carp"
+\&  Memory allocation statistics after compilation: (buckets 4(4)..8188(8192)
+\&     14216 free:   130   117    28     7     9   0   2     2   1 0 0
+\&                437    61    36     0     5
+\&     60924 used:   125   137   161    55     7   8   6    16   2 0 1
+\&                 74   109   304    84    20
+\&  Total sbrk(): 77824/21:119. Odd ends: pad+heads+chain+tail: 0+636+0+2048.
+\&  Memory allocation statistics after execution:   (buckets 4(4)..8188(8192)
+\&     30888 free:   245    78    85    13     6   2   1     3   2 0 1
+\&                315   162    39    42    11
+\&    175816 used:   265   176  1112   111    26  22  11    27   2 1 1
+\&                196   178  1066   798    39
+\&  Total sbrk(): 215040/47:145. Odd ends: pad+heads+chain+tail: 0+2192+0+6144.
+.Ve
+It is possible to ask for such a statistic at arbitrary moment by
+usind \fIDevel::Peek::mstats()\fR (module Devel::Peek is available on \s-1CPAN\s0).
+.PP
+Here is the explanation of different parts of the format:
+.Ip "\f(CWbuckets SMALLEST(APPROX)..GREATEST(APPROX)\fR" 5
+Perl's \fImalloc()\fR uses bucketed allocations.  Every request is rounded
+up to the closest bucket size available, and a bucket of these size is
+taken from the pool of the buckets of this size.
+.Sp
+The above line describes limits of buckets currently in use.  Each
+bucket has two sizes: memory footprint, and the maximal size of user
+data which may be put into this bucket.  Say, in the above example the
+smallest bucket is both sizes 4.  The biggest bucket has usable size
+8188, and the memory footprint 8192.  
+.Sp
+With debugging Perl some buckets may have negative usable size.  This
+means that these buckets cannot (and will not) be used.  For greater
+buckets the memory footprint may be one page greater than a power of
+2.  In such a case the corresponding power of two is printed instead
+in the \f(CWAPPROX\fR field above.
+.Ip "Free/Used" 5
+The following 1 or 2 rows of numbers correspond to the number of
+buckets of each size between \f(CWSMALLEST\fR and \f(CWGREATEST\fR.  In the
+first row the sizes (memory footprints) of buckets are powers of two
+(or possibly one page greater).  In the second row (if present) the
+memory footprints of the buckets are between memory footprints of two
+buckets \*(L"above\*(R".  
+.Sp
+Say, with the above example the memory footprints are (with current
+algorith)
+.Sp
+.Vb 2
+\&     free:    8     16    32    64    128  256 512 1024 2048 4096 8192
+\&           4     12    24    48    80
+.Ve
+With non-\f(CWDEBUGGING\fR perl the buckets starting from \f(CW128\fR\-long ones
+have 4-byte overhead, thus 8192-long bucket may take up to
+8188-byte-long allocations.
+.Ip "\f(CWTotal sbrk(): SBRKed/SBRKs:CONTINUOUS\fR" 5
+The first two fields give the total amount of memory perl \fIsbrk()\fRed,
+and number of \fIsbrk()\fRs used.  The third number is what perl thinks
+about continuity of returned chunks.  As far as this number is
+positive, \fImalloc()\fR will assume that it is probable that \fIsbrk()\fR will
+provide continuous memory.
+.Sp
+The amounts \fIsbrk()\fRed by external libraries is not counted.
+.Ip "\f(CWpad: 0\fR" 5
+The amount of \fIsbrk()\fRed memory needed to keep buckets aligned.
+.Ip "\f(CWheads: 2192\fR" 5
+While memory overhead of bigger buckets is kept inside the bucket, for
+smaller buckets it is kept in separate areas.  This field gives the
+total size of these areas.
+.Ip "\f(CWchain: 0\fR" 5
+\fImalloc()\fR may want to subdivide a bigger bucket into smaller buckets.
+If only a part of the deceased-bucket is left non-subdivided, the rest
+is kept as an element of a linked list.  This field gives the total
+size of these chunks.
+.Ip "\f(CWtail: 6144\fR" 5
+To minimize amount of \fIsbrk()\fRs \fImalloc()\fR asks for more memory.  This
+field gives the size of the yet-unused part, which is \fIsbrk()\fRed, but
+never touched.
+.Sh "Example of using \fB\-\s-1DL\s0\fR switch"
+Below we show how to analyse memory usage by 
+.PP
+.Vb 1
+\&  do 'lib/auto/POSIX/autosplit.ix';
+.Ve
+The file in question contains a header and 146 lines similar to
+.PP
+.Vb 1
+\&  sub getcwd ;
+.Ve
+\fBNote:\fR \fIthe discussion below supposes 32-bit architecture.  In the
+newer versions of perl the memory usage of the constructs discussed
+here is much improved, but the story discussed below is a real-life
+story.  This story is very terse, and assumes more than cursory
+knowledge of Perl internals.\fR
+.PP
+Here is the itemized list of Perl allocations performed during parsing
+of this file:
+.PP
+.Vb 11
+\& !!! "after" at test.pl line 3.
+\&    Id  subtot   4   8  12  16  20  24  28  32  36  40  48  56  64  72  80 80+
+\&  0 02   13752   .   .   .   . 294   .   .   .   .   .   .   .   .   .   .   4
+\&  0 54    5545   .   .   8 124  16   .   .   .   1   1   .   .   .   .   .   3
+\&  5 05      32   .   .   .   .   .   .   .   1   .   .   .   .   .   .   .   .
+\&  6 02    7152   .   .   .   .   .   .   .   .   .   . 149   .   .   .   .   .
+\&  7 02    3600   .   .   .   .   . 150   .   .   .   .   .   .   .   .   .   .
+\&  7 03      64   .  -1   .   1   .   .   2   .   .   .   .   .   .   .   .   .
+\&  7 04    7056   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   7
+\&  7 17   38404   .   .   .   .   .   .   .   1   .   . 442 149   .   . 147   .
+\&  9 03    2078  17 249  32   .   .   .   .   2   .   .   .   .   .   .   .   .
+.Ve
+To see this list insert two \f(CWwarn('!...')\fR statements around the call:
+.PP
+.Vb 3
+\&  warn('!');
+\&  do 'lib/auto/POSIX/autosplit.ix';
+\&  warn('!!! "after"');
+.Ve
+and run it with \fB\-\s-1DL\s0\fR option.  The first \fIwarn()\fR will print memory
+allocation info before the parsing of the file, and will memorize the
+statistics at this point (we ignore what it prints). The second \fIwarn()\fR
+will print increments w.r.t. this memorized statistics.  This is the
+above printout.
+.PP
+Different \fIId\fRs on the left correspond to different subsystems of
+perl interpreter, they are just first argument given to perl memory
+allocation \s-1API\s0 \fINew()\fR.  To find what \f(CW9 03\fR means \f(CWgrep\fR the perl
+source for \f(CW903\fR.  You will see that it is \fIutil.c\fR, function
+\fIsavepvn()\fR.  This function is used to store a copy of existing chunk of
+memory.  Using C debugger, one can see that it is called either
+directly from \fIgv_init()\fR, or via \fIsv_magic()\fR, and \fIgv_init()\fR is called
+from \fIgv_fetchpv()\fR \- which is called from \fInewSUB()\fR.
+.PP
+\fBNote:\fR to reach this place in debugger and skip all the calls to
+savepvn during the compilation of the main script, set a C breakpoint
+in \fIPerl_warn()\fR, \f(CWcontinue\fR this point is reached, \fIthen\fR set
+breakpoint in \fIPerl_savepvn()\fR.  Note that you may need to skip a
+handful of \fIPerl_savepvn()\fR which do not correspond to mass production
+of CVs (there are more \f(CW903\fR allocations than 146 similar lines of
+\fIlib/auto/\s-1POSIX/\s0autosplit.ix\fR).  Note also that \f(CWPerl_\fR prefixes are
+added by macroization code in perl header files to avoid conflicts
+with external libraries.
+.PP
+Anyway, we see that \f(CW903\fR ids correspond to creation of globs, twice
+per glob \- for glob name, and glob stringification magic.
+.PP
+Here are explanations for other \fIId\fRs above: 
+.Ip "\f(CW717\fR " 5
+is for creation of bigger \f(CWXPV*\fR structures.  In the above case it
+creates 3 \f(CWAV\fR per subroutine, one for a list of lexical variable
+names, one for a scratchpad (which contains lexical variables and
+\f(CWtargets\fR), and one for the array of scratchpads needed for
+recursion.  
+.Sp
+It also creates a \f(CWGV\fR and a \f(CWCV\fR per subroutine (all called from
+\fIstart_subparse()\fR).
+.Ip "\f(CW002\fR" 5
+Creates C array corresponding to the \f(CWAV\fR of scratchpads, and the
+scratchpad itself (the first fake entry of this scratchpad is created
+though the subroutine itself is not defined yet).
+.Sp
+It also creates C arrays to keep data for the stash (this is one \s-1HV\s0,
+but it grows, thus there are 4 big allocations: the big chunks are not
+freeed, but are kept as additional arenas for \f(CWSV\fR allocations).
+.Ip "\f(CW054\fR" 5
+creates a \f(CWHEK\fR for the name of the glob for the subroutine (this
+name is a key in a \fIstash\fR).
+.Sp
+Big allocations with this \fIId\fR correspond to allocations of new
+arenas to keep \f(CWHE\fR.
+.Ip "\f(CW602\fR" 5
+creates a \f(CWGP\fR for the glob for the subroutine.
+.Ip "\f(CW702\fR" 5
+creates the \f(CWMAGIC\fR for the glob for the subroutine.
+.Ip "\f(CW704\fR" 5
+creates \fIarenas\fR which keep SVs.
+.Sh "\fB\-\s-1DL\s0\fR details"
+If Perl is run with \fB\-\s-1DL\s0\fR option, then \fIwarn()\fRs which start with `!\*(R'
+behave specially.  They print a list of \fIcategories\fR of memory
+allocations, and statistics of allocations of different sizes for
+these categories.
+.PP
+If \fIwarn()\fR string starts with
+.Ip "\f(CW!!!\fR " 5
+print changed categories only, print the differences in counts of allocations;
+.Ip "\f(CW!!\fR " 5
+print grown categories only; print the absolute values of counts, and totals;
+.Ip "\f(CW!\fR" 5
+print nonempty categories, print the absolute values of counts and totals.
+.Sh "Limitations of \fB\-\s-1DL\s0\fR statistic"
+If an extension or an external library does not use Perl \s-1API\s0 to
+allocate memory, these allocations are not counted.
+.SH "Debugging regular expressions"
+There are two ways to enable debugging output for regular expressions.
+.PP
+If your perl is compiled with \f(CW-DDEBUGGING\fR, you may use the
+\fB\-Dr\fR flag on the command line.
+.PP
+Otherwise, one can \f(CWuse re 'debug'\fR, which has effects both at
+compile time, and at run time (and is \fInot\fR lexically scoped).
+.Sh "Compile-time output"
+The debugging output for the compile time looks like this:
+.PP
+.Vb 20
+\&  compiling RE `[bc]d(ef*g)+h[ij]k$'
+\&  size 43 first at 1
+\&     1: ANYOF(11)
+\&    11: EXACT <d>(13)
+\&    13: CURLYX {1,32767}(27)
+\&    15:   OPEN1(17)
+\&    17:     EXACT <e>(19)
+\&    19:     STAR(22)
+\&    20:       EXACT <f>(0)
+\&    22:     EXACT <g>(24)
+\&    24:   CLOSE1(26)
+\&    26:   WHILEM(0)
+\&    27: NOTHING(28)
+\&    28: EXACT <h>(30)
+\&    30: ANYOF(40)
+\&    40: EXACT <k>(42)
+\&    42: EOL(43)
+\&    43: END(0)
+\&  anchored `de' at 1 floating `gh' at 3..2147483647 (checking floating)
+\&                                    stclass `ANYOF' minlen 7
+.Ve
+The first line shows the pre-compiled form of the regexp, and the
+second shows the size of the compiled form (in arbitrary units,
+usually 4-byte words) and the label \fIid\fR of the first node which
+does a match.
+.PP
+The last line (split into two lines in the above) contains the optimizer
+info.  In the example shown, the optimizer found that the match 
+should contain a substring \f(CWde\fR at the offset 1, and substring \f(CWgh\fR
+at some offset between 3 and infinity.  Moreover, when checking for
+these substrings (to abandon impossible matches quickly) it will check
+for the substring \f(CWgh\fR before checking for the substring \f(CWde\fR.  The
+optimizer may also use the knowledge that the match starts (at the
+\f(CWfirst\fR \fIid\fR) with a character class, and the match cannot be
+shorter than 7 chars.
+.PP
+The fields of interest which may appear in the last line are
+.Ip "\f(CWanchored\fR \fI\s-1STRING\s0\fR \f(CWat\fR \fI\s-1POS\s0\fR" 5
+.Ip "\f(CWfloating\fR \fI\s-1STRING\s0\fR \f(CWat\fR \fI\s-1POS1\s0..\s-1POS2\s0\fR" 5
+see above;
+.Ip "\f(CWmatching floating/anchored\fR" 5
+which substring to check first;
+.Ip "\f(CWminlen\fR" 5
+the minimal length of the match;
+.Ip "\f(CWstclass\fR \fI\s-1TYPE\s0\fR" 5
+The type of the first matching node.
+.Ip "\f(CWnoscan\fR" 5
+which advises to not scan for the found substrings;
+.Ip "\f(CWisall\fR" 5
+which says that the optimizer info is in fact all that the regular
+expression contains (thus one does not need to enter the \s-1RE\s0 engine at
+all);
+.Ip "\f(CWGPOS\fR" 5
+if the pattern contains \f(CW\eG\fR;
+.Ip "\f(CWplus\fR " 5
+if the pattern starts with a repeated char (as in \f(CWx+y\fR);
+.Ip "\f(CWimplicit\fR" 5
+if the pattern starts with \f(CW.*\fR;
+.Ip "\f(CWwith eval\fR " 5
+if the pattern contain eval-groups (see the section on \fI(?{ code })\fR in the \fIperlre\fR manpage);
+.Ip "\f(CWanchored(TYPE)\fR" 5
+if the pattern may
+match only at a handful of places  (with \f(CWTYPE\fR being
+\f(CWBOL\fR, \f(CWMBOL\fR, or \f(CWGPOS\fR, see the table below).
+.PP
+If a substring is known to match at end-of-line only, it may be
+followed by \f(CW$\fR, as in \f(CWfloating `k'$\fR.
+.PP
+The optimizer-specific info is used to avoid entering (a slow) \s-1RE\s0
+engine on strings which will definitely not match.  If \f(CWisall\fR flag
+is set, a call to the \s-1RE\s0 engine may be avoided even when optimizer
+found an appropriate place for the match.
+.PP
+The rest of the output contains the list of \fInodes\fR of the compiled
+form of the \s-1RE\s0.  Each line has format 
+.PP
+\f(CW   \fR\fIid\fR: \fI\s-1TYPE\s0\fR \fI\s-1OPTIONAL\s0\-\s-1INFO\s0\fR (\fInext-id\fR)
+.Sh "Types of nodes"
+Here is the list of possible types with short descriptions:
+.PP
+.Vb 1
+\&    # TYPE arg-description [num-args] [longjump-len] DESCRIPTION
+.Ve
+.Vb 3
+\&    # Exit points
+\&    END         no      End of program.
+\&    SUCCEED     no      Return from a subroutine, basically.
+.Ve
+.Vb 13
+\&    # Anchors:
+\&    BOL         no      Match "" at beginning of line.
+\&    MBOL        no      Same, assuming multiline.
+\&    SBOL        no      Same, assuming singleline.
+\&    EOS         no      Match "" at end of string.
+\&    EOL         no      Match "" at end of line.
+\&    MEOL        no      Same, assuming multiline.
+\&    SEOL        no      Same, assuming singleline.
+\&    BOUND       no      Match "" at any word boundary
+\&    BOUNDL      no      Match "" at any word boundary
+\&    NBOUND      no      Match "" at any word non-boundary
+\&    NBOUNDL     no      Match "" at any word non-boundary
+\&    GPOS        no      Matches where last m//g left off.
+.Ve
+.Vb 14
+\&    # [Special] alternatives
+\&    ANY         no      Match any one character (except newline).
+\&    SANY        no      Match any one character.
+\&    ANYOF       sv      Match character in (or not in) this class.
+\&    ALNUM       no      Match any alphanumeric character
+\&    ALNUML      no      Match any alphanumeric char in locale
+\&    NALNUM      no      Match any non-alphanumeric character
+\&    NALNUML     no      Match any non-alphanumeric char in locale
+\&    SPACE       no      Match any whitespace character
+\&    SPACEL      no      Match any whitespace char in locale
+\&    NSPACE      no      Match any non-whitespace character
+\&    NSPACEL     no      Match any non-whitespace char in locale
+\&    DIGIT       no      Match any numeric character
+\&    NDIGIT      no      Match any non-numeric character
+.Ve
+.Vb 9
+\&    # BRANCH    The set of branches constituting a single choice are hooked
+\&    #           together with their "next" pointers, since precedence prevents
+\&    #           anything being concatenated to any individual branch.  The
+\&    #           "next" pointer of the last BRANCH in a choice points to the
+\&    #           thing following the whole choice.  This is also where the
+\&    #           final "next" pointer of each individual branch points; each
+\&    #           branch starts with the operand node of a BRANCH node.
+\&    #
+\&    BRANCH      node    Match this alternative, or the next...
+.Ve
+.Vb 4
+\&    # BACK      Normal "next" pointers all implicitly point forward; BACK
+\&    #           exists to make loop structures possible.
+\&    # not used
+\&    BACK        no      Match "", "next" ptr points backward.
+.Ve
+.Vb 4
+\&    # Literals
+\&    EXACT       sv      Match this string (preceded by length).
+\&    EXACTF      sv      Match this string, folded (prec. by length).
+\&    EXACTFL     sv      Match this string, folded in locale (w/len).
+.Ve
+.Vb 4
+\&    # Do nothing
+\&    NOTHING     no      Match empty string.
+\&    # A variant of above which delimits a group, thus stops optimizations
+\&    TAIL        no      Match empty string. Can jump here from outside.
+.Ve
+.Vb 7
+\&    # STAR,PLUS '?', and complex '*' and '+', are implemented as circular
+\&    #           BRANCH structures using BACK.  Simple cases (one character
+\&    #           per match) are implemented with STAR and PLUS for speed
+\&    #           and to minimize recursive plunges.
+\&    #
+\&    STAR        node    Match this (simple) thing 0 or more times.
+\&    PLUS        node    Match this (simple) thing 1 or more times.
+.Ve
+.Vb 5
+\&    CURLY       sv 2    Match this simple thing {n,m} times.
+\&    CURLYN      no 2    Match next-after-this simple thing 
+\&    #                   {n,m} times, set parenths.
+\&    CURLYM      no 2    Match this medium-complex thing {n,m} times.
+\&    CURLYX      sv 2    Match this complex thing {n,m} times.
+.Ve
+.Vb 2
+\&    # This terminator creates a loop structure for CURLYX
+\&    WHILEM      no      Do curly processing and see if rest matches.
+.Ve
+.Vb 3
+\&    # OPEN,CLOSE,GROUPP ...are numbered at compile time.
+\&    OPEN        num 1   Mark this point in input as start of #n.
+\&    CLOSE       num 1   Analogous to OPEN.
+.Ve
+.Vb 3
+\&    REF         num 1   Match some already matched string
+\&    REFF        num 1   Match already matched string, folded
+\&    REFFL       num 1   Match already matched string, folded in loc.
+.Ve
+.Vb 6
+\&    # grouping assertions
+\&    IFMATCH     off 1 2 Succeeds if the following matches.
+\&    UNLESSM     off 1 2 Fails if the following matches.
+\&    SUSPEND     off 1 1 "Independent" sub-RE.
+\&    IFTHEN      off 1 1 Switch, should be preceeded by switcher .
+\&    GROUPP      num 1   Whether the group matched.
+.Ve
+.Vb 3
+\&    # Support for long RE
+\&    LONGJMP     off 1 1 Jump far away.
+\&    BRANCHJ     off 1 1 BRANCH with long offset.
+.Ve
+.Vb 2
+\&    # The heavy worker
+\&    EVAL        evl 1   Execute some Perl code.
+.Ve
+.Vb 3
+\&    # Modifiers
+\&    MINMOD      no      Next operator is not greedy.
+\&    LOGICAL     no      Next opcode should set the flag only.
+.Ve
+.Vb 2
+\&    # This is not used yet
+\&    RENUM       off 1 1 Group with independently numbered parens.
+.Ve
+.Vb 3
+\&    # This is not really a node, but an optimized away piece of a "long" node.
+\&    # To simplify debugging output, we mark it as if it were a node
+\&    OPTIMIZED   off     Placeholder for dump.
+.Ve
+.Sh "Run-time output"
+First of all, when doing a match, one may get no run-time output even
+if debugging is enabled.  this means that the \s-1RE\s0 engine was never
+entered, all of the job was done by the optimizer.
+.PP
+If \s-1RE\s0 engine was entered, the output may look like this:
+.PP
+.Vb 25
+\&  Matching `[bc]d(ef*g)+h[ij]k$' against `abcdefg__gh__'
+\&    Setting an EVAL scope, savestack=3
+\&     2 <ab> <cdefg__gh_>    |  1: ANYOF
+\&     3 <abc> <defg__gh_>    | 11: EXACT <d>
+\&     4 <abcd> <efg__gh_>    | 13: CURLYX {1,32767}
+\&     4 <abcd> <efg__gh_>    | 26:   WHILEM
+\&                                0 out of 1..32767  cc=effff31c
+\&     4 <abcd> <efg__gh_>    | 15:     OPEN1
+\&     4 <abcd> <efg__gh_>    | 17:     EXACT <e>
+\&     5 <abcde> <fg__gh_>    | 19:     STAR
+\&                             EXACT <f> can match 1 times out of 32767...
+\&    Setting an EVAL scope, savestack=3
+\&     6 <bcdef> <g__gh__>    | 22:       EXACT <g>
+\&     7 <bcdefg> <__gh__>    | 24:       CLOSE1
+\&     7 <bcdefg> <__gh__>    | 26:       WHILEM
+\&                                    1 out of 1..32767  cc=effff31c
+\&    Setting an EVAL scope, savestack=12
+\&     7 <bcdefg> <__gh__>    | 15:         OPEN1
+\&     7 <bcdefg> <__gh__>    | 17:         EXACT <e>
+\&       restoring \e1 to 4(4)..7
+\&                                    failed, try continuation...
+\&     7 <bcdefg> <__gh__>    | 27:         NOTHING
+\&     7 <bcdefg> <__gh__>    | 28:         EXACT <h>
+\&                                    failed...
+\&                                failed...
+.Ve
+The most significant information in the output is about the particular \fInode\fR
+of the compiled \s-1RE\s0 which is currently being tested against the target string.
+The format of these lines is
+.PP
+\f(CW    \fR\fI\s-1STRING\s0\-\s-1OFFSET\s0\fR <\fI\s-1PRE\s0\-\s-1STRING\s0\fR> <\fI\s-1POST\s0\-\s-1STRING\s0\fR>   |\fI\s-1ID\s0\fR:  \fI\s-1TYPE\s0\fR
+.PP
+The \fI\s-1TYPE\s0\fR info is indented with respect to the backtracking level.
+Other incidental information appears interspersed within.
 
 .rn }` ''
 .IX Title "PERLDEBUG 1"
@@ -1173,6 +1671,10 @@ or \fBpop\fR, the stack backtrace will not show the original values.
 
 .IX Item "A"
 
+.IX Item "W [expr]"
+
+.IX Item "W"
+
 .IX Item "O [opt[=val]] [op'val' [opt?]..."
 
 .IX Item "\f(CWrecallCommand\fR, \f(CWShellBang\fR"
@@ -1206,6 +1708,8 @@ or \fBpop\fR, the stack backtrace will not show the original values.
 .IX Item "\f(CWDumpDBFiles\fR"
 
 .IX Item "\f(CWDumpPackages\fR"
+
+.IX Item "\f(CWDumpReused\fR"
 
 .IX Item "\f(CWquote\fR, \f(CWHighBit\fR, \f(CWundefPrint\fR"
 
@@ -1315,5 +1819,79 @@ or \fBpop\fR, the stack backtrace will not show the original values.
 
 .IX Subsection "Other resources"
 
-.IX Header "BUGS"
+.IX Subsection "\s-1BUGS\s0"
+
+.IX Header "Debugging Perl memory usage"
+
+.IX Subsection "Using \f(CW$ENV{PERL_DEBUG_MSTATS}\fR"
+
+.IX Item "\f(CWbuckets SMALLEST(APPROX)..GREATEST(APPROX)\fR"
+
+.IX Item "Free/Used"
+
+.IX Item "\f(CWTotal sbrk(): SBRKed/SBRKs:CONTINUOUS\fR"
+
+.IX Item "\f(CWpad: 0\fR"
+
+.IX Item "\f(CWheads: 2192\fR"
+
+.IX Item "\f(CWchain: 0\fR"
+
+.IX Item "\f(CWtail: 6144\fR"
+
+.IX Subsection "Example of using \fB\-\s-1DL\s0\fR switch"
+
+.IX Item "\f(CW717\fR "
+
+.IX Item "\f(CW002\fR"
+
+.IX Item "\f(CW054\fR"
+
+.IX Item "\f(CW602\fR"
+
+.IX Item "\f(CW702\fR"
+
+.IX Item "\f(CW704\fR"
+
+.IX Subsection "\fB\-\s-1DL\s0\fR details"
+
+.IX Item "\f(CW!!!\fR "
+
+.IX Item "\f(CW!!\fR "
+
+.IX Item "\f(CW!\fR"
+
+.IX Subsection "Limitations of \fB\-\s-1DL\s0\fR statistic"
+
+.IX Header "Debugging regular expressions"
+
+.IX Subsection "Compile-time output"
+
+.IX Item "\f(CWanchored\fR \fI\s-1STRING\s0\fR \f(CWat\fR \fI\s-1POS\s0\fR"
+
+.IX Item "\f(CWfloating\fR \fI\s-1STRING\s0\fR \f(CWat\fR \fI\s-1POS1\s0..\s-1POS2\s0\fR"
+
+.IX Item "\f(CWmatching floating/anchored\fR"
+
+.IX Item "\f(CWminlen\fR"
+
+.IX Item "\f(CWstclass\fR \fI\s-1TYPE\s0\fR"
+
+.IX Item "\f(CWnoscan\fR"
+
+.IX Item "\f(CWisall\fR"
+
+.IX Item "\f(CWGPOS\fR"
+
+.IX Item "\f(CWplus\fR "
+
+.IX Item "\f(CWimplicit\fR"
+
+.IX Item "\f(CWwith eval\fR "
+
+.IX Item "\f(CWanchored(TYPE)\fR"
+
+.IX Subsection "Types of nodes"
+
+.IX Subsection "Run-time output"
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLOS2 1 "perl 5.004, patch 55" "26/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLOS2 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -391,10 +391,67 @@ sh-syntax shell installed (see the section on \fIPdksh\fR,
 the section on \fIFrequently asked questions\fR), and perl should be able to find it
 (see the section on \fI\s-1PERL_SH_DIR\s0\fR).
 .PP
-The only cases when the shell is not used is the multi-argument
-\fIsystem()\fR (see the \f(CWsystem\fR entry in the \fIperlfunc\fR manpage)/\fIexec()\fR (see the \f(CWexec\fR entry in the \fIperlfunc\fR manpage), and
-one-argument version thereof without redirection and shell
-meta-characters.
+The cases when the shell is used are:
+.Ip "1" 5
+One-argument \fIsystem()\fR (see the \f(CWsystem\fR entry in the \fIperlfunc\fR manpage), \fIexec()\fR (see the \f(CWexec\fR entry in the \fIperlfunc\fR manpage)
+with redirection or shell meta-characters;
+.Ip "2" 5
+Pipe-open (see the \f(CWopen\fR entry in the \fIperlfunc\fR manpage) with the command which contains redirection 
+or shell meta-characters;
+.Ip "3" 5
+Backticks \f(CW``\fR (see the section on \fII/O Operators\fR in the \fIperlop\fR manpage) with the command which contains
+redirection or shell meta-characters;
+.Ip "4" 5
+If the executable called by \fIsystem()\fR/\fIexec()\fR/pipe-\fIopen()\fR/\f(CW``\fR is a script
+with the \*(L"magic\*(R" \f(CW#!\fR line or \f(CWextproc\fR line which specifies shell;
+.Ip "5" 5
+If the executable called by \fIsystem()\fR/\fIexec()\fR/pipe-\fIopen()\fR/\f(CW``\fR is a script
+without \*(L"magic\*(R" line, and \f(CW$ENV{EXECSHELL}\fR is set to shell;
+.Ip "6" 5
+If the executable called by \fIsystem()\fR/\fIexec()\fR/pipe-\fIopen()\fR/\f(CW``\fR is not
+found;
+.Ip "7" 5
+For globbing (see the \f(CWglob\fR entry in the \fIperlfunc\fR manpage, the section on \fII/O Operators\fR in the \fIperlop\fR manpage).
+.PP
+For the sake of speed for a common case, in the above algorithms 
+backslashes in the command name are not considered as shell metacharacters.
+.PP
+Perl starts scripts which begin with cookies
+\f(CWextproc\fR or \f(CW#!\fR directly, without an intervention of shell.  Perl uses the
+same algorithm to find the executable as \fIpdksh\fR: if the path
+on \f(CW#!\fR line does not work, and contains \f(CW/\fR, then the executable
+is searched in \fI.\fR and on \f(CWPATH\fR.  To find arguments for these scripts
+Perl uses a different algorithm than \fIpdksh\fR: up to 3 arguments are 
+recognized, and trailing whitespace is stripped.
+.PP
+If a script
+does not contain such a cooky, then to avoid calling \fIsh.exe\fR, Perl uses
+the same algorithm as \fIpdksh\fR: if \f(CW$ENV{EXECSHELL}\fR is set, the
+script is given as the first argument to this command, if not set, then
+\f(CW$ENV{COMSPEC} /c\fR is used (or a hardwired guess if \f(CW$ENV{COMSPEC}\fR is
+not set).
+.PP
+If starting scripts directly, Perl will use exactly the same algorithm as for 
+the search of script given by \fB\-S\fR command-line option: it will look in
+the current directory, then on components of \f(CW$ENV{PATH}\fR using the 
+following order of appended extensions: no extension, \fI.cmd\fR, \fI.btm\fR, 
+\&\fI.bat\fR, \fI.pl\fR.
+.PP
+Note that Perl will start to look for scripts only if \s-1OS/2\s0 cannot start the
+specified application, thus \f(CWsystem 'blah'\fR will not look for a script if 
+there is an executable file \fIblah.exe\fR \fIanywhere\fR on \f(CWPATH\fR.  
+.PP
+Note also that executable files on \s-1OS/2\s0 can have an arbitrary extension, 
+but \fI.exe\fR will be automatically appended if no dot is present in the name.  
+The workaround as as simple as that:  since \fIblah.\fR and \fIblah\fR denote the 
+same file, to start an executable residing in file \fIn:/bin/blah\fR (no 
+extension) give an argument \f(CWn:/bin/blah.\fR to \fIsystem()\fR.
+.PP
+The last note is that currently it is not straightforward to start \s-1PM\s0 
+programs from \s-1VIO\s0 (=text-mode) Perl process and visa versa.  Either ensure
+that shell will be used, as in \f(CWsystem 'cmd /c epm'\fR, or start it using
+optional arguments to \fIsystem()\fR documented in \f(CWOS2::Process\fR module.  This
+is considered a bug and should be fixed soon.
 .SH "Frequently asked questions"
 .Sh "I cannot run external programs"
 .Ip "" 4
@@ -698,6 +755,9 @@ check use
 .Ve
 ). You need the latest version of \fIpdksh\fR installed as \fIsh.exe\fR.
 .PP
+Check that you have \fB\s-1BSD\s0\fR libraries and headers installed, and \- 
+optionally \- Berkeley \s-1DB\s0 headers and libraries, and crypt.
+.PP
 Possible locations to get this from are
 .PP
 .Vb 4
@@ -788,6 +848,22 @@ compatibility with XFree86-\s-1OS/2\s0). Get a corrected one from
 .Vb 1
 \&  ftp://ftp.math.ohio-state.edu/pub/users/ilya/os2/db_mt.zip
 .Ve
+To make \f(CW-p\fR filetest work, one may also need to apply the following patch
+to \s-1EMX\s0 headers:
+.PP
+.Vb 11
+\&  --- /emx/include/sys/stat.h.orig      Thu May 23 13:48:16 1996
+\&  +++ /emx/include/sys/stat.h   Sun Jul 12 14:11:32 1998
+\&  @@ -53,7 +53,7 @@ struct stat
+\&   #endif
+\& 
+\&   #if !defined (S_IFMT)
+\&  -#define S_IFMT   0160000  /* Mask for file type */
+\&  +#define S_IFMT   0170000  /* Mask for file type */
+\&   #define S_IFIFO  0010000  /* Pipe */
+\&   #define S_IFCHR  0020000  /* Character device */
+\&   #define S_IFDIR  0040000  /* Directory */
+.Ve
 .Sh "Hand-editing"
 You may look into the file \fI./hints/os2.sh\fR and correct anything
 wrong you find there. I do not expect it is needed anywhere.
@@ -821,74 +897,26 @@ statically now.\fR
 Warnings which are safe to ignore: \fImkfifo() redefined\fR inside
 \fI\s-1POSIX\s0.c\fR.
 .Sh "Testing"
+If you haven't yet moved perl.dll onto \s-1LIBPATH\s0, do it now (alternatively, if
+you have a previous perl installation you'd rather not disrupt until this one
+is installed, copy perl.dll to the t directory).
+.PP
 Now run
 .PP
 .Vb 1
 \&  make test
 .Ve
-Some tests (4..6) should fail. Some perl invocations should end in a
-segfault (system error \f(CWSYS3175\fR). To get finer error reports, 
+All tests should succeed (with some of them skipped).  Note that on one
+of the systems I see intermittent failures of \fIio/pipe.t\fR subtest 9.
+Any help to track what happens with this test is appreciated.
 .PP
-.Vb 2
-\&  cd t
-\&  perl harness
-.Ve
-The report you get may look like
-.PP
-.Vb 7
-\&  Failed Test  Status Wstat Total Fail  Failed  List of failed
-\&  ---------------------------------------------------------------
-\&  io/fs.t                      26   11  42.31%  2-5, 7-11, 18, 25
-\&  lib/io_pipe.t     3   768     6   ??       %  ??
-\&  lib/io_sock.t     3   768     5   ??       %  ??
-\&  op/stat.t                    56    5   8.93%  3-4, 20, 35, 39
-\&  Failed 4/140 test scripts, 97.14% okay. 27/2937 subtests failed, 99.08% okay.
-.Ve
-Note that using `make test\*(R' target two more tests may fail: \f(CWop/exec:1\fR
-because of (mis)feature of pdksh, and \f(CWlib/posix:15\fR, which checks
-that the buffers are not flushed on \f(CW_exit\fR (this is a bug in the test
-which assumes that tty output is buffered).
-.PP
-I submitted a patch to \s-1EMX\s0 which makes it possible to \fIfork()\fR with \s-1EMX\s0 
-dynamic libraries loaded, which makes \fIlib/io*\fR tests pass. This means
-that soon the number of failing tests may decrease yet more.
-.PP
-However, the test \fIlib/io_udp.t\fR is disabled, since it never terminates, I
-do not know why. Comments/fixes welcome.
-.PP
-The reasons for failed tests are:
-.Ip "\fIio/fs.t\fR" 8
-Checks \fIfile system\fR operations. Tests:
-.Ip "2-5, 7-11" 18
-Check \f(CWlink()\fR and \f(CWinode count\fR \- nonesuch under \s-1OS/2\s0.
-.Ip "18" 18
-Checks \f(CWatime\fR and \f(CWmtime\fR of \f(CWstat()\fR \- I could not understand this test.
-.Ip "25" 18
-Checks \f(CWtruncate()\fR on a filehandle just opened for write \- I do not
-know why this should or should not work.
-.Ip "\fIlib/io_pipe.t\fR" 8
-Checks \f(CWIO::Pipe\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs with
-dynamic extension loaded \- unsupported now.
-.Ip "\fIlib/io_sock.t\fR" 8
-Checks \f(CWIO::Socket\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs
-with dynamic extension loaded \- unsupported now.
-.Ip "\fIop/stat.t\fR" 8
-Checks \f(CWstat()\fR. Tests:
-.Ip "3" 12
-Checks \f(CWinode count\fR \- nonesuch under \s-1OS/2\s0.
-.Ip "4" 12
-Checks \f(CWmtime\fR and \f(CWctime\fR of \f(CWstat()\fR \- I could not understand this test.
-.Ip "20" 12
-Checks \f(CW-x\fR \- determined by the file extension only under \s-1OS/2\s0.
-.Ip "35" 12
-Needs \fI/usr/bin\fR.
-.Ip "39" 12
-Checks \f(CW-t\fR of \fI/dev/null\fR. Should not fail!
-.PP
-In addition to errors, you should get a lot of warnings. 
-.Ip "A lot of `bad free\*(T'" 4
-in databases related to Berkeley \s-1DB\s0. This is a confirmed bug of
+Some tests may generate extra messages similar to
+.Ip "A lot of \f(CWbad free\fR" 4
+in database tests related to Berkeley \s-1DB\s0. This is a confirmed bug of
 \s-1DB\s0. You may disable this warnings, see the section on \fI\s-1PERL_BADFREE\s0\fR.
+.Sp
+There is not much we can do with it (but apparently it does not cause 
+any real error with data).
 .Ip "Process terminated by \s-1SIGTERM/SIGINT\s0" 4
 This is a standard message issued by \s-1OS/2\s0 applications. *nix
 applications die in silence. It is considered a feature. One can
@@ -897,15 +925,55 @@ easily disable this by appropriate sighandlers.
 However the test engine bleeds these message to screen in unexpected
 moments. Two messages of this kind \fIshould\fR be present during
 testing.
-.Ip "\fI*/sh.exe\fR: ln: not found" 4
-.Ip "\f(CWls\fR: /dev: No such file or directory" 4
-The last two should be self-explanatory. The test suite discovers that
-the system it runs on is not \fIthat much\fR *nixish.
 .PP
-A lot of `bad free\*(R'... in databases, bug in \s-1DB\s0 confirmed on other
-platforms. You may disable it by setting \s-1PERL_BADFREE\s0 environment variable
-to 1.
+Two \fIlib/io_*\fR tests may generate popups (system error \f(CWSYS3175\fR), 
+but should succeed anyway.  This is due to a bug of \s-1EMX\s0 related to 
+\fIfork()\fRing with dynamically loaded libraries.
+.PP
+I submitted a patch to \s-1EMX\s0 which makes it possible to \fIfork()\fR with \s-1EMX\s0 
+dynamic libraries loaded, which makes \fIlib/io*\fR tests pass without
+skipping offended tests. This means that soon the number of skipped tests
+may decrease yet more.
+.PP
+To get finer test reports, call
+.PP
+.Vb 1
+\&  perl t/harness
+.Ve
+The report with \fIio/pipe.t\fR failing may look like this:
+.PP
+.Vb 5
+\&  Failed Test  Status Wstat Total Fail  Failed  List of failed
+\&  ------------------------------------------------------------
+\&  io/pipe.t                    12    1   8.33%  9
+\&  7 tests skipped, plus 56 subtests skipped.
+\&  Failed 1/195 test scripts, 99.49% okay. 1/6542 subtests failed, 99.98% okay.
+.Ve
+The reasons for most important skipped tests are:
+.Ip "\fIop/fs.t\fR" 8
+.Ip "18" 8
+Checks \f(CWatime\fR and \f(CWmtime\fR of \f(CWstat()\fR \- unfortunately, \s-1HPFS\s0
+provides only 2sec time granularity (for compatibility with \s-1FAT\s0?).
+.Ip "25" 8
+Checks \f(CWtruncate()\fR on a filehandle just opened for write \- I do not
+know why this should or should not work.
+.Ip "\fIlib/io_pipe.t\fR" 0
+Checks \f(CWIO::Pipe\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs with
+dynamic extension loaded \- unsupported now.
+.Ip "\fIlib/io_sock.t\fR" 0
+Checks \f(CWIO::Socket\fR module. Some feature of \s-1EMX\s0 \- test \fIfork()\fRs
+with dynamic extension loaded \- unsupported now.
+.Ip "\fIop/stat.t\fR" 0
+Checks \f(CWstat()\fR. Tests:
+.Ip "4" 4
+Checks \f(CWatime\fR and \f(CWmtime\fR of \f(CWstat()\fR \- unfortunately, \s-1HPFS\s0
+provides only 2sec time granularity (for compatibility with \s-1FAT\s0?).
+.Ip "\fIlib/io_udp.t\fR" 0
+It never terminates, apparently some bug in storing the last socket from
+which we obtained a message.
 .Sh "Installing the built perl"
+If you haven't yet moved perl.dll onto \s-1LIBPATH\s0, do it now.
+.PP
 Run
 .PP
 .Vb 1
@@ -962,8 +1030,8 @@ first.
 You have a very old pdksh. See the \fIPrerequisites\fR manpage.
 .Sh "\f(CW'errno'\fR \- unresolved external"
 You do not have \s-1MT\s0\-safe \fIdb.lib\fR. See the \fIPrerequisites\fR manpage.
-.Sh "Problems with tr"
-reported with very old version of tr.
+.Sh "Problems with tr or sed"
+reported with very old version of tr and sed.
 .Sh "Some problem (forget which ;\-)"
 You have an older version of \fIperl.dll\fR on your \s-1LIBPATH\s0, which
 broke the build of extensions.
@@ -985,8 +1053,9 @@ If the first chars of a script are \f(CW"extproc "\fR, this line is treated
 as \f(CW#!\fR\-line, thus all the switches on this line are processed (twice
 if script was started via cmd.exe).
 .Sh "Additional modules:"
-the \fI\s-1OS2::\s0Process\fR manpage, the \fI\s-1OS2::REXX\s0\fR manpage, the \fI\s-1OS2::\s0PrfDB\fR manpage, the \fI\s-1OS2::\s0ExtAttr\fR manpage. This
-modules provide access to additional numeric argument for \f(CWsystem\fR,
+the \fI\s-1OS2::\s0Process\fR manpage, the \fI\s-1OS2::REXX\s0\fR manpage, the \fI\s-1OS2::\s0PrfDB\fR manpage, the \fI\s-1OS2::\s0ExtAttr\fR manpage. These
+modules provide access to additional numeric argument for \f(CWsystem\fR
+and to the list of the running processes,
 to DLLs having functions with \s-1REXX\s0 signature and to \s-1REXX\s0 runtime, to
 \s-1OS/2\s0 databases in the \fI.\s-1INI\s0\fR format, and to Extended Attributes.
 .PP
@@ -1240,7 +1309,7 @@ which contain a checksum, thus allowing workaround for \s-1OS/2\s0 scheme of
 caching DLLs.
 .Sh "Threading"
 As of release 5.003_01 perl is linked to multithreaded \s-1CRT\s0
-\s-1DLL\s0. Perl itself is not multithread-safe, as is not perl
+\s-1DLL\s0.  If perl itself is not compiled multithread-enabled, so will not be perl
 \fImalloc()\fR. However, extensions may use multiple thread on their own
 risk. 
 .PP
@@ -1252,7 +1321,7 @@ external program \fIvia shell\fR, the \fIf:/bin/sh.exe\fR will be called, or
 whatever is the override, see the section on \fI\s-1PERL_SH_DIR\s0\fR.
 .PP
 Thus means that you need to get some copy of a \fIsh.exe\fR as well (I
-use one from pdksh). The drive F: above is set up automatically during
+use one from pdksh). The drive \fIF:\fR above is set up automatically during
 the build to a correct value on the builder machine, but is
 overridable at runtime,
 .PP
@@ -1295,16 +1364,18 @@ will substitute the one-argument call to \fIsystem()\fR by
 If you have some working code for \f(CWOS2::Cmd\fR, please send it to me,
 I will include it into distribution. I have no need for such a module, so
 cannot test it.
+.PP
+For the details of the current situation with calling external programs,
+see the section on \fIStarting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl\fR.
+.Ip "" 5
+External scripts may be called by name.  Perl will try the same extensions
+as when processing \fB\-S\fR command-line switch.
 .Sh "Memory allocation"
 Perl uses its own \fImalloc()\fR under \s-1OS/2\s0 \- interpreters are usually malloc-bound
-for speed, but perl is not, since its malloc is lightning-fast. 
-Unfortunately, it is also quite frivolous with memory usage as well.
-.PP
-Since kitchen-top machines are usually low on memory, perl is compiled with
-all the possible memory-saving options. This probably makes perl's 
-\fImalloc()\fR as greedy with memory as the neighbor's \fImalloc()\fR, but still
-much quickier. Note that this is true only for a \*(L"typical\*(R" usage,
-it is possible that the perl malloc will be worse for some very special usage.
+for speed, but perl is not, since its malloc is lightning-fast.
+Perl-memory-usage-tuned benchmarks show that Perl's malloc is 5 times quickier
+than \s-1EMX\s0 one.  I do not have convincing data about memory footpring, but
+a (pretty random) benchmark showed that Perl one is 5% better.
 .PP
 Combination of perl's \fImalloc()\fR and rigid \s-1DLL\s0 name resolution creates
 a special problem with library functions which expect their return value to
@@ -1312,6 +1383,21 @@ be \fIfree()\fRd by system's \fIfree()\fR. To facilitate extensions which need t
 such functions, system memory-allocation functions are still available with
 the prefix \f(CWemx_\fR added. (Currently only \s-1DLL\s0 perl has this, it should 
 propagate to \fIperl_.exe\fR shortly.)
+.Sh "Threads"
+One can build perl with thread support enabled by providing \f(CW-D usethreads\fR
+option to \fIConfigure\fR.  Currently \s-1OS/2\s0 support of threads is very 
+preliminary.
+.PP
+Most notable problems: 
+.Ip "\f(CWCOND_WAIT\fR " 5
+may have a race condition.  Needs a reimplementation (in terms of chaining
+waiting threads, with linker list stored in per-thread structure?).
+.Ip "\fIos2.c\fR" 5
+has a couple of static variables used in \s-1OS/2-\s0specific functions.  (Need to be
+moved to per-thread structure, or serialized?)
+.PP
+Note that these problems should not discourage experimenting, since they
+have a low probability of affecting small programs.
 .SH "AUTHOR"
 Ilya Zakharevich, ilya@math.ohio-state.edu
 .SH "SEE ALSO"
@@ -1348,6 +1434,20 @@ Ilya Zakharevich, ilya@math.ohio-state.edu
 .IX Subsection "Starting Perl programs under \s-1OS/2\s0 (and \s-1DOS\s0 and...)"
 
 .IX Subsection "Starting \s-1OS/2\s0 (and \s-1DOS\s0) programs under Perl"
+
+.IX Item "1"
+
+.IX Item "2"
+
+.IX Item "3"
+
+.IX Item "4"
+
+.IX Item "5"
+
+.IX Item "6"
+
+.IX Item "7"
 
 .IX Header "Frequently asked questions"
 
@@ -1433,9 +1533,11 @@ Ilya Zakharevich, ilya@math.ohio-state.edu
 
 .IX Subsection "Testing"
 
-.IX Item "\fIio/fs.t\fR"
+.IX Item "A lot of \f(CWbad free\fR"
 
-.IX Item "2-5, 7-11"
+.IX Item "Process terminated by \s-1SIGTERM/SIGINT\s0"
+
+.IX Item "\fIop/fs.t\fR"
 
 .IX Item "18"
 
@@ -1447,23 +1549,9 @@ Ilya Zakharevich, ilya@math.ohio-state.edu
 
 .IX Item "\fIop/stat.t\fR"
 
-.IX Item "3"
-
 .IX Item "4"
 
-.IX Item "20"
-
-.IX Item "35"
-
-.IX Item "39"
-
-.IX Item "A lot of `bad free\*(T'"
-
-.IX Item "Process terminated by \s-1SIGTERM/SIGINT\s0"
-
-.IX Item "\fI*/sh.exe\fR: ln: not found"
-
-.IX Item "\f(CWls\fR: /dev: No such file or directory"
+.IX Item "\fIlib/io_udp.t\fR"
 
 .IX Subsection "Installing the built perl"
 
@@ -1475,7 +1563,7 @@ Ilya Zakharevich, ilya@math.ohio-state.edu
 
 .IX Subsection "\f(CW'errno'\fR \- unresolved external"
 
-.IX Subsection "Problems with tr"
+.IX Subsection "Problems with tr or sed"
 
 .IX Subsection "Some problem (forget which ;\-)"
 
@@ -1597,7 +1685,15 @@ Ilya Zakharevich, ilya@math.ohio-state.edu
 
 .IX Subsection "Calls to external programs"
 
+.IX Item ""
+
 .IX Subsection "Memory allocation"
+
+.IX Subsection "Threads"
+
+.IX Item "\f(CWCOND_WAIT\fR "
+
+.IX Item "\fIos2.c\fR"
 
 .IX Header "AUTHOR"
 

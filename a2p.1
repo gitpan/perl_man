@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH A2P 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH A2P 1 "perl 5.005, patch 53" "5/Nov/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -214,21 +214,31 @@ Any delimiter can be used to separate the field names.
 .Ip "\fB\-<number>\fR" 5
 causes a2p to assume that input will always have that many fields.
 .Ip "\fB\-o\fR" 5
-tells a2p to use old awk behavior.  For now, the only difference is
-that old awk always has a line loop, even if there are no line
+tells a2p to use old awk behavior.  The only current differences are:
+.Ip "" 10
+Old awk always has a line loop, even if there are no line
 actions, whereas new awk does not.
+.Ip "" 10
+In old awk, sprintf is extremely greedy about its arguments.
+For example, given the statement
+.Sp
+.Vb 1
+\&        print sprintf(some_args), extra_args;
+.Ve
+old awk considers \fIextra_args\fR to be arguments to \f(CWsprintf\fR; new awk
+considers them arguments to \f(CWprint\fR.
 .Sh "\*(M"Considerations\*(S""
 A2p cannot do as good a job translating as a human would, but it
 usually does pretty well.  There are some areas where you may want to
 examine the perl script produced and tweak it some.  Here are some of
 them, in no particular order.
-.PP
+.Sp
 There is an awk idiom of putting \fIint()\fR around a string expression to
 force numeric interpretation, even though the argument is always
 integer anyway.  This is generally unneeded in perl, but a2p can't
 tell if the argument is always going to be integer, so it leaves it
 in.  You may wish to remove it.
-.PP
+.Sp
 Perl differentiates numeric comparison from string comparison.  Awk
 has one operator for both that decides at run time which comparison to
 do.  A2p does not try to do a complete job of awk emulation at this
@@ -237,24 +247,24 @@ right, but it can be spoofed.  All such guesses are marked with the
 comment \*(L"\f(CW#???\fR\*(R".  You should go through and check them.  You might
 want to run at least once with the \fB\-w\fR switch to perl, which will
 warn you if you use == where you should have used eq.
-.PP
+.Sp
 Perl does not attempt to emulate the behavior of awk in which
 nonexistent array elements spring into existence simply by being
 referenced.  If somehow you are relying on this mechanism to create
 null entries for a subsequent for...in, they won't be there in perl.
-.PP
+.Sp
 If a2p makes a split line that assigns to a list of variables that
 looks like (Fld1, Fld2, Fld3...) you may want to rerun a2p using the
 \fB\-n\fR option mentioned above.  This will let you name the fields
 throughout the script.  If it splits to an array instead, the script
 is probably referring to the number of fields somewhere.
-.PP
+.Sp
 The exit statement in awk doesn't necessarily exit; it goes to the \s-1END\s0
 block if there is one.  Awk scripts that do contortions within the \s-1END\s0
 block to bypass the block under such circumstances can be simplified
 by removing the conditional in the \s-1END\s0 block and just exiting directly
 from the perl script.
-.PP
+.Sp
 Perl has two kinds of array, numerically-indexed and associative.
 Perl associative arrays are called \*(L"hashes\*(R".  Awk arrays are usually
 translated to hashes, but if you happen to know that the index is
@@ -262,42 +272,42 @@ always going to be numeric you could change the {...} to [...].
 Iteration over a hash is done using the \fIkeys()\fR function, but iteration
 over an array is \s-1NOT\s0.  You might need to modify any loop that iterates
 over such an array.
-.PP
+.Sp
 Awk starts by assuming \s-1OFMT\s0 has the value %.6g.  Perl starts by
 assuming its equivalent, $#, to have the value %.20g.  You'll want to
 set $# explicitly if you use the default value of \s-1OFMT\s0.
-.PP
+.Sp
 Near the top of the line loop will be the split operation that is
 implicit in the awk script.  There are times when you can move this
 down past some conditionals that test the entire record so that the
 split is not done as often.
-.PP
+.Sp
 For aesthetic reasons you may wish to change the array base $[ from 1
 back to perl's default of 0, but remember to change all array
 subscripts \s-1AND\s0 all \fIsubstr()\fR and \fIindex()\fR operations to match.
-.PP
+.Sp
 Cute comments that say \*(L"# Here is a workaround because awk is dumb\*(R"
 are passed through unmodified.
-.PP
+.Sp
 Awk scripts are often embedded in a shell script that pipes stuff into
 and out of awk.  Often the shell script wrapper can be incorporated
 into the perl script, since perl can start up pipes into and out of
 itself, and can do other things that awk can't do by itself.
-.PP
+.Sp
 Scripts that refer to the special variables \s-1RSTART\s0 and \s-1RLENGTH\s0 can
 often be simplified by referring to the variables $`, $& and $\*(R', as
 long as they are within the scope of the pattern match that sets them.
-.PP
+.Sp
 The produced perl script may have subroutines defined to deal with
 awk's semantics regarding getline and print.  Since a2p usually picks
 correctness over efficiency.  it is almost always possible to rewrite
 such code to be more efficient by discarding the semantic sugar.
-.PP
+.Sp
 For efficiency, you may wish to remove the keyword from any return
 statement that is the last statement executed in a subroutine.  A2p
 catches the most common case, but doesn't analyze embedded blocks for
 subtler cases.
-.PP
+.Sp
 \s-1ARGV\s0[0] translates to \f(CW$ARGV0\fR, but \s-1ARGV\s0[n] translates to \f(CW$ARGV\fR[$n].  A
 loop that tries to iterate over \s-1ARGV\s0[0] won't find it.
 .SH "ENVIRONMENT"
@@ -306,7 +316,7 @@ A2p uses no environment variables.
 Larry Wall <\fIlarry@wall.org\fR>
 .SH "FILES"
 .SH "SEE ALSO"
-.PP
+.Sp
 .Vb 3
 \& perl   The perl compiler/interpreter
 \& 
@@ -318,7 +328,7 @@ It would be possible to emulate awk's behavior in selecting string
 versus numeric operations at run time by inspection of the operands,
 but it would be gross and inefficient.  Besides, a2p almost always
 guesses right.
-.PP
+.Sp
 Storage for the awk syntax tree is currently static, and can run out.
 
 .rn }` ''
@@ -342,6 +352,10 @@ Storage for the awk syntax tree is currently static, and can run out.
 .IX Item "\fB\-<number>\fR"
 
 .IX Item "\fB\-o\fR"
+
+.IX Item ""
+
+.IX Item ""
 
 .IX Subsection "\*(M"Considerations\*(S""
 

@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLTIE 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLTIE 1 "perl 5.005, patch 53" "14/Jun/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -212,7 +212,7 @@ Now you can.
 The \fItie()\fR function binds a variable to a class (package) that will provide
 the implementation for access methods for that variable.  Once this magic
 has been performed, accessing a tied variable automatically triggers
-method calls in the proper class.  All of the complexity of the class is
+method calls in the proper class.  The complexity of the class is
 hidden behind magic methods calls.  The method names are in ALL CAPS,
 which is a convention that Perl uses to indicate that they're called
 implicitly rather than explicitly\*(--just like the \fIBEGIN()\fR and \fIEND()\fR
@@ -368,17 +368,26 @@ of completeness, robustness, and general aesthetics.  Simpler
 \s-1TIESCALAR\s0 classes are certainly possible.
 .Sh "Tying Arrays"
 A class implementing a tied ordinary array should define the following
-methods: \s-1TIEARRAY\s0, \s-1FETCH\s0, \s-1STORE\s0, and perhaps \s-1DESTROY\s0.
+methods: \s-1TIEARRAY\s0, \s-1FETCH\s0, \s-1STORE\s0, \s-1FETCHSIZE\s0, \s-1STORESIZE\s0 and perhaps \s-1DESTROY\s0. 
 .PP
-\fB\s-1WARNING\s0\fR: Tied arrays are \fIincomplete\fR.  They are also distinctly lacking
-something for the \f(CW$#ARRAY\fR access (which is hard, as it's an lvalue), as
-well as the other obvious array functions, like \fIpush()\fR, \fIpop()\fR, \fIshift()\fR,
-\fIunshift()\fR, and \fIsplice()\fR.
+\s-1FETCHSIZE\s0 and \s-1STORESIZE\s0 are used to provide \f(CW$#array\fR and
+equivalent \f(CWscalar(@array)\fR access.
+    
+The methods \s-1POP\s0, \s-1PUSH\s0, \s-1SHIFT\s0, \s-1UNSHIFT\s0, \s-1SPLICE\s0 are required if the perl
+operator with the corresponding (but lowercase) name is to operate on the
+tied array. The \fBTie::Array\fR class can be used as a base class to implement
+these in terms of the basic five methods above.  
+.PP
+In addition \s-1EXTEND\s0 will be called when perl would have pre-extended 
+allocation in a real array.
+.PP
+This means that tied arrays are now \fIcomplete\fR. The example below needs
+upgrading to illustrate this. (The documentation in \fBTie::Array\fR is more
+complete.)
 .PP
 For this discussion, we'll implement an array whose indices are fixed at
 its creation.  If you try to access anything beyond those bounds, you'll
-take an exception.  (Well, if you access an individual element; an
-aggregate assignment would be missed.) For example:
+take an exception.  For example:
 .PP
 .Vb 9
 \&    require Bounded_Array;
@@ -772,9 +781,9 @@ or have auxiliary state to clean up.  Here's a very simple function:
 \&    }
 .Ve
 .PP
-Note that functions such as \fIkeys()\fR and \fIvalues()\fR may return huge array
-values when used on large objects, like \s-1DBM\s0 files.  You may prefer to
-use the \fIeach()\fR function to iterate over such.  Example:
+Note that functions such as \fIkeys()\fR and \fIvalues()\fR may return huge lists
+when used on large objects, like \s-1DBM\s0 files.  You may prefer to use the
+\fIeach()\fR function to iterate over such.  Example:
 .PP
 .Vb 7
 \&    # print out history file offsets
@@ -789,8 +798,8 @@ use the \fIeach()\fR function to iterate over such.  Example:
 This is partially implemented now.
 .PP
 A class implementing a tied filehandle should define the following
-methods: \s-1TIEHANDLE\s0, at least one of \s-1PRINT\s0, \s-1PRINTF\s0, \s-1READLINE\s0, \s-1GETC\s0, or \s-1READ\s0,
-and possibly \s-1DESTROY\s0.
+methods: \s-1TIEHANDLE\s0, at least one of \s-1PRINT\s0, \s-1PRINTF\s0, \s-1WRITE\s0, \s-1READLINE\s0, \s-1GETC\s0,
+\s-1READ\s0, and possibly \s-1CLOSE\s0 and \s-1DESTROY\s0.
 .PP
 It is especially useful when perl is embedded in some other program,
 where output to \s-1STDOUT\s0 and \s-1STDERR\s0 may have to be redirected in some
@@ -808,6 +817,17 @@ hold some internal information.
 .Sp
 .Vb 1
 \&    sub TIEHANDLE { print "<shout>\en"; my $i; bless \e$i, shift }
+.Ve
+.Ip "\s-1WRITE\s0 this, \s-1LIST\s0" 5
+This method will be called when the handle is written to via the
+\f(CWsyswrite\fR function.
+.Sp
+.Vb 5
+\&    sub WRITE {
+\&        $r = shift;
+\&        my($buf,$len,$offset) = @_;
+\&        print "WRITE called, \e$buf=$buf, \e$len=$len, \e$offset=$offset";
+\&    }
 .Ve
 .Ip "\s-1PRINT\s0 this, \s-1LIST\s0" 5
 This method will be triggered every time the tied handle is printed to
@@ -831,7 +851,7 @@ passed to the printf function.
 \&        print sprintf($fmt, @_)."\en";
 \&    }
 .Ve
-.Ip "\s-1READ\s0 this \s-1LIST\s0" 5
+.Ip "\s-1READ\s0 this, \s-1LIST\s0" 5
 This method will be called when the handle is read from via the \f(CWread\fR
 or \f(CWsysread\fR functions.
 .Sp
@@ -854,6 +874,13 @@ This method will be called when the \f(CWgetc\fR function is called.
 .Sp
 .Vb 1
 \&    sub GETC { print "Don't GETC, Get Perl"; return "a"; }
+.Ve
+.Ip "\s-1CLOSE\s0 this" 5
+This method will be called when the handle is closed via the \f(CWclose\fR
+function.
+.Sp
+.Vb 1
+\&    sub CLOSE { print "CLOSE called.\en" }
 .Ve
 .Ip "\s-1DESTROY\s0 this" 5
 As with the other types of ties, this method will be called when the
@@ -1097,15 +1124,19 @@ TIEHANDLE by Sven Verdoolaege <\fIskimo@dns.ufsia.ac.be\fR> and Doug MacEachern 
 
 .IX Item "\s-1TIEHANDLE\s0 classname, \s-1LIST\s0"
 
+.IX Item "\s-1WRITE\s0 this, \s-1LIST\s0"
+
 .IX Item "\s-1PRINT\s0 this, \s-1LIST\s0"
 
 .IX Item "\s-1PRINTF\s0 this, \s-1LIST\s0"
 
-.IX Item "\s-1READ\s0 this \s-1LIST\s0"
+.IX Item "\s-1READ\s0 this, \s-1LIST\s0"
 
 .IX Item "\s-1READLINE\s0 this"
 
 .IX Item "\s-1GETC\s0 this"
+
+.IX Item "\s-1CLOSE\s0 this"
 
 .IX Item "\s-1DESTROY\s0 this"
 

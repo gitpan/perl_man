@@ -93,7 +93,7 @@
 .nr % 0
 .rr F
 .\}
-.TH PERLFAQ1 1 "perl 5.004, patch 55" "25/Nov/97" "Perl Programmers Reference Guide"
+.TH PERLFAQ1 1 "perl 5.005, patch 53" "23/Sep/98" "Perl Programmers Reference Guide"
 .UC
 .if n .hy 0
 .if n .na
@@ -188,7 +188,7 @@
 .\}
 .rm #[ #] #H #V #F C
 .SH "NAME"
-perlfaq1 \- General Questions About Perl ($Revision: 1.12 $, \f(CW$Date:\fR 1997/04/24 22:43:34 $)
+perlfaq1 \- General Questions About Perl ($Revision: 1.15 $, \f(CW$Date:\fR 1998/08/05 11:52:24 $)
 .SH "DESCRIPTION"
 This section of the FAQ answers very general, high-level questions
 about Perl.
@@ -211,13 +211,14 @@ distribution policy of perl.  Perl is supported by its users.  The
 core, the standard Perl library, the optional modules, and the
 documentation you're reading now were all written by volunteers.  See
 the personal note at the end of the \s-1README\s0 file in the perl source
-distribution for more details.
+distribution for more details.  See the \fIperlhist\fR manpage (new as of 5.005)
+for Perl's milestone releases.
 .PP
 In particular, the core development team (known as the Perl
 Porters) are a rag-tag band of highly altruistic individuals
 committed to producing better software for free than you
 could hope to purchase for money.  You may snoop on pending
-developments via news://genetics.upenn.edu/perl.porters-gw/ and
+developments via news://news.perl.com/perl.porters-gw/ and
 http://www.frii.com/~gnat/perl/porters/summary.html.
 .PP
 While the \s-1GNU\s0 project includes Perl in its distributions, there's no
@@ -231,10 +232,10 @@ users the informal support will more than suffice.  See the answer to
 .Sh "Which version of Perl should I use?"
 You should definitely use version 5.  Version 4 is old, limited, and
 no longer maintained; its last patch (4.036) was in 1992.  The most
-recent production release is 5.004.  Further references to the Perl
+recent production release is 5.005_01.  Further references to the Perl
 language in this document refer to this production release unless
 otherwise specified.  There may be one or more official bug fixes for
-5.004 by the time you read this, and also perhaps some experimental
+5.005_01 by the time you read this, and also perhaps some experimental
 versions on the way to the next release.
 .Sh "What are perl4 and perl5?"
 Perl4 and perl5 are informal names for different versions of the Perl
@@ -254,6 +255,8 @@ with previous releases is very high.
 To avoid the \*(L"what language is perl5?\*(R" confusion, some people prefer to
 simply use \*(L"perl\*(R" to refer to the latest version of perl and avoid using
 \*(L"perl5\*(R" altogether.  It's not really that big a deal, though.
+.PP
+See the \fIperlhist\fR manpage for a history of Perl revisions.
 .Sh "How stable is Perl?"
 Production releases, which incorporate bug fixes and new functionality,
 are widely tested before release.  Since the 5.000 release, we have
@@ -266,10 +269,10 @@ under perl5, an update to perl should nearly never invalidate a program
 written for an earlier version of perl (barring accidental bug fixes
 and the rare new keyword).
 .Sh "Is Perl difficult to learn?"
-Perl is easy to start learning -- and easy to keep learning.  It looks
-like most programming languages you're likely to have had experience
+No, Perl is easy to start learning -- and easy to keep learning.  It looks
+like most programming languages you're likely to have experience
 with, so if you've ever written an C program, an awk script, a shell
-script, or even an Excel macro, you're already part way there.
+script, or even \s-1BASIC\s0 program, you're already part way there.
 .PP
 Most tasks only require a small subset of the Perl language.  One of
 the guiding mottos for Perl development is \*(L"there's more than one way
@@ -367,7 +370,7 @@ available from http://www.perl.com/\s-1CPAN/\s0misc/japh .
 .Sh "Where can I get a list of Larry Wall witticisms?"
 Over a hundred quips by Larry, from postings of his or source code,
 can be found at http://www.perl.com/\s-1CPAN/\s0misc/lwall-quotes .
-.Sh "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
+.Sh "How can I convince my sysadmin/supervisor/employees to use version (5/5.005/Perl instead of some other language)?"
 If your manager or employees are wary of unsupported software, or
 software which doesn't officially ship with your Operating System, you
 might try to appeal to their self-interest.  If programmers can be
@@ -378,7 +381,7 @@ sometimes helpful to point out that delivery times may be reduced
 using Perl, as compared to other languages.
 .PP
 If you have a project which has a bottleneck, especially in terms of
-translation, or testing, Perl almost certainly will provide a viable,
+translation or testing, Perl almost certainly will provide a viable,
 and quick solution.  In conjunction with any persuasion effort, you
 should not fail to point out that Perl is used, quite extensively, and
 with extremely reliable and valuable results, at many large computer
@@ -396,17 +399,33 @@ for any given task.  Also mention that the difference between version
 (Well, ok, maybe not quite that distinct, but you get the idea.)  If
 you want support and a reasonable guarantee that what you're
 developing will continue to work in the future, then you have to run
-the supported version.  That probably means running the 5.004 release,
-although 5.003 isn't that bad (it's just one year and one release
+the supported version.  That probably means running the 5.005 release,
+although 5.004 isn't that bad (it's just one year and one release
 behind).  Several important bugs were fixed from the 5.000 through
-5.002 versions, though, so try upgrading past them if possible.
+5.003 versions, though, so try upgrading past them if possible.
+.PP
+Of particular note is the massive bughunt for buffer overflow
+problems that went into the 5.004 release.  All releases prior to
+that, including perl4, are considered insecure and should be upgraded
+as soon as possible. 
 .SH "AUTHOR AND COPYRIGHT"
-Copyright (c) 1997 Tom Christiansen and Nathan Torkington.
-All rights reserved.  See the \fIperlfaq\fR manpage for distribution information.
+Copyright (c) 1997, 1998 Tom Christiansen and Nathan Torkington.
+All rights reserved.
+.PP
+When included as an integrated part of the Standard Distribution
+of Perl or of its documentation (printed or otherwise), this works is
+covered under Perl's Artistic Licence.  For separate distributions of
+all or part of this FAQ outside of that, see the \fIperlfaq\fR manpage.
+.PP
+Irrespective of its distribution, all code examples here are public
+domain.  You are permitted and encouraged to use this code and any
+derivatives thereof in your own programs for fun or for profit as you
+see fit.  A simple comment in the code giving credit to the FAQ would
+be courteous but is not required.
 
 .rn }` ''
 .IX Title "PERLFAQ1 1"
-.IX Name "perlfaq1 - General Questions About Perl ($Revision: 1.12 $, $Date: 1997/04/24 22:43:34 $)"
+.IX Name "perlfaq1 - General Questions About Perl ($Revision: 1.15 $, $Date: 1998/08/05 11:52:24 $)"
 
 .IX Header "NAME"
 
@@ -438,7 +457,7 @@ All rights reserved.  See the \fIperlfaq\fR manpage for distribution information
 
 .IX Subsection "Where can I get a list of Larry Wall witticisms?"
 
-.IX Subsection "How can I convince my sysadmin/supervisor/employees to use version (5/5.004/Perl instead of some other language)?"
+.IX Subsection "How can I convince my sysadmin/supervisor/employees to use version (5/5.005/Perl instead of some other language)?"
 
 .IX Header "AUTHOR AND COPYRIGHT"
 
